@@ -1,0 +1,13 @@
+# hexo robots.txt
+User-agent: *
+Allow: /
+Allow: /Archives/
+Allow: /Aategories/
+Allow: /Tags/
+Allow: /About/ 
+
+# Disallow: /js/
+# Disallow: /css/
+# Disallow: /fancybox/
+
+Sitemap: https://zanazhong.github.io/sitemap.xml
