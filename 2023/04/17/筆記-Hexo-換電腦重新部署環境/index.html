@@ -26,18 +26,27 @@
     var CONFIG = {"hostname":"zanazhong.github.io","root":"/","scheme":"Gemini","version":"8.0.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":true,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}};
   </script>
 
-  <meta name="description" content="ɪᴛ ɪs ɪᴍᴘᴏʀᴛᴀɴᴛ ᴛᴏ sᴇᴇ ʜᴏᴡ ғᴀʀ ʏᴏᴜ&#39;ᴠᴇ ᴄᴏᴍᴇ🐾">
+  <meta name="description" content="換電腦後發現即使有用 time machine 做備份還是要重新部署因為 push 至 github 的是已經編譯過後的檔案，所以沒有留原始檔的話，看起來應該沒救了(?)">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Note">
 <meta property="og:url" content="https://zanazhong.github.io/2023/04/17/%E7%AD%86%E8%A8%98-Hexo-%E6%8F%9B%E9%9B%BB%E8%85%A6%E9%87%8D%E6%96%B0%E9%83%A8%E7%BD%B2%E7%92%B0%E5%A2%83/index.html">
 <meta property="og:site_name" content="Hey I am Zana">
-<meta property="og:description" content="ɪᴛ ɪs ɪᴍᴘᴏʀᴛᴀɴᴛ ᴛᴏ sᴇᴇ ʜᴏᴡ ғᴀʀ ʏᴏᴜ&#39;ᴠᴇ ᴄᴏᴍᴇ🐾">
+<meta property="og:description" content="換電腦後發現即使有用 time machine 做備份還是要重新部署因為 push 至 github 的是已經編譯過後的檔案，所以沒有留原始檔的話，看起來應該沒救了(?)">
 <meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://i.imgur.com/wNuNXtT.png">
+<meta property="og:image" content="https://i.imgur.com/lWLZd0F.png)">
+<meta property="og:image" content="https://i.imgur.com/lDCil5I.png">
+<meta property="og:image" content="https://i.imgur.com/esiwR1T.png">
+<meta property="og:image" content="https://i.imgur.com/8yv980c.png">
 <meta property="article:published_time" content="2023-04-17T13:30:32.000Z">
-<meta property="article:modified_time" content="2023-04-17T13:30:32.741Z">
+<meta property="article:modified_time" content="2023-04-17T13:35:16.125Z">
 <meta property="article:author" content="Zana">
-<meta property="article:tag" content="artwork, python, programming, learning, java">
+<meta property="article:tag" content="GitHub">
+<meta property="article:tag" content="Hexo">
+<meta property="article:tag" content="GitHub pages">
+<meta property="article:tag" content="Blog">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i.imgur.com/wNuNXtT.png">
 
 
 <link rel="canonical" href="https://zanazhong.github.io/2023/04/17/%E7%AD%86%E8%A8%98-Hexo-%E6%8F%9B%E9%9B%BB%E8%85%A6%E9%87%8D%E6%96%B0%E9%83%A8%E7%BD%B2%E7%92%B0%E5%A2%83/">
@@ -211,7 +220,7 @@
 
   <aside class="sidebar">
 
-    <div class="sidebar-inner sidebar-overview-active">
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
       <ul class="sidebar-nav">
         <li class="sidebar-nav-toc">
           Table of Contents
@@ -223,6 +232,7 @@
 
       <!--noindex-->
       <section class="post-toc-wrap sidebar-panel">
+          <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#step-1-%E9%9B%BB%E8%85%A6%E7%92%B0%E5%A2%83%E8%A8%AD%E5%AE%9A"><span class="nav-number">1.</span> <span class="nav-text">step 1: 電腦環境設定</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#step-2-%E9%87%8D%E6%96%B0%E5%BB%BA%E7%BD%AE-Hexo-%E7%92%B0%E5%A2%83"><span class="nav-number">2.</span> <span class="nav-text">step 2: 重新建置 Hexo 環境</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%B0%87%E5%82%99%E4%BB%BD%E7%9A%84%E6%AA%94%E6%A1%88%E8%A4%87%E8%A3%BD%E8%87%B3%E6%96%B0%E7%9A%84-Hexo-%E7%92%B0%E5%A2%83"><span class="nav-number">2.1.</span> <span class="nav-text">將備份的檔案複製至新的 Hexo 環境</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%A4%87%E8%A3%BD%E5%AE%8C%E5%9F%B7%E8%A1%8C%E4%BB%A5%E4%B8%8B%E6%8C%87%E4%BB%A4"><span class="nav-number">2.2.</span> <span class="nav-text">複製完執行以下指令</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#step-3-%E5%9C%A8%E6%9C%AC%E5%9C%B0%E7%AB%AF-preview-%E4%B8%80%E4%B8%8B"><span class="nav-number">3.</span> <span class="nav-text">step 3: 在本地端 preview 一下</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#step-4-%E9%87%8D%E6%96%B0%E9%83%A8%E7%BD%B2-gogo"><span class="nav-number">4.</span> <span class="nav-text">step 4: 重新部署 gogo</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%95%AA%E5%A4%96-%E9%83%A8%E7%BD%B2%E5%95%8F%E9%A1%8C"><span class="nav-number">5.</span> <span class="nav-text">番外: 部署問題</span></a></li></ol></div>
       </section>
       <!--/noindex-->
 
@@ -330,8 +340,18 @@
         <i class="far fa-calendar"></i>
       </span>
       <span class="post-meta-item-text">Posted on</span>
+      
 
-      <time title="Created: 2023-04-17 21:30:32" itemprop="dateCreated datePublished" datetime="2023-04-17T21:30:32+08:00">2023-04-17</time>
+      <time title="Created: 2023-04-17 21:30:32 / Modified: 21:35:16" itemprop="dateCreated datePublished" datetime="2023-04-17T21:30:32+08:00">2023-04-17</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Hexo/" itemprop="url" rel="index"><span itemprop="name">Hexo</span></a>
+        </span>
     </span>
 
   
@@ -347,14 +367,14 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">Symbols count in article: </span>
-      <span>0</span>
+      <span>2.6k</span>
     </span>
     <span class="post-meta-item" title="Reading time">
       <span class="post-meta-item-icon">
         <i class="far fa-clock"></i>
       </span>
       <span class="post-meta-item-text">Reading time &asymp;</span>
-      <span>1 mins.</span>
+      <span>2 mins.</span>
     </span>
 </div>
 
@@ -365,7 +385,70 @@
     
     
     <div class="post-body" itemprop="articleBody">
-        
+        <blockquote>
+<p>換電腦後發現即使有用 time machine 做備份還是要重新部署<br>因為 push 至 github 的是已經編譯過後的檔案，所以沒有留原始檔的話，看起來應該沒救了(?)</p>
+</blockquote>
+<span id="more"></span>
+<h3 id="step-1-電腦環境設定"><a href="#step-1-電腦環境設定" class="headerlink" title="step 1: 電腦環境設定"></a>step 1: 電腦環境設定</h3><figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">git --version</span><br><span class="line">node -v</span><br><span class="line">hexo -v</span><br></pre></td></tr></table></figure>
+<center>
+   <img src="https://i.imgur.com/wNuNXtT.png" width="40%">
+</center>
+
+<h3 id="step-2-重新建置-Hexo-環境"><a href="#step-2-重新建置-Hexo-環境" class="headerlink" title="step 2: 重新建置 Hexo 環境"></a>step 2: 重新建置 Hexo 環境</h3><figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">#建立一個 blog 的資料夾 (blog_name 請自行命名~)</span><br><span class="line">hexo init blog_name  </span><br></pre></td></tr></table></figure>
+<p>若是有其他的要安裝請參考 <a href="https://zanazhong.github.io/2020/09/11/%E7%AD%86%E8%A8%98-GitHub-pages-Hexo-%E6%90%AD%E5%BB%BA-Blog-Mac/#more">Hexo 環境安裝</a></p>
+<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> blog_name</span><br></pre></td></tr></table></figure>
+<h4 id="將備份的檔案複製至新的-Hexo-環境"><a href="#將備份的檔案複製至新的-Hexo-環境" class="headerlink" title="將備份的檔案複製至新的 Hexo 環境"></a>將備份的檔案複製至新的 Hexo 環境</h4><center>
+   <img src="https://i.imgur.com/lWLZd0F.png)" width="40%">
+</center>
+
+<p>將除了 node_modules 跟 public 之外的檔案複製過去</p>
+<blockquote>
+<p>node_modules 是放一些 library 的地方，執行 npm install 時就會下載相關的 library；而 public 是放原始檔編譯後的檔案，之後部署時會再建回來</p>
+</blockquote>
+<h4 id="複製完執行以下指令"><a href="#複製完執行以下指令" class="headerlink" title="複製完執行以下指令"></a>複製完執行以下指令</h4><figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">npm install</span><br><span class="line">npm install hexo-deployer-git --save</span><br><span class="line">npm install hexo-generator-feed --save</span><br><span class="line">npm install hexo-generator-sitemap --save</span><br></pre></td></tr></table></figure>
+<p>可能會出現一些 Error or Warning，照著他的指示修正即可</p>
+<h3 id="step-3-在本地端-preview-一下"><a href="#step-3-在本地端-preview-一下" class="headerlink" title="step 3: 在本地端 preview 一下"></a>step 3: 在本地端 preview 一下</h3><p>上線前還是小心謹慎一點好，先在本地檢視一下有沒有如期正常顯示，畢竟裡面已經有嘔心瀝血作品</p>
+<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">#透過本機的 http://localhost:<span class="number">4000</span> 查看</span><br><span class="line">hexo s --debug</span><br></pre></td></tr></table></figure>
+
+<h3 id="step-4-重新部署-gogo"><a href="#step-4-重新部署-gogo" class="headerlink" title="step 4: 重新部署 gogo"></a>step 4: 重新部署 gogo</h3><figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hexo d -g</span><br></pre></td></tr></table></figure>
+
+
+<h3 id="番外-部署問題"><a href="#番外-部署問題" class="headerlink" title="番外: 部署問題"></a>番外: 部署問題</h3><blockquote>
+<p>事情有時候總是沒這麼簡單的喇!!</p>
+</blockquote>
+<p>看起來一般來說他給的這個網站裡面都能找到解法 ⬇️<br>Something’s wrong. Maybe you can find the solution here: %s <a target="_blank" rel="noopener" href="https://hexo.io/docs/troubleshooting.html">https://hexo.io/docs/troubleshooting.html</a></p>
+<p>分享一下我遇到的是 github Authentication Failed (身份驗證失敗)<br>解法：</p>
+<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"># 進去網站資料夾</span><br><span class="line"><span class="built_in">cd</span> blog_name</span><br><span class="line"></span><br><span class="line"># 修改 _config.yml</span><br><span class="line">vim _config.yml</span><br></pre></td></tr></table></figure>
+<p>將 https 方式改成用 ssh 方式</p>
+<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">deploy:</span></span><br><span class="line"><span class="function">    <span class="title">type</span>: <span class="title">git</span></span></span><br><span class="line"><span class="function">    <span class="title">repo</span>: <span class="title">https</span>://<span class="title">github.com</span>/<span class="title">yourname</span>/<span class="title">yourname.github.io.git</span> -&gt; <span class="title">git</span>@<span class="title">github.com:yourname</span>/<span class="title">yourname.github.io.git</span></span></span><br><span class="line"><span class="function">    <span class="title">branch</span>: <span class="title">master</span></span></span><br></pre></td></tr></table></figure>
+
+<ol>
+<li><p>Generating a new SSH key and adding it to the ssh-agent <a target="_blank" rel="noopener" href="https://docs.github.com/en/authentication/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent">:link:</a></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ls -al ~&#x2F;.ssh</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh-keygen -t ed25519 -C &quot;your_email@example.com&quot;</span><br></pre></td></tr></table></figure>
+<p>產生金鑰的過程中，會問 3 個問題，如果沒有特殊需求可以全部使用預設值(press Enter)就好</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"># 金鑰儲存的位置與檔名，預設檔名是前面所提到 id_ed25519，可以更改檔名，ex: githud_key</span><br><span class="line">Enter file in which to save the key (&#x2F;home&#x2F;username&#x2F;.ssh&#x2F;id_ed25519): [Press enter]</span><br><span class="line"></span><br><span class="line"># 詢問是否指定金鑰保護密碼，若有設定密碼的話，之後使用每次使用時，這把金鑰時就要輸入密碼，請務必牢記。之後想修改金鑰密碼的話，可以透過 ssh-keygen 來設定。</span><br><span class="line">Enter passphrase (empty for no passphrase):</span><br><span class="line">Enter same passphrase again:</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">Generating public&#x2F;private ed25519 key pair.</span><br><span class="line">Enter file in which to save the key (&#x2F;Users&#x2F;username&#x2F;.ssh&#x2F;id_ed25519):</span><br><span class="line">Enter passphrase (empty for no passphrase):</span><br><span class="line">Enter same passphrase again:</span><br><span class="line">Your identification has been saved in &#x2F;Users&#x2F;username&#x2F;.ssh&#x2F;id_ed25519</span><br><span class="line">Your public key has been saved in &#x2F;Users&#x2F;username&#x2F;.ssh&#x2F;id_ed25519.pub</span><br><span class="line">The key fingerprint is:</span><br><span class="line">SHA256:*************************** your_email@example.com</span><br><span class="line">The key&#39;s randomart image is:</span><br><span class="line">+--[ED25519 256]--+</span><br><span class="line">|                 |</span><br><span class="line">|                 |</span><br><span class="line">|                 |</span><br><span class="line">|                 |</span><br><span class="line">|                 |</span><br><span class="line">|                 |</span><br><span class="line">|                 |</span><br><span class="line">|                 |</span><br><span class="line">|                 |</span><br><span class="line">+----[SHA256]-----+</span><br></pre></td></tr></table></figure>
+<p><img src="https://i.imgur.com/lDCil5I.png"></p>
+<p>設定金鑰代理</p>
+<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">eval &quot;$(ssh-agent -s)&quot;</span><br><span class="line"># output: Agent pid <span class="number">98350</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">touch ~/.ssh/config</span><br><span class="line">open ~/.ssh/config</span><br></pre></td></tr></table></figure>
+<p>modify ~&#x2F;.ssh&#x2F;config</p>
+<figure class="highlight vim"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Host *</span><br><span class="line">   AddKeysToAgent yes</span><br><span class="line">   UseKeychain yes</span><br><span class="line">   IdentityFile ~/.ssh/id_ed25519 #！如果有改名的話這邊記得改</span><br></pre></td></tr></table></figure>
+<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"># Add your SSH private key to the ssh-agen</span><br><span class="line">ssh-add -K ~/.ssh/id_ed25519</span><br><span class="line"># <span class="built_in">copy</span> it</span><br><span class="line">pbcopy &lt; ~/.ssh/id_ed25519.pub #！如果有改名的話這邊記得改</span><br></pre></td></tr></table></figure>
+
+
+</li>
+<li><p>Adding a new SSH key to your GitHub account<a target="_blank" rel="noopener" href="https://docs.github.com/en/authentication/connecting-to-github-with-ssh/adding-a-new-ssh-key-to-your-github-account">:link:</a><br>![](<a target="_blank" rel="noopener" href="https://i.imgur.com/fT8xpej.png">https://i.imgur.com/fT8xpej.png</a> &#x3D;200x)<br><img src="https://i.imgur.com/esiwR1T.png"></p>
+<p><img src="https://i.imgur.com/8yv980c.png"></p>
+<p>連線測試</p>
+<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ssh -T git@github.com</span><br><span class="line"># output: Hi XXX! You’ve successfully authenticated, but GitHub does <span class="keyword">not</span> provide shell access.</span><br></pre></td></tr></table></figure></li>
+<li><p>deploy on GitHub</p>
+<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hexo clean &amp;&amp; hexo g &amp;&amp; hexo d</span><br></pre></td></tr></table></figure></li>
+</ol>
+
     </div>
 
     
@@ -373,6 +456,12 @@
     
 
     <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/GitHub/" rel="tag"># GitHub</a>
+              <a href="/tags/Hexo/" rel="tag"># Hexo</a>
+              <a href="/tags/GitHub-pages/" rel="tag"># GitHub pages</a>
+              <a href="/tags/Blog/" rel="tag"># Blog</a>
+          </div>
 
         
 
@@ -447,13 +536,13 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-line"></i>
     </span>
-    <span title="Symbols count total">19k</span>
+    <span title="Symbols count total">22k</span>
   </span>
   <span class="post-meta-item">
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="Reading time total">17 mins.</span>
+    <span title="Reading time total">20 mins.</span>
   </span>
 </div>
 <div class="busuanzi-count">
