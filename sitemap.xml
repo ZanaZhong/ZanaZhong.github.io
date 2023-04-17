@@ -218,6 +218,48 @@
 
   
   <url>
+    <loc>https://zanazhong.github.io/tags/Check-io/</loc>
+    <lastmod>2023-04-17</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://zanazhong.github.io/tags/python/</loc>
+    <lastmod>2023-04-17</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://zanazhong.github.io/tags/lambda/</loc>
+    <lastmod>2023-04-17</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://zanazhong.github.io/tags/sort/</loc>
+    <lastmod>2023-04-17</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://zanazhong.github.io/tags/list/</loc>
+    <lastmod>2023-04-17</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://zanazhong.github.io/tags/dictionary/</loc>
+    <lastmod>2023-04-17</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
     <loc>https://zanazhong.github.io/tags/sidebar/</loc>
     <lastmod>2023-04-17</lastmod>
     <changefreq>weekly</changefreq>
@@ -268,48 +310,6 @@
   
   <url>
     <loc>https://zanazhong.github.io/tags/card/</loc>
-    <lastmod>2023-04-17</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://zanazhong.github.io/tags/Check-io/</loc>
-    <lastmod>2023-04-17</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://zanazhong.github.io/tags/python/</loc>
-    <lastmod>2023-04-17</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://zanazhong.github.io/tags/lambda/</loc>
-    <lastmod>2023-04-17</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://zanazhong.github.io/tags/sort/</loc>
-    <lastmod>2023-04-17</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://zanazhong.github.io/tags/list/</loc>
-    <lastmod>2023-04-17</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://zanazhong.github.io/tags/dictionary/</loc>
     <lastmod>2023-04-17</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -451,14 +451,14 @@
 
   
   <url>
-    <loc>https://zanazhong.github.io/categories/html/</loc>
+    <loc>https://zanazhong.github.io/categories/Check-io/</loc>
     <lastmod>2023-04-17</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
-    <loc>https://zanazhong.github.io/categories/Check-io/</loc>
+    <loc>https://zanazhong.github.io/categories/html/</loc>
     <lastmod>2023-04-17</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
