@@ -318,9 +318,9 @@
     
     <category term="lambda" scheme="https://zanazhong.github.io/tags/lambda/"/>
     
-    <category term="sort" scheme="https://zanazhong.github.io/tags/sort/"/>
-    
     <category term="list" scheme="https://zanazhong.github.io/tags/list/"/>
+    
+    <category term="sort" scheme="https://zanazhong.github.io/tags/sort/"/>
     
     <category term="dictionary" scheme="https://zanazhong.github.io/tags/dictionary/"/>
     
@@ -403,9 +403,9 @@
     
     <category term="lambda" scheme="https://zanazhong.github.io/tags/lambda/"/>
     
-    <category term="list" scheme="https://zanazhong.github.io/tags/list/"/>
-    
     <category term="min/max" scheme="https://zanazhong.github.io/tags/min-max/"/>
+    
+    <category term="list" scheme="https://zanazhong.github.io/tags/list/"/>
     
   </entry>
   
