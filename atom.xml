@@ -18,8 +18,8 @@
   
   <entry>
     <title>[筆記] Leetcode - 1822. Sign of the Product of an Array</title>
-    <link href="https://zanazhong.github.io/2023/05/02/%E7%AD%86%E8%A8%98/"/>
-    <id>https://zanazhong.github.io/2023/05/02/%E7%AD%86%E8%A8%98/</id>
+    <link href="https://zanazhong.github.io/2023/05/02/%E7%AD%86-Leetcode-1822-Sign-of-the-Product-of-an-Array/"/>
+    <id>https://zanazhong.github.io/2023/05/02/%E7%AD%86-Leetcode-1822-Sign-of-the-Product-of-an-Array/</id>
     <published>2023-05-02T10:11:37.000Z</published>
     <updated>2023-05-02T10:20:47.436Z</updated>
     
@@ -352,9 +352,9 @@
     
     <category term="lambda" scheme="https://zanazhong.github.io/tags/lambda/"/>
     
-    <category term="list" scheme="https://zanazhong.github.io/tags/list/"/>
-    
     <category term="sort" scheme="https://zanazhong.github.io/tags/sort/"/>
+    
+    <category term="list" scheme="https://zanazhong.github.io/tags/list/"/>
     
     <category term="dictionary" scheme="https://zanazhong.github.io/tags/dictionary/"/>
     
@@ -437,9 +437,9 @@
     
     <category term="lambda" scheme="https://zanazhong.github.io/tags/lambda/"/>
     
-    <category term="min/max" scheme="https://zanazhong.github.io/tags/min-max/"/>
-    
     <category term="list" scheme="https://zanazhong.github.io/tags/list/"/>
+    
+    <category term="min/max" scheme="https://zanazhong.github.io/tags/min-max/"/>
     
   </entry>
   
