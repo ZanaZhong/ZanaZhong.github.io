@@ -517,6 +517,87 @@ def date_time(time: str) -&gt; str:
       </tags>
   </entry>
   <entry>
+    <title>[筆記] Hexo - nexT 基礎配置 (一)</title>
+    <url>/2020/09/11/%E7%AD%86%E8%A8%98-Hexo-nexT-%E5%9F%BA%E7%A4%8E%E9%85%8D%E7%BD%AE-%E4%B8%80/</url>
+    <content><![CDATA[<blockquote>
+<p>自己在建置的時候查了很多資料，整理完希望幫助到有需要的人<br>此篇文章主要是修改 _config.yml 裡的設置</p>
+</blockquote>
+<span id="more"></span>
+
+<h3 id="新建文章分類頁面-Categories"><a href="#新建文章分類頁面-Categories" class="headerlink" title="新建文章分類頁面 (Categories)"></a>新建文章分類頁面 (Categories)</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">hexo new page categories</span><br></pre></td></tr></table></figure>
+<p>修改 source&#x2F;categories&#x2F;index.md </p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">---</span><br><span class="line">title: categories</span><br><span class="line">date: 產生當下時間</span><br><span class="line">type: &quot;categories&quot;</span><br><span class="line">comments: false</span><br><span class="line">---</span><br></pre></td></tr></table></figure>
+<p>文章增加分類，只要在 categories 後面加入類別</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">categories: [categorie1, categorie2, ...]</span><br></pre></td></tr></table></figure>
+
+<h3 id="新建文章標籤頁面-Tags"><a href="#新建文章標籤頁面-Tags" class="headerlink" title="新建文章標籤頁面 (Tags)"></a>新建文章標籤頁面 (Tags)</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">hexo new page tags</span><br></pre></td></tr></table></figure>
+<p>修改 source&#x2F;tags&#x2F;index.md </p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">---</span><br><span class="line">title: tags</span><br><span class="line">date: 產生當下時間</span><br><span class="line">type: &quot;tags&quot;</span><br><span class="line">comments: false</span><br><span class="line">---</span><br></pre></td></tr></table></figure>
+<p>文章增加標籤，只要在 tags 後面加入標籤</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">tags: [tag1, tag2, ...]</span><br></pre></td></tr></table></figure>
+<p>下列方式會在文章中顯示 tags</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">---</span><br><span class="line">title: &#39;[筆記] GitHub pages + Hexo 搭建 Blog (Mac)&#39;</span><br><span class="line">date: 2020-09-11 18:39:59</span><br><span class="line">tags: </span><br><span class="line">  - tag1</span><br><span class="line">  - tag2</span><br><span class="line">  - tag3</span><br><span class="line">  - tag4</span><br><span class="line">---</span><br></pre></td></tr></table></figure>
+<p><img src="https://i.imgur.com/q9GAmY2.png?450x" alt="圖片"></p>
+<h3 id="設置首頁不顯示全文"><a href="#設置首頁不顯示全文" class="headerlink" title="設置首頁不顯示全文"></a>設置首頁不顯示全文</h3><p>Next默認會顯示全文，個人不是很喜歡，首頁會有點太長</p>
+<ul>
+<li>修改配置<br>印象安裝時 default 應該就是true<figure class="highlight yml"><table><tr><td class="code"><pre><span class="line"><span class="attr">excerpt_description:</span>  <span class="literal">true</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li><p>方法一： 在文章中寫 desctiption</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">--- </span><br><span class="line">title: &#39;文章標題&#39;</span><br><span class="line">date: 產生當下時間</span><br><span class="line">description: &#39;會顯示在首頁的摘要，其餘的會隱藏&#39;</span><br><span class="line">---</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>方法二：<br>  在文章中想截斷的地方加上 <code>&lt;!--more--&gt;</code></p>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="文章中-note-樣式"><a href="#文章中-note-樣式" class="headerlink" title="文章中 note 樣式"></a>文章中 note 樣式</h3><ul>
+<li><p>default:</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">style: simple</span><br><span class="line">icons: false</span><br></pre></td></tr></table></figure>
+<p><img src="https://i.imgur.com/79YnfVM.png" alt="圖片"></p>
+</li>
+<li><p>修改後</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">note:</span><br><span class="line">  style: flat</span><br><span class="line">  icons: true</span><br></pre></td></tr></table></figure>
+<div class="note default"><p>default note</p>
+</div>
+
+<div class="note primary"><p>primary note</p>
+</div>
+
+<div class="note success"><p>success note</p>
+</div>
+
+<div class="note info"><p>info note</p>
+</div>
+
+<div class="note warning"><p>warning note</p>
+</div>
+
+<div class="note danger"><p>danger note</p>
+</div>
+
+<p>使用方法：(跟 HackMD 滿像的)</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#123;% note default %&#125;</span><br><span class="line">default note</span><br><span class="line">&#123;% endnote %&#125;</span><br><span class="line"></span><br><span class="line">&#123;% note primary %&#125;</span><br><span class="line">primary note</span><br><span class="line">&#123;% endnote %&#125;</span><br><span class="line"></span><br><span class="line">&#123;% note success %&#125;</span><br><span class="line">success note</span><br><span class="line">&#123;% endnote %&#125;</span><br><span class="line"></span><br><span class="line">&#123;% note info %&#125;</span><br><span class="line">info note</span><br><span class="line">&#123;% endnote %&#125;</span><br><span class="line"></span><br><span class="line">&#123;% note warning %&#125;</span><br><span class="line">warning note</span><br><span class="line">&#123;% endnote %&#125;</span><br><span class="line"></span><br><span class="line">&#123;% note danger %&#125;</span><br><span class="line">danger note</span><br><span class="line">&#123;% endnote %&#125;</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h3 id="Scheme-設定"><a href="#Scheme-設定" class="headerlink" title="Scheme 設定"></a>Scheme 設定</h3><p>在 NexT 中以下幾種 Scheme 可選擇，預設主題為Muse<br>修改 theme&#x2F;next&#x2F;_config.yml，去掉註解 ‘#’ 即可</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">#scheme: Muse</span><br><span class="line">#scheme: Mist</span><br><span class="line">#scheme: Pisces</span><br><span class="line">scheme: Gemini</span><br></pre></td></tr></table></figure>
+
+<h3 id="開啟社群帳號連結"><a href="#開啟社群帳號連結" class="headerlink" title="開啟社群帳號連結"></a>開啟社群帳號連結</h3><p>修改 theme&#x2F;next&#x2F;_config.yml，去掉註解 ‘#’ 即可</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># Social Links</span><br><span class="line"># Usage: &#96;Key: permalink || icon&#96;</span><br><span class="line"># Key is the link label showing to end users.</span><br><span class="line"># Value before &#96;||&#96; delimiter is the target permalink, value after &#96;||&#96; delimiter is the name of Font Awesome icon.</span><br><span class="line">social:</span><br><span class="line">  #GitHub: https:&#x2F;&#x2F;github.com&#x2F;yourname || fab fa-github</span><br><span class="line">  #E-Mail: mailto:yourname@gmail.com || fa fa-envelope</span><br><span class="line">  #Weibo: https:&#x2F;&#x2F;weibo.com&#x2F;yourname || fab fa-weibo</span><br><span class="line">  #Google: https:&#x2F;&#x2F;plus.google.com&#x2F;yourname || fab fa-google</span><br><span class="line">  #Twitter: https:&#x2F;&#x2F;twitter.com&#x2F;yourname || fab fa-twitter</span><br><span class="line">  #FB Page: https:&#x2F;&#x2F;www.facebook.com&#x2F;yourname&#x2F; || fab fa-facebook</span><br><span class="line">  #StackOverflow: https:&#x2F;&#x2F;stackoverflow.com&#x2F;yourname || fab fa-stack-overflow</span><br><span class="line">  #YouTube: https:&#x2F;&#x2F;youtube.com&#x2F;yourname || fab fa-youtube</span><br><span class="line">  #Instagram: https:&#x2F;&#x2F;instagram.com&#x2F;yourname || fab fa-instagram</span><br><span class="line">  #Skype: skype:yourname?call|chat || fab fa-skype</span><br></pre></td></tr></table></figure>
+
+<h3 id="大頭貼設定"><a href="#大頭貼設定" class="headerlink" title="大頭貼設定"></a>大頭貼設定</h3><p>修改 theme&#x2F;next&#x2F;_config.yml，去掉註解 ‘#’ 即可</p>
+<figure class="highlight yml"><table><tr><td class="code"><pre><span class="line"><span class="attr">avatar:</span></span><br><span class="line">  <span class="attr">url:</span> <span class="comment">#/images/avatar.gif</span></span><br><span class="line">  <span class="comment"># If true, the avatar will be dispalyed in circle.</span></span><br><span class="line">  <span class="attr">rounded:</span> <span class="literal">true</span></span><br></pre></td></tr></table></figure>]]></content>
+      <categories>
+        <category>Hexo</category>
+      </categories>
+      <tags>
+        <tag>GitHub</tag>
+        <tag>Hexo</tag>
+        <tag>GitHub pages</tag>
+        <tag>Blog</tag>
+        <tag>Mac</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>[筆記] Hexo - nexT 基礎配置 (三)</title>
     <url>/2020/09/14/%E7%AD%86%E8%A8%98-Hexo-nexT-%E5%9F%BA%E7%A4%8E%E9%85%8D%E7%BD%AE-%E4%B8%89/</url>
     <content><![CDATA[<blockquote>
@@ -548,6 +629,60 @@ def date_time(time: str) -&gt; str:
       <categories>
         <category>Hexo</category>
       </categories>
+      <tags>
+        <tag>GitHub</tag>
+        <tag>Hexo</tag>
+        <tag>GitHub pages</tag>
+        <tag>Blog</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>[筆記] Hexo - nexT 基礎配置 (二)</title>
+    <url>/2020/09/11/%E7%AD%86%E8%A8%98-Hexo-nexT-%E5%9F%BA%E7%A4%8E%E9%85%8D%E7%BD%AE-%E4%BA%8C/</url>
+    <content><![CDATA[<blockquote>
+<p>自己在建置的時候查了很多資料，整理完希望幫助到有需要的人<br>此篇文章需要下載一些而外的套件</p>
+</blockquote>
+<span id="more"></span>
+
+<h3 id="pjax-安裝-還不知道要做啥"><a href="#pjax-安裝-還不知道要做啥" class="headerlink" title="pjax 安裝 (還不知道要做啥)"></a>pjax 安裝 (還不知道要做啥)</h3><blockquote>
+<p>pjax 實現了 URL 改變但不重新整理整個頁面，也就是只有局部的頁面會更新，不會讓整個頁面重新閃動（重新整理）。那這個功能有什麼特色呢？最重要的就是原本左下角的音樂播放器遇到切換頁面，就會停掉然後重新載入；但使用 pjax 後就能解決這個問題。</p>
+</blockquote>
+<p>&#x2F;themes&#x2F;next&#x2F;_config.yml，修改 pjax: true：</p>
+<figure class="highlight yml"><table><tr><td class="code"><pre><span class="line"><span class="comment"># Easily enable fast Ajax navigation on your website.</span></span><br><span class="line"><span class="comment"># Dependencies: https://github.com/theme-next/theme-next-pjax</span></span><br><span class="line"><span class="attr">pjax:</span> <span class="literal">true</span> <span class="string">(default</span> <span class="literal">null</span><span class="string">)</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line">git clone https://github.com/theme-next/theme-next-pjax themes/next/source/lib/pjax</span><br></pre></td></tr></table></figure>
+
+<h3 id="文章字數統計-x2F-閱讀時間安裝"><a href="#文章字數統計-x2F-閱讀時間安裝" class="headerlink" title="文章字數統計&#x2F;閱讀時間安裝"></a>文章字數統計&#x2F;閱讀時間安裝</h3><p>&#x2F;themes&#x2F;next&#x2F;_config.yml</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># Post wordcount display settings</span><br><span class="line"># Dependencies: https:&#x2F;&#x2F;github.com&#x2F;theme-next&#x2F;hexo-symbols-count-time</span><br><span class="line">symbols_count_time:</span><br><span class="line">  separated_meta: true # 是否&quot;換行顯示&quot;字數統計及閱讀時長</span><br><span class="line">  item_text_post: false # 字數統計和閱讀時長是要使用小圖示(true)還是文字表示(false)</span><br><span class="line">  item_text_total: false # 文章底部的字數統計和閱讀時長是要使用小圖示(true)還是文字表示(false)</span><br></pre></td></tr></table></figure>
+
+<h3 id="讓google可以搜尋到你的網站"><a href="#讓google可以搜尋到你的網站" class="headerlink" title="讓google可以搜尋到你的網站"></a>讓google可以搜尋到你的網站</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">npm i hexo-generator-sitemap --save</span><br></pre></td></tr></table></figure>
+<p>Hexo 資料夾根目錄 &#x2F;_config.yml</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">sitemap:</span><br><span class="line">  path: sitemap.xml</span><br></pre></td></tr></table></figure>
+<p>但事情沒這麼單純，之後有空再寫</p>
+<h3 id="文章搜尋功能安裝"><a href="#文章搜尋功能安裝" class="headerlink" title="文章搜尋功能安裝"></a>文章搜尋功能安裝</h3><p>&#x2F;themes&#x2F;next&#x2F;_config.yml</p>
+<figure class="highlight yml"><table><tr><td class="code"><pre><span class="line"><span class="attr">local_search:</span></span><br><span class="line">  <span class="attr">enable:</span> <span class="literal">true</span> <span class="string">(default</span> <span class="literal">false</span><span class="string">)</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line">npm install hexo-generator-searchdb --save</span><br></pre></td></tr></table></figure>
+<p>Hexo 資料夾根目錄 &#x2F;_config.yml<br>自己加上，加入最末端即可</p>
+<figure class="highlight yml"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 文章搜尋功能</span></span><br><span class="line"><span class="attr">search:</span></span><br><span class="line">  <span class="attr">path:</span> <span class="string">search.xml</span></span><br><span class="line">  <span class="attr">field:</span> <span class="string">post</span></span><br><span class="line">  <span class="attr">content:</span> <span class="literal">true</span></span><br><span class="line">  <span class="attr">format:</span> <span class="string">html</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="頁面滾動進度條"><a href="#頁面滾動進度條" class="headerlink" title="頁面滾動進度條"></a>頁面滾動進度條</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">reading_progress:</span><br><span class="line">  enable: true (default false)</span><br></pre></td></tr></table></figure>
+<p>(好像要下載這個，但我好像沒有)</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">git clone https:&#x2F;&#x2F;github.com&#x2F;theme-next&#x2F;theme-next-reading-progress source&#x2F;lib&#x2F;reading_progress</span><br></pre></td></tr></table></figure>
+
+<h3 id="頁面載入進度條"><a href="#頁面載入進度條" class="headerlink" title="頁面載入進度條"></a>頁面載入進度條</h3><p>我的沒反應QQQQQ</p>
+<!-- https://blog.pangao.vip/Hexo%E5%8D%9A%E5%AE%A2NexT%E4%B8%BB%E9%A2%98%E7%BE%8E%E5%8C%96%E4%B9%8B%E9%A1%B6%E9%83%A8%E5%8A%A0%E8%BD%BD%E8%BF%9B%E5%BA%A6%E6%9D%A1/ -->
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">git clone https:&#x2F;&#x2F;github.com&#x2F;theme-next&#x2F;theme-next-pace source&#x2F;lib&#x2F;pace</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">pace:</span><br><span class="line">  enable: true</span><br><span class="line">  # Themes list:</span><br><span class="line">  # big-counter | bounce | barber-shop | center-atom | center-circle | center-radar | center-simple</span><br><span class="line">  # corner-indicator | fill-left | flat-top | flash | loading-bar | mac-osx | material | minimal</span><br><span class="line">  theme: minimal</span><br></pre></td></tr></table></figure>
+
+<h3 id="閱讀統計"><a href="#閱讀統計" class="headerlink" title="閱讀統計"></a>閱讀統計</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">busuanzi_count:</span><br><span class="line">  enable: true</span><br></pre></td></tr></table></figure>
+<p><img src="https://i.imgur.com/43jmHsU.png?90x" alt="圖片"></p>
+<h3 id="文章中程式碼設置"><a href="#文章中程式碼設置" class="headerlink" title="文章中程式碼設置"></a>文章中程式碼設置</h3><ul>
+<li><p>區塊樣式<br>可至 <a href="https://theme-next.js.org/highlight/">themes</a> 挑選</p>
+<figure class="highlight yml"><table><tr><td class="code"><pre><span class="line"><span class="attr">theme:</span></span><br><span class="line">  <span class="attr">light:</span> <span class="string">atom-one-dark-reasonable</span></span><br><span class="line">  <span class="attr">dark:</span> <span class="string">tomorrow-night</span></span><br><span class="line"><span class="attr">prism:</span></span><br><span class="line">  <span class="attr">light:</span> <span class="string">prism</span></span><br><span class="line">  <span class="attr">dark:</span> <span class="string">prism-dark</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>copy button</p>
+<figure class="highlight yml"><table><tr><td class="code"><pre><span class="line"><span class="attr">border_radius:</span></span><br><span class="line">  <span class="attr">copy_button:</span></span><br><span class="line">    <span class="attr">enable:</span> <span class="literal">true</span></span><br><span class="line">    <span class="comment"># Available values: default | flat | mac</span></span><br><span class="line">    <span class="attr">style:</span> <span class="string">flat</span></span><br></pre></td></tr></table></figure></li>
+</ul>
+]]></content>
       <tags>
         <tag>GitHub</tag>
         <tag>Hexo</tag>
@@ -633,139 +768,16 @@ def date_time(time: str) -&gt; str:
       </tags>
   </entry>
   <entry>
-    <title>[筆記] Hexo - nexT 基礎配置 (一)</title>
-    <url>/2020/09/11/%E7%AD%86%E8%A8%98-Hexo-nexT-%E5%9F%BA%E7%A4%8E%E9%85%8D%E7%BD%AE-%E4%B8%80/</url>
-    <content><![CDATA[<blockquote>
-<p>自己在建置的時候查了很多資料，整理完希望幫助到有需要的人<br>此篇文章主要是修改 _config.yml 裡的設置</p>
+    <title>筆記</title>
+    <url>/2023/05/01/%E7%AD%86%E8%A8%98-Leetcode-1491-Average-Salary-Excluding-the-Minimum-and-Maximum-Salary/</url>
+    <content><![CDATA[<p><a href="https://leetcode.com/problems/average-salary-excluding-the-minimum-and-maximum-salary/">https://leetcode.com/problems/average-salary-excluding-the-minimum-and-maximum-salary/</a></p>
+<blockquote>
+<p>You are given an array of unique integers salary where salary[i] is the salary of the ith employee.</p>
 </blockquote>
-<span id="more"></span>
-
-<h3 id="新建文章分類頁面-Categories"><a href="#新建文章分類頁面-Categories" class="headerlink" title="新建文章分類頁面 (Categories)"></a>新建文章分類頁面 (Categories)</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">hexo new page categories</span><br></pre></td></tr></table></figure>
-<p>修改 source&#x2F;categories&#x2F;index.md </p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">---</span><br><span class="line">title: categories</span><br><span class="line">date: 產生當下時間</span><br><span class="line">type: &quot;categories&quot;</span><br><span class="line">comments: false</span><br><span class="line">---</span><br></pre></td></tr></table></figure>
-<p>文章增加分類，只要在 categories 後面加入類別</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">categories: [categorie1, categorie2, ...]</span><br></pre></td></tr></table></figure>
-
-<h3 id="新建文章標籤頁面-Tags"><a href="#新建文章標籤頁面-Tags" class="headerlink" title="新建文章標籤頁面 (Tags)"></a>新建文章標籤頁面 (Tags)</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">hexo new page tags</span><br></pre></td></tr></table></figure>
-<p>修改 source&#x2F;tags&#x2F;index.md </p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">---</span><br><span class="line">title: tags</span><br><span class="line">date: 產生當下時間</span><br><span class="line">type: &quot;tags&quot;</span><br><span class="line">comments: false</span><br><span class="line">---</span><br></pre></td></tr></table></figure>
-<p>文章增加標籤，只要在 tags 後面加入標籤</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">tags: [tag1, tag2, ...]</span><br></pre></td></tr></table></figure>
-<p>下列方式會在文章中顯示 tags</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">---</span><br><span class="line">title: &#39;[筆記] GitHub pages + Hexo 搭建 Blog (Mac)&#39;</span><br><span class="line">date: 2020-09-11 18:39:59</span><br><span class="line">tags: </span><br><span class="line">  - tag1</span><br><span class="line">  - tag2</span><br><span class="line">  - tag3</span><br><span class="line">  - tag4</span><br><span class="line">---</span><br></pre></td></tr></table></figure>
-<p><img src="https://i.imgur.com/q9GAmY2.png?450x" alt="圖片"></p>
-<h3 id="設置首頁不顯示全文"><a href="#設置首頁不顯示全文" class="headerlink" title="設置首頁不顯示全文"></a>設置首頁不顯示全文</h3><p>Next默認會顯示全文，個人不是很喜歡，首頁會有點太長</p>
-<ul>
-<li>修改配置<br>印象安裝時 default 應該就是true<figure class="highlight yml"><table><tr><td class="code"><pre><span class="line"><span class="attr">excerpt_description:</span>  <span class="literal">true</span></span><br></pre></td></tr></table></figure>
-<ul>
-<li><p>方法一： 在文章中寫 desctiption</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">--- </span><br><span class="line">title: &#39;文章標題&#39;</span><br><span class="line">date: 產生當下時間</span><br><span class="line">description: &#39;會顯示在首頁的摘要，其餘的會隱藏&#39;</span><br><span class="line">---</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>方法二：<br>  在文章中想截斷的地方加上 <code>&lt;!--more--&gt;</code></p>
-</li>
-</ul>
-</li>
-</ul>
-<h3 id="文章中-note-樣式"><a href="#文章中-note-樣式" class="headerlink" title="文章中 note 樣式"></a>文章中 note 樣式</h3><ul>
-<li><p>default:</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">style: simple</span><br><span class="line">icons: false</span><br></pre></td></tr></table></figure>
-<p><img src="https://i.imgur.com/79YnfVM.png" alt="圖片"></p>
-</li>
-<li><p>修改後</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">note:</span><br><span class="line">  style: flat</span><br><span class="line">  icons: true</span><br></pre></td></tr></table></figure>
-<div class="note default"><p>default note</p>
-</div>
-
-<div class="note primary"><p>primary note</p>
-</div>
-
-<div class="note success"><p>success note</p>
-</div>
-
-<div class="note info"><p>info note</p>
-</div>
-
-<div class="note warning"><p>warning note</p>
-</div>
-
-<div class="note danger"><p>danger note</p>
-</div>
-
-<p>使用方法：(跟 HackMD 滿像的)</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#123;% note default %&#125;</span><br><span class="line">default note</span><br><span class="line">&#123;% endnote %&#125;</span><br><span class="line"></span><br><span class="line">&#123;% note primary %&#125;</span><br><span class="line">primary note</span><br><span class="line">&#123;% endnote %&#125;</span><br><span class="line"></span><br><span class="line">&#123;% note success %&#125;</span><br><span class="line">success note</span><br><span class="line">&#123;% endnote %&#125;</span><br><span class="line"></span><br><span class="line">&#123;% note info %&#125;</span><br><span class="line">info note</span><br><span class="line">&#123;% endnote %&#125;</span><br><span class="line"></span><br><span class="line">&#123;% note warning %&#125;</span><br><span class="line">warning note</span><br><span class="line">&#123;% endnote %&#125;</span><br><span class="line"></span><br><span class="line">&#123;% note danger %&#125;</span><br><span class="line">danger note</span><br><span class="line">&#123;% endnote %&#125;</span><br></pre></td></tr></table></figure></li>
-</ul>
-<h3 id="Scheme-設定"><a href="#Scheme-設定" class="headerlink" title="Scheme 設定"></a>Scheme 設定</h3><p>在 NexT 中以下幾種 Scheme 可選擇，預設主題為Muse<br>修改 theme&#x2F;next&#x2F;_config.yml，去掉註解 ‘#’ 即可</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">#scheme: Muse</span><br><span class="line">#scheme: Mist</span><br><span class="line">#scheme: Pisces</span><br><span class="line">scheme: Gemini</span><br></pre></td></tr></table></figure>
-
-<h3 id="開啟社群帳號連結"><a href="#開啟社群帳號連結" class="headerlink" title="開啟社群帳號連結"></a>開啟社群帳號連結</h3><p>修改 theme&#x2F;next&#x2F;_config.yml，去掉註解 ‘#’ 即可</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># Social Links</span><br><span class="line"># Usage: &#96;Key: permalink || icon&#96;</span><br><span class="line"># Key is the link label showing to end users.</span><br><span class="line"># Value before &#96;||&#96; delimiter is the target permalink, value after &#96;||&#96; delimiter is the name of Font Awesome icon.</span><br><span class="line">social:</span><br><span class="line">  #GitHub: https:&#x2F;&#x2F;github.com&#x2F;yourname || fab fa-github</span><br><span class="line">  #E-Mail: mailto:yourname@gmail.com || fa fa-envelope</span><br><span class="line">  #Weibo: https:&#x2F;&#x2F;weibo.com&#x2F;yourname || fab fa-weibo</span><br><span class="line">  #Google: https:&#x2F;&#x2F;plus.google.com&#x2F;yourname || fab fa-google</span><br><span class="line">  #Twitter: https:&#x2F;&#x2F;twitter.com&#x2F;yourname || fab fa-twitter</span><br><span class="line">  #FB Page: https:&#x2F;&#x2F;www.facebook.com&#x2F;yourname&#x2F; || fab fa-facebook</span><br><span class="line">  #StackOverflow: https:&#x2F;&#x2F;stackoverflow.com&#x2F;yourname || fab fa-stack-overflow</span><br><span class="line">  #YouTube: https:&#x2F;&#x2F;youtube.com&#x2F;yourname || fab fa-youtube</span><br><span class="line">  #Instagram: https:&#x2F;&#x2F;instagram.com&#x2F;yourname || fab fa-instagram</span><br><span class="line">  #Skype: skype:yourname?call|chat || fab fa-skype</span><br></pre></td></tr></table></figure>
-
-<h3 id="大頭貼設定"><a href="#大頭貼設定" class="headerlink" title="大頭貼設定"></a>大頭貼設定</h3><p>修改 theme&#x2F;next&#x2F;_config.yml，去掉註解 ‘#’ 即可</p>
-<figure class="highlight yml"><table><tr><td class="code"><pre><span class="line"><span class="attr">avatar:</span></span><br><span class="line">  <span class="attr">url:</span> <span class="comment">#/images/avatar.gif</span></span><br><span class="line">  <span class="comment"># If true, the avatar will be dispalyed in circle.</span></span><br><span class="line">  <span class="attr">rounded:</span> <span class="literal">true</span></span><br></pre></td></tr></table></figure>]]></content>
-      <categories>
-        <category>Hexo</category>
-      </categories>
-      <tags>
-        <tag>GitHub</tag>
-        <tag>Hexo</tag>
-        <tag>GitHub pages</tag>
-        <tag>Blog</tag>
-        <tag>Mac</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>[筆記] Hexo - nexT 基礎配置 (二)</title>
-    <url>/2020/09/11/%E7%AD%86%E8%A8%98-Hexo-nexT-%E5%9F%BA%E7%A4%8E%E9%85%8D%E7%BD%AE-%E4%BA%8C/</url>
-    <content><![CDATA[<blockquote>
-<p>自己在建置的時候查了很多資料，整理完希望幫助到有需要的人<br>此篇文章需要下載一些而外的套件</p>
-</blockquote>
-<span id="more"></span>
-
-<h3 id="pjax-安裝-還不知道要做啥"><a href="#pjax-安裝-還不知道要做啥" class="headerlink" title="pjax 安裝 (還不知道要做啥)"></a>pjax 安裝 (還不知道要做啥)</h3><blockquote>
-<p>pjax 實現了 URL 改變但不重新整理整個頁面，也就是只有局部的頁面會更新，不會讓整個頁面重新閃動（重新整理）。那這個功能有什麼特色呢？最重要的就是原本左下角的音樂播放器遇到切換頁面，就會停掉然後重新載入；但使用 pjax 後就能解決這個問題。</p>
-</blockquote>
-<p>&#x2F;themes&#x2F;next&#x2F;_config.yml，修改 pjax: true：</p>
-<figure class="highlight yml"><table><tr><td class="code"><pre><span class="line"><span class="comment"># Easily enable fast Ajax navigation on your website.</span></span><br><span class="line"><span class="comment"># Dependencies: https://github.com/theme-next/theme-next-pjax</span></span><br><span class="line"><span class="attr">pjax:</span> <span class="literal">true</span> <span class="string">(default</span> <span class="literal">null</span><span class="string">)</span></span><br></pre></td></tr></table></figure>
-<figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line">git clone https://github.com/theme-next/theme-next-pjax themes/next/source/lib/pjax</span><br></pre></td></tr></table></figure>
-
-<h3 id="文章字數統計-x2F-閱讀時間安裝"><a href="#文章字數統計-x2F-閱讀時間安裝" class="headerlink" title="文章字數統計&#x2F;閱讀時間安裝"></a>文章字數統計&#x2F;閱讀時間安裝</h3><p>&#x2F;themes&#x2F;next&#x2F;_config.yml</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># Post wordcount display settings</span><br><span class="line"># Dependencies: https:&#x2F;&#x2F;github.com&#x2F;theme-next&#x2F;hexo-symbols-count-time</span><br><span class="line">symbols_count_time:</span><br><span class="line">  separated_meta: true # 是否&quot;換行顯示&quot;字數統計及閱讀時長</span><br><span class="line">  item_text_post: false # 字數統計和閱讀時長是要使用小圖示(true)還是文字表示(false)</span><br><span class="line">  item_text_total: false # 文章底部的字數統計和閱讀時長是要使用小圖示(true)還是文字表示(false)</span><br></pre></td></tr></table></figure>
-
-<h3 id="讓google可以搜尋到你的網站"><a href="#讓google可以搜尋到你的網站" class="headerlink" title="讓google可以搜尋到你的網站"></a>讓google可以搜尋到你的網站</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">npm i hexo-generator-sitemap --save</span><br></pre></td></tr></table></figure>
-<p>Hexo 資料夾根目錄 &#x2F;_config.yml</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">sitemap:</span><br><span class="line">  path: sitemap.xml</span><br></pre></td></tr></table></figure>
-<p>但事情沒這麼單純，之後有空再寫</p>
-<h3 id="文章搜尋功能安裝"><a href="#文章搜尋功能安裝" class="headerlink" title="文章搜尋功能安裝"></a>文章搜尋功能安裝</h3><p>&#x2F;themes&#x2F;next&#x2F;_config.yml</p>
-<figure class="highlight yml"><table><tr><td class="code"><pre><span class="line"><span class="attr">local_search:</span></span><br><span class="line">  <span class="attr">enable:</span> <span class="literal">true</span> <span class="string">(default</span> <span class="literal">false</span><span class="string">)</span></span><br></pre></td></tr></table></figure>
-<figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line">npm install hexo-generator-searchdb --save</span><br></pre></td></tr></table></figure>
-<p>Hexo 資料夾根目錄 &#x2F;_config.yml<br>自己加上，加入最末端即可</p>
-<figure class="highlight yml"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 文章搜尋功能</span></span><br><span class="line"><span class="attr">search:</span></span><br><span class="line">  <span class="attr">path:</span> <span class="string">search.xml</span></span><br><span class="line">  <span class="attr">field:</span> <span class="string">post</span></span><br><span class="line">  <span class="attr">content:</span> <span class="literal">true</span></span><br><span class="line">  <span class="attr">format:</span> <span class="string">html</span></span><br></pre></td></tr></table></figure>
-
-<h3 id="頁面滾動進度條"><a href="#頁面滾動進度條" class="headerlink" title="頁面滾動進度條"></a>頁面滾動進度條</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">reading_progress:</span><br><span class="line">  enable: true (default false)</span><br></pre></td></tr></table></figure>
-<p>(好像要下載這個，但我好像沒有)</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">git clone https:&#x2F;&#x2F;github.com&#x2F;theme-next&#x2F;theme-next-reading-progress source&#x2F;lib&#x2F;reading_progress</span><br></pre></td></tr></table></figure>
-
-<h3 id="頁面載入進度條"><a href="#頁面載入進度條" class="headerlink" title="頁面載入進度條"></a>頁面載入進度條</h3><p>我的沒反應QQQQQ</p>
-<!-- https://blog.pangao.vip/Hexo%E5%8D%9A%E5%AE%A2NexT%E4%B8%BB%E9%A2%98%E7%BE%8E%E5%8C%96%E4%B9%8B%E9%A1%B6%E9%83%A8%E5%8A%A0%E8%BD%BD%E8%BF%9B%E5%BA%A6%E6%9D%A1/ -->
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">git clone https:&#x2F;&#x2F;github.com&#x2F;theme-next&#x2F;theme-next-pace source&#x2F;lib&#x2F;pace</span><br></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">pace:</span><br><span class="line">  enable: true</span><br><span class="line">  # Themes list:</span><br><span class="line">  # big-counter | bounce | barber-shop | center-atom | center-circle | center-radar | center-simple</span><br><span class="line">  # corner-indicator | fill-left | flat-top | flash | loading-bar | mac-osx | material | minimal</span><br><span class="line">  theme: minimal</span><br></pre></td></tr></table></figure>
-
-<h3 id="閱讀統計"><a href="#閱讀統計" class="headerlink" title="閱讀統計"></a>閱讀統計</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">busuanzi_count:</span><br><span class="line">  enable: true</span><br></pre></td></tr></table></figure>
-<p><img src="https://i.imgur.com/43jmHsU.png?90x" alt="圖片"></p>
-<h3 id="文章中程式碼設置"><a href="#文章中程式碼設置" class="headerlink" title="文章中程式碼設置"></a>文章中程式碼設置</h3><ul>
-<li><p>區塊樣式<br>可至 <a href="https://theme-next.js.org/highlight/">themes</a> 挑選</p>
-<figure class="highlight yml"><table><tr><td class="code"><pre><span class="line"><span class="attr">theme:</span></span><br><span class="line">  <span class="attr">light:</span> <span class="string">atom-one-dark-reasonable</span></span><br><span class="line">  <span class="attr">dark:</span> <span class="string">tomorrow-night</span></span><br><span class="line"><span class="attr">prism:</span></span><br><span class="line">  <span class="attr">light:</span> <span class="string">prism</span></span><br><span class="line">  <span class="attr">dark:</span> <span class="string">prism-dark</span></span><br></pre></td></tr></table></figure>
-</li>
-<li><p>copy button</p>
-<figure class="highlight yml"><table><tr><td class="code"><pre><span class="line"><span class="attr">border_radius:</span></span><br><span class="line">  <span class="attr">copy_button:</span></span><br><span class="line">    <span class="attr">enable:</span> <span class="literal">true</span></span><br><span class="line">    <span class="comment"># Available values: default | flat | mac</span></span><br><span class="line">    <span class="attr">style:</span> <span class="string">flat</span></span><br></pre></td></tr></table></figure></li>
-</ul>
+<p>Return the average salary of employees excluding the minimum and maximum salary. Answers within 10-5 of the actual answer will be accepted.</p>
+<p><img src="https://i.imgur.com/uoZrJtI.png"></p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">average</span>(<span class="params">self, salary: <span class="type">List</span>[<span class="built_in">int</span>]</span>) -&gt; <span class="built_in">float</span>:</span></span><br><span class="line">        salary.sort()</span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">sum</span>(salary[<span class="number">1</span>:-<span class="number">1</span>]) / (<span class="built_in">len</span>(salary) - <span class="number">2</span>)</span><br></pre></td></tr></table></figure>
 ]]></content>
-      <tags>
-        <tag>GitHub</tag>
-        <tag>Hexo</tag>
-        <tag>GitHub pages</tag>
-        <tag>Blog</tag>
-      </tags>
   </entry>
   <entry>
     <title>[筆記] Relative Dropdown List</title>
