@@ -2,15 +2,6 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
-    <loc>https://zanazhong.github.io/2023/05/01/%E7%AD%86%E8%A8%98-Leetcode-1491-Average-Salary-Excluding-the-Minimum-and-Maximum-Salary/</loc>
-    
-    <lastmod>2023-05-02</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
     <loc>https://zanazhong.github.io/2023/04/17/%E7%AD%86%E8%A8%98-Hexo-%E6%8F%9B%E9%9B%BB%E8%85%A6%E9%87%8D%E6%96%B0%E9%83%A8%E7%BD%B2%E7%92%B0%E5%A2%83/</loc>
     
     <lastmod>2023-04-17</lastmod>
@@ -304,7 +295,7 @@
   </url>
   
   <url>
-    <loc>https://zanazhong.github.io/tags/min-max/</loc>
+    <loc>https://zanazhong.github.io/tags/sort/</loc>
     <lastmod>2023-05-02</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -318,14 +309,14 @@
   </url>
   
   <url>
-    <loc>https://zanazhong.github.io/tags/sort/</loc>
+    <loc>https://zanazhong.github.io/tags/dictionary/</loc>
     <lastmod>2023-05-02</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
-    <loc>https://zanazhong.github.io/tags/dictionary/</loc>
+    <loc>https://zanazhong.github.io/tags/min-max/</loc>
     <lastmod>2023-05-02</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -416,13 +407,6 @@
   </url>
   
   <url>
-    <loc>https://zanazhong.github.io/tags/Mac/</loc>
-    <lastmod>2023-05-02</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
     <loc>https://zanazhong.github.io/tags/hackerrank/</loc>
     <lastmod>2023-05-02</lastmod>
     <changefreq>weekly</changefreq>
@@ -445,6 +429,13 @@
   
   <url>
     <loc>https://zanazhong.github.io/tags/hashset/</loc>
+    <lastmod>2023-05-02</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://zanazhong.github.io/tags/Mac/</loc>
     <lastmod>2023-05-02</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -481,14 +472,14 @@
   </url>
   
   <url>
-    <loc>https://zanazhong.github.io/categories/Check-io/python/</loc>
+    <loc>https://zanazhong.github.io/categories/Hexo/</loc>
     <lastmod>2023-05-02</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
-    <loc>https://zanazhong.github.io/categories/Hexo/</loc>
+    <loc>https://zanazhong.github.io/categories/Check-io/python/</loc>
     <lastmod>2023-05-02</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
