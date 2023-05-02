@@ -136,6 +136,48 @@
       </tags>
   </entry>
   <entry>
+    <title>[學習] Pyton - String</title>
+    <url>/2021/01/20/%E5%AD%B8%E7%BF%92-Pyton-String/</url>
+    <content><![CDATA[<blockquote>
+<p>一些關於 String 單字或字首大寫處理的用法</p>
+</blockquote>
+<span id="more"></span>
+
+<h2 id="字首大寫"><a href="#字首大寫" class="headerlink" title="字首大寫"></a>字首大寫</h2><ul>
+<li>capitalize(): 只會將字串的字首轉成大寫，其餘若有大寫的字會轉成小寫</li>
+<li>title(): 將字串中所有“單字”的字首轉成大寫</li>
+</ul>
+<p>input:</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">text = <span class="string">&quot;greetings, fiends&quot;</span></span><br><span class="line"><span class="built_in">print</span>(text.capitalize())</span><br><span class="line"><span class="built_in">print</span>(text.title())</span><br></pre></td></tr></table></figure>
+
+<p>output:</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#39;Greetings, friends&#39;</span><br><span class="line">&#39;Greetings, Fiends&#39;</span><br></pre></td></tr></table></figure>
+
+<p>但 capitalize() 可能會遇到一個問題，若是原本句子中有人名或地名，本身字首就是大寫的單子，在使用 capitalize() 後會變成小寫，因此有另一種方法，如下：</p>
+<p>input:</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">text = <span class="string">&quot;welcome to New York&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(text[<span class="number">0</span>].upper() + text[<span class="number">1</span>:])</span><br></pre></td></tr></table></figure>
+<p>output:</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&quot;Welcome to New York&quot;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>lower(): 將字串全部轉成小寫</li>
+<li>upper(): 將字串全部轉成大寫</li>
+<li>islowewr(): 檢查字串是否全小寫</li>
+<li>isupper(): 檢查字串是否全大寫</li>
+</ul>
+<p>input:</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">text = <span class="string">&quot;Hi, my Name is Zana&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(text.lower())</span><br><span class="line"><span class="built_in">print</span>(text.upper())</span><br><span class="line"><span class="built_in">print</span>(text.islowewr())</span><br><span class="line"><span class="built_in">print</span>(text.isupper())</span><br></pre></td></tr></table></figure>
+<p>output:</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&quot;hi, my name is zana&quot;</span><br><span class="line">&quot;HI, MY NAME IS ZANA&quot;</span><br><span class="line">False</span><br><span class="line">False</span><br></pre></td></tr></table></figure>]]></content>
+      <categories>
+        <category>python</category>
+      </categories>
+      <tags>
+        <tag>python</tag>
+        <tag>string</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>[學習] Check.io - Nearest Value</title>
     <url>/2021/01/14/%E5%AD%B8%E7%BF%92-Check-io-Nearest-Value/</url>
     <content><![CDATA[<blockquote>
@@ -212,48 +254,6 @@
         <tag>lambda</tag>
         <tag>list</tag>
         <tag>min/max</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>[學習] Pyton - String</title>
-    <url>/2021/01/20/%E5%AD%B8%E7%BF%92-Pyton-String/</url>
-    <content><![CDATA[<blockquote>
-<p>一些關於 String 單字或字首大寫處理的用法</p>
-</blockquote>
-<span id="more"></span>
-
-<h2 id="字首大寫"><a href="#字首大寫" class="headerlink" title="字首大寫"></a>字首大寫</h2><ul>
-<li>capitalize(): 只會將字串的字首轉成大寫，其餘若有大寫的字會轉成小寫</li>
-<li>title(): 將字串中所有“單字”的字首轉成大寫</li>
-</ul>
-<p>input:</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">text = <span class="string">&quot;greetings, fiends&quot;</span></span><br><span class="line"><span class="built_in">print</span>(text.capitalize())</span><br><span class="line"><span class="built_in">print</span>(text.title())</span><br></pre></td></tr></table></figure>
-
-<p>output:</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#39;Greetings, friends&#39;</span><br><span class="line">&#39;Greetings, Fiends&#39;</span><br></pre></td></tr></table></figure>
-
-<p>但 capitalize() 可能會遇到一個問題，若是原本句子中有人名或地名，本身字首就是大寫的單子，在使用 capitalize() 後會變成小寫，因此有另一種方法，如下：</p>
-<p>input:</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">text = <span class="string">&quot;welcome to New York&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(text[<span class="number">0</span>].upper() + text[<span class="number">1</span>:])</span><br></pre></td></tr></table></figure>
-<p>output:</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&quot;Welcome to New York&quot;</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>lower(): 將字串全部轉成小寫</li>
-<li>upper(): 將字串全部轉成大寫</li>
-<li>islowewr(): 檢查字串是否全小寫</li>
-<li>isupper(): 檢查字串是否全大寫</li>
-</ul>
-<p>input:</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">text = <span class="string">&quot;Hi, my Name is Zana&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(text.lower())</span><br><span class="line"><span class="built_in">print</span>(text.upper())</span><br><span class="line"><span class="built_in">print</span>(text.islowewr())</span><br><span class="line"><span class="built_in">print</span>(text.isupper())</span><br></pre></td></tr></table></figure>
-<p>output:</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&quot;hi, my name is zana&quot;</span><br><span class="line">&quot;HI, MY NAME IS ZANA&quot;</span><br><span class="line">False</span><br><span class="line">False</span><br></pre></td></tr></table></figure>]]></content>
-      <categories>
-        <category>python</category>
-      </categories>
-      <tags>
-        <tag>python</tag>
-        <tag>string</tag>
       </tags>
   </entry>
   <entry>
@@ -765,6 +765,23 @@ def date_time(time: str) -&gt; str:
         <tag>Hexo</tag>
         <tag>GitHub pages</tag>
         <tag>Blog</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>[筆記] Leetcode - 1491. Average Salary Excluding the Minimum and Maximum Salary</title>
+    <url>/2023/05/01/%E7%AD%86%E8%A8%98-Leetcode-1491-Average-Salary-Excluding-the-Minimum-and-Maximum-Salary/</url>
+    <content><![CDATA[<p><a href="https://leetcode.com/problems/average-salary-excluding-the-minimum-and-maximum-salary/">https://leetcode.com/problems/average-salary-excluding-the-minimum-and-maximum-salary/</a></p>
+<blockquote>
+<p>You are given an array of unique integers salary where salary[i] is the salary of the ith employee.</p>
+</blockquote>
+<p>Return the average salary of employees excluding the minimum and maximum salary. Answers within 10-5 of the actual answer will be accepted.</p>
+<p><img src="https://i.imgur.com/uoZrJtI.png"></p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">average</span>(<span class="params">self, salary: <span class="type">List</span>[<span class="built_in">int</span>]</span>) -&gt; <span class="built_in">float</span>:</span></span><br><span class="line">        salary.sort()</span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">sum</span>(salary[<span class="number">1</span>:-<span class="number">1</span>]) / (<span class="built_in">len</span>(salary) - <span class="number">2</span>)</span><br></pre></td></tr></table></figure>
+]]></content>
+      <tags>
+        <tag>Leetcode</tag>
+        <tag>Python</tag>
+        <tag>Coding</tag>
       </tags>
   </entry>
   <entry>
