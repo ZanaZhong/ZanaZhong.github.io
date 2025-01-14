@@ -26,28 +26,21 @@
     var CONFIG = {"hostname":"zanazhong.github.io","root":"/","scheme":"Gemini","version":"8.0.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":true,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}};
   </script>
 
-  <meta name="description" content="自己在建置的時候查了很多資料，整理完希望幫助到有需要的人此篇文章主要是修改 _config.yml 裡的設置">
+  <meta name="description" content="ɪᴛ ɪs ɪᴍᴘᴏʀᴛᴀɴᴛ ᴛᴏ sᴇᴇ ʜᴏᴡ ғᴀʀ ʏᴏᴜ&#39;ᴠᴇ ᴄᴏᴍᴇ🐾">
 <meta property="og:type" content="article">
-<meta property="og:title" content="[筆記] Hexo - nexT 基礎配置 (一)">
-<meta property="og:url" content="https://zanazhong.github.io/2020/09/11/%E7%AD%86%E8%A8%98-Hexo-nexT-%E5%9F%BA%E7%A4%8E%E9%85%8D%E7%BD%AE-%E4%B8%80/index.html">
+<meta property="og:title" content="筆記">
+<meta property="og:url" content="https://zanazhong.github.io/2025/01/14/%E7%AD%86%E8%A8%98/index.html">
 <meta property="og:site_name" content="Hey I am Zana">
-<meta property="og:description" content="自己在建置的時候查了很多資料，整理完希望幫助到有需要的人此篇文章主要是修改 _config.yml 裡的設置">
+<meta property="og:description" content="ɪᴛ ɪs ɪᴍᴘᴏʀᴛᴀɴᴛ ᴛᴏ sᴇᴇ ʜᴏᴡ ғᴀʀ ʏᴏᴜ&#39;ᴠᴇ ᴄᴏᴍᴇ🐾">
 <meta property="og:locale" content="en_US">
-<meta property="og:image" content="https://i.imgur.com/q9GAmY2.png?450x">
-<meta property="og:image" content="https://i.imgur.com/79YnfVM.png">
-<meta property="article:published_time" content="2020-09-11T10:43:19.000Z">
-<meta property="article:modified_time" content="2021-01-14T10:36:36.000Z">
+<meta property="article:published_time" content="2025-01-14T01:08:17.000Z">
+<meta property="article:modified_time" content="2025-01-14T01:08:17.628Z">
 <meta property="article:author" content="Zana">
-<meta property="article:tag" content="GitHub">
-<meta property="article:tag" content="Hexo">
-<meta property="article:tag" content="GitHub pages">
-<meta property="article:tag" content="Blog">
-<meta property="article:tag" content="Mac">
+<meta property="article:tag" content="artwork, python, programming, learning, java">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://i.imgur.com/q9GAmY2.png?450x">
 
 
-<link rel="canonical" href="https://zanazhong.github.io/2020/09/11/%E7%AD%86%E8%A8%98-Hexo-nexT-%E5%9F%BA%E7%A4%8E%E9%85%8D%E7%BD%AE-%E4%B8%80/">
+<link rel="canonical" href="https://zanazhong.github.io/2025/01/14/%E7%AD%86%E8%A8%98/">
 
 
 <script data-pjax class="page-configurations">
@@ -60,7 +53,7 @@
   };
 </script>
 
-  <title>[筆記] Hexo - nexT 基礎配置 (一) | Hey I am Zana</title>
+  <title>筆記 | Hey I am Zana</title>
   
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-187712309-1"></script>
     <script data-pjax>
@@ -218,7 +211,7 @@
 
   <aside class="sidebar">
 
-    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+    <div class="sidebar-inner sidebar-overview-active">
       <ul class="sidebar-nav">
         <li class="sidebar-nav-toc">
           Table of Contents
@@ -230,7 +223,6 @@
 
       <!--noindex-->
       <section class="post-toc-wrap sidebar-panel">
-          <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%96%B0%E5%BB%BA%E6%96%87%E7%AB%A0%E5%88%86%E9%A1%9E%E9%A0%81%E9%9D%A2-Categories"><span class="nav-number">1.</span> <span class="nav-text">新建文章分類頁面 (Categories)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%96%B0%E5%BB%BA%E6%96%87%E7%AB%A0%E6%A8%99%E7%B1%A4%E9%A0%81%E9%9D%A2-Tags"><span class="nav-number">2.</span> <span class="nav-text">新建文章標籤頁面 (Tags)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%A8%AD%E7%BD%AE%E9%A6%96%E9%A0%81%E4%B8%8D%E9%A1%AF%E7%A4%BA%E5%85%A8%E6%96%87"><span class="nav-number">3.</span> <span class="nav-text">設置首頁不顯示全文</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%96%87%E7%AB%A0%E4%B8%AD-note-%E6%A8%A3%E5%BC%8F"><span class="nav-number">4.</span> <span class="nav-text">文章中 note 樣式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Scheme-%E8%A8%AD%E5%AE%9A"><span class="nav-number">5.</span> <span class="nav-text">Scheme 設定</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%96%8B%E5%95%9F%E7%A4%BE%E7%BE%A4%E5%B8%B3%E8%99%9F%E9%80%A3%E7%B5%90"><span class="nav-number">6.</span> <span class="nav-text">開啟社群帳號連結</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A4%A7%E9%A0%AD%E8%B2%BC%E8%A8%AD%E5%AE%9A"><span class="nav-number">7.</span> <span class="nav-text">大頭貼設定</span></a></li></ol></div>
       </section>
       <!--/noindex-->
 
@@ -312,7 +304,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://zanazhong.github.io/2020/09/11/%E7%AD%86%E8%A8%98-Hexo-nexT-%E5%9F%BA%E7%A4%8E%E9%85%8D%E7%BD%AE-%E4%B8%80/">
+    <link itemprop="mainEntityOfPage" href="https://zanazhong.github.io/2025/01/14/%E7%AD%86%E8%A8%98/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/headshot.jpg">
@@ -328,7 +320,7 @@
     
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          [筆記] Hexo - nexT 基礎配置 (一)
+          筆記
         </h1>
 
         <div class="post-meta-container">
@@ -339,23 +331,7 @@
       </span>
       <span class="post-meta-item-text">Posted on</span>
 
-      <time title="Created: 2020-09-11 18:43:19" itemprop="dateCreated datePublished" datetime="2020-09-11T18:43:19+08:00">2020-09-11</time>
-    </span>
-      <span class="post-meta-item">
-        <span class="post-meta-item-icon">
-          <i class="far fa-calendar-check"></i>
-        </span>
-        <span class="post-meta-item-text">Edited on</span>
-        <time title="Modified: 2021-01-14 18:36:36" itemprop="dateModified" datetime="2021-01-14T18:36:36+08:00">2021-01-14</time>
-      </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">In</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/Hexo/" itemprop="url" rel="index"><span itemprop="name">Hexo</span></a>
-        </span>
+      <time title="Created: 2025-01-14 09:08:17" itemprop="dateCreated datePublished" datetime="2025-01-14T09:08:17+08:00">2025-01-14</time>
     </span>
 
   
@@ -371,14 +347,14 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">Symbols count in article: </span>
-      <span>2.5k</span>
+      <span>0</span>
     </span>
     <span class="post-meta-item" title="Reading time">
       <span class="post-meta-item-icon">
         <i class="far fa-clock"></i>
       </span>
       <span class="post-meta-item-text">Reading time &asymp;</span>
-      <span>2 mins.</span>
+      <span>1 mins.</span>
     </span>
 </div>
 
@@ -389,73 +365,7 @@
     
     
     <div class="post-body" itemprop="articleBody">
-        <blockquote>
-<p>自己在建置的時候查了很多資料，整理完希望幫助到有需要的人<br>此篇文章主要是修改 _config.yml 裡的設置</p>
-</blockquote>
-<span id="more"></span>
-
-<h3 id="新建文章分類頁面-Categories"><a href="#新建文章分類頁面-Categories" class="headerlink" title="新建文章分類頁面 (Categories)"></a>新建文章分類頁面 (Categories)</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hexo new page categories</span><br></pre></td></tr></table></figure>
-<p>修改 source&#x2F;categories&#x2F;index.md </p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">---</span><br><span class="line">title: categories</span><br><span class="line">date: 產生當下時間</span><br><span class="line">type: &quot;categories&quot;</span><br><span class="line">comments: false</span><br><span class="line">---</span><br></pre></td></tr></table></figure>
-<p>文章增加分類，只要在 categories 後面加入類別</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">categories: [categorie1, categorie2, ...]</span><br></pre></td></tr></table></figure>
-
-<h3 id="新建文章標籤頁面-Tags"><a href="#新建文章標籤頁面-Tags" class="headerlink" title="新建文章標籤頁面 (Tags)"></a>新建文章標籤頁面 (Tags)</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hexo new page tags</span><br></pre></td></tr></table></figure>
-<p>修改 source&#x2F;tags&#x2F;index.md </p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">---</span><br><span class="line">title: tags</span><br><span class="line">date: 產生當下時間</span><br><span class="line">type: &quot;tags&quot;</span><br><span class="line">comments: false</span><br><span class="line">---</span><br></pre></td></tr></table></figure>
-<p>文章增加標籤，只要在 tags 後面加入標籤</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tags: [tag1, tag2, ...]</span><br></pre></td></tr></table></figure>
-<p>下列方式會在文章中顯示 tags</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">---</span><br><span class="line">title: &#39;[筆記] GitHub pages + Hexo 搭建 Blog (Mac)&#39;</span><br><span class="line">date: 2020-09-11 18:39:59</span><br><span class="line">tags: </span><br><span class="line">  - tag1</span><br><span class="line">  - tag2</span><br><span class="line">  - tag3</span><br><span class="line">  - tag4</span><br><span class="line">---</span><br></pre></td></tr></table></figure>
-<p><img src="https://i.imgur.com/q9GAmY2.png?450x" alt="圖片"></p>
-<h3 id="設置首頁不顯示全文"><a href="#設置首頁不顯示全文" class="headerlink" title="設置首頁不顯示全文"></a>設置首頁不顯示全文</h3><p>Next默認會顯示全文，個人不是很喜歡，首頁會有點太長</p>
-<ul>
-<li>修改配置<br>印象安裝時 default 應該就是true<figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">excerpt_description:</span>  <span class="literal">true</span></span><br></pre></td></tr></table></figure>
-<ul>
-<li><p>方法一： 在文章中寫 desctiption</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">--- </span><br><span class="line">title: &#39;文章標題&#39;</span><br><span class="line">date: 產生當下時間</span><br><span class="line">description: &#39;會顯示在首頁的摘要，其餘的會隱藏&#39;</span><br><span class="line">---</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>方法二：<br>  在文章中想截斷的地方加上 <code>&lt;!--more--&gt;</code></p>
-</li>
-</ul>
-</li>
-</ul>
-<h3 id="文章中-note-樣式"><a href="#文章中-note-樣式" class="headerlink" title="文章中 note 樣式"></a>文章中 note 樣式</h3><ul>
-<li><p>default:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">style: simple</span><br><span class="line">icons: false</span><br></pre></td></tr></table></figure>
-<p><img src="https://i.imgur.com/79YnfVM.png" alt="圖片"></p>
-</li>
-<li><p>修改後</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">note:</span><br><span class="line">  style: flat</span><br><span class="line">  icons: true</span><br></pre></td></tr></table></figure>
-<div class="note default"><p>default note</p>
-</div>
-
-<div class="note primary"><p>primary note</p>
-</div>
-
-<div class="note success"><p>success note</p>
-</div>
-
-<div class="note info"><p>info note</p>
-</div>
-
-<div class="note warning"><p>warning note</p>
-</div>
-
-<div class="note danger"><p>danger note</p>
-</div>
-
-<p>使用方法：(跟 HackMD 滿像的)</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">&#123;% note default %&#125;</span><br><span class="line">default note</span><br><span class="line">&#123;% endnote %&#125;</span><br><span class="line"></span><br><span class="line">&#123;% note primary %&#125;</span><br><span class="line">primary note</span><br><span class="line">&#123;% endnote %&#125;</span><br><span class="line"></span><br><span class="line">&#123;% note success %&#125;</span><br><span class="line">success note</span><br><span class="line">&#123;% endnote %&#125;</span><br><span class="line"></span><br><span class="line">&#123;% note info %&#125;</span><br><span class="line">info note</span><br><span class="line">&#123;% endnote %&#125;</span><br><span class="line"></span><br><span class="line">&#123;% note warning %&#125;</span><br><span class="line">warning note</span><br><span class="line">&#123;% endnote %&#125;</span><br><span class="line"></span><br><span class="line">&#123;% note danger %&#125;</span><br><span class="line">danger note</span><br><span class="line">&#123;% endnote %&#125;</span><br></pre></td></tr></table></figure></li>
-</ul>
-<h3 id="Scheme-設定"><a href="#Scheme-設定" class="headerlink" title="Scheme 設定"></a>Scheme 設定</h3><p>在 NexT 中以下幾種 Scheme 可選擇，預設主題為Muse<br>修改 theme&#x2F;next&#x2F;_config.yml，去掉註解 ‘#’ 即可</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">#scheme: Muse</span><br><span class="line">#scheme: Mist</span><br><span class="line">#scheme: Pisces</span><br><span class="line">scheme: Gemini</span><br></pre></td></tr></table></figure>
-
-<h3 id="開啟社群帳號連結"><a href="#開啟社群帳號連結" class="headerlink" title="開啟社群帳號連結"></a>開啟社群帳號連結</h3><p>修改 theme&#x2F;next&#x2F;_config.yml，去掉註解 ‘#’ 即可</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"># Social Links</span><br><span class="line"># Usage: &#96;Key: permalink || icon&#96;</span><br><span class="line"># Key is the link label showing to end users.</span><br><span class="line"># Value before &#96;||&#96; delimiter is the target permalink, value after &#96;||&#96; delimiter is the name of Font Awesome icon.</span><br><span class="line">social:</span><br><span class="line">  #GitHub: https:&#x2F;&#x2F;github.com&#x2F;yourname || fab fa-github</span><br><span class="line">  #E-Mail: mailto:yourname@gmail.com || fa fa-envelope</span><br><span class="line">  #Weibo: https:&#x2F;&#x2F;weibo.com&#x2F;yourname || fab fa-weibo</span><br><span class="line">  #Google: https:&#x2F;&#x2F;plus.google.com&#x2F;yourname || fab fa-google</span><br><span class="line">  #Twitter: https:&#x2F;&#x2F;twitter.com&#x2F;yourname || fab fa-twitter</span><br><span class="line">  #FB Page: https:&#x2F;&#x2F;www.facebook.com&#x2F;yourname&#x2F; || fab fa-facebook</span><br><span class="line">  #StackOverflow: https:&#x2F;&#x2F;stackoverflow.com&#x2F;yourname || fab fa-stack-overflow</span><br><span class="line">  #YouTube: https:&#x2F;&#x2F;youtube.com&#x2F;yourname || fab fa-youtube</span><br><span class="line">  #Instagram: https:&#x2F;&#x2F;instagram.com&#x2F;yourname || fab fa-instagram</span><br><span class="line">  #Skype: skype:yourname?call|chat || fab fa-skype</span><br></pre></td></tr></table></figure>
-
-<h3 id="大頭貼設定"><a href="#大頭貼設定" class="headerlink" title="大頭貼設定"></a>大頭貼設定</h3><p>修改 theme&#x2F;next&#x2F;_config.yml，去掉註解 ‘#’ 即可</p>
-<figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">avatar:</span></span><br><span class="line">  <span class="attr">url:</span> <span class="comment">#/images/avatar.gif</span></span><br><span class="line">  <span class="comment"># If true, the avatar will be dispalyed in circle.</span></span><br><span class="line">  <span class="attr">rounded:</span> <span class="literal">true</span></span><br></pre></td></tr></table></figure>
+        
     </div>
 
     
@@ -463,26 +373,16 @@
     
 
     <footer class="post-footer">
-          <div class="post-tags">
-              <a href="/tags/GitHub/" rel="tag"># GitHub</a>
-              <a href="/tags/Hexo/" rel="tag"># Hexo</a>
-              <a href="/tags/GitHub-pages/" rel="tag"># GitHub pages</a>
-              <a href="/tags/Blog/" rel="tag"># Blog</a>
-              <a href="/tags/Mac/" rel="tag"># Mac</a>
-          </div>
 
         
 
           <div class="post-nav">
             <div class="post-nav-item">
-                <a href="/2020/09/11/%E7%AD%86%E8%A8%98-GitHub-pages-Hexo-%E6%90%AD%E5%BB%BA-Blog-Mac/" rel="prev" title="[筆記] GitHub pages + Hexo 搭建 Blog (Mac)">
-                  <i class="fa fa-chevron-left"></i> [筆記] GitHub pages + Hexo 搭建 Blog (Mac)
+                <a href="/2023/12/18/%E7%AD%86%E8%A8%98-1913.-Maximum-Product%20Difference-Between-Two-Pairs/" rel="prev" title="[筆記] Leetcode - 1913. Maximum Product Difference Between Two Pairs">
+                  <i class="fa fa-chevron-left"></i> [筆記] Leetcode - 1913. Maximum Product Difference Between Two Pairs
                 </a>
             </div>
             <div class="post-nav-item">
-                <a href="/2020/09/11/%E7%AD%86%E8%A8%98-Hexo-nexT-%E5%9F%BA%E7%A4%8E%E9%85%8D%E7%BD%AE-%E4%BA%8C/" rel="next" title="[筆記] Hexo - nexT 基礎配置 (二)">
-                  [筆記] Hexo - nexT 基礎配置 (二) <i class="fa fa-chevron-right"></i>
-                </a>
             </div>
           </div>
     </footer>
@@ -682,9 +582,9 @@ NexT.utils.loadComments('#disqus_thread', () => {
       api       : '' || 'https://disqus.com/api/',
       apikey    : 'PwhBX0pvyskM9Ham1vjsvzwzjlJch5I73qZCHQrBMoGA6NBOuwdPWCQccXelF20z',
       shortname : 'https-zanazhong-github-io',
-      url       : "https://zanazhong.github.io/2020/09/11/%E7%AD%86%E8%A8%98-Hexo-nexT-%E5%9F%BA%E7%A4%8E%E9%85%8D%E7%BD%AE-%E4%B8%80/",
-      identifier: "2020/09/11/筆記-Hexo-nexT-基礎配置-一/",
-      title     : "[筆記] Hexo - nexT 基礎配置 (一)",
+      url       : "https://zanazhong.github.io/2025/01/14/%E7%AD%86%E8%A8%98/",
+      identifier: "2025/01/14/筆記/",
+      title     : "筆記",
     });
   }, window.DisqusJS);
 });
