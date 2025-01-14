@@ -34,7 +34,7 @@
 <meta property="og:description" content="為什麼需要這些技術？隨著應用程式越來越複雜，我們需要更靈活、高效的方式來部署和管理它們。傳統的硬體配置已經無法滿足快速變動的需求，因此「虛擬化技術」和「容器化技術」應運而生。">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2025-01-14T01:08:17.000Z">
-<meta property="article:modified_time" content="2025-01-14T02:41:55.974Z">
+<meta property="article:modified_time" content="2025-01-14T02:45:24.115Z">
 <meta property="article:author" content="Zana">
 <meta property="article:tag" content="Kubernetes">
 <meta property="article:tag" content="Docker">
@@ -340,7 +340,7 @@
       <span class="post-meta-item-text">Posted on</span>
       
 
-      <time title="Created: 2025-01-14 09:08:17 / Modified: 10:41:55" itemprop="dateCreated datePublished" datetime="2025-01-14T09:08:17+08:00">2025-01-14</time>
+      <time title="Created: 2025-01-14 09:08:17 / Modified: 10:45:24" itemprop="dateCreated datePublished" datetime="2025-01-14T09:08:17+08:00">2025-01-14</time>
     </span>
 
   
@@ -356,7 +356,7 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">Symbols count in article: </span>
-      <span>1.3k</span>
+      <span>1.4k</span>
     </span>
     <span class="post-meta-item" title="Reading time">
       <span class="post-meta-item-icon">
@@ -435,33 +435,53 @@
 <h2 id="比較"><a href="#比較" class="headerlink" title="比較"></a>比較</h2><table>
 <thead>
 <tr>
-<th><strong>技術</strong></th>
-<th><strong>隔離性</strong></th>
-<th><strong>資源效率</strong></th>
-<th><strong>啟動速度</strong></th>
-<th><strong>管理工具</strong></th>
+<th><strong>特性</strong></th>
+<th><strong>Kubernetes</strong></th>
+<th><strong>Docker</strong></th>
+<th><strong>虛擬機 (VM)</strong></th>
 </tr>
 </thead>
 <tbody><tr>
-<td><strong>VM</strong></td>
-<td>高</td>
-<td>較低</td>
-<td>分鐘級</td>
-<td>VirtualBox、VMware</td>
+<td><strong>管理對象</strong></td>
+<td>容器 (集群層級管理)</td>
+<td>容器 (單機層級管理)</td>
+<td>整個操作系統</td>
 </tr>
 <tr>
-<td><strong>Container</strong></td>
+<td><strong>隔離層級</strong></td>
+<td>基於容器與命名空間(Namespace)</td>
+<td>基於容器與命名空間(Namespace)</td>
+<td>基於虛擬硬體</td>
+</tr>
+<tr>
+<td><strong>隔離性</strong></td>
+<td>N&#x2F;A (管理工具)</td>
 <td>中</td>
 <td>高</td>
-<td>秒級</td>
-<td>Docker</td>
 </tr>
 <tr>
-<td><strong>Kubernetes</strong></td>
-<td>N&#x2F;A（管理工具）</td>
-<td>N&#x2F;A</td>
-<td>N&#x2F;A</td>
+<td><strong>資源效率</strong></td>
+<td>輕量級 (容器共享同一內核)</td>
+<td>輕量級 (容器共享同一內核)</td>
+<td>重量級 (每個)VM 有獨立的內核）</td>
+</tr>
+<tr>
+<td><strong>啟動速度</strong></td>
+<td>快 (秒級)</td>
+<td>快 (秒級)</td>
+<td>慢 (分鐘級)</td>
+</tr>
+<tr>
+<td><strong>運行環境的靈活性</strong></td>
+<td>高 (容器自動調度與管理)</td>
+<td>中 (單機或簡單的容器編排)</td>
+<td>低 (操作系統層級管理)</td>
+</tr>
+<tr>
+<td><strong>工具</strong></td>
 <td>Kubernetes</td>
+<td>Docker</td>
+<td>VirtualBox、VMware</td>
 </tr>
 </tbody></table>
 <h2 id="應用情境"><a href="#應用情境" class="headerlink" title="應用情境"></a>應用情境</h2><ul>
