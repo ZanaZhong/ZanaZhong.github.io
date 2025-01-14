@@ -6,7 +6,7 @@
   <link href="https://zanazhong.github.io/atom.xml" rel="self"/>
   
   <link href="https://zanazhong.github.io/"/>
-  <updated>2025-01-14T01:08:17.628Z</updated>
+  <updated>2025-01-14T02:40:02.029Z</updated>
   <id>https://zanazhong.github.io/</id>
   
   <author>
@@ -17,15 +17,38 @@
   <generator uri="https://hexo.io/">Hexo</generator>
   
   <entry>
-    <title>筆記</title>
-    <link href="https://zanazhong.github.io/2025/01/14/%E7%AD%86%E8%A8%98/"/>
-    <id>https://zanazhong.github.io/2025/01/14/%E7%AD%86%E8%A8%98/</id>
+    <title>[筆記] 深入淺出理解 Kubernetes / Docker / Container/ VM 概念</title>
+    <link href="https://zanazhong.github.io/2025/01/14/%E7%AD%86%E8%A8%98-Kubernetes:-Docker:-Container:-VM-%E6%A6%82%E5%BF%B5/"/>
+    <id>https://zanazhong.github.io/2025/01/14/%E7%AD%86%E8%A8%98-Kubernetes:-Docker:-Container:-VM-%E6%A6%82%E5%BF%B5/</id>
     <published>2025-01-14T01:08:17.000Z</published>
-    <updated>2025-01-14T01:08:17.628Z</updated>
+    <updated>2025-01-14T02:40:02.029Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="深入淺出理解-VM、Docker、Kubernetes-與容器化技術"><a href="#深入淺出理解-VM、Docker、Kubernetes-與容器化技術" class="headerlink" title="深入淺出理解 VM、Docker、Kubernetes 與容器化技術"></a>深入淺出理解 VM、Docker、Kubernetes 與容器化技術</h1><p><code>#SRE</code> <code>#容器化技術</code> <code>#Kubernetes</code> <code>#Docker</code> <code>#虛擬化</code> <code>#基礎概念</code></p><h2 id="為什麼需要這些技術？"><a href="#為什麼需要這些技術？" class="headerlink" title="為什麼需要這些技術？"></a>為什麼需要這些技術？</h2><p>隨著應用程式越來越複雜，我們需要更靈活、高效的方式來部署和管理它們。傳統的硬體配置已經無法滿足快速變動的需求，因此「虛擬化技術」和「容器化技術」應運而生。</p><h2 id="什麼是-VM？"><a href="#什麼是-VM？" class="headerlink" title="什麼是 VM？"></a>什麼是 VM？</h2><p>虛擬機（Virtual Machine）是利用虛擬化技術，把一台實體機（Host）分割成多個彼此獨立的環境（Guest）。<br>每個 VM 都有自己的作業系統，並模擬硬體資源（CPU、記憶體、網路等）。</p><ul><li><strong>優點</strong>：<ul><li>完全隔離，安全性高。</li><li>支援多種作業系統（Windows、Linux、Ubuntu）。</li></ul></li><li><strong>缺點</strong>：<ul><li>資源消耗較大，因為每個 VM 都需要一整套作業系統。</li><li>啟動速度較慢。</li></ul></li></ul><h2 id="什麼是容器（Container）？"><a href="#什麼是容器（Container）？" class="headerlink" title="什麼是容器（Container）？"></a>什麼是容器（Container）？</h2><p>容器是一種比 VM 更輕量的技術，讓應用程式及其依賴環境打包成獨立的單位來執行。它共享宿主機的作業系統核心，但彼此之間隔離。<br>透過容器引擎（如 Docker），容器可以快速啟動並執行應用程式。</p><ul><li><strong>優點</strong>：<ul><li>輕量：共享作業系統核心，減少資源需求。</li><li>啟動快速：秒級啟動，比 VM 更高效。</li><li>可移植性強：應用程式「打包一次，運行到處」。</li></ul></li><li><strong>缺點</strong>：<ul><li>相較 VM 隔離性稍弱（取決於設定）。</li></ul></li></ul><h2 id="Docker：容器化技術的代名詞"><a href="#Docker：容器化技術的代名詞" class="headerlink" title="Docker：容器化技術的代名詞"></a>Docker：容器化技術的代名詞</h2><p>Docker 是一種用於建立、部署和運行容器的開放平台。<br>將應用程式及其依賴項打包在輕量級的容器中，確保一致性和移植性。</p><ul><li><strong>核心概念</strong>：<ul><li><strong>Image</strong>（映像檔）：容器的靜態模板。</li><li><strong>Container</strong>（容器）：從映像檔啟動的執行實例。</li><li><strong>Registry</strong>（註冊伺服器）：儲存與分發映像檔的倉庫（如 Docker Hub）。</li></ul></li><li><strong>實用場景</strong>：<ul><li>在本地開發環境中模擬多服務架構。</li><li>快速測試和部署應用程式。</li></ul></li></ul><h2 id="Kubernetes-K8s-：容器的指揮官"><a href="#Kubernetes-K8s-：容器的指揮官" class="headerlink" title="Kubernetes (K8s)：容器的指揮官"></a>Kubernetes (K8s)：容器的指揮官</h2><p>K8s 是管理容器 (如調度、擴容、故障恢復) 的開源平台，專為大規模分散式系統設計。</p><ul><li><strong>主要功能</strong>：<ul><li><strong>自動化部署</strong>：根據定義文件部署應用。</li><li><strong>資源調度</strong>：動態分配計算資源。</li><li><strong>彈性伸縮</strong>：根據負載自動擴展或縮減容器數量。</li><li><strong>服務發現</strong>：為應用程式提供內建的 DNS 支援。</li></ul></li><li><strong>實用場景</strong>：<ul><li>微服務架構 (Microservices) 中管理數百甚至數千個容器。</li><li>高流量應用需要動態擴展。</li></ul></li></ul><h2 id="比較"><a href="#比較" class="headerlink" title="比較"></a>比較</h2><table><thead><tr><th><strong>技術</strong></th><th><strong>隔離性</strong></th><th><strong>資源效率</strong></th><th><strong>啟動速度</strong></th><th><strong>管理工具</strong></th></tr></thead><tbody><tr><td><strong>VM</strong></td><td>高</td><td>較低</td><td>分鐘級</td><td>VirtualBox、VMware</td></tr><tr><td><strong>Container</strong></td><td>中</td><td>高</td><td>秒級</td><td>Docker</td></tr><tr><td><strong>Kubernetes</strong></td><td>N&#x2F;A（管理工具）</td><td>N&#x2F;A</td><td>N&#x2F;A</td><td>Kubernetes</td></tr></tbody></table><h2 id="應用情境"><a href="#應用情境" class="headerlink" title="應用情境"></a>應用情境</h2><ul><li><strong>虛擬機</strong><br>當你需要在單台硬體上跑多個不同作業系統的應用（如 Windows + Linux）。</li><li><strong>容器</strong><br>部署輕量、可移植的微服務，適合 CI&#x2F;CD Pipline、自動化測試。</li><li><strong>Kubernetes</strong><br>大型分散式系統需要高效管理，且擁有動態流量需求的場景。</li></ul><h2 id="總結"><a href="#總結" class="headerlink" title="總結"></a>總結</h2><ul><li>虛擬機是傳統的隔離方案，適合需要高安全性的場景。</li><li>容器則是現代化應用的主流解決方案，輕量且靈活。</li><li>Docker 是目前最受歡迎的容器化技術，提供簡單易用的工具來打包、分發和執行應用程式，讓開發與部署更加高效。</li><li>Kubernetes 是容器化技術的最佳管理工具，幫助我們在大規模維運中游刃有餘。</li></ul><div class="note info"><p>:bulb: VM 是重，Container 是輕，Kubernetes 是管家！</p></div>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;h1 id=&quot;深入淺出理解-VM、Docker、Kubernetes-與容器化技術&quot;&gt;&lt;a href=&quot;#深入淺出理解-VM、Docker、Kubernetes-與容器化技術&quot; class=&quot;headerlink&quot; title=&quot;深入淺出理解 VM、Docker、Kuberne</summary>
+      
     
     
     
     
+    <category term="Kubernetes" scheme="https://zanazhong.github.io/tags/Kubernetes/"/>
+    
+    <category term="Docker" scheme="https://zanazhong.github.io/tags/Docker/"/>
+    
+    <category term="Container" scheme="https://zanazhong.github.io/tags/Container/"/>
+    
+    <category term="VM" scheme="https://zanazhong.github.io/tags/VM/"/>
+    
+    <category term="Containerized" scheme="https://zanazhong.github.io/tags/Containerized/"/>
+    
+    <category term="Virtualized" scheme="https://zanazhong.github.io/tags/Virtualized/"/>
+    
+    <category term="容器化技術" scheme="https://zanazhong.github.io/tags/%E5%AE%B9%E5%99%A8%E5%8C%96%E6%8A%80%E8%A1%93/"/>
+    
+    <category term="虛擬化" scheme="https://zanazhong.github.io/tags/%E8%99%9B%E6%93%AC%E5%8C%96/"/>
     
   </entry>
   
