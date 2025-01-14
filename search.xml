@@ -1,6 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>[分享] Website Layout - Sidebar + Flexed</title>
+    <url>/2021/04/01/%E5%88%86%E4%BA%AB-Website-Layout-Sidebar-Flexed/</url>
+    <content><![CDATA[<blockquote>
+<p>實習開發網站，常遇到一些功能需求要上網查詢，整理成筆記以後再用到就不用又從頭開始找，也希望幫助到正在找學這些功能的人</p>
+</blockquote>
+<span id="more"></span>
+
+<iframe width="100%" height="500" src="https://codepen.io/ZZYume/embed/NWddogz?height=265&theme-id=dark&default-tab=result" frameborder="0"></iframe>
+
+<p>&#x2F;&#x2F; 有空再認真補教學</p>
+]]></content>
+      <categories>
+        <category>html</category>
+      </categories>
+      <tags>
+        <tag>sidebar</tag>
+        <tag>html</tag>
+        <tag>css</tag>
+        <tag>javascript</tag>
+        <tag>jquery</tag>
+        <tag>Bootstrap</tag>
+        <tag>Bootstrap-table</tag>
+        <tag>card</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>[學習] Check.io - Bigger Price</title>
     <url>/2021/03/17/%E5%AD%B8%E7%BF%92-Check-io-Bigger-Price/</url>
     <content><![CDATA[<blockquote>
@@ -48,32 +74,6 @@
         <tag>sort</tag>
         <tag>list</tag>
         <tag>dictionary</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>[分享] Website Layout - Sidebar + Flexed</title>
-    <url>/2021/04/01/%E5%88%86%E4%BA%AB-Website-Layout-Sidebar-Flexed/</url>
-    <content><![CDATA[<blockquote>
-<p>實習開發網站，常遇到一些功能需求要上網查詢，整理成筆記以後再用到就不用又從頭開始找，也希望幫助到正在找學這些功能的人</p>
-</blockquote>
-<span id="more"></span>
-
-<iframe width="100%" height="500" src="https://codepen.io/ZZYume/embed/NWddogz?height=265&theme-id=dark&default-tab=result" frameborder="0"></iframe>
-
-<p>&#x2F;&#x2F; 有空再認真補教學</p>
-]]></content>
-      <categories>
-        <category>html</category>
-      </categories>
-      <tags>
-        <tag>sidebar</tag>
-        <tag>html</tag>
-        <tag>css</tag>
-        <tag>javascript</tag>
-        <tag>jquery</tag>
-        <tag>Bootstrap</tag>
-        <tag>Bootstrap-table</tag>
-        <tag>card</tag>
       </tags>
   </entry>
   <entry>
@@ -156,48 +156,6 @@
       </tags>
   </entry>
   <entry>
-    <title>[學習] Pyton - String</title>
-    <url>/2021/01/20/%E5%AD%B8%E7%BF%92-Pyton-String/</url>
-    <content><![CDATA[<blockquote>
-<p>一些關於 String 單字或字首大寫處理的用法</p>
-</blockquote>
-<span id="more"></span>
-
-<h2 id="字首大寫"><a href="#字首大寫" class="headerlink" title="字首大寫"></a>字首大寫</h2><ul>
-<li>capitalize(): 只會將字串的字首轉成大寫，其餘若有大寫的字會轉成小寫</li>
-<li>title(): 將字串中所有“單字”的字首轉成大寫</li>
-</ul>
-<p>input:</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">text = <span class="string">&quot;greetings, fiends&quot;</span></span><br><span class="line"><span class="built_in">print</span>(text.capitalize())</span><br><span class="line"><span class="built_in">print</span>(text.title())</span><br></pre></td></tr></table></figure>
-
-<p>output:</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#39;Greetings, friends&#39;</span><br><span class="line">&#39;Greetings, Fiends&#39;</span><br></pre></td></tr></table></figure>
-
-<p>但 capitalize() 可能會遇到一個問題，若是原本句子中有人名或地名，本身字首就是大寫的單子，在使用 capitalize() 後會變成小寫，因此有另一種方法，如下：</p>
-<p>input:</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">text = <span class="string">&quot;welcome to New York&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(text[<span class="number">0</span>].upper() + text[<span class="number">1</span>:])</span><br></pre></td></tr></table></figure>
-<p>output:</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&quot;Welcome to New York&quot;</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>lower(): 將字串全部轉成小寫</li>
-<li>upper(): 將字串全部轉成大寫</li>
-<li>islowewr(): 檢查字串是否全小寫</li>
-<li>isupper(): 檢查字串是否全大寫</li>
-</ul>
-<p>input:</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">text = <span class="string">&quot;Hi, my Name is Zana&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(text.lower())</span><br><span class="line"><span class="built_in">print</span>(text.upper())</span><br><span class="line"><span class="built_in">print</span>(text.islowewr())</span><br><span class="line"><span class="built_in">print</span>(text.isupper())</span><br></pre></td></tr></table></figure>
-<p>output:</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&quot;hi, my name is zana&quot;</span><br><span class="line">&quot;HI, MY NAME IS ZANA&quot;</span><br><span class="line">False</span><br><span class="line">False</span><br></pre></td></tr></table></figure>]]></content>
-      <categories>
-        <category>python</category>
-      </categories>
-      <tags>
-        <tag>python</tag>
-        <tag>string</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>[學習] Python List</title>
     <url>/2021/03/22/%E5%AD%B8%E7%BF%92-Python-List/</url>
     <content><![CDATA[<p>常遇到的問題</p>
@@ -257,6 +215,48 @@
       </tags>
   </entry>
   <entry>
+    <title>[學習] Pyton - String</title>
+    <url>/2021/01/20/%E5%AD%B8%E7%BF%92-Pyton-String/</url>
+    <content><![CDATA[<blockquote>
+<p>一些關於 String 單字或字首大寫處理的用法</p>
+</blockquote>
+<span id="more"></span>
+
+<h2 id="字首大寫"><a href="#字首大寫" class="headerlink" title="字首大寫"></a>字首大寫</h2><ul>
+<li>capitalize(): 只會將字串的字首轉成大寫，其餘若有大寫的字會轉成小寫</li>
+<li>title(): 將字串中所有“單字”的字首轉成大寫</li>
+</ul>
+<p>input:</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">text = <span class="string">&quot;greetings, fiends&quot;</span></span><br><span class="line"><span class="built_in">print</span>(text.capitalize())</span><br><span class="line"><span class="built_in">print</span>(text.title())</span><br></pre></td></tr></table></figure>
+
+<p>output:</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#39;Greetings, friends&#39;</span><br><span class="line">&#39;Greetings, Fiends&#39;</span><br></pre></td></tr></table></figure>
+
+<p>但 capitalize() 可能會遇到一個問題，若是原本句子中有人名或地名，本身字首就是大寫的單子，在使用 capitalize() 後會變成小寫，因此有另一種方法，如下：</p>
+<p>input:</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">text = <span class="string">&quot;welcome to New York&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(text[<span class="number">0</span>].upper() + text[<span class="number">1</span>:])</span><br></pre></td></tr></table></figure>
+<p>output:</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&quot;Welcome to New York&quot;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>lower(): 將字串全部轉成小寫</li>
+<li>upper(): 將字串全部轉成大寫</li>
+<li>islowewr(): 檢查字串是否全小寫</li>
+<li>isupper(): 檢查字串是否全大寫</li>
+</ul>
+<p>input:</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">text = <span class="string">&quot;Hi, my Name is Zana&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(text.lower())</span><br><span class="line"><span class="built_in">print</span>(text.upper())</span><br><span class="line"><span class="built_in">print</span>(text.islowewr())</span><br><span class="line"><span class="built_in">print</span>(text.isupper())</span><br></pre></td></tr></table></figure>
+<p>output:</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&quot;hi, my name is zana&quot;</span><br><span class="line">&quot;HI, MY NAME IS ZANA&quot;</span><br><span class="line">False</span><br><span class="line">False</span><br></pre></td></tr></table></figure>]]></content>
+      <categories>
+        <category>python</category>
+      </categories>
+      <tags>
+        <tag>python</tag>
+        <tag>string</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>[學習] Pyton  try - except</title>
     <url>/2021/01/31/%E5%AD%B8%E7%BF%92-Pyton-try-except/</url>
     <content><![CDATA[<blockquote>
@@ -313,30 +313,6 @@
       </tags>
   </entry>
   <entry>
-    <title>[筆記] Leetcode - 1913. Maximum Product Difference Between Two Pairs</title>
-    <url>/2023/12/18/%E7%AD%86%E8%A8%98-1913.-Maximum-Product%20Difference-Between-Two-Pairs/</url>
-    <content><![CDATA[<p><a href="https://leetcode.com/problems/maximum-product-difference-between-two-pairs/">https://leetcode.com/problems/maximum-product-difference-between-two-pairs/</a></p>
-<blockquote>
-<p>The product difference between two pairs (a, b) and (c, d) is defined as (a * b) - (c * d).</p>
-<p>For example, the product difference between (5, 6) and (2, 7) is (5 * 6) - (2 * 7) &#x3D; 16.<br>Given an integer array nums, choose four distinct indices w, x, y, and z such that the product difference between pairs (nums[w], nums[x]) and (nums[y], nums[z]) is maximized.</p>
-<p>Return the maximum such product difference.</p>
-</blockquote>
-<span id="more"></span>
-
-<p>Example 1:</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Input: nums &#x3D; [5,6,2,7,4]</span><br><span class="line">Output: 34</span><br><span class="line">Explanation: We can choose indices 1 and 3 for the first pair (6, 7) and indices 2 and 4 for the second pair (2, 4).</span><br><span class="line">The product difference is (6 * 7) - (2 * 4) &#x3D; 34.</span><br></pre></td></tr></table></figure>
-<p>Example 2:</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Input: nums &#x3D; [4,2,5,9,7,4,8]</span><br><span class="line">Output: 64</span><br><span class="line">Explanation: We can choose indices 3 and 6 for the first pair (9, 8) and indices 1 and 5 for the second pair (2, 4).</span><br><span class="line">The product difference is (9 * 8) - (2 * 4) &#x3D; 64.</span><br></pre></td></tr></table></figure>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">maxProductDifference</span>(<span class="params">self, nums: <span class="type">List</span>[<span class="built_in">int</span>]</span>) -&gt; <span class="built_in">int</span>:</span></span><br><span class="line">        min_num1, min_num2 = math.inf, math.inf</span><br><span class="line">        max_num1, max_num2 = -math.inf, -math.inf</span><br><span class="line">    </span><br><span class="line">        <span class="keyword">for</span> number <span class="keyword">in</span> nums: </span><br><span class="line">            <span class="keyword">if</span> number &gt; max_num1:</span><br><span class="line">                max_num1, max_num2 = number, max_num1</span><br><span class="line">            <span class="keyword">elif</span> number &gt; max_num2:</span><br><span class="line">                max_num2 = number</span><br><span class="line">    </span><br><span class="line">            <span class="keyword">if</span> number &lt; min_num1:</span><br><span class="line">                min_num1, min_num2 = number, min_num1</span><br><span class="line">            <span class="keyword">elif</span> number &lt; min_num2:</span><br><span class="line">                min_num2 = number</span><br><span class="line">    </span><br><span class="line">        <span class="keyword">return</span> max_num1 * max_num2 - min_num1 * min_num2</span><br></pre></td></tr></table></figure>
-
-]]></content>
-      <tags>
-        <tag>Leetcode</tag>
-        <tag>Python</tag>
-        <tag>Math</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>[筆記] Leetcode - 1903. Largest Odd Number in String</title>
     <url>/2023/12/09/%E7%AD%86%E8%A8%98-1903.-Largest-Odd%20Number-in-String/</url>
     <content><![CDATA[<blockquote>
@@ -358,6 +334,30 @@
         <tag>Leetcode</tag>
         <tag>Python</tag>
         <tag>reverse</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>[筆記] Leetcode - 1913. Maximum Product Difference Between Two Pairs</title>
+    <url>/2023/12/18/%E7%AD%86%E8%A8%98-1913.-Maximum-Product%20Difference-Between-Two-Pairs/</url>
+    <content><![CDATA[<p><a href="https://leetcode.com/problems/maximum-product-difference-between-two-pairs/">https://leetcode.com/problems/maximum-product-difference-between-two-pairs/</a></p>
+<blockquote>
+<p>The product difference between two pairs (a, b) and (c, d) is defined as (a * b) - (c * d).</p>
+<p>For example, the product difference between (5, 6) and (2, 7) is (5 * 6) - (2 * 7) &#x3D; 16.<br>Given an integer array nums, choose four distinct indices w, x, y, and z such that the product difference between pairs (nums[w], nums[x]) and (nums[y], nums[z]) is maximized.</p>
+<p>Return the maximum such product difference.</p>
+</blockquote>
+<span id="more"></span>
+
+<p>Example 1:</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Input: nums &#x3D; [5,6,2,7,4]</span><br><span class="line">Output: 34</span><br><span class="line">Explanation: We can choose indices 1 and 3 for the first pair (6, 7) and indices 2 and 4 for the second pair (2, 4).</span><br><span class="line">The product difference is (6 * 7) - (2 * 4) &#x3D; 34.</span><br></pre></td></tr></table></figure>
+<p>Example 2:</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Input: nums &#x3D; [4,2,5,9,7,4,8]</span><br><span class="line">Output: 64</span><br><span class="line">Explanation: We can choose indices 3 and 6 for the first pair (9, 8) and indices 1 and 5 for the second pair (2, 4).</span><br><span class="line">The product difference is (9 * 8) - (2 * 4) &#x3D; 64.</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">maxProductDifference</span>(<span class="params">self, nums: <span class="type">List</span>[<span class="built_in">int</span>]</span>) -&gt; <span class="built_in">int</span>:</span></span><br><span class="line">        min_num1, min_num2 = math.inf, math.inf</span><br><span class="line">        max_num1, max_num2 = -math.inf, -math.inf</span><br><span class="line">    </span><br><span class="line">        <span class="keyword">for</span> number <span class="keyword">in</span> nums: </span><br><span class="line">            <span class="keyword">if</span> number &gt; max_num1:</span><br><span class="line">                max_num1, max_num2 = number, max_num1</span><br><span class="line">            <span class="keyword">elif</span> number &gt; max_num2:</span><br><span class="line">                max_num2 = number</span><br><span class="line">    </span><br><span class="line">            <span class="keyword">if</span> number &lt; min_num1:</span><br><span class="line">                min_num1, min_num2 = number, min_num1</span><br><span class="line">            <span class="keyword">elif</span> number &lt; min_num2:</span><br><span class="line">                min_num2 = number</span><br><span class="line">    </span><br><span class="line">        <span class="keyword">return</span> max_num1 * max_num2 - min_num1 * min_num2</span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <tags>
+        <tag>Leetcode</tag>
+        <tag>Python</tag>
+        <tag>Math</tag>
       </tags>
   </entry>
   <entry>
@@ -862,7 +862,7 @@ def date_time(time: str) -&gt; str:
 </ul>
 </li>
 </ul>
-<p><img src="https://hackmd.io/_uploads/B19jiIQwyx.jpg" alt="Blog-Machine-Virtualization-vs-Containers"></p>
+<p><img src="https://hackmd.io/_uploads/B19jiIQwyx.jpg" alt="Blog-Machine-Virtualization-vs-Containers"><br><img src="/post_image/VM-vs-Containers.jpg" alt="VM-vs-Containers"></p>
 <h2 id="Docker：容器化技術的代名詞"><a href="#Docker：容器化技術的代名詞" class="headerlink" title="Docker：容器化技術的代名詞"></a>Docker：容器化技術的代名詞</h2><p>Docker 是一種用於建立、部署和運行容器的開放平台。<br>將應用程式及其依賴項打包在輕量級的容器中，確保一致性和移植性。</p>
 <ul>
 <li><strong>核心概念</strong>：<ul>
@@ -1144,6 +1144,28 @@ def date_time(time: str) -&gt; str:
       </tags>
   </entry>
   <entry>
+    <title>[筆記] 網頁版面 - 側邊欄</title>
+    <url>/2020/09/20/%E7%AD%86%E8%A8%98-%E7%B6%B2%E9%A0%81%E7%89%88%E9%9D%A2-%E5%81%B4%E9%82%8A%E6%AC%84/</url>
+    <content><![CDATA[<blockquote>
+<p>實習開發網站，常遇到一些功能需求要上網查詢，整理成筆記以後再用到就不用又從頭開始找，也希望幫助到正在找學這些功能的人</p>
+</blockquote>
+<span id="more"></span>
+
+
+<iframe width="100%" height="500" src="https://codepen.io/ZZYume/embed/WNwaPpJ?height=265&theme-id=dark&default-tab=result" frameborder="0"></iframe>
+
+<p>想看比較清楚的 code，我也有放在 <a href="https://github.com/ZanaZhong/side-nav.github.io">Github</a></p>
+]]></content>
+      <tags>
+        <tag>html</tag>
+        <tag>css</tag>
+        <tag>javascript</tag>
+        <tag>jquery</tag>
+        <tag>Bootstrap</tag>
+        <tag>Bootstrap-table</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>[筆記] Relative Dropdown List</title>
     <url>/2021/03/30/%E7%AD%86%E8%A8%98-Relative-Dropdown-List/</url>
     <content><![CDATA[<blockquote>
@@ -1167,28 +1189,6 @@ def date_time(time: str) -&gt; str:
         <tag>javascript</tag>
         <tag>jquery</tag>
         <tag>dropdown</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>[筆記] 網頁版面 - 側邊欄</title>
-    <url>/2020/09/20/%E7%AD%86%E8%A8%98-%E7%B6%B2%E9%A0%81%E7%89%88%E9%9D%A2-%E5%81%B4%E9%82%8A%E6%AC%84/</url>
-    <content><![CDATA[<blockquote>
-<p>實習開發網站，常遇到一些功能需求要上網查詢，整理成筆記以後再用到就不用又從頭開始找，也希望幫助到正在找學這些功能的人</p>
-</blockquote>
-<span id="more"></span>
-
-
-<iframe width="100%" height="500" src="https://codepen.io/ZZYume/embed/WNwaPpJ?height=265&theme-id=dark&default-tab=result" frameborder="0"></iframe>
-
-<p>想看比較清楚的 code，我也有放在 <a href="https://github.com/ZanaZhong/side-nav.github.io">Github</a></p>
-]]></content>
-      <tags>
-        <tag>html</tag>
-        <tag>css</tag>
-        <tag>javascript</tag>
-        <tag>jquery</tag>
-        <tag>Bootstrap</tag>
-        <tag>Bootstrap-table</tag>
       </tags>
   </entry>
 </search>
