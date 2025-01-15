@@ -1,0 +1,717 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="google-site-verification" content="-NHUbNtD7Y8hamHaLwW7ehcqJ_wj3DOCDQtgMsdADas" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.2">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300&display=swap" rel="stylesheet">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/cat-cage-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/cat-cage-icon.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/cat-cage-icon.png">
+  <link rel="mask-icon" href="/images/cat-cage-icon.png" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.14.0/css/all.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.css">
+  <script src="//cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.js"></script>
+
+<script class="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"zanazhong.github.io","root":"/","scheme":"Gemini","version":"8.0.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":true,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}};
+  </script>
+
+  <meta name="description" content="為什麼要了解單體架構和微服務架構？隨著技術的快速發展，軟體架構設計已經成為每個工程師必須掌握的核心知識之一。無論你是正在開發新產品的初創團隊，還是維護大型系統的資深工程師，選擇適合的架構直接影響系統的穩定性、性能和團隊效率。 然而，對於剛接觸架構設計的初學者來說，「單體架構」與「微服務架構」之間的選擇常常令人困惑：  單體架構似乎簡單直接，但為什麼大家都在討論微服務？ 微服務聽起來很先進，但是否真">
+<meta property="og:type" content="article">
+<meta property="og:title" content="單體架構 vs 微服務架構：選擇的關鍵與應用">
+<meta property="og:url" content="https://zanazhong.github.io/2025/01/15/%E7%AD%86%E8%A8%98-%E5%96%AE%E9%AB%94%E6%9E%B6%E6%A7%8B-vs-%E5%BE%AE%E6%9C%8D%E5%8B%99%E6%9E%B6%E6%A7%8B%EF%BC%9A%E9%81%B8%E6%93%87%E7%9A%84%E9%97%9C%E9%8D%B5%E8%88%87%E6%87%89%E7%94%A8/index.html">
+<meta property="og:site_name" content="Hey I am Zana">
+<meta property="og:description" content="為什麼要了解單體架構和微服務架構？隨著技術的快速發展，軟體架構設計已經成為每個工程師必須掌握的核心知識之一。無論你是正在開發新產品的初創團隊，還是維護大型系統的資深工程師，選擇適合的架構直接影響系統的穩定性、性能和團隊效率。 然而，對於剛接觸架構設計的初學者來說，「單體架構」與「微服務架構」之間的選擇常常令人困惑：  單體架構似乎簡單直接，但為什麼大家都在討論微服務？ 微服務聽起來很先進，但是否真">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2025-01-15T13:52:44.000Z">
+<meta property="article:modified_time" content="2025-01-15T14:30:51.881Z">
+<meta property="article:author" content="Zana">
+<meta property="article:tag" content="Monolithic">
+<meta property="article:tag" content="Microservices">
+<meta property="article:tag" content="微服務">
+<meta property="article:tag" content="單體架構">
+<meta property="article:tag" content="系統架構">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://zanazhong.github.io/2025/01/15/%E7%AD%86%E8%A8%98-%E5%96%AE%E9%AB%94%E6%9E%B6%E6%A7%8B-vs-%E5%BE%AE%E6%9C%8D%E5%8B%99%E6%9E%B6%E6%A7%8B%EF%BC%9A%E9%81%B8%E6%93%87%E7%9A%84%E9%97%9C%E9%8D%B5%E8%88%87%E6%87%89%E7%94%A8/">
+
+
+<script data-pjax class="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>單體架構 vs 微服務架構：選擇的關鍵與應用 | Hey I am Zana</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-187712309-1"></script>
+    <script data-pjax>
+      if (CONFIG.hostname === location.hostname) {
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'UA-187712309-1');
+      }
+    </script>
+
+
+
+
+
+
+  <noscript>
+  <style>
+  body { margin-top: 2rem; }
+
+  .use-motion .menu-item,
+  .use-motion .sidebar,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header {
+    visibility: visible;
+  }
+
+  .use-motion .header,
+  .use-motion .site-brand-container .toggle,
+  .use-motion .footer { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle,
+  .use-motion .custom-logo-image {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line {
+    transform: scaleX(1);
+  }
+
+  .search-pop-overlay, .sidebar-nav { display: none; }
+  .sidebar-panel { display: block; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/atom.xml" title="Hey I am Zana" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">Hey I am Zana</h1>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">54</span></a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">7</span></a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">31</span></a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="Searching..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <section class="post-toc-wrap sidebar-panel">
+          <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%82%BA%E4%BB%80%E9%BA%BC%E8%A6%81%E4%BA%86%E8%A7%A3%E5%96%AE%E9%AB%94%E6%9E%B6%E6%A7%8B%E5%92%8C%E5%BE%AE%E6%9C%8D%E5%8B%99%E6%9E%B6%E6%A7%8B%EF%BC%9F"><span class="nav-number">1.</span> <span class="nav-text">為什麼要了解單體架構和微服務架構？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%96%AE%E9%AB%94%E6%9E%B6%E6%A7%8B-Monolithic-%E6%98%AF%E4%BB%80%E9%BA%BC%EF%BC%9F"><span class="nav-number">2.</span> <span class="nav-text">單體架構 (Monolithic) 是什麼？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BE%AE%E6%9C%8D%E5%8B%99%E6%9E%B6%E6%A7%8B-Microservices-%E6%98%AF%E4%BB%80%E9%BA%BC%EF%BC%9F"><span class="nav-number">3.</span> <span class="nav-text">微服務架構 (Microservices) 是什麼？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%96%AE%E9%AB%94%E6%9E%B6%E6%A7%8B%E4%B8%80%E5%AE%9A%E8%A6%81%E8%BD%89%E6%88%90%E5%BE%AE%E6%9C%8D%E5%8B%99%E5%97%8E%EF%BC%9F"><span class="nav-number">4.</span> <span class="nav-text">單體架構一定要轉成微服務嗎？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%AF%94%E8%BC%83"><span class="nav-number">5.</span> <span class="nav-text">比較</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%87%89%E7%94%A8%E6%83%85%E5%A2%83"><span class="nav-number">6.</span> <span class="nav-text">應用情境</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%B8%BD%E7%B5%90"><span class="nav-number">7.</span> <span class="nav-text">總結</span></a></li></ol></div>
+      </section>
+      <!--/noindex-->
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Zana"
+      src="/images/headshot.jpg">
+  <p class="site-author-name" itemprop="name">Zana</p>
+  <div class="site-description" itemprop="description">ɪᴛ ɪs ɪᴍᴘᴏʀᴛᴀɴᴛ ᴛᴏ sᴇᴇ ʜᴏᴡ ғᴀʀ ʏᴏᴜ'ᴠᴇ ᴄᴏᴍᴇ🐾</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">31</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">7</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">54</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/ZanaZhong" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;ZanaZhong" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.facebook.com/zz.yume/" title="FB Page → https:&#x2F;&#x2F;www.facebook.com&#x2F;zz.yume&#x2F;" rel="noopener" target="_blank"><i class="fab fa-facebook fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.linkedin.com/in/jia-rong-zhong/" title="Linkedin → https:&#x2F;&#x2F;www.linkedin.com&#x2F;in&#x2F;jia-rong-zhong&#x2F;" rel="noopener" target="_blank"><i class="fab fa-linkedin fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://instagram.com/zz._.yume" title="Instagram → https:&#x2F;&#x2F;instagram.com&#x2F;zz._.yume" rel="noopener" target="_blank"><i class="fab fa-instagram fa-fw"></i></a>
+      </span>
+  </div>
+
+
+
+      </section>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+  <a href="https://github.com/ZanaZhong" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+      
+
+      
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://zanazhong.github.io/2025/01/15/%E7%AD%86%E8%A8%98-%E5%96%AE%E9%AB%94%E6%9E%B6%E6%A7%8B-vs-%E5%BE%AE%E6%9C%8D%E5%8B%99%E6%9E%B6%E6%A7%8B%EF%BC%9A%E9%81%B8%E6%93%87%E7%9A%84%E9%97%9C%E9%8D%B5%E8%88%87%E6%87%89%E7%94%A8/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/headshot.jpg">
+      <meta itemprop="name" content="Zana">
+      <meta itemprop="description" content="ɪᴛ ɪs ɪᴍᴘᴏʀᴛᴀɴᴛ ᴛᴏ sᴇᴇ ʜᴏᴡ ғᴀʀ ʏᴏᴜ'ᴠᴇ ᴄᴏᴍᴇ🐾">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hey I am Zana">
+    </span>
+
+    
+    
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          單體架構 vs 微服務架構：選擇的關鍵與應用
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+      
+
+      <time title="Created: 2025-01-15 21:52:44 / Modified: 22:30:51" itemprop="dateCreated datePublished" datetime="2025-01-15T21:52:44+08:00">2025-01-15</time>
+    </span>
+
+  
+    <span class="post-meta-item" title="Views" id="busuanzi_container_page_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">Views: </span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+    <span class="post-meta-item" title="Symbols count in article">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">Symbols count in article: </span>
+      <span>1.5k</span>
+    </span>
+    <span class="post-meta-item" title="Reading time">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">Reading time &asymp;</span>
+      <span>1 mins.</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h2 id="為什麼要了解單體架構和微服務架構？"><a href="#為什麼要了解單體架構和微服務架構？" class="headerlink" title="為什麼要了解單體架構和微服務架構？"></a>為什麼要了解單體架構和微服務架構？</h2><p>隨著技術的快速發展，軟體架構設計已經成為每個工程師必須掌握的核心知識之一。<br>無論你是正在開發新產品的初創團隊，還是維護大型系統的資深工程師，選擇適合的架構直接影響系統的穩定性、性能和團隊效率。</p>
+<p>然而，對於剛接觸架構設計的初學者來說，「單體架構」與「微服務架構」之間的選擇常常令人困惑：</p>
+<ul>
+<li>單體架構似乎簡單直接，但為什麼大家都在討論微服務？</li>
+<li>微服務聽起來很先進，但是否真的適合所有場景？</li>
+<li>團隊是否一定要採用最新技術，才能保持競爭力？</li>
+</ul>
+<span id="more"></span>
+
+<h2 id="單體架構-Monolithic-是什麼？"><a href="#單體架構-Monolithic-是什麼？" class="headerlink" title="單體架構 (Monolithic) 是什麼？"></a>單體架構 (Monolithic) 是什麼？</h2><p>Monolithic 是傳統的軟體設計方式，將應用程式的所有功能打包在一個整體中。</p>
+<ul>
+<li>所有功能模組共享同一個代碼庫和部署單位。</li>
+<li>通常包含三層結構：UI 層、業務邏輯層、數據層。</li>
+</ul>
+<p><strong>優點</strong>：</p>
+<ul>
+<li><strong>簡單性</strong>：適合小型或初期專案，開發與部署流程直觀。</li>
+<li><strong>性能好</strong>：內部調用通常比分布式架構更快。</li>
+<li><strong>工具支援廣</strong>：不需要額外的運行時環境管理 (例如 Kubernetes)。</li>
+</ul>
+<p><strong>缺點</strong>：</p>
+<ul>
+<li><strong>耦合性高</strong>：修改或新增功能可能影響整體應用。</li>
+<li><strong>難以擴展</strong>：所有功能部署在一起，無法針對單一模組進行擴展。</li>
+<li><strong>可靠性低</strong>：一個模組出問題，可能導致整個應用崩潰。</li>
+</ul>
+<h2 id="微服務架構-Microservices-是什麼？"><a href="#微服務架構-Microservices-是什麼？" class="headerlink" title="微服務架構 (Microservices) 是什麼？"></a>微服務架構 (Microservices) 是什麼？</h2><p>Microservices 將應用拆分成一系列獨立的服務，每個服務負責一個特定的功能或業務邏輯。</p>
+<ul>
+<li>每個服務都可以獨立開發、部署和維護。</li>
+<li>服務之間通過 API (例如 REST 或 gRPC) 進行通信。</li>
+</ul>
+<p><strong>優點</strong>：</p>
+<ul>
+<li><strong>高擴展性</strong>：可以針對流量高的服務單獨擴展 (如用戶認證服務)。</li>
+<li><strong>高可用性</strong>：單個服務故障不會影響整體系統。</li>
+<li><strong>靈活開發</strong>：不同團隊可以用不同技術棧構建自己的服務。</li>
+</ul>
+<p><strong>缺點</strong>：</p>
+<ul>
+<li><strong>複雜性增加</strong>：服務之間的通信、數據一致性和分布式監控變得更困難。</li>
+<li><strong>部署挑戰</strong>：需要配合容器化 (Docker)、編排工具 (Kubernetes) 和 CI&#x2F;CD 管線。</li>
+<li><strong>運營成本高</strong>：需要專門的基礎設施和人員來維護。</li>
+</ul>
+<h2 id="單體架構一定要轉成微服務嗎？"><a href="#單體架構一定要轉成微服務嗎？" class="headerlink" title="單體架構一定要轉成微服務嗎？"></a>單體架構一定要轉成微服務嗎？</h2><p>不一定！選擇架構應根據業務需求和資源狀況，而非追求潮流。</p>
+<p><strong>應該轉為 Microservices 的情境</strong>：</p>
+<ol>
+<li><strong>系統龐大且複雜</strong>：單體架構已經無法快速迭代和部署。</li>
+<li><strong>流量分布不均</strong>：某些功能的流量特別高，需要獨立擴展 (例如商品查詢 vs 購物車)。</li>
+<li><strong>團隊規模擴大</strong>：不同功能模組需要由多個團隊並行開發，避免資源衝突。</li>
+<li><strong>多樣性需求</strong>：需要引入不同的技術或框架來滿足特定模組需求。</li>
+</ol>
+<p><strong>適合保留 Monolithic 的情境</strong>：</p>
+<ol>
+<li><strong>小型專案</strong>：團隊規模小，開發與維護的成本可控。</li>
+<li><strong>需求穩定</strong>：業務場景簡單，功能變化不大。</li>
+<li><strong>資源有限</strong>：運營人員、基礎設施或時間不足以支撐Microservices的高複雜度。</li>
+</ol>
+<h2 id="比較"><a href="#比較" class="headerlink" title="比較"></a>比較</h2><table>
+<thead>
+<tr>
+<th><strong>特性</strong></th>
+<th><strong>Monolithic</strong></th>
+<th><strong>Microservices</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>耦合性</strong></td>
+<td>高</td>
+<td>低</td>
+</tr>
+<tr>
+<td><strong>開發速度</strong></td>
+<td>快 (初期)</td>
+<td>慢 (初期)</td>
+</tr>
+<tr>
+<td><strong>部署頻率</strong></td>
+<td>整體部署</td>
+<td>單獨部署</td>
+</tr>
+<tr>
+<td><strong>擴展方式</strong></td>
+<td>整體擴展</td>
+<td>單點擴展</td>
+</tr>
+<tr>
+<td><strong>技術多樣性</strong></td>
+<td>單一技術棧</td>
+<td>支援多種技術</td>
+</tr>
+<tr>
+<td><strong>可靠性</strong></td>
+<td>低 (單點故障影響整體)</td>
+<td>高 (服務隔離，降低故障影響範圍)</td>
+</tr>
+</tbody></table>
+<h2 id="應用情境"><a href="#應用情境" class="headerlink" title="應用情境"></a>應用情境</h2><ul>
+<li><p><strong>Monolithic</strong>：<br>適用於小型企業網站、早期 MVP 開發、簡單內部工具等。</p>
+</li>
+<li><p><strong>Microservices</strong>：<br>適用於電子商務平台 (如亞馬遜)、流媒體服務 (如 Netflix)、高度擴展的分布式應用。</p>
+</li>
+</ul>
+<h2 id="總結"><a href="#總結" class="headerlink" title="總結"></a>總結</h2><ul>
+<li>Monolithic 更適合快速啟動，Microservices 則適合長期運營的大型專案。</li>
+<li><strong>切換前的提醒</strong>：轉向 Microservices 需要全面考慮團隊技能、基礎設施、業務需求，避免「過度設計」。</li>
+<li><strong>最佳策略</strong>：採取 <strong>分段拆解法</strong>，先從最關鍵的模組開始，逐步轉型，平衡效能與複雜度。</li>
+</ul>
+<div class="note info"><p>選擇架構，不是看技術有多潮，而是看它是否真正解決你的問題！<br>這不僅是一場技術選擇，也是平衡效率與效能的一場藝術</p>
+</div>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Monolithic/" rel="tag"># Monolithic</a>
+              <a href="/tags/Microservices/" rel="tag"># Microservices</a>
+              <a href="/tags/%E5%BE%AE%E6%9C%8D%E5%8B%99/" rel="tag"># 微服務</a>
+              <a href="/tags/%E5%96%AE%E9%AB%94%E6%9E%B6%E6%A7%8B/" rel="tag"># 單體架構</a>
+              <a href="/tags/%E7%B3%BB%E7%B5%B1%E6%9E%B6%E6%A7%8B/" rel="tag"># 系統架構</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2025/01/14/%E7%AD%86%E8%A8%98-Kubernetes:-Docker:-Container:-VM-%E6%A6%82%E5%BF%B5/" rel="prev" title="[筆記] 深入淺出理解 Kubernetes/ Docker/ Container/ VM 概念">
+                  <i class="fa fa-chevron-left"></i> [筆記] 深入淺出理解 Kubernetes/ Docker/ Container/ VM 概念
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+  
+  
+  
+
+
+
+      
+    
+  <div class="comments">
+    <div id="disqus_thread">
+      <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+    </div>
+  </div>
+  
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      const activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      const commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      
+
+      
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2025</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Zana</span>
+</div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+    <span title="Symbols count total">32k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="Reading time total">29 mins.</span>
+  </span>
+</div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="Total Visitors">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="Total Views">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+    </div>
+  </footer>
+
+  
+  <script src="//cdn.jsdelivr.net/npm/animejs@3.2.0/lib/anime.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/@next-theme/pjax@0.4.0/pjax.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+  <script>
+var pjax = new Pjax({
+  selectors: [
+    'head title',
+    '.page-configurations',
+    '.main-inner',
+    '.post-toc-wrap',
+    '.languages',
+    '.pjax'
+  ],
+  analytics: false,
+  cacheBust: false,
+  scrollRestoration: false,
+  scrollTo: !CONFIG.bookmark.enable
+});
+
+document.addEventListener('pjax:success', () => {
+  pjax.executeScripts(document.querySelectorAll('script[data-pjax], .pjax script'));
+  NexT.boot.refresh();
+  // Define Motion Sequence & Bootstrap Motion.
+  if (CONFIG.motion.enable) {
+    NexT.motion.integrator
+      .init()
+      .add(NexT.motion.middleWares.subMenu)
+      .add(NexT.motion.middleWares.postList)
+      .bootstrap();
+  }
+  const hasTOC = document.querySelector('.post-toc');
+  document.querySelector('.sidebar-inner').classList.toggle('sidebar-nav-active', hasTOC);
+  document.querySelector(hasTOC ? '.sidebar-nav-toc' : '.sidebar-nav-overview').click();
+  NexT.utils.updateSidebarPosition();
+});
+</script>
+
+
+  
+
+
+
+
+  <script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <script>
+    NProgress.configure({
+      showSpinner: true
+    });
+    NProgress.start();
+    document.addEventListener('readystatechange', () => {
+      if (document.readyState === 'interactive') {
+        NProgress.inc(0.8);
+      }
+      if (document.readyState === 'complete') {
+        NProgress.done();
+      }
+    });
+    document.addEventListener('pjax:send', () => {
+      NProgress.start();
+    });
+    document.addEventListener('pjax:success', () => {
+      NProgress.done();
+    });
+  </script>
+
+
+  
+  <script data-pjax async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+
+
+
+    <div class="pjax">
+  
+
+  
+
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/disqusjs@1.3.0/dist/disqusjs.css">
+
+<script>
+NexT.utils.loadComments('#disqus_thread', () => {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/disqusjs@1.3.0/dist/disqus.js', () => {
+    window.dsqjs = new DisqusJS({
+      api       : '' || 'https://disqus.com/api/',
+      apikey    : 'PwhBX0pvyskM9Ham1vjsvzwzjlJch5I73qZCHQrBMoGA6NBOuwdPWCQccXelF20z',
+      shortname : 'https-zanazhong-github-io',
+      url       : "https://zanazhong.github.io/2025/01/15/%E7%AD%86%E8%A8%98-%E5%96%AE%E9%AB%94%E6%9E%B6%E6%A7%8B-vs-%E5%BE%AE%E6%9C%8D%E5%8B%99%E6%9E%B6%E6%A7%8B%EF%BC%9A%E9%81%B8%E6%93%87%E7%9A%84%E9%97%9C%E9%8D%B5%E8%88%87%E6%87%89%E7%94%A8/",
+      identifier: "2025/01/15/筆記-單體架構-vs-微服務架構：選擇的關鍵與應用/",
+      title     : "單體架構 vs 微服務架構：選擇的關鍵與應用",
+    });
+  }, window.DisqusJS);
+});
+</script>
+
+    </div>
+</body>
+</html>

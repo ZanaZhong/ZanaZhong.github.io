@@ -6,7 +6,7 @@
   <link href="https://zanazhong.github.io/atom.xml" rel="self"/>
   
   <link href="https://zanazhong.github.io/"/>
-  <updated>2025-01-14T05:00:35.964Z</updated>
+  <updated>2025-01-15T14:30:51.881Z</updated>
   <id>https://zanazhong.github.io/</id>
   
   <author>
@@ -15,6 +15,39 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>單體架構 vs 微服務架構：選擇的關鍵與應用</title>
+    <link href="https://zanazhong.github.io/2025/01/15/%E7%AD%86%E8%A8%98-%E5%96%AE%E9%AB%94%E6%9E%B6%E6%A7%8B-vs-%E5%BE%AE%E6%9C%8D%E5%8B%99%E6%9E%B6%E6%A7%8B%EF%BC%9A%E9%81%B8%E6%93%87%E7%9A%84%E9%97%9C%E9%8D%B5%E8%88%87%E6%87%89%E7%94%A8/"/>
+    <id>https://zanazhong.github.io/2025/01/15/%E7%AD%86%E8%A8%98-%E5%96%AE%E9%AB%94%E6%9E%B6%E6%A7%8B-vs-%E5%BE%AE%E6%9C%8D%E5%8B%99%E6%9E%B6%E6%A7%8B%EF%BC%9A%E9%81%B8%E6%93%87%E7%9A%84%E9%97%9C%E9%8D%B5%E8%88%87%E6%87%89%E7%94%A8/</id>
+    <published>2025-01-15T13:52:44.000Z</published>
+    <updated>2025-01-15T14:30:51.881Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="為什麼要了解單體架構和微服務架構？"><a href="#為什麼要了解單體架構和微服務架構？" class="headerlink" title="為什麼要了解單體架構和微服務架構？"></a>為什麼要了解單體架構和微服務架構？</h2><p>隨著技術的快速發展，軟體架構設計已經成為每個工程師必須掌握的核心知識之一。<br>無論你是正在開發新產品的初創團隊，還是維護大型系統的資深工程師，選擇適合的架構直接影響系統的穩定性、性能和團隊效率。</p><p>然而，對於剛接觸架構設計的初學者來說，「單體架構」與「微服務架構」之間的選擇常常令人困惑：</p><ul><li>單體架構似乎簡單直接，但為什麼大家都在討論微服務？</li><li>微服務聽起來很先進，但是否真的適合所有場景？</li><li>團隊是否一定要採用最新技術，才能保持競爭力？</li></ul><span id="more"></span><h2 id="單體架構-Monolithic-是什麼？"><a href="#單體架構-Monolithic-是什麼？" class="headerlink" title="單體架構 (Monolithic) 是什麼？"></a>單體架構 (Monolithic) 是什麼？</h2><p>Monolithic 是傳統的軟體設計方式，將應用程式的所有功能打包在一個整體中。</p><ul><li>所有功能模組共享同一個代碼庫和部署單位。</li><li>通常包含三層結構：UI 層、業務邏輯層、數據層。</li></ul><p><strong>優點</strong>：</p><ul><li><strong>簡單性</strong>：適合小型或初期專案，開發與部署流程直觀。</li><li><strong>性能好</strong>：內部調用通常比分布式架構更快。</li><li><strong>工具支援廣</strong>：不需要額外的運行時環境管理 (例如 Kubernetes)。</li></ul><p><strong>缺點</strong>：</p><ul><li><strong>耦合性高</strong>：修改或新增功能可能影響整體應用。</li><li><strong>難以擴展</strong>：所有功能部署在一起，無法針對單一模組進行擴展。</li><li><strong>可靠性低</strong>：一個模組出問題，可能導致整個應用崩潰。</li></ul><h2 id="微服務架構-Microservices-是什麼？"><a href="#微服務架構-Microservices-是什麼？" class="headerlink" title="微服務架構 (Microservices) 是什麼？"></a>微服務架構 (Microservices) 是什麼？</h2><p>Microservices 將應用拆分成一系列獨立的服務，每個服務負責一個特定的功能或業務邏輯。</p><ul><li>每個服務都可以獨立開發、部署和維護。</li><li>服務之間通過 API (例如 REST 或 gRPC) 進行通信。</li></ul><p><strong>優點</strong>：</p><ul><li><strong>高擴展性</strong>：可以針對流量高的服務單獨擴展 (如用戶認證服務)。</li><li><strong>高可用性</strong>：單個服務故障不會影響整體系統。</li><li><strong>靈活開發</strong>：不同團隊可以用不同技術棧構建自己的服務。</li></ul><p><strong>缺點</strong>：</p><ul><li><strong>複雜性增加</strong>：服務之間的通信、數據一致性和分布式監控變得更困難。</li><li><strong>部署挑戰</strong>：需要配合容器化 (Docker)、編排工具 (Kubernetes) 和 CI&#x2F;CD 管線。</li><li><strong>運營成本高</strong>：需要專門的基礎設施和人員來維護。</li></ul><h2 id="單體架構一定要轉成微服務嗎？"><a href="#單體架構一定要轉成微服務嗎？" class="headerlink" title="單體架構一定要轉成微服務嗎？"></a>單體架構一定要轉成微服務嗎？</h2><p>不一定！選擇架構應根據業務需求和資源狀況，而非追求潮流。</p><p><strong>應該轉為 Microservices 的情境</strong>：</p><ol><li><strong>系統龐大且複雜</strong>：單體架構已經無法快速迭代和部署。</li><li><strong>流量分布不均</strong>：某些功能的流量特別高，需要獨立擴展 (例如商品查詢 vs 購物車)。</li><li><strong>團隊規模擴大</strong>：不同功能模組需要由多個團隊並行開發，避免資源衝突。</li><li><strong>多樣性需求</strong>：需要引入不同的技術或框架來滿足特定模組需求。</li></ol><p><strong>適合保留 Monolithic 的情境</strong>：</p><ol><li><strong>小型專案</strong>：團隊規模小，開發與維護的成本可控。</li><li><strong>需求穩定</strong>：業務場景簡單，功能變化不大。</li><li><strong>資源有限</strong>：運營人員、基礎設施或時間不足以支撐Microservices的高複雜度。</li></ol><h2 id="比較"><a href="#比較" class="headerlink" title="比較"></a>比較</h2><table><thead><tr><th><strong>特性</strong></th><th><strong>Monolithic</strong></th><th><strong>Microservices</strong></th></tr></thead><tbody><tr><td><strong>耦合性</strong></td><td>高</td><td>低</td></tr><tr><td><strong>開發速度</strong></td><td>快 (初期)</td><td>慢 (初期)</td></tr><tr><td><strong>部署頻率</strong></td><td>整體部署</td><td>單獨部署</td></tr><tr><td><strong>擴展方式</strong></td><td>整體擴展</td><td>單點擴展</td></tr><tr><td><strong>技術多樣性</strong></td><td>單一技術棧</td><td>支援多種技術</td></tr><tr><td><strong>可靠性</strong></td><td>低 (單點故障影響整體)</td><td>高 (服務隔離，降低故障影響範圍)</td></tr></tbody></table><h2 id="應用情境"><a href="#應用情境" class="headerlink" title="應用情境"></a>應用情境</h2><ul><li><p><strong>Monolithic</strong>：<br>適用於小型企業網站、早期 MVP 開發、簡單內部工具等。</p></li><li><p><strong>Microservices</strong>：<br>適用於電子商務平台 (如亞馬遜)、流媒體服務 (如 Netflix)、高度擴展的分布式應用。</p></li></ul><h2 id="總結"><a href="#總結" class="headerlink" title="總結"></a>總結</h2><ul><li>Monolithic 更適合快速啟動，Microservices 則適合長期運營的大型專案。</li><li><strong>切換前的提醒</strong>：轉向 Microservices 需要全面考慮團隊技能、基礎設施、業務需求，避免「過度設計」。</li><li><strong>最佳策略</strong>：採取 <strong>分段拆解法</strong>，先從最關鍵的模組開始，逐步轉型，平衡效能與複雜度。</li></ul><div class="note info"><p>選擇架構，不是看技術有多潮，而是看它是否真正解決你的問題！<br>這不僅是一場技術選擇，也是平衡效率與效能的一場藝術</p></div>]]></content>
+    
+    
+    <summary type="html">&lt;h2 id=&quot;為什麼要了解單體架構和微服務架構？&quot;&gt;&lt;a href=&quot;#為什麼要了解單體架構和微服務架構？&quot; class=&quot;headerlink&quot; title=&quot;為什麼要了解單體架構和微服務架構？&quot;&gt;&lt;/a&gt;為什麼要了解單體架構和微服務架構？&lt;/h2&gt;&lt;p&gt;隨著技術的快速發展，軟體架構設計已經成為每個工程師必須掌握的核心知識之一。&lt;br&gt;無論你是正在開發新產品的初創團隊，還是維護大型系統的資深工程師，選擇適合的架構直接影響系統的穩定性、性能和團隊效率。&lt;/p&gt;
+&lt;p&gt;然而，對於剛接觸架構設計的初學者來說，「單體架構」與「微服務架構」之間的選擇常常令人困惑：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;單體架構似乎簡單直接，但為什麼大家都在討論微服務？&lt;/li&gt;
+&lt;li&gt;微服務聽起來很先進，但是否真的適合所有場景？&lt;/li&gt;
+&lt;li&gt;團隊是否一定要採用最新技術，才能保持競爭力？&lt;/li&gt;
+&lt;/ul&gt;</summary>
+    
+    
+    
+    
+    <category term="Monolithic" scheme="https://zanazhong.github.io/tags/Monolithic/"/>
+    
+    <category term="Microservices" scheme="https://zanazhong.github.io/tags/Microservices/"/>
+    
+    <category term="微服務" scheme="https://zanazhong.github.io/tags/%E5%BE%AE%E6%9C%8D%E5%8B%99/"/>
+    
+    <category term="單體架構" scheme="https://zanazhong.github.io/tags/%E5%96%AE%E9%AB%94%E6%9E%B6%E6%A7%8B/"/>
+    
+    <category term="系統架構" scheme="https://zanazhong.github.io/tags/%E7%B3%BB%E7%B5%B1%E6%9E%B6%E6%A7%8B/"/>
+    
+  </entry>
   
   <entry>
     <title>[筆記] 深入淺出理解 Kubernetes/ Docker/ Container/ VM 概念</title>
@@ -583,36 +616,6 @@
     <category term="jquery" scheme="https://zanazhong.github.io/tags/jquery/"/>
     
     <category term="dropdown" scheme="https://zanazhong.github.io/tags/dropdown/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>[學習] Python List</title>
-    <link href="https://zanazhong.github.io/2021/03/22/%E5%AD%B8%E7%BF%92-Python-List/"/>
-    <id>https://zanazhong.github.io/2021/03/22/%E5%AD%B8%E7%BF%92-Python-List/</id>
-    <published>2021-03-22T14:39:49.000Z</published>
-    <updated>2021-04-02T14:48:21.000Z</updated>
-    
-    <content type="html"><![CDATA[<p>常遇到的問題</p><ul><li>find the duplicate elements in the list</li><li>count the duplicate elements in the list</li><li>remove the duplicate elements in the list</li></ul><span id="more"></span><h3 id="List-count-用法"><a href="#List-count-用法" class="headerlink" title="List.count() 用法"></a>List.count() 用法</h3><blockquote><p>計算指定的值在 list 出現幾次</p></blockquote><div class="note default"><p>語法：list.count(element)</p></div><p>input:</p><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">my_list = [<span class="number">2</span>, <span class="number">3</span>, <span class="number">1</span>, <span class="number">4</span>, <span class="number">2</span>, <span class="number">5</span>, <span class="number">3</span>, <span class="number">7</span>]</span><br><span class="line"><span class="built_in">print</span>(my_list.count(<span class="number">3</span>))</span><br><span class="line"><span class="built_in">print</span>(my_list.count(<span class="number">7</span>))</span><br></pre></td></tr></table></figure><p>output:</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">2</span><br><span class="line">1</span><br></pre></td></tr></table></figure><h4 id="進階"><a href="#進階" class="headerlink" title="進階"></a>進階</h4><blockquote><p>將 list 裡面所有的 element 都記錄下有幾個</p></blockquote><p>input:</p><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">dup_list = [<span class="string">&quot;a&quot;</span>, <span class="string">&quot;c&quot;</span>, <span class="string">&quot;a&quot;</span>, <span class="string">&quot;c&quot;</span>, <span class="string">&quot;b&quot;</span>, <span class="string">&quot;a&quot;</span>]</span><br><span class="line">clear_dict = &#123;i: dup_list.count(i) <span class="keyword">for</span> i <span class="keyword">in</span> dup_list&#125;</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(clear_dict)</span><br></pre></td></tr></table></figure><p>output: </p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123;&#39;a&#39;: 3, &#39;c&#39;: 2, &#39;b&#39;: 1&#125;</span><br></pre></td></tr></table></figure><h3 id="另一種用法-Counter"><a href="#另一種用法-Counter" class="headerlink" title="另一種用法 Counter"></a>另一種用法 Counter</h3><div class="note default"><p>需要先 import<br>語法：<br>from collections import Counter<br>Counter(List&#x2F;String)</p></div><blockquote><p>counter 出來的型態通常會轉成 Dictionary 會比較方便～<br>在下面也會示範有轉成 dict 跟沒轉成 dict 的差別</p></blockquote><p>input:</p><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> collections <span class="keyword">import</span> Counter</span><br><span class="line">dup_list = [<span class="string">&quot;a&quot;</span>, <span class="string">&quot;c&quot;</span>, <span class="string">&quot;a&quot;</span>, <span class="string">&quot;c&quot;</span>, <span class="string">&quot;b&quot;</span>, <span class="string">&quot;a&quot;</span>]</span><br><span class="line">count_list = <span class="built_in">dict</span>(Counter(dup_list))</span><br><span class="line">count_string = Counter(<span class="string">&#x27;acacaba&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(count_list)</span><br><span class="line"><span class="built_in">print</span>(count_string)</span><br></pre></td></tr></table></figure><p>output:</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&#123;&#39;a&#39;: 3, &#39;c&#39;: 2, &#39;b&#39;: 1&#125;</span><br><span class="line">Counter(&#123;&#39;a&#39;: 4, &#39;b&#39;: 1, &#39;c&#39;: 2&#125;)</span><br></pre></td></tr></table></figure><h4 id="Counter-的額外用法"><a href="#Counter-的額外用法" class="headerlink" title="Counter 的額外用法"></a>Counter 的額外用法</h4><blockquote><p>找出出現次數前 n 多</p></blockquote><div class="note default"><p>語法： Counter.most_common()</p></div><p>input:</p><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 接續上一個例子</span></span><br><span class="line"><span class="built_in">print</span>(count_string.most_common(<span class="number">1</span>))</span><br><span class="line"><span class="built_in">print</span>(count_string.most_common(<span class="number">2</span>))</span><br></pre></td></tr></table></figure><p>output:</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[(&#39;a&#39;, 4)]</span><br><span class="line">[(&#39;a&#39;, 4), (&#39;c&#39;, 2)]</span><br></pre></td></tr></table></figure>]]></content>
-    
-    
-    <summary type="html">&lt;p&gt;常遇到的問題&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;find the duplicate elements in the list&lt;/li&gt;
-&lt;li&gt;count the duplicate elements in the list&lt;/li&gt;
-&lt;li&gt;remove the duplicate elements in the list&lt;/li&gt;
-&lt;/ul&gt;</summary>
-    
-    
-    
-    <category term="python" scheme="https://zanazhong.github.io/categories/python/"/>
-    
-    
-    <category term="python" scheme="https://zanazhong.github.io/tags/python/"/>
-    
-    <category term="list" scheme="https://zanazhong.github.io/tags/list/"/>
-    
-    <category term="count" scheme="https://zanazhong.github.io/tags/count/"/>
     
   </entry>
   
