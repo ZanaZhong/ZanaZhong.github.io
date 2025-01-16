@@ -34,7 +34,7 @@
 <meta property="og:description" content="為什麼需要這些技術？隨著應用程式越來越複雜，我們需要更靈活、高效的方式來部署和管理它們。傳統的硬體配置已經無法滿足快速變動的需求，因此「虛擬化技術」和「容器化技術」應運而生。">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2025-01-14T01:08:17.000Z">
-<meta property="article:modified_time" content="2025-01-14T05:00:35.964Z">
+<meta property="article:modified_time" content="2025-01-16T10:30:39.279Z">
 <meta property="article:author" content="Zana">
 <meta property="article:tag" content="Kubernetes">
 <meta property="article:tag" content="Docker">
@@ -171,7 +171,7 @@
   </li>
         <li class="menu-item menu-item-archives">
 
-    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">31</span></a>
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">32</span></a>
 
   </li>
       <li class="menu-item menu-item-search">
@@ -246,7 +246,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">31</span>
+          <span class="site-state-item-count">32</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -338,10 +338,16 @@
         <i class="far fa-calendar"></i>
       </span>
       <span class="post-meta-item-text">Posted on</span>
-      
 
-      <time title="Created: 2025-01-14 09:08:17 / Modified: 13:00:35" itemprop="dateCreated datePublished" datetime="2025-01-14T09:08:17+08:00">2025-01-14</time>
+      <time title="Created: 2025-01-14 09:08:17" itemprop="dateCreated datePublished" datetime="2025-01-14T09:08:17+08:00">2025-01-14</time>
     </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">Edited on</span>
+        <time title="Modified: 2025-01-16 18:30:39" itemprop="dateModified" datetime="2025-01-16T18:30:39+08:00">2025-01-16</time>
+      </span>
 
   
     <span class="post-meta-item" title="Views" id="busuanzi_container_page_pv" style="display: none;">
@@ -356,7 +362,7 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">Symbols count in article: </span>
-      <span>1.5k</span>
+      <span>1.6k</span>
     </span>
     <span class="post-meta-item" title="Reading time">
       <span class="post-meta-item-icon">
@@ -377,7 +383,7 @@
         <h2 id="為什麼需要這些技術？"><a href="#為什麼需要這些技術？" class="headerlink" title="為什麼需要這些技術？"></a>為什麼需要這些技術？</h2><p>隨著應用程式越來越複雜，我們需要更靈活、高效的方式來部署和管理它們。傳統的硬體配置已經無法滿足快速變動的需求，因此「虛擬化技術」和「容器化技術」應運而生。</p>
 <span id="more"></span>
 
-<h2 id="什麼是-VM？"><a href="#什麼是-VM？" class="headerlink" title="什麼是 VM？"></a>什麼是 VM？</h2><p>虛擬機（Virtual Machine）是利用虛擬化技術，虛擬化整個硬體（Hardware）層，把一台實體機（Host）分割成多個彼此獨立的環境（Guest）。<br>每個 VM 都有自己的作業系統，並模擬硬體資源 (CPU、記憶體、網路…等)。</p>
+<h2 id="什麼是-VM？"><a href="#什麼是-VM？" class="headerlink" title="什麼是 VM？"></a>什麼是 VM？</h2><p>虛擬機 (Virtual Machine) 是利用虛擬化技術，虛擬化整個硬體 (Hardware) 層，把一台實體機 (Host) 分割成多個彼此獨立的環境 (Guest) &#x3D;&gt; 模擬的是&#x3D;&#x3D;整台機器&#x3D;&#x3D;<br>每個 VM 都有自己的作業系統 (Operating System)，並模擬硬體資源 (CPU、記憶體、網路…等)。</p>
 <ul>
 <li><strong>優點</strong>：<ul>
 <li>完全隔離，安全性高。</li>
@@ -390,7 +396,7 @@
 </ul>
 </li>
 </ul>
-<h2 id="什麼是容器-Container-？"><a href="#什麼是容器-Container-？" class="headerlink" title="什麼是容器 (Container)？"></a>什麼是容器 (Container)？</h2><p>容器是一種比 VM 更輕量的技術，虛擬化的作業系統（Operating System）層，讓應用程式及其依賴環境打包成獨立的單位來執行。它共享宿主機的作業系統核心，但彼此之間隔離。<br>透過容器引擎 (ex: Docker、Podman)，容器可以快速啟動並執行應用程式。</p>
+<h2 id="什麼是容器-Container-？"><a href="#什麼是容器-Container-？" class="headerlink" title="什麼是容器 (Container)？"></a>什麼是容器 (Container)？</h2><p>容器是一種比 VM 更輕量的技術，虛擬化的作業系統層，讓應用程式及其依賴環境打包成獨立的單位來執行。它共享宿主機的作業系統核心，但彼此之間隔離。 &#x3D;&gt; 模擬的是&#x3D;&#x3D;應用程式環境&#x3D;&#x3D;<br>透過容器引擎 (ex: Docker、Podman)，容器可以快速啟動並執行應用程式。</p>
 <ul>
 <li><strong>優點</strong>：<ul>
 <li>輕量：共享作業系統核心，減少資源需求。</li>

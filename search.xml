@@ -156,48 +156,6 @@
       </tags>
   </entry>
   <entry>
-    <title>[學習] Pyton - String</title>
-    <url>/2021/01/20/%E5%AD%B8%E7%BF%92-Pyton-String/</url>
-    <content><![CDATA[<blockquote>
-<p>一些關於 String 單字或字首大寫處理的用法</p>
-</blockquote>
-<span id="more"></span>
-
-<h2 id="字首大寫"><a href="#字首大寫" class="headerlink" title="字首大寫"></a>字首大寫</h2><ul>
-<li>capitalize(): 只會將字串的字首轉成大寫，其餘若有大寫的字會轉成小寫</li>
-<li>title(): 將字串中所有“單字”的字首轉成大寫</li>
-</ul>
-<p>input:</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">text = <span class="string">&quot;greetings, fiends&quot;</span></span><br><span class="line"><span class="built_in">print</span>(text.capitalize())</span><br><span class="line"><span class="built_in">print</span>(text.title())</span><br></pre></td></tr></table></figure>
-
-<p>output:</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#39;Greetings, friends&#39;</span><br><span class="line">&#39;Greetings, Fiends&#39;</span><br></pre></td></tr></table></figure>
-
-<p>但 capitalize() 可能會遇到一個問題，若是原本句子中有人名或地名，本身字首就是大寫的單子，在使用 capitalize() 後會變成小寫，因此有另一種方法，如下：</p>
-<p>input:</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">text = <span class="string">&quot;welcome to New York&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(text[<span class="number">0</span>].upper() + text[<span class="number">1</span>:])</span><br></pre></td></tr></table></figure>
-<p>output:</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&quot;Welcome to New York&quot;</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>lower(): 將字串全部轉成小寫</li>
-<li>upper(): 將字串全部轉成大寫</li>
-<li>islowewr(): 檢查字串是否全小寫</li>
-<li>isupper(): 檢查字串是否全大寫</li>
-</ul>
-<p>input:</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">text = <span class="string">&quot;Hi, my Name is Zana&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(text.lower())</span><br><span class="line"><span class="built_in">print</span>(text.upper())</span><br><span class="line"><span class="built_in">print</span>(text.islowewr())</span><br><span class="line"><span class="built_in">print</span>(text.isupper())</span><br></pre></td></tr></table></figure>
-<p>output:</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&quot;hi, my name is zana&quot;</span><br><span class="line">&quot;HI, MY NAME IS ZANA&quot;</span><br><span class="line">False</span><br><span class="line">False</span><br></pre></td></tr></table></figure>]]></content>
-      <categories>
-        <category>python</category>
-      </categories>
-      <tags>
-        <tag>python</tag>
-        <tag>string</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>[學習] Python List</title>
     <url>/2021/03/22/%E5%AD%B8%E7%BF%92-Python-List/</url>
     <content><![CDATA[<p>常遇到的問題</p>
@@ -257,6 +215,48 @@
       </tags>
   </entry>
   <entry>
+    <title>[學習] Pyton - String</title>
+    <url>/2021/01/20/%E5%AD%B8%E7%BF%92-Pyton-String/</url>
+    <content><![CDATA[<blockquote>
+<p>一些關於 String 單字或字首大寫處理的用法</p>
+</blockquote>
+<span id="more"></span>
+
+<h2 id="字首大寫"><a href="#字首大寫" class="headerlink" title="字首大寫"></a>字首大寫</h2><ul>
+<li>capitalize(): 只會將字串的字首轉成大寫，其餘若有大寫的字會轉成小寫</li>
+<li>title(): 將字串中所有“單字”的字首轉成大寫</li>
+</ul>
+<p>input:</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">text = <span class="string">&quot;greetings, fiends&quot;</span></span><br><span class="line"><span class="built_in">print</span>(text.capitalize())</span><br><span class="line"><span class="built_in">print</span>(text.title())</span><br></pre></td></tr></table></figure>
+
+<p>output:</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#39;Greetings, friends&#39;</span><br><span class="line">&#39;Greetings, Fiends&#39;</span><br></pre></td></tr></table></figure>
+
+<p>但 capitalize() 可能會遇到一個問題，若是原本句子中有人名或地名，本身字首就是大寫的單子，在使用 capitalize() 後會變成小寫，因此有另一種方法，如下：</p>
+<p>input:</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">text = <span class="string">&quot;welcome to New York&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(text[<span class="number">0</span>].upper() + text[<span class="number">1</span>:])</span><br></pre></td></tr></table></figure>
+<p>output:</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&quot;Welcome to New York&quot;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>lower(): 將字串全部轉成小寫</li>
+<li>upper(): 將字串全部轉成大寫</li>
+<li>islowewr(): 檢查字串是否全小寫</li>
+<li>isupper(): 檢查字串是否全大寫</li>
+</ul>
+<p>input:</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">text = <span class="string">&quot;Hi, my Name is Zana&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(text.lower())</span><br><span class="line"><span class="built_in">print</span>(text.upper())</span><br><span class="line"><span class="built_in">print</span>(text.islowewr())</span><br><span class="line"><span class="built_in">print</span>(text.isupper())</span><br></pre></td></tr></table></figure>
+<p>output:</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&quot;hi, my name is zana&quot;</span><br><span class="line">&quot;HI, MY NAME IS ZANA&quot;</span><br><span class="line">False</span><br><span class="line">False</span><br></pre></td></tr></table></figure>]]></content>
+      <categories>
+        <category>python</category>
+      </categories>
+      <tags>
+        <tag>python</tag>
+        <tag>string</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>[學習] Pyton  try - except</title>
     <url>/2021/01/31/%E5%AD%B8%E7%BF%92-Pyton-try-except/</url>
     <content><![CDATA[<blockquote>
@@ -296,6 +296,11 @@
         <tag>python</tag>
         <tag>try-except</tag>
       </tags>
+  </entry>
+  <entry>
+    <title>深入淺出理解 Docker 的底層運作與架</title>
+    <url>/2025/01/16/%E6%B7%B1%E5%85%A5%E6%B7%BA%E5%87%BA%E7%90%86%E8%A7%A3-Docker-%E7%9A%84%E5%BA%95%E5%B1%A4%E9%81%8B%E4%BD%9C%E8%88%87%E6%9E%B6/</url>
+    <content><![CDATA[]]></content>
   </entry>
   <entry>
     <title>[筆記] Leetcode - 1822. Sign of the Product of an Array</title>
@@ -361,37 +366,6 @@
       </tags>
   </entry>
   <entry>
-    <title>[筆記] Boostrape-table 列上編輯功能</title>
-    <url>/2020/09/20/%E7%AD%86%E8%A8%98-Boostrape-table-%E5%88%97%E4%B8%8A%E7%B7%A8%E8%BC%AF%E5%8A%9F%E8%83%BD/</url>
-    <content><![CDATA[<blockquote>
-<p>實習開發網站，常遇到一些功能需求要上網查詢，整理成筆記以後再用到就不用又從頭開始找，也希望幫助到正在找學這些功能的人</p>
-</blockquote>
-<span id="more"></span>
-
-<h3 id="新增功能"><a href="#新增功能" class="headerlink" title="新增功能"></a>新增功能</h3><figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">$(<span class="built_in">document</span>).on(<span class="string">&quot;click&quot;</span>, <span class="string">&quot;.add&quot;</span>, <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">   <span class="keyword">var</span> empty = <span class="literal">false</span>;</span><br><span class="line">   <span class="keyword">var</span> input = $(<span class="built_in">this</span>).parents(<span class="string">&quot;tr&quot;</span>).find(<span class="string">&#x27;input[type=&quot;text&quot;]&#x27;</span>);</span><br><span class="line">   input.each(<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">     <span class="keyword">if</span>(!$(<span class="built_in">this</span>).val())&#123;</span><br><span class="line">       $(<span class="built_in">this</span>).addClass(<span class="string">&quot;error&quot;</span>);</span><br><span class="line">       empty = <span class="literal">true</span>;</span><br><span class="line">     &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">       $(<span class="built_in">this</span>).removeClass(<span class="string">&quot;error&quot;</span>);</span><br><span class="line">     &#125;</span><br><span class="line">   &#125;);</span><br><span class="line">   $(<span class="built_in">this</span>).parents(<span class="string">&quot;tr&quot;</span>).find(<span class="string">&quot;.error&quot;</span>).first().focus();</span><br><span class="line">   <span class="comment">// 新增或編輯完新增時檢查是否都有填</span></span><br><span class="line">   <span class="keyword">if</span>(!empty)&#123;</span><br><span class="line">     $(<span class="string">&#x27;input[type=text]&#x27;</span>).each(<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">       $(<span class="built_in">this</span>).parent(<span class="string">&quot;td&quot;</span>).html($(<span class="built_in">this</span>).val());  </span><br><span class="line">     &#125;);           </span><br><span class="line">     $(<span class="string">&#x27;input[type=date]&#x27;</span>).each(<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">       $(<span class="built_in">this</span>).parent(<span class="string">&quot;td&quot;</span>).html($(<span class="built_in">this</span>).val()); </span><br><span class="line">     &#125;)</span><br><span class="line">     $(<span class="built_in">this</span>).parents(<span class="string">&quot;tr&quot;</span>).find(<span class="string">&quot;.add, .edit&quot;</span>).toggle();</span><br><span class="line">     $(<span class="string">&quot;.add-new&quot;</span>).removeAttr(<span class="string">&quot;disabled&quot;</span>);</span><br><span class="line">   &#125;</span><br><span class="line"> &#125;);</span><br></pre></td></tr></table></figure>
-
-<h3 id="編輯功能"><a href="#編輯功能" class="headerlink" title="編輯功能"></a>編輯功能</h3><figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">$(<span class="built_in">document</span>).on(<span class="string">&quot;click&quot;</span>, <span class="string">&quot;.edit&quot;</span>, <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    $(<span class="built_in">this</span>).parents(<span class="string">&quot;tr&quot;</span>).find(<span class="string">&quot;td:not(:last-child)&quot;</span>).each(<span class="function"><span class="keyword">function</span>(<span class="params">index, value</span>)</span>&#123;</span><br><span class="line">      <span class="keyword">if</span> (index == <span class="number">1</span>) &#123;</span><br><span class="line">        $(<span class="built_in">this</span>).html(<span class="string">&#x27;&lt;input type=&quot;date&quot; class=&quot;form-control&quot; value=&quot;&#x27;</span> + $(<span class="built_in">this</span>).text() + <span class="string">&#x27;&quot;&gt;&#x27;</span>);</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="keyword">else</span> &#123;</span><br><span class="line">        $(<span class="built_in">this</span>).html(<span class="string">&#x27;&lt;input type=&quot;text&quot; class=&quot;form-control&quot; value=&quot;&#x27;</span> + $(<span class="built_in">this</span>).text() + <span class="string">&#x27;&quot;&gt;&#x27;</span>);</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;);     </span><br><span class="line">    $(<span class="built_in">this</span>).parents(<span class="string">&quot;tr&quot;</span>).find(<span class="string">&quot;.add, .edit&quot;</span>).toggle();</span><br><span class="line">    $(<span class="string">&quot;.add-new&quot;</span>).attr(<span class="string">&quot;disabled&quot;</span>, <span class="string">&quot;disabled&quot;</span>);</span><br><span class="line">  &#125;);</span><br></pre></td></tr></table></figure>
-
-<h3 id="刪除功能"><a href="#刪除功能" class="headerlink" title="刪除功能"></a>刪除功能</h3><figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">$(<span class="built_in">document</span>).on(<span class="string">&quot;click&quot;</span>, <span class="string">&quot;.delete&quot;</span>, <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">    $(<span class="built_in">this</span>).parents(<span class="string">&quot;tr&quot;</span>).remove();</span><br><span class="line">    $(<span class="string">&quot;.add-new&quot;</span>).removeAttr(<span class="string">&quot;disabled&quot;</span>);</span><br><span class="line">  &#125;);</span><br></pre></td></tr></table></figure>
-
-<iframe width="100%" height="500" src="https://codepen.io/ZZYume/embed/QWNVXoK?height=265&theme-id=dark&default-tab=result" frameborder="0"></iframe>
-
-
-<p>ref: <a href="https://www.tutorialrepublic.com/faq.php">https://www.tutorialrepublic.com/faq.php</a></p>
-]]></content>
-      <categories>
-        <category>Hexo</category>
-      </categories>
-      <tags>
-        <tag>html</tag>
-        <tag>css</tag>
-        <tag>javascript</tag>
-        <tag>jquery</tag>
-        <tag>Bootstrap</tag>
-        <tag>Bootstrap-table</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>[筆記] Check.io - Acceptable Password II</title>
     <url>/2021/05/01/%E7%AD%86%E8%A8%98-Check-io-Acceptable-Password-II/</url>
     <content><![CDATA[<blockquote>
@@ -442,6 +416,94 @@
         <tag>python</tag>
         <tag>chr</tag>
         <tag>ord</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>[筆記] GitHub pages + Hexo 搭建 Blog (Mac)</title>
+    <url>/2020/09/11/%E7%AD%86%E8%A8%98-GitHub-pages-Hexo-%E6%90%AD%E5%BB%BA-Blog-Mac/</url>
+    <content><![CDATA[<blockquote>
+<p>自己在建置的時候查了很多資料，整理完希望幫助到有需要的人<br>完整手把手教學  GitHub pages + Hexo 搭建</p>
+</blockquote>
+<span id="more"></span>
+
+<h3 id="環境建置"><a href="#環境建置" class="headerlink" title="環境建置"></a>環境建置</h3><ul>
+<li>安裝 <a href="https://nodejs.org/en/">Node.js</a><figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line">brew install node</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h3 id="安裝-Hexo"><a href="#安裝-Hexo" class="headerlink" title="安裝 Hexo"></a>安裝 Hexo</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">npm install -g hexo-cli</span><br></pre></td></tr></table></figure>
+
+<h3 id="初始化-Hexo"><a href="#初始化-Hexo" class="headerlink" title="初始化 Hexo"></a>初始化 Hexo</h3><p>安裝完 Hexo 後，執行下方指令，Hexo 就會在指定資料夾 <folder name> 中新建所需要的的檔案。</p>
+<figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line">hexo init &lt;folder name&gt;</span><br><span class="line"><span class="built_in">cd</span> &lt;folder name&gt;</span><br><span class="line">npm install</span><br><span class="line">//安裝 git 部署套件</span><br><span class="line">npm install hexo-deployer-git --save  </span><br></pre></td></tr></table></figure>
+
+<h3 id="啟動-Hexo"><a href="#啟動-Hexo" class="headerlink" title="啟動 Hexo"></a>啟動 Hexo</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">hexo g</span><br><span class="line">hexo s</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>指令介紹<br>hexo generate (hexo g) 產生靜態檔案，會在目錄下產生public 資料夾<br>hexo server (hexo s) 預覽、啟動伺服器，預設 <a href="http://localhost:4000/">http://localhost:4000/</a><br>hexo deploy (hexo d) 部署網站 (EX: github, heroku … ）</p>
+</li>
+<li><p>常用組合<br>hexo d -g # 產生靜態檔後部署<br>hexo s -g # 產生靜態檔後預覽</p>
+</li>
+</ul>
+<h3 id="網站配置-config-yml"><a href="#網站配置-config-yml" class="headerlink" title="網站配置 _config.yml"></a>網站配置 _config.yml</h3><p>5 ~ 12 行</p>
+<figure class="highlight yml"><table><tr><td class="code"><pre><span class="line"><span class="comment"># Site</span></span><br><span class="line"><span class="attr">title:</span> </span><br><span class="line"><span class="attr">subtitle:</span> <span class="string">&#x27;&#x27;</span></span><br><span class="line"><span class="string">//</span> <span class="string">內容描述(給搜尋引擎看的)</span></span><br><span class="line"><span class="attr">description:</span> <span class="string">&#x27;&#x27;</span></span><br><span class="line"><span class="attr">keywords:</span> </span><br><span class="line"><span class="attr">author:</span> </span><br><span class="line"><span class="attr">language:</span> <span class="string">en</span></span><br><span class="line"><span class="attr">timezone:</span> <span class="string">&#x27;&#x27;</span></span><br></pre></td></tr></table></figure>
+<h3 id="將-Hexo-配置到-GitHub"><a href="#將-Hexo-配置到-GitHub" class="headerlink" title="將 Hexo 配置到 GitHub"></a>將 Hexo 配置到 GitHub</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">url: https:&#x2F;&#x2F;&lt;username&gt;.github.io&#x2F;</span><br><span class="line"></span><br><span class="line">deploy:</span><br><span class="line">  type: git</span><br><span class="line">  repo: https:&#x2F;&#x2F;github.com&#x2F;&lt;username&gt;&#x2F;&lt;username&gt;&lt;&#x2F;username&gt;.github.io.git</span><br><span class="line">  branch: master</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>若沒有 GitHub 帳號<ol>
+<li>至 <a href="https://github.com/">GitHub</a> 申請</li>
+<li>新建 Repositories 取名為 &lt;blogname.github.io&gt;.github.io</li>
+</ol>
+</li>
+</ul>
+<h3 id="更換主題"><a href="#更換主題" class="headerlink" title="更換主題"></a>更換主題</h3><p>可至 <a href="https://hexo.io/themes/">Themes</a> 挑選，據說最多人用的是 <a href="https://theme-next.org/">NexT</a></p>
+<ul>
+<li><p>安裝 NexT</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">git clone https:&#x2F;&#x2F;github.com&#x2F;theme-next&#x2F;hexo-theme-next.git themes&#x2F;next</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>修改 _config.yml</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">theme: next ( default landscape )</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>重新啟動 server</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">hexo server</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h3 id="新增文章"><a href="#新增文章" class="headerlink" title="新增文章"></a>新增文章</h3><p>文章會以 Markdown 格式來撰寫，並且檔案存放在 <folder name>&#x2F;source&#x2F;_posts&#x2F;  </p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">hexo new &quot;&lt;title&gt;&quot;</span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <tags>
+        <tag>GitHub</tag>
+        <tag>Hexo</tag>
+        <tag>GitHub pages</tag>
+        <tag>Blog</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>[筆記] Boostrape-table 列上編輯功能</title>
+    <url>/2020/09/20/%E7%AD%86%E8%A8%98-Boostrape-table-%E5%88%97%E4%B8%8A%E7%B7%A8%E8%BC%AF%E5%8A%9F%E8%83%BD/</url>
+    <content><![CDATA[<blockquote>
+<p>實習開發網站，常遇到一些功能需求要上網查詢，整理成筆記以後再用到就不用又從頭開始找，也希望幫助到正在找學這些功能的人</p>
+</blockquote>
+<span id="more"></span>
+
+<h3 id="新增功能"><a href="#新增功能" class="headerlink" title="新增功能"></a>新增功能</h3><figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">$(<span class="built_in">document</span>).on(<span class="string">&quot;click&quot;</span>, <span class="string">&quot;.add&quot;</span>, <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">   <span class="keyword">var</span> empty = <span class="literal">false</span>;</span><br><span class="line">   <span class="keyword">var</span> input = $(<span class="built_in">this</span>).parents(<span class="string">&quot;tr&quot;</span>).find(<span class="string">&#x27;input[type=&quot;text&quot;]&#x27;</span>);</span><br><span class="line">   input.each(<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">     <span class="keyword">if</span>(!$(<span class="built_in">this</span>).val())&#123;</span><br><span class="line">       $(<span class="built_in">this</span>).addClass(<span class="string">&quot;error&quot;</span>);</span><br><span class="line">       empty = <span class="literal">true</span>;</span><br><span class="line">     &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">       $(<span class="built_in">this</span>).removeClass(<span class="string">&quot;error&quot;</span>);</span><br><span class="line">     &#125;</span><br><span class="line">   &#125;);</span><br><span class="line">   $(<span class="built_in">this</span>).parents(<span class="string">&quot;tr&quot;</span>).find(<span class="string">&quot;.error&quot;</span>).first().focus();</span><br><span class="line">   <span class="comment">// 新增或編輯完新增時檢查是否都有填</span></span><br><span class="line">   <span class="keyword">if</span>(!empty)&#123;</span><br><span class="line">     $(<span class="string">&#x27;input[type=text]&#x27;</span>).each(<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">       $(<span class="built_in">this</span>).parent(<span class="string">&quot;td&quot;</span>).html($(<span class="built_in">this</span>).val());  </span><br><span class="line">     &#125;);           </span><br><span class="line">     $(<span class="string">&#x27;input[type=date]&#x27;</span>).each(<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">       $(<span class="built_in">this</span>).parent(<span class="string">&quot;td&quot;</span>).html($(<span class="built_in">this</span>).val()); </span><br><span class="line">     &#125;)</span><br><span class="line">     $(<span class="built_in">this</span>).parents(<span class="string">&quot;tr&quot;</span>).find(<span class="string">&quot;.add, .edit&quot;</span>).toggle();</span><br><span class="line">     $(<span class="string">&quot;.add-new&quot;</span>).removeAttr(<span class="string">&quot;disabled&quot;</span>);</span><br><span class="line">   &#125;</span><br><span class="line"> &#125;);</span><br></pre></td></tr></table></figure>
+
+<h3 id="編輯功能"><a href="#編輯功能" class="headerlink" title="編輯功能"></a>編輯功能</h3><figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">$(<span class="built_in">document</span>).on(<span class="string">&quot;click&quot;</span>, <span class="string">&quot;.edit&quot;</span>, <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    $(<span class="built_in">this</span>).parents(<span class="string">&quot;tr&quot;</span>).find(<span class="string">&quot;td:not(:last-child)&quot;</span>).each(<span class="function"><span class="keyword">function</span>(<span class="params">index, value</span>)</span>&#123;</span><br><span class="line">      <span class="keyword">if</span> (index == <span class="number">1</span>) &#123;</span><br><span class="line">        $(<span class="built_in">this</span>).html(<span class="string">&#x27;&lt;input type=&quot;date&quot; class=&quot;form-control&quot; value=&quot;&#x27;</span> + $(<span class="built_in">this</span>).text() + <span class="string">&#x27;&quot;&gt;&#x27;</span>);</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="keyword">else</span> &#123;</span><br><span class="line">        $(<span class="built_in">this</span>).html(<span class="string">&#x27;&lt;input type=&quot;text&quot; class=&quot;form-control&quot; value=&quot;&#x27;</span> + $(<span class="built_in">this</span>).text() + <span class="string">&#x27;&quot;&gt;&#x27;</span>);</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;);     </span><br><span class="line">    $(<span class="built_in">this</span>).parents(<span class="string">&quot;tr&quot;</span>).find(<span class="string">&quot;.add, .edit&quot;</span>).toggle();</span><br><span class="line">    $(<span class="string">&quot;.add-new&quot;</span>).attr(<span class="string">&quot;disabled&quot;</span>, <span class="string">&quot;disabled&quot;</span>);</span><br><span class="line">  &#125;);</span><br></pre></td></tr></table></figure>
+
+<h3 id="刪除功能"><a href="#刪除功能" class="headerlink" title="刪除功能"></a>刪除功能</h3><figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">$(<span class="built_in">document</span>).on(<span class="string">&quot;click&quot;</span>, <span class="string">&quot;.delete&quot;</span>, <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">    $(<span class="built_in">this</span>).parents(<span class="string">&quot;tr&quot;</span>).remove();</span><br><span class="line">    $(<span class="string">&quot;.add-new&quot;</span>).removeAttr(<span class="string">&quot;disabled&quot;</span>);</span><br><span class="line">  &#125;);</span><br></pre></td></tr></table></figure>
+
+<iframe width="100%" height="500" src="https://codepen.io/ZZYume/embed/QWNVXoK?height=265&theme-id=dark&default-tab=result" frameborder="0"></iframe>
+
+
+<p>ref: <a href="https://www.tutorialrepublic.com/faq.php">https://www.tutorialrepublic.com/faq.php</a></p>
+]]></content>
+      <categories>
+        <category>Hexo</category>
+      </categories>
+      <tags>
+        <tag>html</tag>
+        <tag>css</tag>
+        <tag>javascript</tag>
+        <tag>jquery</tag>
+        <tag>Bootstrap</tag>
+        <tag>Bootstrap-table</tag>
       </tags>
   </entry>
   <entry>
@@ -604,55 +666,37 @@ def date_time(time: str) -&gt; str:
       </tags>
   </entry>
   <entry>
-    <title>[筆記] GitHub pages + Hexo 搭建 Blog (Mac)</title>
-    <url>/2020/09/11/%E7%AD%86%E8%A8%98-GitHub-pages-Hexo-%E6%90%AD%E5%BB%BA-Blog-Mac/</url>
+    <title>[筆記] Hexo - nexT 基礎配置 (三)</title>
+    <url>/2020/09/14/%E7%AD%86%E8%A8%98-Hexo-nexT-%E5%9F%BA%E7%A4%8E%E9%85%8D%E7%BD%AE-%E4%B8%89/</url>
     <content><![CDATA[<blockquote>
-<p>自己在建置的時候查了很多資料，整理完希望幫助到有需要的人<br>完整手把手教學  GitHub pages + Hexo 搭建</p>
+<p>自己在建置的時候查了很多資料，整理完希望幫助到有需要的人<br>此篇文章主要教學 Disqus 建置</p>
 </blockquote>
 <span id="more"></span>
 
-<h3 id="環境建置"><a href="#環境建置" class="headerlink" title="環境建置"></a>環境建置</h3><ul>
-<li>安裝 <a href="https://nodejs.org/en/">Node.js</a><figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line">brew install node</span><br></pre></td></tr></table></figure></li>
-</ul>
-<h3 id="安裝-Hexo"><a href="#安裝-Hexo" class="headerlink" title="安裝 Hexo"></a>安裝 Hexo</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">npm install -g hexo-cli</span><br></pre></td></tr></table></figure>
 
-<h3 id="初始化-Hexo"><a href="#初始化-Hexo" class="headerlink" title="初始化 Hexo"></a>初始化 Hexo</h3><p>安裝完 Hexo 後，執行下方指令，Hexo 就會在指定資料夾 <folder name> 中新建所需要的的檔案。</p>
-<figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line">hexo init &lt;folder name&gt;</span><br><span class="line"><span class="built_in">cd</span> &lt;folder name&gt;</span><br><span class="line">npm install</span><br><span class="line">//安裝 git 部署套件</span><br><span class="line">npm install hexo-deployer-git --save  </span><br></pre></td></tr></table></figure>
-
-<h3 id="啟動-Hexo"><a href="#啟動-Hexo" class="headerlink" title="啟動 Hexo"></a>啟動 Hexo</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">hexo g</span><br><span class="line">hexo s</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li><p>指令介紹<br>hexo generate (hexo g) 產生靜態檔案，會在目錄下產生public 資料夾<br>hexo server (hexo s) 預覽、啟動伺服器，預設 <a href="http://localhost:4000/">http://localhost:4000/</a><br>hexo deploy (hexo d) 部署網站 (EX: github, heroku … ）</p>
+<h3 id="新增留言功能"><a href="#新增留言功能" class="headerlink" title="新增留言功能"></a>新增留言功能</h3><ol>
+<li><p>至 <a href="https://disqus.com/">Disqus</a> 註冊帳號<br>  <img src="https://i.imgur.com/fJmBmr6.png" alt="圖片"></p>
 </li>
-<li><p>常用組合<br>hexo d -g # 產生靜態檔後部署<br>hexo s -g # 產生靜態檔後預覽</p>
+<li><p>選擇 I want to install Disqus on my site<br>  <img src="https://i.imgur.com/muQV1ZW.jpg" alt="圖片"></p>
 </li>
-</ul>
-<h3 id="網站配置-config-yml"><a href="#網站配置-config-yml" class="headerlink" title="網站配置 _config.yml"></a>網站配置 _config.yml</h3><p>5 ~ 12 行</p>
-<figure class="highlight yml"><table><tr><td class="code"><pre><span class="line"><span class="comment"># Site</span></span><br><span class="line"><span class="attr">title:</span> </span><br><span class="line"><span class="attr">subtitle:</span> <span class="string">&#x27;&#x27;</span></span><br><span class="line"><span class="string">//</span> <span class="string">內容描述(給搜尋引擎看的)</span></span><br><span class="line"><span class="attr">description:</span> <span class="string">&#x27;&#x27;</span></span><br><span class="line"><span class="attr">keywords:</span> </span><br><span class="line"><span class="attr">author:</span> </span><br><span class="line"><span class="attr">language:</span> <span class="string">en</span></span><br><span class="line"><span class="attr">timezone:</span> <span class="string">&#x27;&#x27;</span></span><br></pre></td></tr></table></figure>
-<h3 id="將-Hexo-配置到-GitHub"><a href="#將-Hexo-配置到-GitHub" class="headerlink" title="將 Hexo 配置到 GitHub"></a>將 Hexo 配置到 GitHub</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">url: https:&#x2F;&#x2F;&lt;username&gt;.github.io&#x2F;</span><br><span class="line"></span><br><span class="line">deploy:</span><br><span class="line">  type: git</span><br><span class="line">  repo: https:&#x2F;&#x2F;github.com&#x2F;&lt;username&gt;&#x2F;&lt;username&gt;&lt;&#x2F;username&gt;.github.io.git</span><br><span class="line">  branch: master</span><br></pre></td></tr></table></figure>
-
+<li><p>.<br>  <img src="https://i.imgur.com/FqbITcy.png" alt="圖片"></p>
+</li>
+<li><p>到 <a href="https://disqus.com/api/applications/">Disqus API Application</a> 註冊 application<br>  <img src="https://i.imgur.com/uVVwI0b.png" alt="圖片"></p>
 <ul>
-<li>若沒有 GitHub 帳號<ol>
-<li>至 <a href="https://github.com/">GitHub</a> 申請</li>
-<li>新建 Repositories 取名為 &lt;blogname.github.io&gt;.github.io</li>
+<li>點選 Register new application</li>
+<li>完成後就會给你一個 API Key<br> <img src="https://i.imgur.com/HFKEZ37.png" alt="圖片"></li>
+</ul>
+</li>
+<li><p>設定 Hexo<br>themes&#x2F;next&#x2F;_config.yml</p>
+<figure class="highlight yml"><table><tr><td class="code"><pre><span class="line"><span class="comment"># Disqus</span></span><br><span class="line"><span class="attr">disqus:</span></span><br><span class="line">  <span class="attr">enable:</span> <span class="literal">true</span></span><br><span class="line">  <span class="attr">shortname:</span></span><br><span class="line">  <span class="attr">count:</span> <span class="literal">true</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># DisqusJS</span></span><br><span class="line"><span class="comment"># Alternative Disqus - Render comment component using Disqus API.</span></span><br><span class="line"><span class="comment"># Demo: https://suka.js.org/DisqusJS/</span></span><br><span class="line"><span class="comment"># For more information: https://github.com/SukkaW/DisqusJS</span></span><br><span class="line"><span class="attr">disqusjs:</span></span><br><span class="line">  <span class="attr">enable:</span> <span class="literal">true</span></span><br><span class="line">  <span class="comment"># API Endpoint of Disqus API (https://disqus.com/api/).</span></span><br><span class="line">  <span class="comment"># Leave api empty if you are able to connect to Disqus API. Otherwise you need a reverse proxy for it.</span></span><br><span class="line">  <span class="comment"># For example:</span></span><br><span class="line">  <span class="comment"># api: https://disqus.skk.moe/disqus/</span></span><br><span class="line">  <span class="attr">api:</span></span><br><span class="line">  <span class="attr">apikey:</span> <span class="comment"># Register new application from https://disqus.com/api/applications/</span></span><br><span class="line">  <span class="attr">shortname:</span> <span class="comment"># See: https://disqus.com/admin/settings/general/</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>完成<br>  <img src="https://i.imgur.com/iSG3tLo.png" alt="圖片"></p>
+</li>
 </ol>
-</li>
-</ul>
-<h3 id="更換主題"><a href="#更換主題" class="headerlink" title="更換主題"></a>更換主題</h3><p>可至 <a href="https://hexo.io/themes/">Themes</a> 挑選，據說最多人用的是 <a href="https://theme-next.org/">NexT</a></p>
-<ul>
-<li><p>安裝 NexT</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">git clone https:&#x2F;&#x2F;github.com&#x2F;theme-next&#x2F;hexo-theme-next.git themes&#x2F;next</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>修改 _config.yml</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">theme: next ( default landscape )</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>重新啟動 server</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">hexo server</span><br></pre></td></tr></table></figure></li>
-</ul>
-<h3 id="新增文章"><a href="#新增文章" class="headerlink" title="新增文章"></a>新增文章</h3><p>文章會以 Markdown 格式來撰寫，並且檔案存放在 <folder name>&#x2F;source&#x2F;_posts&#x2F;  </p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">hexo new &quot;&lt;title&gt;&quot;</span><br></pre></td></tr></table></figure>
-
 ]]></content>
+      <categories>
+        <category>Hexo</category>
+      </categories>
       <tags>
         <tag>GitHub</tag>
         <tag>Hexo</tag>
@@ -707,45 +751,6 @@ def date_time(time: str) -&gt; str:
 <figure class="highlight yml"><table><tr><td class="code"><pre><span class="line"><span class="attr">border_radius:</span></span><br><span class="line">  <span class="attr">copy_button:</span></span><br><span class="line">    <span class="attr">enable:</span> <span class="literal">true</span></span><br><span class="line">    <span class="comment"># Available values: default | flat | mac</span></span><br><span class="line">    <span class="attr">style:</span> <span class="string">flat</span></span><br></pre></td></tr></table></figure></li>
 </ul>
 ]]></content>
-      <tags>
-        <tag>GitHub</tag>
-        <tag>Hexo</tag>
-        <tag>GitHub pages</tag>
-        <tag>Blog</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>[筆記] Hexo - nexT 基礎配置 (三)</title>
-    <url>/2020/09/14/%E7%AD%86%E8%A8%98-Hexo-nexT-%E5%9F%BA%E7%A4%8E%E9%85%8D%E7%BD%AE-%E4%B8%89/</url>
-    <content><![CDATA[<blockquote>
-<p>自己在建置的時候查了很多資料，整理完希望幫助到有需要的人<br>此篇文章主要教學 Disqus 建置</p>
-</blockquote>
-<span id="more"></span>
-
-
-<h3 id="新增留言功能"><a href="#新增留言功能" class="headerlink" title="新增留言功能"></a>新增留言功能</h3><ol>
-<li><p>至 <a href="https://disqus.com/">Disqus</a> 註冊帳號<br>  <img src="https://i.imgur.com/fJmBmr6.png" alt="圖片"></p>
-</li>
-<li><p>選擇 I want to install Disqus on my site<br>  <img src="https://i.imgur.com/muQV1ZW.jpg" alt="圖片"></p>
-</li>
-<li><p>.<br>  <img src="https://i.imgur.com/FqbITcy.png" alt="圖片"></p>
-</li>
-<li><p>到 <a href="https://disqus.com/api/applications/">Disqus API Application</a> 註冊 application<br>  <img src="https://i.imgur.com/uVVwI0b.png" alt="圖片"></p>
-<ul>
-<li>點選 Register new application</li>
-<li>完成後就會给你一個 API Key<br> <img src="https://i.imgur.com/HFKEZ37.png" alt="圖片"></li>
-</ul>
-</li>
-<li><p>設定 Hexo<br>themes&#x2F;next&#x2F;_config.yml</p>
-<figure class="highlight yml"><table><tr><td class="code"><pre><span class="line"><span class="comment"># Disqus</span></span><br><span class="line"><span class="attr">disqus:</span></span><br><span class="line">  <span class="attr">enable:</span> <span class="literal">true</span></span><br><span class="line">  <span class="attr">shortname:</span></span><br><span class="line">  <span class="attr">count:</span> <span class="literal">true</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># DisqusJS</span></span><br><span class="line"><span class="comment"># Alternative Disqus - Render comment component using Disqus API.</span></span><br><span class="line"><span class="comment"># Demo: https://suka.js.org/DisqusJS/</span></span><br><span class="line"><span class="comment"># For more information: https://github.com/SukkaW/DisqusJS</span></span><br><span class="line"><span class="attr">disqusjs:</span></span><br><span class="line">  <span class="attr">enable:</span> <span class="literal">true</span></span><br><span class="line">  <span class="comment"># API Endpoint of Disqus API (https://disqus.com/api/).</span></span><br><span class="line">  <span class="comment"># Leave api empty if you are able to connect to Disqus API. Otherwise you need a reverse proxy for it.</span></span><br><span class="line">  <span class="comment"># For example:</span></span><br><span class="line">  <span class="comment"># api: https://disqus.skk.moe/disqus/</span></span><br><span class="line">  <span class="attr">api:</span></span><br><span class="line">  <span class="attr">apikey:</span> <span class="comment"># Register new application from https://disqus.com/api/applications/</span></span><br><span class="line">  <span class="attr">shortname:</span> <span class="comment"># See: https://disqus.com/admin/settings/general/</span></span><br></pre></td></tr></table></figure>
-</li>
-<li><p>完成<br>  <img src="https://i.imgur.com/iSG3tLo.png" alt="圖片"></p>
-</li>
-</ol>
-]]></content>
-      <categories>
-        <category>Hexo</category>
-      </categories>
       <tags>
         <tag>GitHub</tag>
         <tag>Hexo</tag>
@@ -836,7 +841,7 @@ def date_time(time: str) -&gt; str:
     <content><![CDATA[<h2 id="為什麼需要這些技術？"><a href="#為什麼需要這些技術？" class="headerlink" title="為什麼需要這些技術？"></a>為什麼需要這些技術？</h2><p>隨著應用程式越來越複雜，我們需要更靈活、高效的方式來部署和管理它們。傳統的硬體配置已經無法滿足快速變動的需求，因此「虛擬化技術」和「容器化技術」應運而生。</p>
 <span id="more"></span>
 
-<h2 id="什麼是-VM？"><a href="#什麼是-VM？" class="headerlink" title="什麼是 VM？"></a>什麼是 VM？</h2><p>虛擬機（Virtual Machine）是利用虛擬化技術，虛擬化整個硬體（Hardware）層，把一台實體機（Host）分割成多個彼此獨立的環境（Guest）。<br>每個 VM 都有自己的作業系統，並模擬硬體資源 (CPU、記憶體、網路…等)。</p>
+<h2 id="什麼是-VM？"><a href="#什麼是-VM？" class="headerlink" title="什麼是 VM？"></a>什麼是 VM？</h2><p>虛擬機 (Virtual Machine) 是利用虛擬化技術，虛擬化整個硬體 (Hardware) 層，把一台實體機 (Host) 分割成多個彼此獨立的環境 (Guest) &#x3D;&gt; 模擬的是&#x3D;&#x3D;整台機器&#x3D;&#x3D;<br>每個 VM 都有自己的作業系統 (Operating System)，並模擬硬體資源 (CPU、記憶體、網路…等)。</p>
 <ul>
 <li><strong>優點</strong>：<ul>
 <li>完全隔離，安全性高。</li>
@@ -849,7 +854,7 @@ def date_time(time: str) -&gt; str:
 </ul>
 </li>
 </ul>
-<h2 id="什麼是容器-Container-？"><a href="#什麼是容器-Container-？" class="headerlink" title="什麼是容器 (Container)？"></a>什麼是容器 (Container)？</h2><p>容器是一種比 VM 更輕量的技術，虛擬化的作業系統（Operating System）層，讓應用程式及其依賴環境打包成獨立的單位來執行。它共享宿主機的作業系統核心，但彼此之間隔離。<br>透過容器引擎 (ex: Docker、Podman)，容器可以快速啟動並執行應用程式。</p>
+<h2 id="什麼是容器-Container-？"><a href="#什麼是容器-Container-？" class="headerlink" title="什麼是容器 (Container)？"></a>什麼是容器 (Container)？</h2><p>容器是一種比 VM 更輕量的技術，虛擬化的作業系統層，讓應用程式及其依賴環境打包成獨立的單位來執行。它共享宿主機的作業系統核心，但彼此之間隔離。 &#x3D;&gt; 模擬的是&#x3D;&#x3D;應用程式環境&#x3D;&#x3D;<br>透過容器引擎 (ex: Docker、Podman)，容器可以快速啟動並執行應用程式。</p>
 <ul>
 <li><strong>優點</strong>：<ul>
 <li>輕量：共享作業系統核心，減少資源需求。</li>
@@ -1036,6 +1041,26 @@ def date_time(time: str) -&gt; str:
       </tags>
   </entry>
   <entry>
+    <title>[筆記] Leetcode - 56. Merge Intervals</title>
+    <url>/2023/09/05/%E7%AD%86%E8%A8%98-Leetcode-%2056.-Merge%20Intervals/</url>
+    <content><![CDATA[<p><a href="https://leetcode.com/problems/merge-intervals/">https://leetcode.com/problems/merge-intervals/</a></p>
+<p><img src="https://i.imgur.com/FaQwh8J.png"><br>It means each list in intervals is a range, just to merge the overlapping one, others stay the same.</p>
+<span id="more"></span>
+
+
+<p>解題:</p>
+<ol>
+<li>sort</li>
+</ol>
+<p>sort by the start of each range<br>save the first one in result<br>if any the start of each range smaller then the last item in result, it should be merged, otherwise append in result</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>(<span class="params"><span class="built_in">object</span></span>):</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">merge</span>(<span class="params">self, intervals</span>):</span></span><br><span class="line">        <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">        :type intervals: List[List[int]]</span></span><br><span class="line"><span class="string">        :rtype: List[List[int]]</span></span><br><span class="line"><span class="string">        &quot;&quot;&quot;</span></span><br><span class="line">        <span class="comment"># internals.sort(key = lambda x = x[0])</span></span><br><span class="line">        sort_intervals = <span class="built_in">sorted</span>(intervals, key = <span class="keyword">lambda</span> x: x[<span class="number">0</span>])</span><br><span class="line"></span><br><span class="line">        res = [sort_intervals[<span class="number">0</span>]]</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> start, end <span class="keyword">in</span> sort_intervals[<span class="number">1</span>:]:</span><br><span class="line">            <span class="keyword">if</span> res[-<span class="number">1</span>][<span class="number">1</span>] &gt;= start:</span><br><span class="line">                res[-<span class="number">1</span>][<span class="number">1</span>] = <span class="built_in">max</span>(res[-<span class="number">1</span>][<span class="number">1</span>], end)</span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                res.append([start, end])</span><br><span class="line">        <span class="keyword">return</span> res</span><br></pre></td></tr></table></figure>]]></content>
+      <tags>
+        <tag>Leetcode</tag>
+        <tag>Python</tag>
+        <tag>Coding</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>[筆記] Leetcode - 905. Sort Array By Parity</title>
     <url>/2023/09/29/%E7%AD%86%E8%A8%98-Leetcode-%20905.-Sort-Array-By-Parity/</url>
     <content><![CDATA[<p><a href="https://leetcode.com/problems/contains-duplicate/">https://leetcode.com/problems/contains-duplicate/</a></p>
@@ -1054,26 +1079,6 @@ def date_time(time: str) -&gt; str:
         <tag>Python</tag>
         <tag>Coding</tag>
         <tag>two pointer</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>[筆記] Leetcode - 56. Merge Intervals</title>
-    <url>/2023/09/05/%E7%AD%86%E8%A8%98-Leetcode-%2056.-Merge%20Intervals/</url>
-    <content><![CDATA[<p><a href="https://leetcode.com/problems/merge-intervals/">https://leetcode.com/problems/merge-intervals/</a></p>
-<p><img src="https://i.imgur.com/FaQwh8J.png"><br>It means each list in intervals is a range, just to merge the overlapping one, others stay the same.</p>
-<span id="more"></span>
-
-
-<p>解題:</p>
-<ol>
-<li>sort</li>
-</ol>
-<p>sort by the start of each range<br>save the first one in result<br>if any the start of each range smaller then the last item in result, it should be merged, otherwise append in result</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>(<span class="params"><span class="built_in">object</span></span>):</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">merge</span>(<span class="params">self, intervals</span>):</span></span><br><span class="line">        <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">        :type intervals: List[List[int]]</span></span><br><span class="line"><span class="string">        :rtype: List[List[int]]</span></span><br><span class="line"><span class="string">        &quot;&quot;&quot;</span></span><br><span class="line">        <span class="comment"># internals.sort(key = lambda x = x[0])</span></span><br><span class="line">        sort_intervals = <span class="built_in">sorted</span>(intervals, key = <span class="keyword">lambda</span> x: x[<span class="number">0</span>])</span><br><span class="line"></span><br><span class="line">        res = [sort_intervals[<span class="number">0</span>]]</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> start, end <span class="keyword">in</span> sort_intervals[<span class="number">1</span>:]:</span><br><span class="line">            <span class="keyword">if</span> res[-<span class="number">1</span>][<span class="number">1</span>] &gt;= start:</span><br><span class="line">                res[-<span class="number">1</span>][<span class="number">1</span>] = <span class="built_in">max</span>(res[-<span class="number">1</span>][<span class="number">1</span>], end)</span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                res.append([start, end])</span><br><span class="line">        <span class="keyword">return</span> res</span><br></pre></td></tr></table></figure>]]></content>
-      <tags>
-        <tag>Leetcode</tag>
-        <tag>Python</tag>
-        <tag>Coding</tag>
       </tags>
   </entry>
   <entry>
@@ -1140,6 +1145,32 @@ def date_time(time: str) -&gt; str:
         <tag>Leetcode</tag>
         <tag>Python</tag>
         <tag>Matrix</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>[筆記] Relative Dropdown List</title>
+    <url>/2021/03/30/%E7%AD%86%E8%A8%98-Relative-Dropdown-List/</url>
+    <content><![CDATA[<blockquote>
+<p>實習開發網站，常遇到一些功能需求要上網查詢，整理成筆記以後再用到就不用又從頭開始找，也希望幫助到正在找學這些功能的人</p>
+</blockquote>
+<span id="more"></span>
+
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="comment">// get the one which just select</span></span><br><span class="line">$(<span class="string">&#x27;.form_select select&#x27;</span>).change(<span class="function"><span class="keyword">function</span>(<span class="params">e</span>) </span>&#123; </span><br><span class="line">  <span class="keyword">var</span> current_selected = <span class="built_in">this</span>.id;</span><br><span class="line">  <span class="comment">// get all Dropdown in the form</span></span><br><span class="line">  <span class="comment">// remove val of dropdowns except current select </span></span><br><span class="line">  $(<span class="string">&#x27;.form_select select:not(#&#x27;</span> + current_selected + <span class="string">&#x27;)&#x27;</span>).each(<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    $(<span class="string">&#x27;#&#x27;</span> + <span class="built_in">this</span>.id).val(<span class="string">&#x27;&#x27;</span>);</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+
+<iframe width="100%" height="500" src="https://codepen.io/ZZYume/embed/MWJjPGa?height=265&theme-id=dark&default-tab=html,result" frameborder="0">See the Pen <a href='https://codepen.io/ZZYume/pen/MWJjPGa'>Relative Dropdown List </a> by Yume
+  (<a href='https://codepen.io/ZZYume'>@ZZYume</a>) on <a href='https://codepen.io'>CodePen</a>.</iframe>
+
+]]></content>
+      <categories>
+        <category>html</category>
+      </categories>
+      <tags>
+        <tag>html</tag>
+        <tag>css</tag>
+        <tag>javascript</tag>
+        <tag>jquery</tag>
+        <tag>dropdown</tag>
       </tags>
   </entry>
   <entry>
@@ -1283,32 +1314,6 @@ def date_time(time: str) -&gt; str:
         <tag>jquery</tag>
         <tag>Bootstrap</tag>
         <tag>Bootstrap-table</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>[筆記] Relative Dropdown List</title>
-    <url>/2021/03/30/%E7%AD%86%E8%A8%98-Relative-Dropdown-List/</url>
-    <content><![CDATA[<blockquote>
-<p>實習開發網站，常遇到一些功能需求要上網查詢，整理成筆記以後再用到就不用又從頭開始找，也希望幫助到正在找學這些功能的人</p>
-</blockquote>
-<span id="more"></span>
-
-<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="comment">// get the one which just select</span></span><br><span class="line">$(<span class="string">&#x27;.form_select select&#x27;</span>).change(<span class="function"><span class="keyword">function</span>(<span class="params">e</span>) </span>&#123; </span><br><span class="line">  <span class="keyword">var</span> current_selected = <span class="built_in">this</span>.id;</span><br><span class="line">  <span class="comment">// get all Dropdown in the form</span></span><br><span class="line">  <span class="comment">// remove val of dropdowns except current select </span></span><br><span class="line">  $(<span class="string">&#x27;.form_select select:not(#&#x27;</span> + current_selected + <span class="string">&#x27;)&#x27;</span>).each(<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    $(<span class="string">&#x27;#&#x27;</span> + <span class="built_in">this</span>.id).val(<span class="string">&#x27;&#x27;</span>);</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
-
-
-<iframe width="100%" height="500" src="https://codepen.io/ZZYume/embed/MWJjPGa?height=265&theme-id=dark&default-tab=html,result" frameborder="0">See the Pen <a href='https://codepen.io/ZZYume/pen/MWJjPGa'>Relative Dropdown List </a> by Yume
-  (<a href='https://codepen.io/ZZYume'>@ZZYume</a>) on <a href='https://codepen.io'>CodePen</a>.</iframe>
-
-]]></content>
-      <categories>
-        <category>html</category>
-      </categories>
-      <tags>
-        <tag>html</tag>
-        <tag>css</tag>
-        <tag>javascript</tag>
-        <tag>jquery</tag>
-        <tag>dropdown</tag>
       </tags>
   </entry>
 </search>
