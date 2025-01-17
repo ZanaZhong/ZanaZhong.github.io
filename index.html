@@ -152,7 +152,7 @@
   </li>
         <li class="menu-item menu-item-tags">
 
-    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">60</span></a>
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">62</span></a>
 
   </li>
         <li class="menu-item menu-item-categories">
@@ -162,7 +162,7 @@
   </li>
         <li class="menu-item menu-item-archives">
 
-    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">32</span></a>
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">33</span></a>
 
   </li>
       <li class="menu-item menu-item-search">
@@ -236,7 +236,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">32</span>
+          <span class="site-state-item-count">33</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -249,7 +249,7 @@
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">60</span>
+        <span class="site-state-item-count">62</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
@@ -297,6 +297,296 @@
       
 
       
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://zanazhong.github.io/2025/01/17/%E5%BE%9E%E6%9E%B6%E6%A7%8B%E5%88%B0%E6%B5%81%E7%A8%8B%EF%BC%9A%E5%AE%8C%E6%95%B4%E7%90%86%E8%A7%A3-Docker-%E7%9A%84-component-%E8%88%87%E4%BA%92%E5%8B%95%E9%82%8F%E8%BC%AF/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/headshot.jpg">
+      <meta itemprop="name" content="Zana">
+      <meta itemprop="description" content="ɪᴛ ɪs ɪᴍᴘᴏʀᴛᴀɴᴛ ᴛᴏ sᴇᴇ ʜᴏᴡ ғᴀʀ ʏᴏᴜ'ᴠᴇ ᴄᴏᴍᴇ🐾">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hey I am Zana">
+    </span>
+
+    
+    
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2025/01/17/%E5%BE%9E%E6%9E%B6%E6%A7%8B%E5%88%B0%E6%B5%81%E7%A8%8B%EF%BC%9A%E5%AE%8C%E6%95%B4%E7%90%86%E8%A7%A3-Docker-%E7%9A%84-component-%E8%88%87%E4%BA%92%E5%8B%95%E9%82%8F%E8%BC%AF/" class="post-title-link" itemprop="url">從架構到流程：完整理解 Docker 的 component 與互動邏輯</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+      
+
+      <time title="Created: 2025-01-17 15:59:56 / Modified: 16:04:37" itemprop="dateCreated datePublished" datetime="2025-01-17T15:59:56+08:00">2025-01-17</time>
+    </span>
+
+  
+    <span class="post-meta-item" title="Symbols count in article">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">Symbols count in article: </span>
+      <span>3.7k</span>
+    </span>
+    <span class="post-meta-item" title="Reading time">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">Reading time &asymp;</span>
+      <span>3 mins.</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p>本文將從 <strong>整體架構</strong> 和 <strong>運作流程</strong> 的角度，剖析 Docker 主要的 component 及其運作方式。</p>
+<h2 id="核心組件與角色"><a href="#核心組件與角色" class="headerlink" title="核心組件與角色"></a>核心組件與角色</h2><h3 id="Docker-Client"><a href="#Docker-Client" class="headerlink" title="Docker Client"></a>Docker Client</h3><blockquote>
+<p>用戶與 Docker 互動的入口，通過命令 (如 <code>docker run</code>、<code>docker build</code>) 向 Docker Daemon 發送請求。</p>
+</blockquote>
+<ul>
+<li><strong>互動對象</strong>：與 Docker Daemon 通訊 (通常通過 REST API 或 UNIX Socket)。</li>
+<li><strong>位置</strong>：用戶本地環境。</li>
+</ul>
+<h3 id="Docker-Daemon"><a href="#Docker-Daemon" class="headerlink" title="Docker Daemon"></a>Docker Daemon</h3><blockquote>
+<p>Docker 的核心服務 process ，負責接收 Client 請求並執行具體操作，EX: 拉取 Image、創建 Container，並協調後續所有 Container 生命週期、Image 管理、網路、儲存…等工作。<br>早期 Docker Daemon 自己直接管理 Container，但後來將 Container 執行的部分抽象化給 <strong><code>Containerd</code></strong> 去處理。</p>
+</blockquote>
+<ul>
+<li><strong>內部構成</strong>：<ul>
+<li><strong>Containerd</strong>：Container 管理層，負責++管理容器的生命周期++ (EX: 啟動、停止)。</li>
+<li><strong>Containerd-shim</strong>：中介層，確保 Container 與 Containerd 的解耦，讓 Container 在 Containerd 崩潰後仍能運行。</li>
+<li>**OCI Runtime (EX: runc)**：執行層，負責啟動和管理容器的隔離 process 。</li>
+</ul>
+</li>
+</ul>
+<h3 id="Registry"><a href="#Registry" class="headerlink" title="Registry"></a>Registry</h3><blockquote>
+<p>Image 儲存庫，用於保存和分發 Docker Image。<br>可以是 Public（EX: Docker Hub）或 Private（公司內部架設）。</p>
+</blockquote>
+<ul>
+<li><strong>互動對象</strong>：Docker Daemon 通過拉取或推送操作與 Registry 互動。</li>
+<li><strong>常見</strong>：Docker Hub、privete Registry。</li>
+</ul>
+<h3 id="Image"><a href="#Image" class="headerlink" title="Image"></a>Image</h3><blockquote>
+<p>Container 的靜態模板，包含應用程式及其運行所需的依賴和配置。</p>
+</blockquote>
+<ul>
+<li><strong>特性</strong>：<ul>
+<li>使用分層文件系統 (UnionFS)，每層代表 Image 的一部分 (EX: 基礎 OS、應用依賴)。</li>
+<li>不可變，<strong>可以被多個容器共享</strong>。</li>
+</ul>
+</li>
+<li><strong>互動對象</strong>：由 Docker Daemon 從 Registry 中拉取，並交付給 Containerd 啟動 Container。</li>
+</ul>
+<h3 id="Container"><a href="#Container" class="headerlink" title="Container"></a>Container</h3><blockquote>
+<p>Image 的運行實例，是一個輕量級、隔離的應用運行環境。</p>
+</blockquote>
+<ul>
+<li><strong>運作基礎</strong>：依賴 Linux 的 Namespace 和 Cgroups 技術實現隔離與資源限制。</li>
+<li><strong>互動對象</strong>：由 Containerd 調用 OCI Runtime 創建，並由 Containerd-shim 管理。</li>
+</ul>
+<h3 id="Containerd"><a href="#Containerd" class="headerlink" title="Containerd"></a>Containerd</h3><blockquote>
+<p>負責 Container 的整體生命周期管理，是 Docker Daemon 的核心子系統。</p>
+</blockquote>
+<ul>
+<li><strong>功能</strong>：<ul>
+<li>拉取與管理 Image。</li>
+<li>創建與刪除 Container。</li>
+<li>調用 OCI Runtime 啟動容器。</li>
+</ul>
+</li>
+<li><strong>互動對象</strong>：通過 Docker Daemon 接收指令，並向 OCI Runtime 傳遞容器配置。</li>
+</ul>
+<h3 id="Containerd-shim"><a href="#Containerd-shim" class="headerlink" title="Containerd-shim"></a>Containerd-shim</h3><blockquote>
+<p>**中介層 (中間代理)**，管理 Container 的生命周期，確保 Container 在 Containerd 崩潰後依然運行。</p>
+</blockquote>
+<ul>
+<li><p><strong>功能</strong>：</p>
+<ul>
+<li>管理 Container 與父 process 的互動。</li>
+</ul>
+<ul>
+<li>解耦作用：確保容器的執行不依賴於 Containerd 的狀態 (狀態相互獨立)。</li>
+<li>資源管理：監控 Container 的 process 狀態。</li>
+<li>I&#x2F;O 管理：處理 Container 的輸入&#x2F;輸出數據，方便用戶與 Container 互動。</li>
+<li>Container 生命周期管理：處理 Container 的啟動、停止及 process 監控(不因 containerd daemon 本身的重啟而中斷)。</li>
+</ul>
+</li>
+<li><p><strong>互動對象</strong>：</p>
+<ul>
+<li>作為 Containerd 與容器之間的橋接，解耦 Container 與 Containerd。</li>
+<li>與底層的 OCI Runtime 溝通，啟動 Container process。</li>
+</ul>
+</li>
+</ul>
+<div class="note info"><ul>
+<li>shim 就像是「轉接器」或「支架（shim）」的概念，一個 Container 對應一個 shim。</li>
+<li>Container 啟動後，<code>Containerd-shim</code> 會取代 <code>Containerd</code> 成為 Container 的父 process，確保即使 <code>Containerd</code> 崩潰，Container 仍然能持續運行。</li>
+</ul>
+</div>
+
+<h3 id="OCI-Runtime-EX-runc"><a href="#OCI-Runtime-EX-runc" class="headerlink" title="OCI Runtime (EX: runc)"></a>OCI Runtime (EX: runc)</h3><blockquote>
+<p><strong>執行層</strong>，基於 OCI (Open Container Initiative) 規範的運行時工具，負責實際啟動 Container。</p>
+</blockquote>
+<ul>
+<li><strong>功能</strong>：<ul>
+<li>設置 Container 的++隔離環境++ (Namespace、Cgroups…等)。</li>
+<li>啟動 Container 內的應用 process 。</li>
+</ul>
+</li>
+<li><strong>互動對象</strong>：由 Containerd 呼叫，執行容器啟動的具體邏輯。</li>
+</ul>
+<p>最常見的 OCI Runtime 是 runc，它是 OCI Runtime 的一個具體實現，專門處理容器的低層操作。</p>
+<h3 id="OCI-Spec-規範"><a href="#OCI-Spec-規範" class="headerlink" title="OCI Spec (規範)"></a>OCI Spec (規範)</h3><blockquote>
+<p>一套 Container 運行時的標準規範，定義 Container 的配置文件格式和行為。</p>
+</blockquote>
+<ul>
+<li><strong>功能</strong>：<ul>
+<li>描述 Container 的資源設置 (EX: CPU、Memory)。</li>
+<li>定義 Container 的文件系統掛載點。</li>
+<li>設置 process 的啟動命令和參數。</li>
+<li>配置 Namespace 隔離（EX: 網路、PID、用戶等）。</li>
+</ul>
+</li>
+<li><strong>內容</strong>：<ul>
+<li>Container 的資源配置 (EX: CPU、Memory)。</li>
+<li>Namespace 和檔案系統的隔離規則。</li>
+</ul>
+</li>
+<li><strong>主要構成</strong>：<ul>
+<li><code>config.json</code>：定義 Container 的配置，EX: 環境變量、文件系統、資源限制。</li>
+<li><code>runtime-spec</code>：描述 Container 的行為規範，OCI Runtime 依此實現運行時行為。</li>
+</ul>
+</li>
+<li><strong>互動對象</strong>：OCI Runtime 根據 OCI Spec 配置 Container 環境。</li>
+</ul>
+<h2 id="運作流程"><a href="#運作流程" class="headerlink" title="運作流程"></a>運作流程</h2><p>以下是執行 <code>docker run</code> 指令的完整過程：</p>
+<h3 id="發送指令"><a href="#發送指令" class="headerlink" title="發送指令"></a>發送指令</h3><ul>
+<li><strong>步驟</strong>：使用者執行 <code>docker run hello-world</code>。</li>
+<li><strong>互動對象</strong>：Docker Client 將請求發送給 Docker Daemon。</li>
+</ul>
+<h3 id="拉取-Image"><a href="#拉取-Image" class="headerlink" title="拉取 Image"></a>拉取 Image</h3><ul>
+<li><strong>步驟</strong>：Docker Daemon 檢查本地是否存在 Image ，若無則從 Registry 拉取。</li>
+<li><strong>互動對象</strong>：Docker Daemon 與 Registry 通訊，下載 Image 後存儲於本地。</li>
+</ul>
+<h3 id="創建-Container"><a href="#創建-Container" class="headerlink" title="創建 Container"></a>創建 Container</h3><ul>
+<li><strong>步驟</strong>：<ol>
+<li>Docker Daemon 通過 Containerd 請求創建容器。</li>
+<li>Containerd 調用 OCI Runtime (如 runc)，基於 OCI Spec 配置容器環境。</li>
+</ol>
+</li>
+<li><strong>互動對象</strong>：<ul>
+<li>Docker Daemon → Containerd → OCI Runtime。</li>
+</ul>
+</li>
+</ul>
+<h3 id="啟動容器"><a href="#啟動容器" class="headerlink" title="啟動容器"></a>啟動容器</h3><ul>
+<li><strong>步驟</strong>：<ol>
+<li>OCI Runtime 配置命名空間、Cgroups，並啟動 Container process。</li>
+<li>Containerd-shim 接管 Container process 的管理，與父 process 解耦。</li>
+</ol>
+</li>
+<li><strong>互動對象</strong>：<ul>
+<li>OCI Runtime → Containerd-shim。</li>
+</ul>
+</li>
+</ul>
+<h3 id="運行與管理"><a href="#運行與管理" class="headerlink" title="運行與管理"></a>運行與管理</h3><ul>
+<li><strong>步驟</strong>：容器進入運行狀態，Docker Client 可通過命令與容器互動。</li>
+<li><strong>互動對象</strong>：<ul>
+<li>Docker Client → Docker Daemon → Containerd。</li>
+</ul>
+</li>
+</ul>
+<h2 id="架構圖"><a href="#架構圖" class="headerlink" title="架構圖"></a>架構圖</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">+-----------------------------------+</span><br><span class="line">|           Docker Client           |</span><br><span class="line">+-----------------------------------+</span><br><span class="line">                  |</span><br><span class="line">                  v</span><br><span class="line">+-----------------------------------+                          +-----------------+ </span><br><span class="line">|           Docker Daemon  ---------|--(pull image if needed)-&gt;| Registry Client |</span><br><span class="line">|        +----------------+         |                          +-----------------+ </span><br><span class="line">|        |   Containerd   |         |                                    |</span><br><span class="line">|        +----------------+         |                                    v </span><br><span class="line">|                 |                 |                              +------------+</span><br><span class="line">|                 v                 |                              |  Registry  |</span><br><span class="line">|        +-----------------+        |                              +------------+</span><br><span class="line">|        | Containerd-shim |        |</span><br><span class="line">|        +-----------------+        |</span><br><span class="line">|                 |                 |</span><br><span class="line">|                 v                 |</span><br><span class="line">|        +-----------------+        |</span><br><span class="line">|        |   OCI Runtime   |        |</span><br><span class="line">|        +-----------------+        |</span><br><span class="line">|                 |                 |</span><br><span class="line">|                 v                 |</span><br><span class="line">|  Containers (Isolated Processes)  |</span><br><span class="line">+-----------------------------------+</span><br></pre></td></tr></table></figure>
+
+<h2 id="總結"><a href="#總結" class="headerlink" title="總結"></a>總結</h2><table>
+<thead>
+<tr>
+<th><strong>組件名稱</strong></th>
+<th><strong>作用</strong></th>
+<th><strong>互動對象</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Docker Client</td>
+<td>接收用戶指令，發送給 Docker Daemon</td>
+<td>Docker Daemon</td>
+</tr>
+<tr>
+<td>Docker Daemon</td>
+<td>管理 Container 的核心服務，處理 Image 與 Container 操作</td>
+<td>Docker Client、Registry、Containerd</td>
+</tr>
+<tr>
+<td>Registry</td>
+<td>儲存與分發 Image</td>
+<td>Docker Daemon</td>
+</tr>
+<tr>
+<td>Image</td>
+<td>Container 的靜態模板</td>
+<td>Docker Daemon</td>
+</tr>
+<tr>
+<td>Container</td>
+<td>Image 的運行實例</td>
+<td>Containerd</td>
+</tr>
+<tr>
+<td>Containerd</td>
+<td>管理 Container 的生命周期</td>
+<td>Docker Daemon、OCI Runtime</td>
+</tr>
+<tr>
+<td>Containerd-shim</td>
+<td>確保 Container 與 Containerd 解耦</td>
+<td>Containerd、Container、OCI Runtime</td>
+</tr>
+<tr>
+<td>OCI Runtime (runc)</td>
+<td>實際執行Container</td>
+<td>Containerd、作業系統</td>
+</tr>
+<tr>
+<td>OCI Spec</td>
+<td>Container 配置的標準規範</td>
+<td>OCI Runtime</td>
+</tr>
+</tbody></table>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+  
+  
+  
+
       
   
   
@@ -1107,95 +1397,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://zanazhong.github.io/2023/09/28/%E7%AD%86%E8%A8%98-Leetcode-%20136.-Single%20Number/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/headshot.jpg">
-      <meta itemprop="name" content="Zana">
-      <meta itemprop="description" content="ɪᴛ ɪs ɪᴍᴘᴏʀᴛᴀɴᴛ ᴛᴏ sᴇᴇ ʜᴏᴡ ғᴀʀ ʏᴏᴜ'ᴠᴇ ᴄᴏᴍᴇ🐾">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hey I am Zana">
-    </span>
-
-    
-    
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2023/09/28/%E7%AD%86%E8%A8%98-Leetcode-%20136.-Single%20Number/" class="post-title-link" itemprop="url">[筆記] Leetcode - 136. Single Number</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">Posted on</span>
-      
-
-      <time title="Created: 2023-09-28 18:50:09 / Modified: 18:58:42" itemprop="dateCreated datePublished" datetime="2023-09-28T18:50:09+08:00">2023-09-28</time>
-    </span>
-
-  
-    <span class="post-meta-item" title="Symbols count in article">
-      <span class="post-meta-item-icon">
-        <i class="far fa-file-word"></i>
-      </span>
-      <span class="post-meta-item-text">Symbols count in article: </span>
-      <span>361</span>
-    </span>
-    <span class="post-meta-item" title="Reading time">
-      <span class="post-meta-item-icon">
-        <i class="far fa-clock"></i>
-      </span>
-      <span class="post-meta-item-text">Reading time &asymp;</span>
-      <span>1 mins.</span>
-    </span>
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p><a target="_blank" rel="noopener" href="https://leetcode.com/problems/single-number/">https://leetcode.com/problems/single-number/</a></p>
-<blockquote>
-<p>Given a non-empty array of integers nums, every element appears twice except for one. Find that single one.<br>You must implement a solution with a linear runtime complexity and use only constant extra space.</p>
-</blockquote>
-<p><img src="https://hackmd.io/_uploads/BJfpj0Mx6.png"></p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2023/09/28/%E7%AD%86%E8%A8%98-Leetcode-%20136.-Single%20Number/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1251,13 +1452,13 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-line"></i>
     </span>
-    <span title="Symbols count total">33k</span>
+    <span title="Symbols count total">37k</span>
   </span>
   <span class="post-meta-item">
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="Reading time total">30 mins.</span>
+    <span title="Reading time total">34 mins.</span>
   </span>
 </div>
 <div class="busuanzi-count">

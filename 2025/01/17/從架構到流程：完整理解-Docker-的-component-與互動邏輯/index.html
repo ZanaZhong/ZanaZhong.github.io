@@ -1,0 +1,823 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="google-site-verification" content="-NHUbNtD7Y8hamHaLwW7ehcqJ_wj3DOCDQtgMsdADas" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.2">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300&display=swap" rel="stylesheet">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/cat-cage-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/cat-cage-icon.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/cat-cage-icon.png">
+  <link rel="mask-icon" href="/images/cat-cage-icon.png" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.14.0/css/all.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.css">
+  <script src="//cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.js"></script>
+
+<script class="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"zanazhong.github.io","root":"/","scheme":"Gemini","version":"8.0.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":true,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}};
+  </script>
+
+  <meta name="description" content="本文將從 整體架構 和 運作流程 的角度，剖析 Docker 主要的 component 及其運作方式。 核心組件與角色Docker Client 用戶與 Docker 互動的入口，通過命令 (如 docker run、docker build) 向 Docker Daemon 發送請求。   互動對象：與 Docker Daemon 通訊 (通常通過 REST API 或 UNIX Socket">
+<meta property="og:type" content="article">
+<meta property="og:title" content="從架構到流程：完整理解 Docker 的 component 與互動邏輯">
+<meta property="og:url" content="https://zanazhong.github.io/2025/01/17/%E5%BE%9E%E6%9E%B6%E6%A7%8B%E5%88%B0%E6%B5%81%E7%A8%8B%EF%BC%9A%E5%AE%8C%E6%95%B4%E7%90%86%E8%A7%A3-Docker-%E7%9A%84-component-%E8%88%87%E4%BA%92%E5%8B%95%E9%82%8F%E8%BC%AF/index.html">
+<meta property="og:site_name" content="Hey I am Zana">
+<meta property="og:description" content="本文將從 整體架構 和 運作流程 的角度，剖析 Docker 主要的 component 及其運作方式。 核心組件與角色Docker Client 用戶與 Docker 互動的入口，通過命令 (如 docker run、docker build) 向 Docker Daemon 發送請求。   互動對象：與 Docker Daemon 通訊 (通常通過 REST API 或 UNIX Socket">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2025-01-17T07:59:56.000Z">
+<meta property="article:modified_time" content="2025-01-17T08:04:37.633Z">
+<meta property="article:author" content="Zana">
+<meta property="article:tag" content="Docker">
+<meta property="article:tag" content="Architecture">
+<meta property="article:tag" content="基礎架構">
+<meta property="article:tag" content="容器化技術">
+<meta property="article:tag" content="Containerd">
+<meta property="article:tag" content="OCI">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://zanazhong.github.io/2025/01/17/%E5%BE%9E%E6%9E%B6%E6%A7%8B%E5%88%B0%E6%B5%81%E7%A8%8B%EF%BC%9A%E5%AE%8C%E6%95%B4%E7%90%86%E8%A7%A3-Docker-%E7%9A%84-component-%E8%88%87%E4%BA%92%E5%8B%95%E9%82%8F%E8%BC%AF/">
+
+
+<script data-pjax class="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>從架構到流程：完整理解 Docker 的 component 與互動邏輯 | Hey I am Zana</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-187712309-1"></script>
+    <script data-pjax>
+      if (CONFIG.hostname === location.hostname) {
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'UA-187712309-1');
+      }
+    </script>
+
+
+
+
+
+
+  <noscript>
+  <style>
+  body { margin-top: 2rem; }
+
+  .use-motion .menu-item,
+  .use-motion .sidebar,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header {
+    visibility: visible;
+  }
+
+  .use-motion .header,
+  .use-motion .site-brand-container .toggle,
+  .use-motion .footer { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle,
+  .use-motion .custom-logo-image {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line {
+    transform: scaleX(1);
+  }
+
+  .search-pop-overlay, .sidebar-nav { display: none; }
+  .sidebar-panel { display: block; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/atom.xml" title="Hey I am Zana" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">Hey I am Zana</h1>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">62</span></a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">7</span></a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">33</span></a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="Searching..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <section class="post-toc-wrap sidebar-panel">
+          <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A0%B8%E5%BF%83%E7%B5%84%E4%BB%B6%E8%88%87%E8%A7%92%E8%89%B2"><span class="nav-number">1.</span> <span class="nav-text">核心組件與角色</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Docker-Client"><span class="nav-number">1.1.</span> <span class="nav-text">Docker Client</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Docker-Daemon"><span class="nav-number">1.2.</span> <span class="nav-text">Docker Daemon</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Registry"><span class="nav-number">1.3.</span> <span class="nav-text">Registry</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Image"><span class="nav-number">1.4.</span> <span class="nav-text">Image</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Container"><span class="nav-number">1.5.</span> <span class="nav-text">Container</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Containerd"><span class="nav-number">1.6.</span> <span class="nav-text">Containerd</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Containerd-shim"><span class="nav-number">1.7.</span> <span class="nav-text">Containerd-shim</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#OCI-Runtime-EX-runc"><span class="nav-number">1.8.</span> <span class="nav-text">OCI Runtime (EX: runc)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#OCI-Spec-%E8%A6%8F%E7%AF%84"><span class="nav-number">1.9.</span> <span class="nav-text">OCI Spec (規範)</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%81%8B%E4%BD%9C%E6%B5%81%E7%A8%8B"><span class="nav-number">2.</span> <span class="nav-text">運作流程</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%99%BC%E9%80%81%E6%8C%87%E4%BB%A4"><span class="nav-number">2.1.</span> <span class="nav-text">發送指令</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8B%89%E5%8F%96-Image"><span class="nav-number">2.2.</span> <span class="nav-text">拉取 Image</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%89%B5%E5%BB%BA-Container"><span class="nav-number">2.3.</span> <span class="nav-text">創建 Container</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%95%9F%E5%8B%95%E5%AE%B9%E5%99%A8"><span class="nav-number">2.4.</span> <span class="nav-text">啟動容器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%81%8B%E8%A1%8C%E8%88%87%E7%AE%A1%E7%90%86"><span class="nav-number">2.5.</span> <span class="nav-text">運行與管理</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9E%B6%E6%A7%8B%E5%9C%96"><span class="nav-number">3.</span> <span class="nav-text">架構圖</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%B8%BD%E7%B5%90"><span class="nav-number">4.</span> <span class="nav-text">總結</span></a></li></ol></div>
+      </section>
+      <!--/noindex-->
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Zana"
+      src="/images/headshot.jpg">
+  <p class="site-author-name" itemprop="name">Zana</p>
+  <div class="site-description" itemprop="description">ɪᴛ ɪs ɪᴍᴘᴏʀᴛᴀɴᴛ ᴛᴏ sᴇᴇ ʜᴏᴡ ғᴀʀ ʏᴏᴜ'ᴠᴇ ᴄᴏᴍᴇ🐾</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">33</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">7</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">62</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/ZanaZhong" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;ZanaZhong" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.facebook.com/zz.yume/" title="FB Page → https:&#x2F;&#x2F;www.facebook.com&#x2F;zz.yume&#x2F;" rel="noopener" target="_blank"><i class="fab fa-facebook fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.linkedin.com/in/jia-rong-zhong/" title="Linkedin → https:&#x2F;&#x2F;www.linkedin.com&#x2F;in&#x2F;jia-rong-zhong&#x2F;" rel="noopener" target="_blank"><i class="fab fa-linkedin fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://instagram.com/zz._.yume" title="Instagram → https:&#x2F;&#x2F;instagram.com&#x2F;zz._.yume" rel="noopener" target="_blank"><i class="fab fa-instagram fa-fw"></i></a>
+      </span>
+  </div>
+
+
+
+      </section>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+  <a href="https://github.com/ZanaZhong" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+      
+
+      
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://zanazhong.github.io/2025/01/17/%E5%BE%9E%E6%9E%B6%E6%A7%8B%E5%88%B0%E6%B5%81%E7%A8%8B%EF%BC%9A%E5%AE%8C%E6%95%B4%E7%90%86%E8%A7%A3-Docker-%E7%9A%84-component-%E8%88%87%E4%BA%92%E5%8B%95%E9%82%8F%E8%BC%AF/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/headshot.jpg">
+      <meta itemprop="name" content="Zana">
+      <meta itemprop="description" content="ɪᴛ ɪs ɪᴍᴘᴏʀᴛᴀɴᴛ ᴛᴏ sᴇᴇ ʜᴏᴡ ғᴀʀ ʏᴏᴜ'ᴠᴇ ᴄᴏᴍᴇ🐾">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hey I am Zana">
+    </span>
+
+    
+    
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          從架構到流程：完整理解 Docker 的 component 與互動邏輯
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+      
+
+      <time title="Created: 2025-01-17 15:59:56 / Modified: 16:04:37" itemprop="dateCreated datePublished" datetime="2025-01-17T15:59:56+08:00">2025-01-17</time>
+    </span>
+
+  
+    <span class="post-meta-item" title="Views" id="busuanzi_container_page_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">Views: </span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+    <span class="post-meta-item" title="Symbols count in article">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">Symbols count in article: </span>
+      <span>3.7k</span>
+    </span>
+    <span class="post-meta-item" title="Reading time">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">Reading time &asymp;</span>
+      <span>3 mins.</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p>本文將從 <strong>整體架構</strong> 和 <strong>運作流程</strong> 的角度，剖析 Docker 主要的 component 及其運作方式。</p>
+<h2 id="核心組件與角色"><a href="#核心組件與角色" class="headerlink" title="核心組件與角色"></a>核心組件與角色</h2><h3 id="Docker-Client"><a href="#Docker-Client" class="headerlink" title="Docker Client"></a>Docker Client</h3><blockquote>
+<p>用戶與 Docker 互動的入口，通過命令 (如 <code>docker run</code>、<code>docker build</code>) 向 Docker Daemon 發送請求。</p>
+</blockquote>
+<ul>
+<li><strong>互動對象</strong>：與 Docker Daemon 通訊 (通常通過 REST API 或 UNIX Socket)。</li>
+<li><strong>位置</strong>：用戶本地環境。</li>
+</ul>
+<h3 id="Docker-Daemon"><a href="#Docker-Daemon" class="headerlink" title="Docker Daemon"></a>Docker Daemon</h3><blockquote>
+<p>Docker 的核心服務 process ，負責接收 Client 請求並執行具體操作，EX: 拉取 Image、創建 Container，並協調後續所有 Container 生命週期、Image 管理、網路、儲存…等工作。<br>早期 Docker Daemon 自己直接管理 Container，但後來將 Container 執行的部分抽象化給 <strong><code>Containerd</code></strong> 去處理。</p>
+</blockquote>
+<ul>
+<li><strong>內部構成</strong>：<ul>
+<li><strong>Containerd</strong>：Container 管理層，負責++管理容器的生命周期++ (EX: 啟動、停止)。</li>
+<li><strong>Containerd-shim</strong>：中介層，確保 Container 與 Containerd 的解耦，讓 Container 在 Containerd 崩潰後仍能運行。</li>
+<li>**OCI Runtime (EX: runc)**：執行層，負責啟動和管理容器的隔離 process 。</li>
+</ul>
+</li>
+</ul>
+<h3 id="Registry"><a href="#Registry" class="headerlink" title="Registry"></a>Registry</h3><blockquote>
+<p>Image 儲存庫，用於保存和分發 Docker Image。<br>可以是 Public（EX: Docker Hub）或 Private（公司內部架設）。</p>
+</blockquote>
+<ul>
+<li><strong>互動對象</strong>：Docker Daemon 通過拉取或推送操作與 Registry 互動。</li>
+<li><strong>常見</strong>：Docker Hub、privete Registry。</li>
+</ul>
+<h3 id="Image"><a href="#Image" class="headerlink" title="Image"></a>Image</h3><blockquote>
+<p>Container 的靜態模板，包含應用程式及其運行所需的依賴和配置。</p>
+</blockquote>
+<ul>
+<li><strong>特性</strong>：<ul>
+<li>使用分層文件系統 (UnionFS)，每層代表 Image 的一部分 (EX: 基礎 OS、應用依賴)。</li>
+<li>不可變，<strong>可以被多個容器共享</strong>。</li>
+</ul>
+</li>
+<li><strong>互動對象</strong>：由 Docker Daemon 從 Registry 中拉取，並交付給 Containerd 啟動 Container。</li>
+</ul>
+<h3 id="Container"><a href="#Container" class="headerlink" title="Container"></a>Container</h3><blockquote>
+<p>Image 的運行實例，是一個輕量級、隔離的應用運行環境。</p>
+</blockquote>
+<ul>
+<li><strong>運作基礎</strong>：依賴 Linux 的 Namespace 和 Cgroups 技術實現隔離與資源限制。</li>
+<li><strong>互動對象</strong>：由 Containerd 調用 OCI Runtime 創建，並由 Containerd-shim 管理。</li>
+</ul>
+<h3 id="Containerd"><a href="#Containerd" class="headerlink" title="Containerd"></a>Containerd</h3><blockquote>
+<p>負責 Container 的整體生命周期管理，是 Docker Daemon 的核心子系統。</p>
+</blockquote>
+<ul>
+<li><strong>功能</strong>：<ul>
+<li>拉取與管理 Image。</li>
+<li>創建與刪除 Container。</li>
+<li>調用 OCI Runtime 啟動容器。</li>
+</ul>
+</li>
+<li><strong>互動對象</strong>：通過 Docker Daemon 接收指令，並向 OCI Runtime 傳遞容器配置。</li>
+</ul>
+<h3 id="Containerd-shim"><a href="#Containerd-shim" class="headerlink" title="Containerd-shim"></a>Containerd-shim</h3><blockquote>
+<p>**中介層 (中間代理)**，管理 Container 的生命周期，確保 Container 在 Containerd 崩潰後依然運行。</p>
+</blockquote>
+<ul>
+<li><p><strong>功能</strong>：</p>
+<ul>
+<li>管理 Container 與父 process 的互動。</li>
+</ul>
+<ul>
+<li>解耦作用：確保容器的執行不依賴於 Containerd 的狀態 (狀態相互獨立)。</li>
+<li>資源管理：監控 Container 的 process 狀態。</li>
+<li>I&#x2F;O 管理：處理 Container 的輸入&#x2F;輸出數據，方便用戶與 Container 互動。</li>
+<li>Container 生命周期管理：處理 Container 的啟動、停止及 process 監控(不因 containerd daemon 本身的重啟而中斷)。</li>
+</ul>
+</li>
+<li><p><strong>互動對象</strong>：</p>
+<ul>
+<li>作為 Containerd 與容器之間的橋接，解耦 Container 與 Containerd。</li>
+<li>與底層的 OCI Runtime 溝通，啟動 Container process。</li>
+</ul>
+</li>
+</ul>
+<div class="note info"><ul>
+<li>shim 就像是「轉接器」或「支架（shim）」的概念，一個 Container 對應一個 shim。</li>
+<li>Container 啟動後，<code>Containerd-shim</code> 會取代 <code>Containerd</code> 成為 Container 的父 process，確保即使 <code>Containerd</code> 崩潰，Container 仍然能持續運行。</li>
+</ul>
+</div>
+
+<h3 id="OCI-Runtime-EX-runc"><a href="#OCI-Runtime-EX-runc" class="headerlink" title="OCI Runtime (EX: runc)"></a>OCI Runtime (EX: runc)</h3><blockquote>
+<p><strong>執行層</strong>，基於 OCI (Open Container Initiative) 規範的運行時工具，負責實際啟動 Container。</p>
+</blockquote>
+<ul>
+<li><strong>功能</strong>：<ul>
+<li>設置 Container 的++隔離環境++ (Namespace、Cgroups…等)。</li>
+<li>啟動 Container 內的應用 process 。</li>
+</ul>
+</li>
+<li><strong>互動對象</strong>：由 Containerd 呼叫，執行容器啟動的具體邏輯。</li>
+</ul>
+<p>最常見的 OCI Runtime 是 runc，它是 OCI Runtime 的一個具體實現，專門處理容器的低層操作。</p>
+<h3 id="OCI-Spec-規範"><a href="#OCI-Spec-規範" class="headerlink" title="OCI Spec (規範)"></a>OCI Spec (規範)</h3><blockquote>
+<p>一套 Container 運行時的標準規範，定義 Container 的配置文件格式和行為。</p>
+</blockquote>
+<ul>
+<li><strong>功能</strong>：<ul>
+<li>描述 Container 的資源設置 (EX: CPU、Memory)。</li>
+<li>定義 Container 的文件系統掛載點。</li>
+<li>設置 process 的啟動命令和參數。</li>
+<li>配置 Namespace 隔離（EX: 網路、PID、用戶等）。</li>
+</ul>
+</li>
+<li><strong>內容</strong>：<ul>
+<li>Container 的資源配置 (EX: CPU、Memory)。</li>
+<li>Namespace 和檔案系統的隔離規則。</li>
+</ul>
+</li>
+<li><strong>主要構成</strong>：<ul>
+<li><code>config.json</code>：定義 Container 的配置，EX: 環境變量、文件系統、資源限制。</li>
+<li><code>runtime-spec</code>：描述 Container 的行為規範，OCI Runtime 依此實現運行時行為。</li>
+</ul>
+</li>
+<li><strong>互動對象</strong>：OCI Runtime 根據 OCI Spec 配置 Container 環境。</li>
+</ul>
+<h2 id="運作流程"><a href="#運作流程" class="headerlink" title="運作流程"></a>運作流程</h2><p>以下是執行 <code>docker run</code> 指令的完整過程：</p>
+<h3 id="發送指令"><a href="#發送指令" class="headerlink" title="發送指令"></a>發送指令</h3><ul>
+<li><strong>步驟</strong>：使用者執行 <code>docker run hello-world</code>。</li>
+<li><strong>互動對象</strong>：Docker Client 將請求發送給 Docker Daemon。</li>
+</ul>
+<h3 id="拉取-Image"><a href="#拉取-Image" class="headerlink" title="拉取 Image"></a>拉取 Image</h3><ul>
+<li><strong>步驟</strong>：Docker Daemon 檢查本地是否存在 Image ，若無則從 Registry 拉取。</li>
+<li><strong>互動對象</strong>：Docker Daemon 與 Registry 通訊，下載 Image 後存儲於本地。</li>
+</ul>
+<h3 id="創建-Container"><a href="#創建-Container" class="headerlink" title="創建 Container"></a>創建 Container</h3><ul>
+<li><strong>步驟</strong>：<ol>
+<li>Docker Daemon 通過 Containerd 請求創建容器。</li>
+<li>Containerd 調用 OCI Runtime (如 runc)，基於 OCI Spec 配置容器環境。</li>
+</ol>
+</li>
+<li><strong>互動對象</strong>：<ul>
+<li>Docker Daemon → Containerd → OCI Runtime。</li>
+</ul>
+</li>
+</ul>
+<h3 id="啟動容器"><a href="#啟動容器" class="headerlink" title="啟動容器"></a>啟動容器</h3><ul>
+<li><strong>步驟</strong>：<ol>
+<li>OCI Runtime 配置命名空間、Cgroups，並啟動 Container process。</li>
+<li>Containerd-shim 接管 Container process 的管理，與父 process 解耦。</li>
+</ol>
+</li>
+<li><strong>互動對象</strong>：<ul>
+<li>OCI Runtime → Containerd-shim。</li>
+</ul>
+</li>
+</ul>
+<h3 id="運行與管理"><a href="#運行與管理" class="headerlink" title="運行與管理"></a>運行與管理</h3><ul>
+<li><strong>步驟</strong>：容器進入運行狀態，Docker Client 可通過命令與容器互動。</li>
+<li><strong>互動對象</strong>：<ul>
+<li>Docker Client → Docker Daemon → Containerd。</li>
+</ul>
+</li>
+</ul>
+<h2 id="架構圖"><a href="#架構圖" class="headerlink" title="架構圖"></a>架構圖</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">+-----------------------------------+</span><br><span class="line">|           Docker Client           |</span><br><span class="line">+-----------------------------------+</span><br><span class="line">                  |</span><br><span class="line">                  v</span><br><span class="line">+-----------------------------------+                          +-----------------+ </span><br><span class="line">|           Docker Daemon  ---------|--(pull image if needed)-&gt;| Registry Client |</span><br><span class="line">|        +----------------+         |                          +-----------------+ </span><br><span class="line">|        |   Containerd   |         |                                    |</span><br><span class="line">|        +----------------+         |                                    v </span><br><span class="line">|                 |                 |                              +------------+</span><br><span class="line">|                 v                 |                              |  Registry  |</span><br><span class="line">|        +-----------------+        |                              +------------+</span><br><span class="line">|        | Containerd-shim |        |</span><br><span class="line">|        +-----------------+        |</span><br><span class="line">|                 |                 |</span><br><span class="line">|                 v                 |</span><br><span class="line">|        +-----------------+        |</span><br><span class="line">|        |   OCI Runtime   |        |</span><br><span class="line">|        +-----------------+        |</span><br><span class="line">|                 |                 |</span><br><span class="line">|                 v                 |</span><br><span class="line">|  Containers (Isolated Processes)  |</span><br><span class="line">+-----------------------------------+</span><br></pre></td></tr></table></figure>
+
+<h2 id="總結"><a href="#總結" class="headerlink" title="總結"></a>總結</h2><table>
+<thead>
+<tr>
+<th><strong>組件名稱</strong></th>
+<th><strong>作用</strong></th>
+<th><strong>互動對象</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Docker Client</td>
+<td>接收用戶指令，發送給 Docker Daemon</td>
+<td>Docker Daemon</td>
+</tr>
+<tr>
+<td>Docker Daemon</td>
+<td>管理 Container 的核心服務，處理 Image 與 Container 操作</td>
+<td>Docker Client、Registry、Containerd</td>
+</tr>
+<tr>
+<td>Registry</td>
+<td>儲存與分發 Image</td>
+<td>Docker Daemon</td>
+</tr>
+<tr>
+<td>Image</td>
+<td>Container 的靜態模板</td>
+<td>Docker Daemon</td>
+</tr>
+<tr>
+<td>Container</td>
+<td>Image 的運行實例</td>
+<td>Containerd</td>
+</tr>
+<tr>
+<td>Containerd</td>
+<td>管理 Container 的生命周期</td>
+<td>Docker Daemon、OCI Runtime</td>
+</tr>
+<tr>
+<td>Containerd-shim</td>
+<td>確保 Container 與 Containerd 解耦</td>
+<td>Containerd、Container、OCI Runtime</td>
+</tr>
+<tr>
+<td>OCI Runtime (runc)</td>
+<td>實際執行Container</td>
+<td>Containerd、作業系統</td>
+</tr>
+<tr>
+<td>OCI Spec</td>
+<td>Container 配置的標準規範</td>
+<td>OCI Runtime</td>
+</tr>
+</tbody></table>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Docker/" rel="tag"># Docker</a>
+              <a href="/tags/Architecture/" rel="tag"># Architecture</a>
+              <a href="/tags/%E5%9F%BA%E7%A4%8E%E6%9E%B6%E6%A7%8B/" rel="tag"># 基礎架構</a>
+              <a href="/tags/%E5%AE%B9%E5%99%A8%E5%8C%96%E6%8A%80%E8%A1%93/" rel="tag"># 容器化技術</a>
+              <a href="/tags/Containerd/" rel="tag"># Containerd</a>
+              <a href="/tags/OCI/" rel="tag"># OCI</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2025/01/16/%E6%B7%B1%E5%85%A5%E6%B7%BA%E5%87%BA%E7%90%86%E8%A7%A3-Docker-%E7%9A%84%E5%BA%95%E5%B1%A4%E9%81%8B%E4%BD%9C%E8%88%87%E6%9E%B6/" rel="prev" title="深入淺出理解 Docker 的底層運作與架">
+                  <i class="fa fa-chevron-left"></i> 深入淺出理解 Docker 的底層運作與架
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+  
+  
+  
+
+
+
+      
+    
+  <div class="comments">
+    <div id="disqus_thread">
+      <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+    </div>
+  </div>
+  
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      const activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      const commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      
+
+      
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2025</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Zana</span>
+</div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+    <span title="Symbols count total">37k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="Reading time total">34 mins.</span>
+  </span>
+</div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="Total Visitors">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="Total Views">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+    </div>
+  </footer>
+
+  
+  <script src="//cdn.jsdelivr.net/npm/animejs@3.2.0/lib/anime.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/@next-theme/pjax@0.4.0/pjax.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+  <script>
+var pjax = new Pjax({
+  selectors: [
+    'head title',
+    '.page-configurations',
+    '.main-inner',
+    '.post-toc-wrap',
+    '.languages',
+    '.pjax'
+  ],
+  analytics: false,
+  cacheBust: false,
+  scrollRestoration: false,
+  scrollTo: !CONFIG.bookmark.enable
+});
+
+document.addEventListener('pjax:success', () => {
+  pjax.executeScripts(document.querySelectorAll('script[data-pjax], .pjax script'));
+  NexT.boot.refresh();
+  // Define Motion Sequence & Bootstrap Motion.
+  if (CONFIG.motion.enable) {
+    NexT.motion.integrator
+      .init()
+      .add(NexT.motion.middleWares.subMenu)
+      .add(NexT.motion.middleWares.postList)
+      .bootstrap();
+  }
+  const hasTOC = document.querySelector('.post-toc');
+  document.querySelector('.sidebar-inner').classList.toggle('sidebar-nav-active', hasTOC);
+  document.querySelector(hasTOC ? '.sidebar-nav-toc' : '.sidebar-nav-overview').click();
+  NexT.utils.updateSidebarPosition();
+});
+</script>
+
+
+  
+
+
+
+
+  <script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <script>
+    NProgress.configure({
+      showSpinner: true
+    });
+    NProgress.start();
+    document.addEventListener('readystatechange', () => {
+      if (document.readyState === 'interactive') {
+        NProgress.inc(0.8);
+      }
+      if (document.readyState === 'complete') {
+        NProgress.done();
+      }
+    });
+    document.addEventListener('pjax:send', () => {
+      NProgress.start();
+    });
+    document.addEventListener('pjax:success', () => {
+      NProgress.done();
+    });
+  </script>
+
+
+  
+  <script data-pjax async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+
+
+
+    <div class="pjax">
+  
+
+  
+
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/disqusjs@1.3.0/dist/disqusjs.css">
+
+<script>
+NexT.utils.loadComments('#disqus_thread', () => {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/disqusjs@1.3.0/dist/disqus.js', () => {
+    window.dsqjs = new DisqusJS({
+      api       : '' || 'https://disqus.com/api/',
+      apikey    : 'PwhBX0pvyskM9Ham1vjsvzwzjlJch5I73qZCHQrBMoGA6NBOuwdPWCQccXelF20z',
+      shortname : 'https-zanazhong-github-io',
+      url       : "https://zanazhong.github.io/2025/01/17/%E5%BE%9E%E6%9E%B6%E6%A7%8B%E5%88%B0%E6%B5%81%E7%A8%8B%EF%BC%9A%E5%AE%8C%E6%95%B4%E7%90%86%E8%A7%A3-Docker-%E7%9A%84-component-%E8%88%87%E4%BA%92%E5%8B%95%E9%82%8F%E8%BC%AF/",
+      identifier: "2025/01/17/從架構到流程：完整理解-Docker-的-component-與互動邏輯/",
+      title     : "從架構到流程：完整理解 Docker 的 component 與互動邏輯",
+    });
+  }, window.DisqusJS);
+});
+</script>
+
+    </div>
+</body>
+</html>
