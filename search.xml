@@ -1,32 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>[分享] Website Layout - Sidebar + Flexed</title>
-    <url>/2021/04/01/%E5%88%86%E4%BA%AB-Website-Layout-Sidebar-Flexed/</url>
-    <content><![CDATA[<blockquote>
-<p>實習開發網站，常遇到一些功能需求要上網查詢，整理成筆記以後再用到就不用又從頭開始找，也希望幫助到正在找學這些功能的人</p>
-</blockquote>
-<span id="more"></span>
-
-<iframe width="100%" height="500" src="https://codepen.io/ZZYume/embed/NWddogz?height=265&theme-id=dark&default-tab=result" frameborder="0"></iframe>
-
-<p>&#x2F;&#x2F; 有空再認真補教學</p>
-]]></content>
-      <categories>
-        <category>html</category>
-      </categories>
-      <tags>
-        <tag>sidebar</tag>
-        <tag>html</tag>
-        <tag>css</tag>
-        <tag>javascript</tag>
-        <tag>jquery</tag>
-        <tag>Bootstrap</tag>
-        <tag>Bootstrap-table</tag>
-        <tag>card</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>[學習] Check.io - Bigger Price</title>
     <url>/2021/03/17/%E5%AD%B8%E7%BF%92-Check-io-Bigger-Price/</url>
     <content><![CDATA[<blockquote>
@@ -74,6 +48,91 @@
         <tag>sort</tag>
         <tag>list</tag>
         <tag>dictionary</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>[分享] Website Layout - Sidebar + Flexed</title>
+    <url>/2021/04/01/%E5%88%86%E4%BA%AB-Website-Layout-Sidebar-Flexed/</url>
+    <content><![CDATA[<blockquote>
+<p>實習開發網站，常遇到一些功能需求要上網查詢，整理成筆記以後再用到就不用又從頭開始找，也希望幫助到正在找學這些功能的人</p>
+</blockquote>
+<span id="more"></span>
+
+<iframe width="100%" height="500" src="https://codepen.io/ZZYume/embed/NWddogz?height=265&theme-id=dark&default-tab=result" frameborder="0"></iframe>
+
+<p>&#x2F;&#x2F; 有空再認真補教學</p>
+]]></content>
+      <categories>
+        <category>html</category>
+      </categories>
+      <tags>
+        <tag>sidebar</tag>
+        <tag>html</tag>
+        <tag>css</tag>
+        <tag>javascript</tag>
+        <tag>jquery</tag>
+        <tag>Bootstrap</tag>
+        <tag>Bootstrap-table</tag>
+        <tag>card</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>[學習] Python List</title>
+    <url>/2021/03/22/%E5%AD%B8%E7%BF%92-Python-List/</url>
+    <content><![CDATA[<p>常遇到的問題</p>
+<ul>
+<li>find the duplicate elements in the list</li>
+<li>count the duplicate elements in the list</li>
+<li>remove the duplicate elements in the list</li>
+</ul>
+<span id="more"></span>
+
+<h3 id="List-count-用法"><a href="#List-count-用法" class="headerlink" title="List.count() 用法"></a>List.count() 用法</h3><blockquote>
+<p>計算指定的值在 list 出現幾次</p>
+</blockquote>
+<div class="note default"><p>語法：list.count(element)</p>
+</div>
+
+<p>input:</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">my_list = [<span class="number">2</span>, <span class="number">3</span>, <span class="number">1</span>, <span class="number">4</span>, <span class="number">2</span>, <span class="number">5</span>, <span class="number">3</span>, <span class="number">7</span>]</span><br><span class="line"><span class="built_in">print</span>(my_list.count(<span class="number">3</span>))</span><br><span class="line"><span class="built_in">print</span>(my_list.count(<span class="number">7</span>))</span><br></pre></td></tr></table></figure>
+<p>output:</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">2</span><br><span class="line">1</span><br></pre></td></tr></table></figure>
+
+<h4 id="進階"><a href="#進階" class="headerlink" title="進階"></a>進階</h4><blockquote>
+<p>將 list 裡面所有的 element 都記錄下有幾個</p>
+</blockquote>
+<p>input:</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">dup_list = [<span class="string">&quot;a&quot;</span>, <span class="string">&quot;c&quot;</span>, <span class="string">&quot;a&quot;</span>, <span class="string">&quot;c&quot;</span>, <span class="string">&quot;b&quot;</span>, <span class="string">&quot;a&quot;</span>]</span><br><span class="line">clear_dict = &#123;i: dup_list.count(i) <span class="keyword">for</span> i <span class="keyword">in</span> dup_list&#125;</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(clear_dict)</span><br></pre></td></tr></table></figure>
+<p>output: </p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#123;&#39;a&#39;: 3, &#39;c&#39;: 2, &#39;b&#39;: 1&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="另一種用法-Counter"><a href="#另一種用法-Counter" class="headerlink" title="另一種用法 Counter"></a>另一種用法 Counter</h3><div class="note default"><p>需要先 import<br>語法：<br>from collections import Counter<br>Counter(List&#x2F;String)</p>
+</div>
+<blockquote>
+<p>counter 出來的型態通常會轉成 Dictionary 會比較方便～<br>在下面也會示範有轉成 dict 跟沒轉成 dict 的差別</p>
+</blockquote>
+<p>input:</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> collections <span class="keyword">import</span> Counter</span><br><span class="line">dup_list = [<span class="string">&quot;a&quot;</span>, <span class="string">&quot;c&quot;</span>, <span class="string">&quot;a&quot;</span>, <span class="string">&quot;c&quot;</span>, <span class="string">&quot;b&quot;</span>, <span class="string">&quot;a&quot;</span>]</span><br><span class="line">count_list = <span class="built_in">dict</span>(Counter(dup_list))</span><br><span class="line">count_string = Counter(<span class="string">&#x27;acacaba&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(count_list)</span><br><span class="line"><span class="built_in">print</span>(count_string)</span><br></pre></td></tr></table></figure>
+<p>output:</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#123;&#39;a&#39;: 3, &#39;c&#39;: 2, &#39;b&#39;: 1&#125;</span><br><span class="line">Counter(&#123;&#39;a&#39;: 4, &#39;b&#39;: 1, &#39;c&#39;: 2&#125;)</span><br></pre></td></tr></table></figure>
+
+<h4 id="Counter-的額外用法"><a href="#Counter-的額外用法" class="headerlink" title="Counter 的額外用法"></a>Counter 的額外用法</h4><blockquote>
+<p>找出出現次數前 n 多</p>
+</blockquote>
+<div class="note default"><p>語法： Counter.most_common()</p>
+</div>
+
+<p>input:</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 接續上一個例子</span></span><br><span class="line"><span class="built_in">print</span>(count_string.most_common(<span class="number">1</span>))</span><br><span class="line"><span class="built_in">print</span>(count_string.most_common(<span class="number">2</span>))</span><br></pre></td></tr></table></figure>
+<p>output:</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[(&#39;a&#39;, 4)]</span><br><span class="line">[(&#39;a&#39;, 4), (&#39;c&#39;, 2)]</span><br></pre></td></tr></table></figure>]]></content>
+      <categories>
+        <category>python</category>
+      </categories>
+      <tags>
+        <tag>python</tag>
+        <tag>list</tag>
+        <tag>count</tag>
       </tags>
   </entry>
   <entry>
@@ -153,65 +212,6 @@
         <tag>lambda</tag>
         <tag>list</tag>
         <tag>min/max</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>[學習] Python List</title>
-    <url>/2021/03/22/%E5%AD%B8%E7%BF%92-Python-List/</url>
-    <content><![CDATA[<p>常遇到的問題</p>
-<ul>
-<li>find the duplicate elements in the list</li>
-<li>count the duplicate elements in the list</li>
-<li>remove the duplicate elements in the list</li>
-</ul>
-<span id="more"></span>
-
-<h3 id="List-count-用法"><a href="#List-count-用法" class="headerlink" title="List.count() 用法"></a>List.count() 用法</h3><blockquote>
-<p>計算指定的值在 list 出現幾次</p>
-</blockquote>
-<div class="note default"><p>語法：list.count(element)</p>
-</div>
-
-<p>input:</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">my_list = [<span class="number">2</span>, <span class="number">3</span>, <span class="number">1</span>, <span class="number">4</span>, <span class="number">2</span>, <span class="number">5</span>, <span class="number">3</span>, <span class="number">7</span>]</span><br><span class="line"><span class="built_in">print</span>(my_list.count(<span class="number">3</span>))</span><br><span class="line"><span class="built_in">print</span>(my_list.count(<span class="number">7</span>))</span><br></pre></td></tr></table></figure>
-<p>output:</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">2</span><br><span class="line">1</span><br></pre></td></tr></table></figure>
-
-<h4 id="進階"><a href="#進階" class="headerlink" title="進階"></a>進階</h4><blockquote>
-<p>將 list 裡面所有的 element 都記錄下有幾個</p>
-</blockquote>
-<p>input:</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">dup_list = [<span class="string">&quot;a&quot;</span>, <span class="string">&quot;c&quot;</span>, <span class="string">&quot;a&quot;</span>, <span class="string">&quot;c&quot;</span>, <span class="string">&quot;b&quot;</span>, <span class="string">&quot;a&quot;</span>]</span><br><span class="line">clear_dict = &#123;i: dup_list.count(i) <span class="keyword">for</span> i <span class="keyword">in</span> dup_list&#125;</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(clear_dict)</span><br></pre></td></tr></table></figure>
-<p>output: </p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#123;&#39;a&#39;: 3, &#39;c&#39;: 2, &#39;b&#39;: 1&#125;</span><br></pre></td></tr></table></figure>
-
-<h3 id="另一種用法-Counter"><a href="#另一種用法-Counter" class="headerlink" title="另一種用法 Counter"></a>另一種用法 Counter</h3><div class="note default"><p>需要先 import<br>語法：<br>from collections import Counter<br>Counter(List&#x2F;String)</p>
-</div>
-<blockquote>
-<p>counter 出來的型態通常會轉成 Dictionary 會比較方便～<br>在下面也會示範有轉成 dict 跟沒轉成 dict 的差別</p>
-</blockquote>
-<p>input:</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> collections <span class="keyword">import</span> Counter</span><br><span class="line">dup_list = [<span class="string">&quot;a&quot;</span>, <span class="string">&quot;c&quot;</span>, <span class="string">&quot;a&quot;</span>, <span class="string">&quot;c&quot;</span>, <span class="string">&quot;b&quot;</span>, <span class="string">&quot;a&quot;</span>]</span><br><span class="line">count_list = <span class="built_in">dict</span>(Counter(dup_list))</span><br><span class="line">count_string = Counter(<span class="string">&#x27;acacaba&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(count_list)</span><br><span class="line"><span class="built_in">print</span>(count_string)</span><br></pre></td></tr></table></figure>
-<p>output:</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#123;&#39;a&#39;: 3, &#39;c&#39;: 2, &#39;b&#39;: 1&#125;</span><br><span class="line">Counter(&#123;&#39;a&#39;: 4, &#39;b&#39;: 1, &#39;c&#39;: 2&#125;)</span><br></pre></td></tr></table></figure>
-
-<h4 id="Counter-的額外用法"><a href="#Counter-的額外用法" class="headerlink" title="Counter 的額外用法"></a>Counter 的額外用法</h4><blockquote>
-<p>找出出現次數前 n 多</p>
-</blockquote>
-<div class="note default"><p>語法： Counter.most_common()</p>
-</div>
-
-<p>input:</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 接續上一個例子</span></span><br><span class="line"><span class="built_in">print</span>(count_string.most_common(<span class="number">1</span>))</span><br><span class="line"><span class="built_in">print</span>(count_string.most_common(<span class="number">2</span>))</span><br></pre></td></tr></table></figure>
-<p>output:</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[(&#39;a&#39;, 4)]</span><br><span class="line">[(&#39;a&#39;, 4), (&#39;c&#39;, 2)]</span><br></pre></td></tr></table></figure>]]></content>
-      <categories>
-        <category>python</category>
-      </categories>
-      <tags>
-        <tag>python</tag>
-        <tag>list</tag>
-        <tag>count</tag>
       </tags>
   </entry>
   <entry>
@@ -348,7 +348,7 @@
 <li><strong>互動對象</strong>：由 Containerd 調用 OCI Runtime 創建，並由 Containerd-shim 管理。</li>
 </ul>
 <h3 id="Containerd"><a href="#Containerd" class="headerlink" title="Containerd"></a>Containerd</h3><blockquote>
-<p>負責 Container 的整體生命周期管理，是 Docker Daemon 的核心子系統。</p>
+<p><strong>管理層</strong>，負責 Container 的整體生命周期管理，是 Docker Daemon 的核心子系統。</p>
 </blockquote>
 <ul>
 <li><strong>功能</strong>：<ul>
@@ -809,25 +809,6 @@
       </tags>
   </entry>
   <entry>
-    <title>[筆記] Check.io - Pawn Brotherhood</title>
-    <url>/2021/04/25/%E7%AD%86%E8%A8%98-Check-io-Pawn-Brotherhood/</url>
-    <content><![CDATA[<blockquote>
-<p><a href="https://py.checkio.org/en/mission/pawn-brotherhood/">check.io</a> 上的題目：判斷西洋棋中的兵有幾個是安全的<br>此系列文章主要是自己在解題時覺得有趣的題目，記錄下來讓自己以後好複習，有興趣的人可以參考看看</p>
-</blockquote>
-<h2 id="先來看看題目"><a href="#先來看看題目" class="headerlink" title="先來看看題目"></a>先來看看題目</h2><p><img src="https://i.imgur.com/oTOaA4z.jpg"><br>總結來說：兵的行徑方向走斜對角的(左前、右前)，若是兵的右下或左下有其他兵的話，他就是安全的</p>
-<h2 id="解題步驟"><a href="#解題步驟" class="headerlink" title="解題步驟"></a>解題步驟</h2><h2 id="解題"><a href="#解題" class="headerlink" title="解題"></a>解題</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">safe_pawns</span>(<span class="params">pawns: <span class="built_in">set</span></span>) -&gt; <span class="built_in">int</span>:</span></span><br><span class="line">    safe = <span class="number">0</span></span><br><span class="line">    <span class="keyword">for</span> p <span class="keyword">in</span> pawns:</span><br><span class="line">        <span class="keyword">if</span> <span class="built_in">chr</span>(<span class="built_in">ord</span>(p[<span class="number">0</span>]) + <span class="number">1</span>) + <span class="built_in">str</span>(<span class="built_in">int</span>(p[<span class="number">1</span>]) - <span class="number">1</span>) <span class="keyword">in</span> pawns <span class="keyword">or</span> <span class="built_in">chr</span>(<span class="built_in">ord</span>(p[<span class="number">0</span>]) - <span class="number">1</span>) + <span class="built_in">str</span>(<span class="built_in">int</span>(p[<span class="number">1</span>]) - <span class="number">1</span>) <span class="keyword">in</span> pawns:</span><br><span class="line">            safe += <span class="number">1</span></span><br><span class="line">    <span class="keyword">return</span> safe</span><br></pre></td></tr></table></figure>]]></content>
-      <categories>
-        <category>Check.io</category>
-        <category>python</category>
-      </categories>
-      <tags>
-        <tag>Check.io</tag>
-        <tag>python</tag>
-        <tag>chr</tag>
-        <tag>ord</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>[筆記] Check.io - Date and Time Converter</title>
     <url>/2021/04/25/%E7%AD%86%E8%A8%98-Check-io-Date-and-Time-Converter/</url>
     <content><![CDATA[<blockquote>
@@ -858,6 +839,25 @@ def date_time(time: str) -&gt; str:
         <tag>Check.io</tag>
         <tag>python</tag>
         <tag>datetime</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>[筆記] Check.io - Pawn Brotherhood</title>
+    <url>/2021/04/25/%E7%AD%86%E8%A8%98-Check-io-Pawn-Brotherhood/</url>
+    <content><![CDATA[<blockquote>
+<p><a href="https://py.checkio.org/en/mission/pawn-brotherhood/">check.io</a> 上的題目：判斷西洋棋中的兵有幾個是安全的<br>此系列文章主要是自己在解題時覺得有趣的題目，記錄下來讓自己以後好複習，有興趣的人可以參考看看</p>
+</blockquote>
+<h2 id="先來看看題目"><a href="#先來看看題目" class="headerlink" title="先來看看題目"></a>先來看看題目</h2><p><img src="https://i.imgur.com/oTOaA4z.jpg"><br>總結來說：兵的行徑方向走斜對角的(左前、右前)，若是兵的右下或左下有其他兵的話，他就是安全的</p>
+<h2 id="解題步驟"><a href="#解題步驟" class="headerlink" title="解題步驟"></a>解題步驟</h2><h2 id="解題"><a href="#解題" class="headerlink" title="解題"></a>解題</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">safe_pawns</span>(<span class="params">pawns: <span class="built_in">set</span></span>) -&gt; <span class="built_in">int</span>:</span></span><br><span class="line">    safe = <span class="number">0</span></span><br><span class="line">    <span class="keyword">for</span> p <span class="keyword">in</span> pawns:</span><br><span class="line">        <span class="keyword">if</span> <span class="built_in">chr</span>(<span class="built_in">ord</span>(p[<span class="number">0</span>]) + <span class="number">1</span>) + <span class="built_in">str</span>(<span class="built_in">int</span>(p[<span class="number">1</span>]) - <span class="number">1</span>) <span class="keyword">in</span> pawns <span class="keyword">or</span> <span class="built_in">chr</span>(<span class="built_in">ord</span>(p[<span class="number">0</span>]) - <span class="number">1</span>) + <span class="built_in">str</span>(<span class="built_in">int</span>(p[<span class="number">1</span>]) - <span class="number">1</span>) <span class="keyword">in</span> pawns:</span><br><span class="line">            safe += <span class="number">1</span></span><br><span class="line">    <span class="keyword">return</span> safe</span><br></pre></td></tr></table></figure>]]></content>
+      <categories>
+        <category>Check.io</category>
+        <category>python</category>
+      </categories>
+      <tags>
+        <tag>Check.io</tag>
+        <tag>python</tag>
+        <tag>chr</tag>
+        <tag>ord</tag>
       </tags>
   </entry>
   <entry>
@@ -1396,26 +1396,6 @@ def date_time(time: str) -&gt; str:
       </tags>
   </entry>
   <entry>
-    <title>[筆記] Leetcode - 56. Merge Intervals</title>
-    <url>/2023/09/05/%E7%AD%86%E8%A8%98-Leetcode-%2056.-Merge%20Intervals/</url>
-    <content><![CDATA[<p><a href="https://leetcode.com/problems/merge-intervals/">https://leetcode.com/problems/merge-intervals/</a></p>
-<p><img src="https://i.imgur.com/FaQwh8J.png"><br>It means each list in intervals is a range, just to merge the overlapping one, others stay the same.</p>
-<span id="more"></span>
-
-
-<p>解題:</p>
-<ol>
-<li>sort</li>
-</ol>
-<p>sort by the start of each range<br>save the first one in result<br>if any the start of each range smaller then the last item in result, it should be merged, otherwise append in result</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>(<span class="params"><span class="built_in">object</span></span>):</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">merge</span>(<span class="params">self, intervals</span>):</span></span><br><span class="line">        <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">        :type intervals: List[List[int]]</span></span><br><span class="line"><span class="string">        :rtype: List[List[int]]</span></span><br><span class="line"><span class="string">        &quot;&quot;&quot;</span></span><br><span class="line">        <span class="comment"># internals.sort(key = lambda x = x[0])</span></span><br><span class="line">        sort_intervals = <span class="built_in">sorted</span>(intervals, key = <span class="keyword">lambda</span> x: x[<span class="number">0</span>])</span><br><span class="line"></span><br><span class="line">        res = [sort_intervals[<span class="number">0</span>]]</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> start, end <span class="keyword">in</span> sort_intervals[<span class="number">1</span>:]:</span><br><span class="line">            <span class="keyword">if</span> res[-<span class="number">1</span>][<span class="number">1</span>] &gt;= start:</span><br><span class="line">                res[-<span class="number">1</span>][<span class="number">1</span>] = <span class="built_in">max</span>(res[-<span class="number">1</span>][<span class="number">1</span>], end)</span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                res.append([start, end])</span><br><span class="line">        <span class="keyword">return</span> res</span><br></pre></td></tr></table></figure>]]></content>
-      <tags>
-        <tag>Leetcode</tag>
-        <tag>Python</tag>
-        <tag>Coding</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>[筆記] Leetcode - 217. Contains Duplicate</title>
     <url>/2023/09/28/%E7%AD%86%E8%A8%98-Leetcode-%20217.-Contains-Duplicate/</url>
     <content><![CDATA[<p><a href="https://leetcode.com/problems/contains-duplicate/">https://leetcode.com/problems/contains-duplicate/</a></p>
@@ -1436,6 +1416,26 @@ def date_time(time: str) -&gt; str:
         <tag>Python</tag>
         <tag>Coding</tag>
         <tag>set</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>[筆記] Leetcode - 56. Merge Intervals</title>
+    <url>/2023/09/05/%E7%AD%86%E8%A8%98-Leetcode-%2056.-Merge%20Intervals/</url>
+    <content><![CDATA[<p><a href="https://leetcode.com/problems/merge-intervals/">https://leetcode.com/problems/merge-intervals/</a></p>
+<p><img src="https://i.imgur.com/FaQwh8J.png"><br>It means each list in intervals is a range, just to merge the overlapping one, others stay the same.</p>
+<span id="more"></span>
+
+
+<p>解題:</p>
+<ol>
+<li>sort</li>
+</ol>
+<p>sort by the start of each range<br>save the first one in result<br>if any the start of each range smaller then the last item in result, it should be merged, otherwise append in result</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>(<span class="params"><span class="built_in">object</span></span>):</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">merge</span>(<span class="params">self, intervals</span>):</span></span><br><span class="line">        <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">        :type intervals: List[List[int]]</span></span><br><span class="line"><span class="string">        :rtype: List[List[int]]</span></span><br><span class="line"><span class="string">        &quot;&quot;&quot;</span></span><br><span class="line">        <span class="comment"># internals.sort(key = lambda x = x[0])</span></span><br><span class="line">        sort_intervals = <span class="built_in">sorted</span>(intervals, key = <span class="keyword">lambda</span> x: x[<span class="number">0</span>])</span><br><span class="line"></span><br><span class="line">        res = [sort_intervals[<span class="number">0</span>]]</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> start, end <span class="keyword">in</span> sort_intervals[<span class="number">1</span>:]:</span><br><span class="line">            <span class="keyword">if</span> res[-<span class="number">1</span>][<span class="number">1</span>] &gt;= start:</span><br><span class="line">                res[-<span class="number">1</span>][<span class="number">1</span>] = <span class="built_in">max</span>(res[-<span class="number">1</span>][<span class="number">1</span>], end)</span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                res.append([start, end])</span><br><span class="line">        <span class="keyword">return</span> res</span><br></pre></td></tr></table></figure>]]></content>
+      <tags>
+        <tag>Leetcode</tag>
+        <tag>Python</tag>
+        <tag>Coding</tag>
       </tags>
   </entry>
   <entry>
@@ -1549,6 +1549,28 @@ def date_time(time: str) -&gt; str:
         <tag>javascript</tag>
         <tag>jquery</tag>
         <tag>dropdown</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>[筆記] 網頁版面 - 側邊欄</title>
+    <url>/2020/09/20/%E7%AD%86%E8%A8%98-%E7%B6%B2%E9%A0%81%E7%89%88%E9%9D%A2-%E5%81%B4%E9%82%8A%E6%AC%84/</url>
+    <content><![CDATA[<blockquote>
+<p>實習開發網站，常遇到一些功能需求要上網查詢，整理成筆記以後再用到就不用又從頭開始找，也希望幫助到正在找學這些功能的人</p>
+</blockquote>
+<span id="more"></span>
+
+
+<iframe width="100%" height="500" src="https://codepen.io/ZZYume/embed/WNwaPpJ?height=265&theme-id=dark&default-tab=result" frameborder="0"></iframe>
+
+<p>想看比較清楚的 code，我也有放在 <a href="https://github.com/ZanaZhong/side-nav.github.io">Github</a></p>
+]]></content>
+      <tags>
+        <tag>html</tag>
+        <tag>css</tag>
+        <tag>javascript</tag>
+        <tag>jquery</tag>
+        <tag>Bootstrap</tag>
+        <tag>Bootstrap-table</tag>
       </tags>
   </entry>
   <entry>
@@ -1670,28 +1692,6 @@ def date_time(time: str) -&gt; str:
         <tag>微服務</tag>
         <tag>單體架構</tag>
         <tag>系統架構</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>[筆記] 網頁版面 - 側邊欄</title>
-    <url>/2020/09/20/%E7%AD%86%E8%A8%98-%E7%B6%B2%E9%A0%81%E7%89%88%E9%9D%A2-%E5%81%B4%E9%82%8A%E6%AC%84/</url>
-    <content><![CDATA[<blockquote>
-<p>實習開發網站，常遇到一些功能需求要上網查詢，整理成筆記以後再用到就不用又從頭開始找，也希望幫助到正在找學這些功能的人</p>
-</blockquote>
-<span id="more"></span>
-
-
-<iframe width="100%" height="500" src="https://codepen.io/ZZYume/embed/WNwaPpJ?height=265&theme-id=dark&default-tab=result" frameborder="0"></iframe>
-
-<p>想看比較清楚的 code，我也有放在 <a href="https://github.com/ZanaZhong/side-nav.github.io">Github</a></p>
-]]></content>
-      <tags>
-        <tag>html</tag>
-        <tag>css</tag>
-        <tag>javascript</tag>
-        <tag>jquery</tag>
-        <tag>Bootstrap</tag>
-        <tag>Bootstrap-table</tag>
       </tags>
   </entry>
 </search>
