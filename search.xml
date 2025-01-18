@@ -1,176 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>SQL 與 NoSQL：關聯式與非關聯式資料庫的差異與應用</title>
-    <url>/2025/01/18/SQL-%E8%88%87-NoSQL%EF%BC%9A%E9%97%9C%E8%81%AF%E5%BC%8F%E8%88%87%E9%9D%9E%E9%97%9C%E8%81%AF%E5%BC%8F%E8%B3%87%E6%96%99%E5%BA%AB%E7%9A%84%E5%B7%AE%E7%95%B0%E8%88%87%E6%87%89%E7%94%A8/</url>
-    <content><![CDATA[<h3 id="資料的儲存與未來的選擇"><a href="#資料的儲存與未來的選擇" class="headerlink" title="資料的儲存與未來的選擇"></a>資料的儲存與未來的選擇</h3><p>現今的應用程式需要處理大量的資料，而選擇適合的資料庫相當的重要。無論是需要處理 ++結構化資料++ ，還是 ++非結構化++ 或 ++半結構化資料++ ，我們通常面臨著兩種主要資料庫技術的選擇：<strong>關聯式資料庫 (SQL)</strong> 和 <strong>非關聯式資料庫 (NoSQL)</strong> 。</p>
-<p>本篇教學將以簡單明瞭的方式介紹這兩種資料庫的核心概念、結構、適用情境以及它們之間的比較，幫助你快速掌握其特性，並做出正確的選擇。</p>
-<span id="more"></span>
-
-<h2 id="什麼是-SQL-和-NoSQL？"><a href="#什麼是-SQL-和-NoSQL？" class="headerlink" title="什麼是 SQL 和 NoSQL？"></a>什麼是 SQL 和 NoSQL？</h2><table>
-<thead>
-<tr>
-<th><strong>分類</strong></th>
-<th><strong>SQL (關聯式資料庫)</strong></th>
-<th><strong>NoSQL (非關聯式資料庫)</strong></th>
-</tr>
-</thead>
-<tbody><tr>
-<td><strong>定義</strong></td>
-<td>使用結構化查詢語言 (Structured Query Language)進行操作的關聯式資料庫。</td>
-<td>不使用固定結構的表格，支持非結構化或半結構化資料的資料庫。</td>
-</tr>
-<tr>
-<td><strong>資料結構</strong></td>
-<td>嚴格的表格結構 (行與列)，所有資料存儲於表格中，表格之間透過關聯來連結。</td>
-<td>多種資料模型 (鍵值、文件、圖形、列式)，沒有固定結構，靈活性高。</td>
-</tr>
-<tr>
-<td><strong>儲存方式</strong></td>
-<td>表格型資料 (Table-based)。</td>
-<td>文件、鍵值對 (Key-Value)、圖形、文件、列式 (Column-Oriented)資料等多種儲存格式。</td>
-</tr>
-<tr>
-<td><strong>一致性模型</strong></td>
-<td>強一致性 (ACID：原子性、一致性、隔離性、持久性)。</td>
-<td>最終一致性 (BASE：基本可用、軟狀態、最終一致性)，但可根據需求提供強一致性。</td>
-</tr>
-</tbody></table>
-<h2 id="SQL-關聯式資料庫"><a href="#SQL-關聯式資料庫" class="headerlink" title="SQL (關聯式資料庫)"></a>SQL (關聯式資料庫)</h2><ul>
-<li><p><strong>結構化與模式化</strong></p>
-<ul>
-<li>資料存儲在行和列的表格中，表格具有嚴格的結構 (Schema)。</li>
-<li>資料需要事先設計表格結構 (如欄位名稱和資料類型)。</li>
-</ul>
-</li>
-<li><p><strong>支援複雜查詢</strong></p>
-<ul>
-<li>使用 SQL 語言執行強大的查詢與資料操作 (EX: SELECT、JOIN、GROUP BY)。</li>
-<li>非常適合需要跨多個表格進行關聯性查詢的情境。</li>
-</ul>
-</li>
-<li><p><strong>交易支持</strong></p>
-<ul>
-<li>遵循 <strong>ACID 特性</strong>，確保資料在交易過程中始終一致與完整。</li>
-<li>適合金融、銀行、電商等需要高一致性的應用。</li>
-</ul>
-</li>
-</ul>
-<div class="note info"><p><strong>MySQL</strong>、<strong>PostgreSQL</strong>、<strong>Microsoft SQL Server</strong>、<strong>Oracle Database</strong></p>
-</div>
-
-
-<h2 id="NoSQL-非關聯式資料庫"><a href="#NoSQL-非關聯式資料庫" class="headerlink" title="NoSQL (非關聯式資料庫)"></a>NoSQL (非關聯式資料庫)</h2><ul>
-<li><p><strong>靈活的資料結構</strong></p>
-<ul>
-<li>支援多種資料模型：<ul>
-<li><strong>鍵值對模型</strong> (EX: Redis)：用於快速存取資料。</li>
-<li><strong>文件模型</strong> (EX: MongoDB)：儲存 JSON 格式的文件資料。</li>
-<li><strong>圖形模型</strong> (EX: Neo4j)：用於儲存節點和關係的資料。</li>
-<li><strong>列式模型</strong> (EX: Cassandra)：適合大規模分布式運算。</li>
-</ul>
-</li>
-</ul>
-</li>
-<li><p><strong>高可擴展性</strong></p>
-<ul>
-<li>透過分片 (Sharding)和分布式架構，能處理大量資料和高併發需求。</li>
-<li>適合大規模應用程式 (如社交媒體、物聯網)。</li>
-</ul>
-</li>
-<li><p><strong>靈活性與高性能</strong></p>
-<ul>
-<li>資料結構靈活，適合處理快速變化的需求。</li>
-<li>可根據需求選擇一致性 (強一致性或最終一致性)。</li>
-</ul>
-</li>
-</ul>
-<div class="note info"><p><strong>MongoDB</strong> (文件型)、<strong>Redis</strong> (Key-Value)、<strong>Cassandra</strong> (Column-Oriented)、<strong>Neo4j</strong> (圖形型)</p>
-</div>
-
-<h2 id="比較"><a href="#比較" class="headerlink" title="比較"></a>比較</h2><table>
-<thead>
-<tr>
-<th><strong>特性</strong></th>
-<th><strong>SQL</strong></th>
-<th><strong>NoSQL</strong></th>
-</tr>
-</thead>
-<tbody><tr>
-<td><strong>結構化</strong></td>
-<td>嚴格結構，需事先定義 Schema。</td>
-<td>無固定模式，靈活應對結構變化。</td>
-</tr>
-<tr>
-<td><strong>查詢能力</strong></td>
-<td>支持複雜查詢和跨表操作 (JOIN)。</td>
-<td>查詢速度快，通常不支持複雜的 JOIN 操作。</td>
-</tr>
-<tr>
-<td><strong>交易支持</strong></td>
-<td>支持 ACID 交易，確保資料一致性。</td>
-<td>通常不支持 ACID，根據需求支持 BASE 或強一致性。</td>
-</tr>
-<tr>
-<td><strong>擴展性</strong></td>
-<td>垂直擴展 (Scale-Up)，增加硬體資源。</td>
-<td>水平擴展 (Scale-Out)，分片處理大量資料。</td>
-</tr>
-<tr>
-<td><strong>適用場景</strong></td>
-<td>資料結構穩定，要求高一致性，關聯查詢頻繁的應用。</td>
-<td>資料結構多變，大規模、高併發的應用 (如社交網路、流量分析)。</td>
-</tr>
-<tr>
-<td><strong>性能表現</strong></td>
-<td>對<code>小型</code>資料庫表現良好，但大規模資料可能遇到瓶頸。</td>
-<td>針對<code>大規模資料</code>設計，擁有高性能與高擴展性。</td>
-</tr>
-</tbody></table>
-<h2 id="適用情境與選擇指南"><a href="#適用情境與選擇指南" class="headerlink" title="適用情境與選擇指南"></a>適用情境與選擇指南</h2><table>
-<thead>
-<tr>
-<th><strong>需求類型</strong></th>
-<th><strong>建議使用</strong></th>
-<th><strong>原因</strong></th>
-</tr>
-</thead>
-<tbody><tr>
-<td><strong>強一致性</strong>，EX: 金融交易、銀行系統</td>
-<td>SQL</td>
-<td>支持 ACID 特性，確保資料一致性和完整性。</td>
-</tr>
-<tr>
-<td><strong>高併發讀取</strong>，EX: 社交媒體平台</td>
-<td>NoSQL (鍵值或文件型)</td>
-<td>分布式架構能有效處理高併發，Key-Value 適合快速讀寫需求。</td>
-</tr>
-<tr>
-<td><strong>頻繁關聯查詢</strong>，EX: ERP 系統</td>
-<td>SQL</td>
-<td>支持 JOIN 和複雜查詢操作。</td>
-</tr>
-<tr>
-<td><strong>快速變化的資料結構</strong>，如物聯網數據分析</td>
-<td>NoSQL (文件型)</td>
-<td>資料結構靈活，能適應快速變化的需求。</td>
-</tr>
-<tr>
-<td><strong>大規模儲存與數據分片</strong>，如分布式日誌系統</td>
-<td>NoSQL (列式或鍵值型)</td>
-<td>支持水平擴展和分片，適合處理大規模資料。</td>
-</tr>
-</tbody></table>
-<h2 id="是否一定要選擇-NoSQL？"><a href="#是否一定要選擇-NoSQL？" class="headerlink" title="是否一定要選擇 NoSQL？"></a>是否一定要選擇 NoSQL？</h2><p>隨著應用場景的多樣化，NoSQL 的確解決了許多傳統 SQL 資料庫難以處理的問題，但它並不一定適合所有情況。如果你的應用需要強一致性或關聯查詢頻繁，SQL 仍然是最好的選擇。而對於靈活性需求高且需要處理大規模分布式數據的情況，NoSQL 則更具優勢。<br>++重要的是根據你的實際需求選擇最合適的技術，而不是盲目追求新的趨勢或工具++。</p>
-]]></content>
-      <tags>
-        <tag>Database</tag>
-        <tag>SQL</tag>
-        <tag>NoSQL</tag>
-        <tag>資料庫</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>[分享] Website Layout - Sidebar + Flexed</title>
     <url>/2021/04/01/%E5%88%86%E4%BA%AB-Website-Layout-Sidebar-Flexed/</url>
     <content><![CDATA[<blockquote>
@@ -385,47 +215,6 @@
       </tags>
   </entry>
   <entry>
-    <title>[學習] Pyton  try - except</title>
-    <url>/2021/01/31/%E5%AD%B8%E7%BF%92-Pyton-try-except/</url>
-    <content><![CDATA[<blockquote>
-<p>在開發程式的過程中，難免有會遇到錯誤，例如：使用者輸入不正確的資料、網路連線問題或語法上的問題等，如果沒有做好例外處理的機制，程式碼可能因此而中斷，還會讓使用者看到錯誤訊息，對產品使用的觀感不佳，體驗也會大打折扣。因此，在開發的過程中要考慮到錯誤發生時，程式碼要如何做適當的反應。</p>
-</blockquote>
-<span id="more"></span>
-
-<p>Python 在例外處理的機制為：</p>
-<div class="note default"><p>try 執行<br>except 例外<br>else 都沒出錯就執行這區塊<br>finally 任何狀況下都會執行的區塊</p>
-</div>
-
-<p>而錯誤類型可以至<a href="https://docs.python.org/3.6/library/exceptions.html">該網址</a>查看，常見ValueError(ex: int(hi))、ZeroDivisionError(ex: x &#x3D; 2&#x2F;0)、</p>
-<p>先來個完整的架構的範例：</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">func</span>(<span class="params">x, y</span>):</span></span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        result = x / y</span><br><span class="line">    <span class="keyword">except</span> ZeroDivisionError:</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;不能除以零！&quot;</span>)</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;結果是：&quot;</span>, result)</span><br><span class="line">    <span class="keyword">finally</span>:</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;Hi，我一定會執行&quot;</span>)</span><br><span class="line">func(<span class="number">4</span>, <span class="number">2</span>)</span><br><span class="line"></span><br><span class="line">func(<span class="number">2</span>, <span class="number">0</span>)</span><br></pre></td></tr></table></figure>
-
-<p>output：</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">結果是： 2.0</span><br><span class="line">Hi，我一定會執行</span><br><span class="line">--------------</span><br><span class="line">不能除以零！</span><br><span class="line">Hi，我一定會執行</span><br></pre></td></tr></table></figure>
-
-<p>一般來說可以這樣寫：</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">try:</span><br><span class="line">    正常時要執行的程式</span><br><span class="line">except &lt;error type&gt;:</span><br><span class="line">    錯誤時要執行程式</span><br></pre></td></tr></table></figure>
-
-<p>不確定的錯誤類型的話 error type 可以不寫</p>
-<p>example：</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">func</span>(<span class="params">x, y</span>):</span></span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        result = x / y</span><br><span class="line">    <span class="keyword">except</span>:</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;something wrong&quot;</span>)</span><br><span class="line"></span><br><span class="line">func(<span class="number">4</span>, <span class="number">0</span>)</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">something wrong</span><br></pre></td></tr></table></figure>
-
-<p>sys.exc_info()[0] 可以用來取出 except 的錯誤訊息</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> sys</span><br><span class="line"></span><br><span class="line">i = <span class="string">&#x27;o&#x27;</span></span><br><span class="line"><span class="keyword">try</span>:</span><br><span class="line">    result = i / <span class="number">0</span></span><br><span class="line">    <span class="built_in">print</span>(result)</span><br><span class="line"><span class="keyword">except</span>:</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;Unexpected error:&quot;</span>, sys.exc_info()[<span class="number">0</span>])</span><br></pre></td></tr></table></figure>
-
-<p>output：</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Unexpected error: &lt;class &#39;TypeError&#39;&gt;</span><br></pre></td></tr></table></figure>]]></content>
-      <categories>
-        <category>python</category>
-      </categories>
-      <tags>
-        <tag>python</tag>
-        <tag>try-except</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>[學習] Pyton - String</title>
     <url>/2021/01/20/%E5%AD%B8%E7%BF%92-Pyton-String/</url>
     <content><![CDATA[<blockquote>
@@ -465,6 +254,217 @@
       <tags>
         <tag>python</tag>
         <tag>string</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>SQL 與 NoSQL：關聯式與非關聯式資料庫的差異與應用</title>
+    <url>/2025/01/18/SQL-%E8%88%87-NoSQL%EF%BC%9A%E9%97%9C%E8%81%AF%E5%BC%8F%E8%88%87%E9%9D%9E%E9%97%9C%E8%81%AF%E5%BC%8F%E8%B3%87%E6%96%99%E5%BA%AB%E7%9A%84%E5%B7%AE%E7%95%B0%E8%88%87%E6%87%89%E7%94%A8/</url>
+    <content><![CDATA[<h3 id="資料的儲存與未來的選擇"><a href="#資料的儲存與未來的選擇" class="headerlink" title="資料的儲存與未來的選擇"></a>資料的儲存與未來的選擇</h3><p>現今的應用程式需要處理大量的資料，而選擇適合的資料庫相當的重要。無論是需要處理 ++結構化資料++ ，還是 ++非結構化++ 或 ++半結構化資料++ ，我們通常面臨著兩種主要資料庫技術的選擇：<strong>關聯式資料庫 (SQL)</strong> 和 <strong>非關聯式資料庫 (NoSQL)</strong> 。</p>
+<p>本篇教學將以簡單明瞭的方式介紹這兩種資料庫的核心概念、結構、適用情境以及它們之間的比較，幫助你快速掌握其特性，並做出正確的選擇。</p>
+<span id="more"></span>
+
+<h2 id="什麼是-SQL-和-NoSQL？"><a href="#什麼是-SQL-和-NoSQL？" class="headerlink" title="什麼是 SQL 和 NoSQL？"></a>什麼是 SQL 和 NoSQL？</h2><table>
+<thead>
+<tr>
+<th><strong>分類</strong></th>
+<th><strong>SQL (關聯式資料庫)</strong></th>
+<th><strong>NoSQL (非關聯式資料庫)</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>定義</strong></td>
+<td>使用結構化查詢語言 (Structured Query Language)進行操作的關聯式資料庫。</td>
+<td>不使用固定結構的表格，支持非結構化或半結構化資料的資料庫。</td>
+</tr>
+<tr>
+<td><strong>資料結構</strong></td>
+<td>嚴格的表格結構 (行與列)，所有資料存儲於表格中，表格之間透過關聯來連結。</td>
+<td>多種資料模型 (鍵值、文件、圖形、列式)，沒有固定結構，靈活性高。</td>
+</tr>
+<tr>
+<td><strong>儲存方式</strong></td>
+<td>表格型資料 (Table-based)。</td>
+<td>文件、鍵值對 (Key-Value)、圖形、文件、列式 (Column-Oriented)資料等多種儲存格式。</td>
+</tr>
+<tr>
+<td><strong>一致性模型</strong></td>
+<td>強一致性 (ACID：原子性、一致性、隔離性、持久性)。</td>
+<td>最終一致性 (BASE：基本可用、軟狀態、最終一致性)，但可根據需求提供強一致性。</td>
+</tr>
+</tbody></table>
+<h2 id="SQL-關聯式資料庫"><a href="#SQL-關聯式資料庫" class="headerlink" title="SQL (關聯式資料庫)"></a>SQL (關聯式資料庫)</h2><ul>
+<li><p><strong>結構化與模式化</strong></p>
+<ul>
+<li>資料存儲在行和列的表格中，表格具有嚴格的結構 (Schema)。</li>
+<li>資料需要事先設計表格結構 (如欄位名稱和資料類型)。</li>
+</ul>
+</li>
+<li><p><strong>支援複雜查詢</strong></p>
+<ul>
+<li>使用 SQL 語言執行強大的查詢與資料操作 (EX: SELECT、JOIN、GROUP BY)。</li>
+<li>非常適合需要跨多個表格進行關聯性查詢的情境。</li>
+</ul>
+</li>
+<li><p><strong>交易支持</strong></p>
+<ul>
+<li>遵循 <strong>ACID 特性</strong>，確保資料在交易過程中始終一致與完整。</li>
+<li>適合金融、銀行、電商等需要高一致性的應用。</li>
+</ul>
+</li>
+</ul>
+<div class="note info"><p><strong>MySQL</strong>、<strong>PostgreSQL</strong>、<strong>Microsoft SQL Server</strong>、<strong>Oracle Database</strong></p>
+</div>
+
+
+<h2 id="NoSQL-非關聯式資料庫"><a href="#NoSQL-非關聯式資料庫" class="headerlink" title="NoSQL (非關聯式資料庫)"></a>NoSQL (非關聯式資料庫)</h2><ul>
+<li><p><strong>靈活的資料結構</strong></p>
+<ul>
+<li>支援多種資料模型：<ul>
+<li><strong>鍵值對模型</strong> (EX: Redis)：用於快速存取資料。</li>
+<li><strong>文件模型</strong> (EX: MongoDB)：儲存 JSON 格式的文件資料。</li>
+<li><strong>圖形模型</strong> (EX: Neo4j)：用於儲存節點和關係的資料。</li>
+<li><strong>列式模型</strong> (EX: Cassandra)：適合大規模分布式運算。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p><strong>高可擴展性</strong></p>
+<ul>
+<li>透過分片 (Sharding)和分布式架構，能處理大量資料和高併發需求。</li>
+<li>適合大規模應用程式 (如社交媒體、物聯網)。</li>
+</ul>
+</li>
+<li><p><strong>靈活性與高性能</strong></p>
+<ul>
+<li>資料結構靈活，適合處理快速變化的需求。</li>
+<li>可根據需求選擇一致性 (強一致性或最終一致性)。</li>
+</ul>
+</li>
+</ul>
+<div class="note info"><p><strong>MongoDB</strong> (文件型)、<strong>Redis</strong> (Key-Value)、<strong>Cassandra</strong> (Column-Oriented)、<strong>Neo4j</strong> (圖形型)</p>
+</div>
+
+<h2 id="比較"><a href="#比較" class="headerlink" title="比較"></a>比較</h2><table>
+<thead>
+<tr>
+<th><strong>特性</strong></th>
+<th><strong>SQL</strong></th>
+<th><strong>NoSQL</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>結構化</strong></td>
+<td>嚴格結構，需事先定義 Schema。</td>
+<td>無固定模式，靈活應對結構變化。</td>
+</tr>
+<tr>
+<td><strong>查詢能力</strong></td>
+<td>支持複雜查詢和跨表操作 (JOIN)。</td>
+<td>查詢速度快，通常不支持複雜的 JOIN 操作。</td>
+</tr>
+<tr>
+<td><strong>交易支持</strong></td>
+<td>支持 ACID 交易，確保資料一致性。</td>
+<td>通常不支持 ACID，根據需求支持 BASE 或強一致性。</td>
+</tr>
+<tr>
+<td><strong>擴展性</strong></td>
+<td>垂直擴展 (Scale-Up)，增加硬體資源。</td>
+<td>水平擴展 (Scale-Out)，分片處理大量資料。</td>
+</tr>
+<tr>
+<td><strong>適用場景</strong></td>
+<td>資料結構穩定，要求高一致性，關聯查詢頻繁的應用。</td>
+<td>資料結構多變，大規模、高併發的應用 (如社交網路、流量分析)。</td>
+</tr>
+<tr>
+<td><strong>性能表現</strong></td>
+<td>對<code>小型</code>資料庫表現良好，但大規模資料可能遇到瓶頸。</td>
+<td>針對<code>大規模資料</code>設計，擁有高性能與高擴展性。</td>
+</tr>
+</tbody></table>
+<h2 id="適用情境與選擇指南"><a href="#適用情境與選擇指南" class="headerlink" title="適用情境與選擇指南"></a>適用情境與選擇指南</h2><table>
+<thead>
+<tr>
+<th><strong>需求類型</strong></th>
+<th><strong>建議使用</strong></th>
+<th><strong>原因</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>強一致性</strong>，EX: 金融交易、銀行系統</td>
+<td>SQL</td>
+<td>支持 ACID 特性，確保資料一致性和完整性。</td>
+</tr>
+<tr>
+<td><strong>高併發讀取</strong>，EX: 社交媒體平台</td>
+<td>NoSQL (鍵值或文件型)</td>
+<td>分布式架構能有效處理高併發，Key-Value 適合快速讀寫需求。</td>
+</tr>
+<tr>
+<td><strong>頻繁關聯查詢</strong>，EX: ERP 系統</td>
+<td>SQL</td>
+<td>支持 JOIN 和複雜查詢操作。</td>
+</tr>
+<tr>
+<td><strong>快速變化的資料結構</strong>，如物聯網數據分析</td>
+<td>NoSQL (文件型)</td>
+<td>資料結構靈活，能適應快速變化的需求。</td>
+</tr>
+<tr>
+<td><strong>大規模儲存與數據分片</strong>，如分布式日誌系統</td>
+<td>NoSQL (列式或鍵值型)</td>
+<td>支持水平擴展和分片，適合處理大規模資料。</td>
+</tr>
+</tbody></table>
+<h2 id="是否一定要選擇-NoSQL？"><a href="#是否一定要選擇-NoSQL？" class="headerlink" title="是否一定要選擇 NoSQL？"></a>是否一定要選擇 NoSQL？</h2><p>隨著應用場景的多樣化，NoSQL 的確解決了許多傳統 SQL 資料庫難以處理的問題，但它並不一定適合所有情況。如果你的應用需要強一致性或關聯查詢頻繁，SQL 仍然是最好的選擇。而對於靈活性需求高且需要處理大規模分布式數據的情況，NoSQL 則更具優勢。<br>++重要的是根據你的實際需求選擇最合適的技術，而不是盲目追求新的趨勢或工具++。</p>
+]]></content>
+      <tags>
+        <tag>Database</tag>
+        <tag>SQL</tag>
+        <tag>NoSQL</tag>
+        <tag>資料庫</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>[學習] Pyton  try - except</title>
+    <url>/2021/01/31/%E5%AD%B8%E7%BF%92-Pyton-try-except/</url>
+    <content><![CDATA[<blockquote>
+<p>在開發程式的過程中，難免有會遇到錯誤，例如：使用者輸入不正確的資料、網路連線問題或語法上的問題等，如果沒有做好例外處理的機制，程式碼可能因此而中斷，還會讓使用者看到錯誤訊息，對產品使用的觀感不佳，體驗也會大打折扣。因此，在開發的過程中要考慮到錯誤發生時，程式碼要如何做適當的反應。</p>
+</blockquote>
+<span id="more"></span>
+
+<p>Python 在例外處理的機制為：</p>
+<div class="note default"><p>try 執行<br>except 例外<br>else 都沒出錯就執行這區塊<br>finally 任何狀況下都會執行的區塊</p>
+</div>
+
+<p>而錯誤類型可以至<a href="https://docs.python.org/3.6/library/exceptions.html">該網址</a>查看，常見ValueError(ex: int(hi))、ZeroDivisionError(ex: x &#x3D; 2&#x2F;0)、</p>
+<p>先來個完整的架構的範例：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">func</span>(<span class="params">x, y</span>):</span></span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        result = x / y</span><br><span class="line">    <span class="keyword">except</span> ZeroDivisionError:</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;不能除以零！&quot;</span>)</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;結果是：&quot;</span>, result)</span><br><span class="line">    <span class="keyword">finally</span>:</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;Hi，我一定會執行&quot;</span>)</span><br><span class="line">func(<span class="number">4</span>, <span class="number">2</span>)</span><br><span class="line"></span><br><span class="line">func(<span class="number">2</span>, <span class="number">0</span>)</span><br></pre></td></tr></table></figure>
+
+<p>output：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">結果是： 2.0</span><br><span class="line">Hi，我一定會執行</span><br><span class="line">--------------</span><br><span class="line">不能除以零！</span><br><span class="line">Hi，我一定會執行</span><br></pre></td></tr></table></figure>
+
+<p>一般來說可以這樣寫：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">try:</span><br><span class="line">    正常時要執行的程式</span><br><span class="line">except &lt;error type&gt;:</span><br><span class="line">    錯誤時要執行程式</span><br></pre></td></tr></table></figure>
+
+<p>不確定的錯誤類型的話 error type 可以不寫</p>
+<p>example：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">func</span>(<span class="params">x, y</span>):</span></span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        result = x / y</span><br><span class="line">    <span class="keyword">except</span>:</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;something wrong&quot;</span>)</span><br><span class="line"></span><br><span class="line">func(<span class="number">4</span>, <span class="number">0</span>)</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">something wrong</span><br></pre></td></tr></table></figure>
+
+<p>sys.exc_info()[0] 可以用來取出 except 的錯誤訊息</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> sys</span><br><span class="line"></span><br><span class="line">i = <span class="string">&#x27;o&#x27;</span></span><br><span class="line"><span class="keyword">try</span>:</span><br><span class="line">    result = i / <span class="number">0</span></span><br><span class="line">    <span class="built_in">print</span>(result)</span><br><span class="line"><span class="keyword">except</span>:</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;Unexpected error:&quot;</span>, sys.exc_info()[<span class="number">0</span>])</span><br></pre></td></tr></table></figure>
+
+<p>output：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Unexpected error: &lt;class &#39;TypeError&#39;&gt;</span><br></pre></td></tr></table></figure>]]></content>
+      <categories>
+        <category>python</category>
+      </categories>
+      <tags>
+        <tag>python</tag>
+        <tag>try-except</tag>
       </tags>
   </entry>
   <entry>
@@ -945,39 +945,6 @@
       </tags>
   </entry>
   <entry>
-    <title>[筆記] Check.io - Date and Time Converter</title>
-    <url>/2021/04/25/%E7%AD%86%E8%A8%98-Check-io-Date-and-Time-Converter/</url>
-    <content><![CDATA[<blockquote>
-<p><a href="https://py.checkio.org/en/mission/date-and-time-converter/">check.io</a> 上的題目：將字串轉成規定的格式<br>此系列文章主要是自己在解題時覺得有趣的題目，記錄下來讓自己以後方便複習，有興趣的人可以參考看看</p>
-</blockquote>
-<span id="more"></span>
-
-<h2 id="先來看看題目"><a href="#先來看看題目" class="headerlink" title="先來看看題目"></a>先來看看題目</h2><p><img src="https://i.imgur.com/1IHEoPk.png"></p>
-<h2 id="解題步驟"><a href="#解題步驟" class="headerlink" title="解題步驟"></a>解題步驟</h2><h2 id=""><a href="#" class="headerlink" title="- "></a>- </h2><p>strptime<br>strftime<br>format</p>
-<p><a href="https://www.geeksforgeeks.org/python-strftime-function/"><img src="https://i.imgur.com/cKcNfZx.png" alt="參考來源"></a></p>
-<h2 id="解題"><a href="#解題" class="headerlink" title="解題"></a>解題</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> datetime</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">date_time</span>(<span class="params">time: <span class="built_in">str</span></span>) -&gt; <span class="built_in">str</span>:</span></span><br><span class="line">    <span class="comment">#convert string to datetime</span></span><br><span class="line">    date_time = datetime.datetime.strptime(time, <span class="string">&quot;%d.%m.%Y %H:%M&quot;</span>)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> date_time.strftime(<span class="string">f&quot;<span class="subst">&#123;date_time.day&#125;</span> %B %Y year <span class="subst">&#123;date_time.hour&#125;</span> hour<span class="subst">&#123;<span class="string">&#x27;s&#x27;</span> <span class="keyword">if</span> date_time.hour != <span class="number">1</span> <span class="keyword">else</span> <span class="string">&#x27;&#x27;</span>&#125;</span> <span class="subst">&#123;date_time.minute&#125;</span> minute<span class="subst">&#123;<span class="string">&#x27;s&#x27;</span> <span class="keyword">if</span> date_time.minute != <span class="number">1</span> <span class="keyword">else</span> <span class="string">&#x27;&#x27;</span>&#125;</span>&quot;</span>)</span><br></pre></td></tr></table></figure>
-
-<p>分享一個查到的不錯的方法</p>
-<pre><code class="python">import datetime
-
-def date_time(time: str) -&gt; str:
-    #convert string to datetime
-    date_time = datetime.datetime.strptime(time, &quot;%d.%m.%Y %H:%M&quot;)
-
-    return date_time.strftime(f&quot;&#123;date_time.day&#125; %B %Y year &#123;date_time.hour&#125; &#123;[&#39;hours&#39;, &#39;hour&#39;][date_time.hour == 1]&#125; &#123;date_time.minute&#125; &#123;[&#39;minutes&#39;, &#39;minute&#39;][date_time.minute == 1]&#125;&quot;)
-</code></pre>
-]]></content>
-      <categories>
-        <category>Check.io</category>
-        <category>python</category>
-      </categories>
-      <tags>
-        <tag>Check.io</tag>
-        <tag>python</tag>
-        <tag>datetime</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>[筆記] Check.io - Acceptable Password II</title>
     <url>/2021/05/01/%E7%AD%86%E8%A8%98-Check-io-Acceptable-Password-II/</url>
     <content><![CDATA[<blockquote>
@@ -1012,6 +979,39 @@ def date_time(time: str) -&gt; str:
       </tags>
   </entry>
   <entry>
+    <title>[筆記] Check.io - Date and Time Converter</title>
+    <url>/2021/04/25/%E7%AD%86%E8%A8%98-Check-io-Date-and-Time-Converter/</url>
+    <content><![CDATA[<blockquote>
+<p><a href="https://py.checkio.org/en/mission/date-and-time-converter/">check.io</a> 上的題目：將字串轉成規定的格式<br>此系列文章主要是自己在解題時覺得有趣的題目，記錄下來讓自己以後方便複習，有興趣的人可以參考看看</p>
+</blockquote>
+<span id="more"></span>
+
+<h2 id="先來看看題目"><a href="#先來看看題目" class="headerlink" title="先來看看題目"></a>先來看看題目</h2><p><img src="https://i.imgur.com/1IHEoPk.png"></p>
+<h2 id="解題步驟"><a href="#解題步驟" class="headerlink" title="解題步驟"></a>解題步驟</h2><h2 id=""><a href="#" class="headerlink" title="- "></a>- </h2><p>strptime<br>strftime<br>format</p>
+<p><a href="https://www.geeksforgeeks.org/python-strftime-function/"><img src="https://i.imgur.com/cKcNfZx.png" alt="參考來源"></a></p>
+<h2 id="解題"><a href="#解題" class="headerlink" title="解題"></a>解題</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> datetime</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">date_time</span>(<span class="params">time: <span class="built_in">str</span></span>) -&gt; <span class="built_in">str</span>:</span></span><br><span class="line">    <span class="comment">#convert string to datetime</span></span><br><span class="line">    date_time = datetime.datetime.strptime(time, <span class="string">&quot;%d.%m.%Y %H:%M&quot;</span>)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> date_time.strftime(<span class="string">f&quot;<span class="subst">&#123;date_time.day&#125;</span> %B %Y year <span class="subst">&#123;date_time.hour&#125;</span> hour<span class="subst">&#123;<span class="string">&#x27;s&#x27;</span> <span class="keyword">if</span> date_time.hour != <span class="number">1</span> <span class="keyword">else</span> <span class="string">&#x27;&#x27;</span>&#125;</span> <span class="subst">&#123;date_time.minute&#125;</span> minute<span class="subst">&#123;<span class="string">&#x27;s&#x27;</span> <span class="keyword">if</span> date_time.minute != <span class="number">1</span> <span class="keyword">else</span> <span class="string">&#x27;&#x27;</span>&#125;</span>&quot;</span>)</span><br></pre></td></tr></table></figure>
+
+<p>分享一個查到的不錯的方法</p>
+<pre><code class="python">import datetime
+
+def date_time(time: str) -&gt; str:
+    #convert string to datetime
+    date_time = datetime.datetime.strptime(time, &quot;%d.%m.%Y %H:%M&quot;)
+
+    return date_time.strftime(f&quot;&#123;date_time.day&#125; %B %Y year &#123;date_time.hour&#125; &#123;[&#39;hours&#39;, &#39;hour&#39;][date_time.hour == 1]&#125; &#123;date_time.minute&#125; &#123;[&#39;minutes&#39;, &#39;minute&#39;][date_time.minute == 1]&#125;&quot;)
+</code></pre>
+]]></content>
+      <categories>
+        <category>Check.io</category>
+        <category>python</category>
+      </categories>
+      <tags>
+        <tag>Check.io</tag>
+        <tag>python</tag>
+        <tag>datetime</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>[筆記] Check.io - Pawn Brotherhood</title>
     <url>/2021/04/25/%E7%AD%86%E8%A8%98-Check-io-Pawn-Brotherhood/</url>
     <content><![CDATA[<blockquote>
@@ -1028,6 +1028,63 @@ def date_time(time: str) -&gt; str:
         <tag>python</tag>
         <tag>chr</tag>
         <tag>ord</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>[筆記] GitHub pages + Hexo 搭建 Blog (Mac)</title>
+    <url>/2020/09/11/%E7%AD%86%E8%A8%98-GitHub-pages-Hexo-%E6%90%AD%E5%BB%BA-Blog-Mac/</url>
+    <content><![CDATA[<blockquote>
+<p>自己在建置的時候查了很多資料，整理完希望幫助到有需要的人<br>完整手把手教學  GitHub pages + Hexo 搭建</p>
+</blockquote>
+<span id="more"></span>
+
+<h3 id="環境建置"><a href="#環境建置" class="headerlink" title="環境建置"></a>環境建置</h3><ul>
+<li>安裝 <a href="https://nodejs.org/en/">Node.js</a><figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line">brew install node</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h3 id="安裝-Hexo"><a href="#安裝-Hexo" class="headerlink" title="安裝 Hexo"></a>安裝 Hexo</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">npm install -g hexo-cli</span><br></pre></td></tr></table></figure>
+
+<h3 id="初始化-Hexo"><a href="#初始化-Hexo" class="headerlink" title="初始化 Hexo"></a>初始化 Hexo</h3><p>安裝完 Hexo 後，執行下方指令，Hexo 就會在指定資料夾 <folder name> 中新建所需要的的檔案。</p>
+<figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line">hexo init &lt;folder name&gt;</span><br><span class="line"><span class="built_in">cd</span> &lt;folder name&gt;</span><br><span class="line">npm install</span><br><span class="line">//安裝 git 部署套件</span><br><span class="line">npm install hexo-deployer-git --save  </span><br></pre></td></tr></table></figure>
+
+<h3 id="啟動-Hexo"><a href="#啟動-Hexo" class="headerlink" title="啟動 Hexo"></a>啟動 Hexo</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">hexo g</span><br><span class="line">hexo s</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>指令介紹<br>hexo generate (hexo g) 產生靜態檔案，會在目錄下產生public 資料夾<br>hexo server (hexo s) 預覽、啟動伺服器，預設 <a href="http://localhost:4000/">http://localhost:4000/</a><br>hexo deploy (hexo d) 部署網站 (EX: github, heroku … ）</p>
+</li>
+<li><p>常用組合<br>hexo d -g # 產生靜態檔後部署<br>hexo s -g # 產生靜態檔後預覽</p>
+</li>
+</ul>
+<h3 id="網站配置-config-yml"><a href="#網站配置-config-yml" class="headerlink" title="網站配置 _config.yml"></a>網站配置 _config.yml</h3><p>5 ~ 12 行</p>
+<figure class="highlight yml"><table><tr><td class="code"><pre><span class="line"><span class="comment"># Site</span></span><br><span class="line"><span class="attr">title:</span> </span><br><span class="line"><span class="attr">subtitle:</span> <span class="string">&#x27;&#x27;</span></span><br><span class="line"><span class="string">//</span> <span class="string">內容描述(給搜尋引擎看的)</span></span><br><span class="line"><span class="attr">description:</span> <span class="string">&#x27;&#x27;</span></span><br><span class="line"><span class="attr">keywords:</span> </span><br><span class="line"><span class="attr">author:</span> </span><br><span class="line"><span class="attr">language:</span> <span class="string">en</span></span><br><span class="line"><span class="attr">timezone:</span> <span class="string">&#x27;&#x27;</span></span><br></pre></td></tr></table></figure>
+<h3 id="將-Hexo-配置到-GitHub"><a href="#將-Hexo-配置到-GitHub" class="headerlink" title="將 Hexo 配置到 GitHub"></a>將 Hexo 配置到 GitHub</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">url: https:&#x2F;&#x2F;&lt;username&gt;.github.io&#x2F;</span><br><span class="line"></span><br><span class="line">deploy:</span><br><span class="line">  type: git</span><br><span class="line">  repo: https:&#x2F;&#x2F;github.com&#x2F;&lt;username&gt;&#x2F;&lt;username&gt;&lt;&#x2F;username&gt;.github.io.git</span><br><span class="line">  branch: master</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>若沒有 GitHub 帳號<ol>
+<li>至 <a href="https://github.com/">GitHub</a> 申請</li>
+<li>新建 Repositories 取名為 &lt;blogname.github.io&gt;.github.io</li>
+</ol>
+</li>
+</ul>
+<h3 id="更換主題"><a href="#更換主題" class="headerlink" title="更換主題"></a>更換主題</h3><p>可至 <a href="https://hexo.io/themes/">Themes</a> 挑選，據說最多人用的是 <a href="https://theme-next.org/">NexT</a></p>
+<ul>
+<li><p>安裝 NexT</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">git clone https:&#x2F;&#x2F;github.com&#x2F;theme-next&#x2F;hexo-theme-next.git themes&#x2F;next</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>修改 _config.yml</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">theme: next ( default landscape )</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>重新啟動 server</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">hexo server</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h3 id="新增文章"><a href="#新增文章" class="headerlink" title="新增文章"></a>新增文章</h3><p>文章會以 Markdown 格式來撰寫，並且檔案存放在 <folder name>&#x2F;source&#x2F;_posts&#x2F;  </p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">hexo new &quot;&lt;title&gt;&quot;</span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <tags>
+        <tag>GitHub</tag>
+        <tag>Hexo</tag>
+        <tag>GitHub pages</tag>
+        <tag>Blog</tag>
       </tags>
   </entry>
   <entry>
@@ -1154,63 +1211,6 @@ def date_time(time: str) -&gt; str:
         <tag>GitHub pages</tag>
         <tag>Blog</tag>
         <tag>Mac</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>[筆記] GitHub pages + Hexo 搭建 Blog (Mac)</title>
-    <url>/2020/09/11/%E7%AD%86%E8%A8%98-GitHub-pages-Hexo-%E6%90%AD%E5%BB%BA-Blog-Mac/</url>
-    <content><![CDATA[<blockquote>
-<p>自己在建置的時候查了很多資料，整理完希望幫助到有需要的人<br>完整手把手教學  GitHub pages + Hexo 搭建</p>
-</blockquote>
-<span id="more"></span>
-
-<h3 id="環境建置"><a href="#環境建置" class="headerlink" title="環境建置"></a>環境建置</h3><ul>
-<li>安裝 <a href="https://nodejs.org/en/">Node.js</a><figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line">brew install node</span><br></pre></td></tr></table></figure></li>
-</ul>
-<h3 id="安裝-Hexo"><a href="#安裝-Hexo" class="headerlink" title="安裝 Hexo"></a>安裝 Hexo</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">npm install -g hexo-cli</span><br></pre></td></tr></table></figure>
-
-<h3 id="初始化-Hexo"><a href="#初始化-Hexo" class="headerlink" title="初始化 Hexo"></a>初始化 Hexo</h3><p>安裝完 Hexo 後，執行下方指令，Hexo 就會在指定資料夾 <folder name> 中新建所需要的的檔案。</p>
-<figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line">hexo init &lt;folder name&gt;</span><br><span class="line"><span class="built_in">cd</span> &lt;folder name&gt;</span><br><span class="line">npm install</span><br><span class="line">//安裝 git 部署套件</span><br><span class="line">npm install hexo-deployer-git --save  </span><br></pre></td></tr></table></figure>
-
-<h3 id="啟動-Hexo"><a href="#啟動-Hexo" class="headerlink" title="啟動 Hexo"></a>啟動 Hexo</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">hexo g</span><br><span class="line">hexo s</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li><p>指令介紹<br>hexo generate (hexo g) 產生靜態檔案，會在目錄下產生public 資料夾<br>hexo server (hexo s) 預覽、啟動伺服器，預設 <a href="http://localhost:4000/">http://localhost:4000/</a><br>hexo deploy (hexo d) 部署網站 (EX: github, heroku … ）</p>
-</li>
-<li><p>常用組合<br>hexo d -g # 產生靜態檔後部署<br>hexo s -g # 產生靜態檔後預覽</p>
-</li>
-</ul>
-<h3 id="網站配置-config-yml"><a href="#網站配置-config-yml" class="headerlink" title="網站配置 _config.yml"></a>網站配置 _config.yml</h3><p>5 ~ 12 行</p>
-<figure class="highlight yml"><table><tr><td class="code"><pre><span class="line"><span class="comment"># Site</span></span><br><span class="line"><span class="attr">title:</span> </span><br><span class="line"><span class="attr">subtitle:</span> <span class="string">&#x27;&#x27;</span></span><br><span class="line"><span class="string">//</span> <span class="string">內容描述(給搜尋引擎看的)</span></span><br><span class="line"><span class="attr">description:</span> <span class="string">&#x27;&#x27;</span></span><br><span class="line"><span class="attr">keywords:</span> </span><br><span class="line"><span class="attr">author:</span> </span><br><span class="line"><span class="attr">language:</span> <span class="string">en</span></span><br><span class="line"><span class="attr">timezone:</span> <span class="string">&#x27;&#x27;</span></span><br></pre></td></tr></table></figure>
-<h3 id="將-Hexo-配置到-GitHub"><a href="#將-Hexo-配置到-GitHub" class="headerlink" title="將 Hexo 配置到 GitHub"></a>將 Hexo 配置到 GitHub</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">url: https:&#x2F;&#x2F;&lt;username&gt;.github.io&#x2F;</span><br><span class="line"></span><br><span class="line">deploy:</span><br><span class="line">  type: git</span><br><span class="line">  repo: https:&#x2F;&#x2F;github.com&#x2F;&lt;username&gt;&#x2F;&lt;username&gt;&lt;&#x2F;username&gt;.github.io.git</span><br><span class="line">  branch: master</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>若沒有 GitHub 帳號<ol>
-<li>至 <a href="https://github.com/">GitHub</a> 申請</li>
-<li>新建 Repositories 取名為 &lt;blogname.github.io&gt;.github.io</li>
-</ol>
-</li>
-</ul>
-<h3 id="更換主題"><a href="#更換主題" class="headerlink" title="更換主題"></a>更換主題</h3><p>可至 <a href="https://hexo.io/themes/">Themes</a> 挑選，據說最多人用的是 <a href="https://theme-next.org/">NexT</a></p>
-<ul>
-<li><p>安裝 NexT</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">git clone https:&#x2F;&#x2F;github.com&#x2F;theme-next&#x2F;hexo-theme-next.git themes&#x2F;next</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>修改 _config.yml</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">theme: next ( default landscape )</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>重新啟動 server</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">hexo server</span><br></pre></td></tr></table></figure></li>
-</ul>
-<h3 id="新增文章"><a href="#新增文章" class="headerlink" title="新增文章"></a>新增文章</h3><p>文章會以 Markdown 格式來撰寫，並且檔案存放在 <folder name>&#x2F;source&#x2F;_posts&#x2F;  </p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">hexo new &quot;&lt;title&gt;&quot;</span><br></pre></td></tr></table></figure>
-
-]]></content>
-      <tags>
-        <tag>GitHub</tag>
-        <tag>Hexo</tag>
-        <tag>GitHub pages</tag>
-        <tag>Blog</tag>
       </tags>
   </entry>
   <entry>
