@@ -6,7 +6,7 @@
   <link href="https://zanazhong.github.io/atom.xml" rel="self"/>
   
   <link href="https://zanazhong.github.io/"/>
-  <updated>2025-01-17T08:46:15.233Z</updated>
+  <updated>2025-01-18T12:57:07.154Z</updated>
   <id>https://zanazhong.github.io/</id>
   
   <author>
@@ -15,6 +15,32 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>SQL 與 NoSQL：關聯式與非關聯式資料庫的差異與應用</title>
+    <link href="https://zanazhong.github.io/2025/01/18/SQL-%E8%88%87-NoSQL%EF%BC%9A%E9%97%9C%E8%81%AF%E5%BC%8F%E8%88%87%E9%9D%9E%E9%97%9C%E8%81%AF%E5%BC%8F%E8%B3%87%E6%96%99%E5%BA%AB%E7%9A%84%E5%B7%AE%E7%95%B0%E8%88%87%E6%87%89%E7%94%A8/"/>
+    <id>https://zanazhong.github.io/2025/01/18/SQL-%E8%88%87-NoSQL%EF%BC%9A%E9%97%9C%E8%81%AF%E5%BC%8F%E8%88%87%E9%9D%9E%E9%97%9C%E8%81%AF%E5%BC%8F%E8%B3%87%E6%96%99%E5%BA%AB%E7%9A%84%E5%B7%AE%E7%95%B0%E8%88%87%E6%87%89%E7%94%A8/</id>
+    <published>2025-01-18T12:52:41.000Z</published>
+    <updated>2025-01-18T12:57:07.154Z</updated>
+    
+    <content type="html"><![CDATA[<h3 id="資料的儲存與未來的選擇"><a href="#資料的儲存與未來的選擇" class="headerlink" title="資料的儲存與未來的選擇"></a>資料的儲存與未來的選擇</h3><p>現今的應用程式需要處理大量的資料，而選擇適合的資料庫相當的重要。無論是需要處理++結構化資料++，還是++非結構化++或++半結構化資料++，我們通常面臨著兩種主要資料庫技術的選擇：<strong>關聯式資料庫 (SQL)</strong> 和 **非關聯式資料庫 (NoSQL)**。</p><p>本篇教學將以簡單明瞭的方式介紹這兩種資料庫的核心概念、結構、適用情境以及它們之間的比較，幫助你快速掌握其特性，並做出正確的選擇。</p><span id="more"></span><h2 id="什麼是-SQL-和-NoSQL？"><a href="#什麼是-SQL-和-NoSQL？" class="headerlink" title="什麼是 SQL 和 NoSQL？"></a>什麼是 SQL 和 NoSQL？</h2><table><thead><tr><th><strong>分類</strong></th><th><strong>SQL (關聯式資料庫)</strong></th><th><strong>NoSQL (非關聯式資料庫)</strong></th></tr></thead><tbody><tr><td><strong>定義</strong></td><td>使用結構化查詢語言 (Structured Query Language)進行操作的關聯式資料庫。</td><td>不使用固定結構的表格，支持非結構化或半結構化資料的資料庫。</td></tr><tr><td><strong>資料結構</strong></td><td>嚴格的表格結構 (行與列)，所有資料存儲於表格中，表格之間透過關聯來連結。</td><td>多種資料模型 (鍵值、文件、圖形、列式)，沒有固定結構，靈活性高。</td></tr><tr><td><strong>儲存方式</strong></td><td>表格型資料 (Table-based)。</td><td>文件、鍵值對 (Key-Value)、圖形、文件、列式 (Column-Oriented)資料等多種儲存格式。</td></tr><tr><td><strong>一致性模型</strong></td><td>強一致性 (ACID：原子性、一致性、隔離性、持久性)。</td><td>最終一致性 (BASE：基本可用、軟狀態、最終一致性)，但可根據需求提供強一致性。</td></tr></tbody></table><h2 id="SQL-關聯式資料庫"><a href="#SQL-關聯式資料庫" class="headerlink" title="SQL (關聯式資料庫)"></a>SQL (關聯式資料庫)</h2><ul><li><p><strong>結構化與模式化</strong></p><ul><li>資料存儲在行和列的表格中，表格具有嚴格的結構 (Schema)。</li><li>資料需要事先設計表格結構 (如欄位名稱和資料類型)。</li></ul></li><li><p><strong>支援複雜查詢</strong></p><ul><li>使用 SQL 語言執行強大的查詢與資料操作 (EX: SELECT、JOIN、GROUP BY)。</li><li>非常適合需要跨多個表格進行關聯性查詢的情境。</li></ul></li><li><p><strong>交易支持</strong></p><ul><li>遵循 <strong>ACID 特性</strong>，確保資料在交易過程中始終一致與完整。</li><li>適合金融、銀行、電商等需要高一致性的應用。</li></ul></li></ul><div class="note info"><p><strong>MySQL</strong>、<strong>PostgreSQL</strong>、<strong>Microsoft SQL Server</strong>、<strong>Oracle Database</strong></p></div><h2 id="NoSQL-非關聯式資料庫"><a href="#NoSQL-非關聯式資料庫" class="headerlink" title="NoSQL (非關聯式資料庫)"></a>NoSQL (非關聯式資料庫)</h2><ul><li><p><strong>靈活的資料結構</strong></p><ul><li>支援多種資料模型：<ul><li><strong>鍵值對模型</strong> (EX: Redis)：用於快速存取資料。</li><li><strong>文件模型</strong> (EX: MongoDB)：儲存 JSON 格式的文件資料。</li><li><strong>圖形模型</strong> (EX: Neo4j)：用於儲存節點和關係的資料。</li><li><strong>列式模型</strong> (EX: Cassandra)：適合大規模分布式運算。</li></ul></li></ul></li><li><p><strong>高可擴展性</strong></p><ul><li>透過分片 (Sharding)和分布式架構，能處理大量資料和高併發需求。</li><li>適合大規模應用程式 (如社交媒體、物聯網)。</li></ul></li><li><p><strong>靈活性與高性能</strong></p><ul><li>資料結構靈活，適合處理快速變化的需求。</li><li>可根據需求選擇一致性 (強一致性或最終一致性)。</li></ul></li></ul><div class="note info"><p><strong>MongoDB</strong> (文件型)、<strong>Redis</strong> (Key-Value)、<strong>Cassandra</strong> (Column-Oriented)、<strong>Neo4j</strong> (圖形型)</p></div><h2 id="比較"><a href="#比較" class="headerlink" title="比較"></a>比較</h2><table><thead><tr><th><strong>特性</strong></th><th><strong>SQL</strong></th><th><strong>NoSQL</strong></th></tr></thead><tbody><tr><td><strong>結構化</strong></td><td>嚴格結構，需事先定義 Schema。</td><td>無固定模式，靈活應對結構變化。</td></tr><tr><td><strong>查詢能力</strong></td><td>支持複雜查詢和跨表操作 (JOIN)。</td><td>查詢速度快，通常不支持複雜的 JOIN 操作。</td></tr><tr><td><strong>交易支持</strong></td><td>支持 ACID 交易，確保資料一致性。</td><td>通常不支持 ACID，根據需求支持 BASE 或強一致性。</td></tr><tr><td><strong>擴展性</strong></td><td>垂直擴展 (Scale-Up)，增加硬體資源。</td><td>水平擴展 (Scale-Out)，分片處理大量資料。</td></tr><tr><td><strong>適用場景</strong></td><td>資料結構穩定，要求高一致性，關聯查詢頻繁的應用。</td><td>資料結構多變，大規模、高併發的應用 (如社交網路、流量分析)。</td></tr><tr><td><strong>性能表現</strong></td><td>對<code>小型</code>資料庫表現良好，但大規模資料可能遇到瓶頸。</td><td>針對<code>大規模資料</code>設計，擁有高性能與高擴展性。</td></tr></tbody></table><h2 id="適用情境與選擇指南"><a href="#適用情境與選擇指南" class="headerlink" title="適用情境與選擇指南"></a>適用情境與選擇指南</h2><table><thead><tr><th><strong>需求類型</strong></th><th><strong>建議使用</strong></th><th><strong>原因</strong></th></tr></thead><tbody><tr><td><strong>強一致性</strong>，EX: 金融交易、銀行系統</td><td>SQL</td><td>支持 ACID 特性，確保資料一致性和完整性。</td></tr><tr><td><strong>高併發讀取</strong>，EX: 社交媒體平台</td><td>NoSQL (鍵值或文件型)</td><td>分布式架構能有效處理高併發，Key-Value 適合快速讀寫需求。</td></tr><tr><td><strong>頻繁關聯查詢</strong>，EX: ERP 系統</td><td>SQL</td><td>支持 JOIN 和複雜查詢操作。</td></tr><tr><td><strong>快速變化的資料結構</strong>，如物聯網數據分析</td><td>NoSQL (文件型)</td><td>資料結構靈活，能適應快速變化的需求。</td></tr><tr><td><strong>大規模儲存與數據分片</strong>，如分布式日誌系統</td><td>NoSQL (列式或鍵值型)</td><td>支持水平擴展和分片，適合處理大規模資料。</td></tr></tbody></table><h2 id="是否一定要選擇-NoSQL？"><a href="#是否一定要選擇-NoSQL？" class="headerlink" title="是否一定要選擇 NoSQL？"></a>是否一定要選擇 NoSQL？</h2><p>隨著應用場景的多樣化，NoSQL 的確解決了許多傳統 SQL 資料庫難以處理的問題，但它並不一定適合所有情況。如果你的應用需要強一致性或關聯查詢頻繁，SQL 仍然是最好的選擇。而對於靈活性需求高且需要處理大規模分布式數據的情況，NoSQL 則更具優勢。<br>++重要的是根據你的實際需求選擇最合適的技術，而不是盲目追求新的趨勢或工具++。</p>]]></content>
+    
+    
+    <summary type="html">&lt;h3 id=&quot;資料的儲存與未來的選擇&quot;&gt;&lt;a href=&quot;#資料的儲存與未來的選擇&quot; class=&quot;headerlink&quot; title=&quot;資料的儲存與未來的選擇&quot;&gt;&lt;/a&gt;資料的儲存與未來的選擇&lt;/h3&gt;&lt;p&gt;現今的應用程式需要處理大量的資料，而選擇適合的資料庫相當的重要。無論是需要處理++結構化資料++，還是++非結構化++或++半結構化資料++，我們通常面臨著兩種主要資料庫技術的選擇：&lt;strong&gt;關聯式資料庫 (SQL)&lt;/strong&gt; 和 **非關聯式資料庫 (NoSQL)**。&lt;/p&gt;
+&lt;p&gt;本篇教學將以簡單明瞭的方式介紹這兩種資料庫的核心概念、結構、適用情境以及它們之間的比較，幫助你快速掌握其特性，並做出正確的選擇。&lt;/p&gt;</summary>
+    
+    
+    
+    
+    <category term="Database" scheme="https://zanazhong.github.io/tags/Database/"/>
+    
+    <category term="SQL" scheme="https://zanazhong.github.io/tags/SQL/"/>
+    
+    <category term="NoSQL" scheme="https://zanazhong.github.io/tags/NoSQL/"/>
+    
+    <category term="資料庫" scheme="https://zanazhong.github.io/tags/%E8%B3%87%E6%96%99%E5%BA%AB/"/>
+    
+  </entry>
   
   <entry>
     <title>從架構到流程：完整理解 Docker 的 component 與互動邏輯</title>
@@ -34,15 +60,15 @@
     
     <category term="Docker" scheme="https://zanazhong.github.io/tags/Docker/"/>
     
-    <category term="Containerd" scheme="https://zanazhong.github.io/tags/Containerd/"/>
-    
-    <category term="OCI" scheme="https://zanazhong.github.io/tags/OCI/"/>
-    
     <category term="Architecture" scheme="https://zanazhong.github.io/tags/Architecture/"/>
     
     <category term="基礎架構" scheme="https://zanazhong.github.io/tags/%E5%9F%BA%E7%A4%8E%E6%9E%B6%E6%A7%8B/"/>
     
     <category term="容器化技術" scheme="https://zanazhong.github.io/tags/%E5%AE%B9%E5%99%A8%E5%8C%96%E6%8A%80%E8%A1%93/"/>
+    
+    <category term="Containerd" scheme="https://zanazhong.github.io/tags/Containerd/"/>
+    
+    <category term="OCI" scheme="https://zanazhong.github.io/tags/OCI/"/>
     
   </entry>
   
@@ -67,8 +93,6 @@
     
     <category term="基礎架構" scheme="https://zanazhong.github.io/tags/%E5%9F%BA%E7%A4%8E%E6%9E%B6%E6%A7%8B/"/>
     
-    <category term="容器化技術" scheme="https://zanazhong.github.io/tags/%E5%AE%B9%E5%99%A8%E5%8C%96%E6%8A%80%E8%A1%93/"/>
-    
     <category term="Linux" scheme="https://zanazhong.github.io/tags/Linux/"/>
     
     <category term="Namespace" scheme="https://zanazhong.github.io/tags/Namespace/"/>
@@ -76,6 +100,8 @@
     <category term="Cgroups" scheme="https://zanazhong.github.io/tags/Cgroups/"/>
     
     <category term="UnionFS" scheme="https://zanazhong.github.io/tags/UnionFS/"/>
+    
+    <category term="容器化技術" scheme="https://zanazhong.github.io/tags/%E5%AE%B9%E5%99%A8%E5%8C%96%E6%8A%80%E8%A1%93/"/>
     
   </entry>
   
@@ -576,41 +602,6 @@
     <category term="chr" scheme="https://zanazhong.github.io/tags/chr/"/>
     
     <category term="ord" scheme="https://zanazhong.github.io/tags/ord/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>[筆記] HackerRank - Sales by Match</title>
-    <link href="https://zanazhong.github.io/2021/04/02/%E7%AD%86%E8%A8%98-HackerRank-Sales-by-Match/"/>
-    <id>https://zanazhong.github.io/2021/04/02/%E7%AD%86%E8%A8%98-HackerRank-Sales-by-Match/</id>
-    <published>2021-04-02T12:40:09.000Z</published>
-    <updated>2021-04-02T14:47:44.000Z</updated>
-    
-    <content type="html"><![CDATA[<blockquote><p>HackerRank 上的題目：找出成對的襪子並算出總共有幾雙<br>此系列文章主要是自己在解題時覺得有趣的題目，記錄下來讓自己以後好複習，有興趣的人可以參考看看</p></blockquote><span id="more"></span><h2 id="先來看看題目"><a href="#先來看看題目" class="headerlink" title="先來看看題目"></a>先來看看題目</h2><p><a href="https://www.hackerrank.com/challenges/sock-merchant/problem?h_l=interview&playlist_slugs%5B%5D=interview-preparation-kit&playlist_slugs%5B%5D=warmup"><img src="https://i.imgur.com/McOlaEW.png"></a></p><h3 id="解題步驟："><a href="#解題步驟：" class="headerlink" title="解題步驟："></a>解題步驟：</h3><ol><li>想想怎麼找出成對的襪子並記錄</li><li>計算出所有成對的襪子有幾雙</li></ol><h2 id="Python"><a href="#Python" class="headerlink" title="Python"></a>Python</h2><p>如果第一個想到用 dictionary 來實踐儲存不同顏色襪子有幾隻的話，<a href="https://zanazhong.github.io/2021/03/22/%E5%AD%B8%E7%BF%92-Python-List/">此篇文章</a> 有提到相關用法，這裡就不贅述。</p><p>最好要將 dictionay 裡所有的 value 值找出成對的並算出共有幾對的話可以使用 sum。</p><h3 id="sum-的用法"><a href="#sum-的用法" class="headerlink" title="sum 的用法"></a>sum 的用法</h3><div class="note default"><p>語法： sum(iterable, start)</p></div><p>input:</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">list &#x3D; [2, 4, 1, 3, 6]</span><br><span class="line">print(sum(list))</span><br><span class="line">&#x2F;&#x2F; 起始點從 100 開始 (目前沒使用過)</span><br><span class="line">print(sum(list, 100))</span><br></pre></td></tr></table></figure><p>output:</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">16</span><br><span class="line">116</span><br></pre></td></tr></table></figure><h3 id="解題"><a href="#解題" class="headerlink" title="解題"></a>解題</h3><h4 id="方法一-dict-sum"><a href="#方法一-dict-sum" class="headerlink" title="方法一 dict + sum"></a>方法一 dict + sum</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">sockMerchant</span>(<span class="params">n, ar</span>):</span></span><br><span class="line">    pair_count = &#123;i : ar.count(i) <span class="keyword">for</span> i <span class="keyword">in</span> ar&#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">sum</span>(i//<span class="number">2</span> <span class="keyword">for</span> i <span class="keyword">in</span> pair_count.values())</span><br></pre></td></tr></table></figure><h4 id="方法二-set-sum"><a href="#方法二-set-sum" class="headerlink" title="方法二 set + sum"></a>方法二 set + sum</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">sockMerchant</span>(<span class="params">n, ar</span>):</span></span><br><span class="line">    pair_count = <span class="built_in">set</span>(ar)</span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">sum</span>(ar.count(i) // <span class="number">2</span> <span class="keyword">for</span> i <span class="keyword">in</span> pair_count)</span><br></pre></td></tr></table></figure><h2 id="Java"><a href="#Java" class="headerlink" title="Java"></a>Java</h2><h4 id="方法一-for-loop"><a href="#方法一-for-loop" class="headerlink" title="方法一 for loop"></a>方法一 for loop</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">int</span> <span class="title">sockMerchant</span><span class="params">(<span class="keyword">int</span> n, <span class="keyword">int</span>[] ar)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span> sum = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; n; i++) &#123;</span><br><span class="line">        <span class="keyword">int</span> count = <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">if</span> (ar[i] != -<span class="number">1</span>) &#123;</span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> j = i + <span class="number">1</span>; j &lt; n; j++ ) &#123;</span><br><span class="line">                <span class="keyword">if</span> (ar[i] == ar[j]) &#123;</span><br><span class="line">                    count++;</span><br><span class="line">                    ar[j] = -<span class="number">1</span>;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            System.out.print(count);</span><br><span class="line">            sum += Math.floor(count / <span class="number">2</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> sum;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><h4 id="方法二-HashSet"><a href="#方法二-HashSet" class="headerlink" title="方法二 HashSet"></a>方法二 HashSet</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> java.util.HashSet;</span><br><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">int</span> <span class="title">sockMerchant</span><span class="params">(<span class="keyword">int</span> n, <span class="keyword">int</span>[] ar)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span> count = <span class="number">0</span>;</span><br><span class="line">    HashSet&lt;Integer&gt; sock_set = <span class="keyword">new</span> HashSet&lt;Integer&gt;();</span><br><span class="line">    <span class="keyword">for</span> (Integer i: ar) &#123;</span><br><span class="line">        <span class="keyword">if</span> (sock_set.contains(i)) &#123;</span><br><span class="line">            sock_set.remove(i);</span><br><span class="line">            count++;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            sock_set.add(i);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> count;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><p>ref: <a href="https://www.programiz.com/python-programming/methods/built-in/sum">https://www.programiz.com/python-programming/methods/built-in/sum</a></p>]]></content>
-    
-    
-    <summary type="html">&lt;blockquote&gt;
-&lt;p&gt;HackerRank 上的題目：找出成對的襪子並算出總共有幾雙&lt;br&gt;此系列文章主要是自己在解題時覺得有趣的題目，記錄下來讓自己以後好複習，有興趣的人可以參考看看&lt;/p&gt;
-&lt;/blockquote&gt;</summary>
-    
-    
-    
-    <category term="hackerrank" scheme="https://zanazhong.github.io/categories/hackerrank/"/>
-    
-    <category term="python" scheme="https://zanazhong.github.io/categories/hackerrank/python/"/>
-    
-    
-    <category term="python" scheme="https://zanazhong.github.io/tags/python/"/>
-    
-    <category term="dictionary" scheme="https://zanazhong.github.io/tags/dictionary/"/>
-    
-    <category term="hackerrank" scheme="https://zanazhong.github.io/tags/hackerrank/"/>
-    
-    <category term="sum" scheme="https://zanazhong.github.io/tags/sum/"/>
-    
-    <category term="java" scheme="https://zanazhong.github.io/tags/java/"/>
-    
-    <category term="hashset" scheme="https://zanazhong.github.io/tags/hashset/"/>
     
   </entry>
   
