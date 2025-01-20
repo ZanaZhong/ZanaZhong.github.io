@@ -6,7 +6,7 @@
   <link href="https://zanazhong.github.io/atom.xml" rel="self"/>
   
   <link href="https://zanazhong.github.io/"/>
-  <updated>2025-01-18T14:35:00.321Z</updated>
+  <updated>2025-01-20T14:24:14.491Z</updated>
   <id>https://zanazhong.github.io/</id>
   
   <author>
@@ -15,6 +15,35 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>深入解析：列式資料（Column-Oriented）與鍵值資料（Key-Value）</title>
+    <link href="https://zanazhong.github.io/2025/01/20/%E6%B7%B1%E5%85%A5%E8%A7%A3%E6%9E%90%EF%BC%9A%E5%88%97%E5%BC%8F%E8%B3%87%E6%96%99%EF%BC%88Column-Oriented%EF%BC%89%E8%88%87%E9%8D%B5%E5%80%BC%E8%B3%87%E6%96%99%EF%BC%88Key-Value%EF%BC%89/"/>
+    <id>https://zanazhong.github.io/2025/01/20/%E6%B7%B1%E5%85%A5%E8%A7%A3%E6%9E%90%EF%BC%9A%E5%88%97%E5%BC%8F%E8%B3%87%E6%96%99%EF%BC%88Column-Oriented%EF%BC%89%E8%88%87%E9%8D%B5%E5%80%BC%E8%B3%87%E6%96%99%EF%BC%88Key-Value%EF%BC%89/</id>
+    <published>2025-01-20T14:20:02.000Z</published>
+    <updated>2025-01-20T14:24:14.491Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>在現代應用程式開發中，選擇合適的資料庫類型對於系統效能與可擴展性非常重要。許多人常將列式資料 (Column-Oriented) 與鍵值資料 (Key-Value) 混淆，本文將介紹這兩種存儲方式的概念、優缺點與適用場景，幫助讀者更好地理解並選擇合適的解決方案。</p><span id="more"></span><h2 id="列式資料-Column-Oriented"><a href="#列式資料-Column-Oriented" class="headerlink" title="列式資料 (Column-Oriented)"></a>列式資料 (Column-Oriented)</h2><blockquote><p>列式資料庫是指資料以「列」為單位進行存儲，而非傳統的按「行」存儲方式。它專為需要對特定欄位進行高效的篩選、聚合和分析的應用而設計，適合<strong>大規模</strong>資料分析場景。</p></blockquote><h2 id="儲存方式範例"><a href="#儲存方式範例" class="headerlink" title="儲存方式範例"></a>儲存方式範例</h2><p>假設有一張用戶資料表：</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">ID   | Name   | Age</span><br><span class="line">--------------------</span><br><span class="line">1    | Alice  | 25</span><br><span class="line">2    | Bob    | 30</span><br></pre></td></tr></table></figure><p>在列式存儲中，數據會這樣存儲：</p><ul><li>列1 (ID): <code>[1, 2]</code></li><li>列2 (Name): <code>[Alice, Bob]</code></li><li>列3 (Age): <code>[25, 30]</code></li></ul><p>這樣的結構使得對某一列的篩選與聚合操作非常高效。</p><h2 id="優勢"><a href="#優勢" class="headerlink" title="優勢"></a>優勢</h2><ul><li><strong>高效查詢特定列</strong>：只需讀取相關的列，避免不必要的資料讀取。</li><li><strong>良好的壓縮率</strong>：同類型資料集中存放，壓縮率高，節省儲存空間。</li><li>**適合分析型查詢 (OLAP)**：如統計、報表生成等。</li></ul><h2 id="缺點"><a href="#缺點" class="headerlink" title="缺點"></a>缺點</h2><ul><li><strong>寫入效能較低</strong>：因為數據需分別寫入多個列，插入性能不如行式存儲。</li><li><strong>不適合頻繁的更新和刪除</strong>：需要重新整理數據結構。</li></ul><h2 id="適用場景"><a href="#適用場景" class="headerlink" title="適用場景"></a>適用場景</h2><ul><li>資料倉儲系統 (EX: ClickHouse、Apache HBase、Apache Cassandra)</li><li>需要頻繁聚合與分析的應用 (EX: BI 報表、即時分析)</li></ul><h2 id="鍵值資料-Key-Value"><a href="#鍵值資料-Key-Value" class="headerlink" title="鍵值資料 (Key-Value)"></a>鍵值資料 (Key-Value)</h2><blockquote><p>鍵值資料庫是一種非關聯式資料庫，將數據存儲為「鍵-值」對的形式。它提供快速查找與讀取操作，特別適合於需要低延遲 &amp; 高吞吐的應用場景。</p></blockquote><h2 id="儲存方式範例-1"><a href="#儲存方式範例-1" class="headerlink" title="儲存方式範例"></a>儲存方式範例</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Key: user1 -&gt; Value: &#123;&quot;ID&quot;: 1, &quot;Name&quot;: &quot;Alice&quot;, &quot;Age&quot;: 25&#125;</span><br><span class="line">Key: user2 -&gt; Value: &#123;&quot;ID&quot;: 2, &quot;Name&quot;: &quot;Bob&quot;, &quot;Age&quot;: 30&#125;</span><br></pre></td></tr></table></figure><p>在鍵值存儲中，資料以獨立的鍵值對方式存放，並透過鍵快速檢索整個值。</p><h2 id="優勢-1"><a href="#優勢-1" class="headerlink" title="優勢"></a>優勢</h2><ul><li><strong>查詢速度極快</strong>：透過鍵直接定位數據，查找效率高。</li><li><strong>高擴展性</strong>：可以水平擴展，適合分佈式架構。</li><li><strong>靈活的資料結構</strong>：支援 JSON、XML 等非結構化資料存儲。</li></ul><h2 id="缺點-1"><a href="#缺點-1" class="headerlink" title="缺點"></a>缺點</h2><ul><li><strong>無法針對 Value 進行篩選</strong>：只能根據 Key 來存取數據，++無法輕易查詢值中的具體欄位++。</li><li><strong>數據關聯性弱</strong>：不適合有強關聯性的應用，EX: 關聯式數據查詢。</li></ul><h2 id="適用場景-1"><a href="#適用場景-1" class="headerlink" title="適用場景"></a>適用場景</h2><ul><li>快取系統 (EX: Redis、Memcached)</li><li>會話管理、使用者偏好設定…等場景</li><li>物聯網 IoT 應用，存取大量即時資料</li></ul><h2 id="比較"><a href="#比較" class="headerlink" title="比較"></a>比較</h2><table><thead><tr><th>比較項目</th><th>列式資料 (Column-Oriented)</th><th>鍵值資料 (Key-Value)</th></tr></thead><tbody><tr><td>儲存方式</td><td>按列存儲，數據高度結構化</td><td>鍵對應值，值可以是非結構化數據</td></tr><tr><td>查詢效能</td><td>適合讀取單一或少數欄位，高效進行聚合和統計</td><td>適合快速查找單個鍵的整體數據</td></tr><tr><td>讀取效率</td><td>需要讀取列，對整體行查詢速度較慢</td><td>直接根據鍵讀取，速度極快</td></tr><tr><td>寫入效能</td><td>較慢，因為數據需分列存儲</td><td>快速寫入，不需特別拆解數據</td></tr><tr><td>應用場景</td><td>數據分析、報表生成、資料倉儲等</td><td>快取、用戶會話管理、分散式系統</td></tr><tr><td>常見技術</td><td>Apache Cassandra、ClickHouse、HBase</td><td>Redis、Memcached、DynamoDB</td></tr></tbody></table><h2 id="如何選擇合適的資料庫？"><a href="#如何選擇合適的資料庫？" class="headerlink" title="如何選擇合適的資料庫？"></a>如何選擇合適的資料庫？</h2><p>在選擇資料庫時，可以根據以下幾點考慮：</p><ul><li><strong>需要快速存取特定數據時</strong> → 選擇鍵值資料庫，EX: Redis。</li><li><strong>需要處理大規模的數據分析時</strong> → 選擇列式資料庫，EX: Apache Cassandra。</li><li><strong>需要處理高頻讀取但低頻寫入的場景</strong> → 列式資料庫較適合。</li><li><strong>需要高效寫入與查詢整體數據時</strong> → 鍵值資料庫是最佳選擇。</li></ul>]]></content>
+    
+    
+    <summary type="html">&lt;h2 id=&quot;前言&quot;&gt;&lt;a href=&quot;#前言&quot; class=&quot;headerlink&quot; title=&quot;前言&quot;&gt;&lt;/a&gt;前言&lt;/h2&gt;&lt;p&gt;在現代應用程式開發中，選擇合適的資料庫類型對於系統效能與可擴展性非常重要。許多人常將列式資料 (Column-Oriented) 與鍵值資料 (Key-Value) 混淆，本文將介紹這兩種存儲方式的概念、優缺點與適用場景，幫助讀者更好地理解並選擇合適的解決方案。&lt;/p&gt;</summary>
+    
+    
+    
+    
+    <category term="Database" scheme="https://zanazhong.github.io/tags/Database/"/>
+    
+    <category term="SQL" scheme="https://zanazhong.github.io/tags/SQL/"/>
+    
+    <category term="NoSQL" scheme="https://zanazhong.github.io/tags/NoSQL/"/>
+    
+    <category term="資料庫" scheme="https://zanazhong.github.io/tags/%E8%B3%87%E6%96%99%E5%BA%AB/"/>
+    
+    <category term="列式資料" scheme="https://zanazhong.github.io/tags/%E5%88%97%E5%BC%8F%E8%B3%87%E6%96%99/"/>
+    
+    <category term="鍵值資料" scheme="https://zanazhong.github.io/tags/%E9%8D%B5%E5%80%BC%E8%B3%87%E6%96%99/"/>
+    
+  </entry>
   
   <entry>
     <title>SQL 與 NoSQL：關聯式與非關聯式資料庫的差異與應用</title>
@@ -569,39 +598,6 @@
     <category term="python" scheme="https://zanazhong.github.io/tags/python/"/>
     
     <category term="datetime" scheme="https://zanazhong.github.io/tags/datetime/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>[筆記] Check.io - Pawn Brotherhood</title>
-    <link href="https://zanazhong.github.io/2021/04/25/%E7%AD%86%E8%A8%98-Check-io-Pawn-Brotherhood/"/>
-    <id>https://zanazhong.github.io/2021/04/25/%E7%AD%86%E8%A8%98-Check-io-Pawn-Brotherhood/</id>
-    <published>2021-04-25T13:57:42.000Z</published>
-    <updated>2021-04-25T13:59:43.000Z</updated>
-    
-    <content type="html"><![CDATA[<blockquote><p><a href="https://py.checkio.org/en/mission/pawn-brotherhood/">check.io</a> 上的題目：判斷西洋棋中的兵有幾個是安全的<br>此系列文章主要是自己在解題時覺得有趣的題目，記錄下來讓自己以後好複習，有興趣的人可以參考看看</p></blockquote><h2 id="先來看看題目"><a href="#先來看看題目" class="headerlink" title="先來看看題目"></a>先來看看題目</h2><p><img src="https://i.imgur.com/oTOaA4z.jpg"><br>總結來說：兵的行徑方向走斜對角的(左前、右前)，若是兵的右下或左下有其他兵的話，他就是安全的</p><h2 id="解題步驟"><a href="#解題步驟" class="headerlink" title="解題步驟"></a>解題步驟</h2><h2 id="解題"><a href="#解題" class="headerlink" title="解題"></a>解題</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">safe_pawns</span>(<span class="params">pawns: <span class="built_in">set</span></span>) -&gt; <span class="built_in">int</span>:</span></span><br><span class="line">    safe = <span class="number">0</span></span><br><span class="line">    <span class="keyword">for</span> p <span class="keyword">in</span> pawns:</span><br><span class="line">        <span class="keyword">if</span> <span class="built_in">chr</span>(<span class="built_in">ord</span>(p[<span class="number">0</span>]) + <span class="number">1</span>) + <span class="built_in">str</span>(<span class="built_in">int</span>(p[<span class="number">1</span>]) - <span class="number">1</span>) <span class="keyword">in</span> pawns <span class="keyword">or</span> <span class="built_in">chr</span>(<span class="built_in">ord</span>(p[<span class="number">0</span>]) - <span class="number">1</span>) + <span class="built_in">str</span>(<span class="built_in">int</span>(p[<span class="number">1</span>]) - <span class="number">1</span>) <span class="keyword">in</span> pawns:</span><br><span class="line">            safe += <span class="number">1</span></span><br><span class="line">    <span class="keyword">return</span> safe</span><br></pre></td></tr></table></figure>]]></content>
-    
-    
-      
-      
-    <summary type="html">&lt;blockquote&gt;
-&lt;p&gt;&lt;a href=&quot;https://py.checkio.org/en/mission/pawn-brotherhood/&quot;&gt;check.io&lt;/a&gt; 上的題目：判斷西洋棋中的兵有幾個是安全的&lt;br&gt;此系列文章主要是自己在解題時覺得有趣的題目，記錄下</summary>
-      
-    
-    
-    
-    <category term="Check.io" scheme="https://zanazhong.github.io/categories/Check-io/"/>
-    
-    <category term="python" scheme="https://zanazhong.github.io/categories/Check-io/python/"/>
-    
-    
-    <category term="Check.io" scheme="https://zanazhong.github.io/tags/Check-io/"/>
-    
-    <category term="python" scheme="https://zanazhong.github.io/tags/python/"/>
-    
-    <category term="chr" scheme="https://zanazhong.github.io/tags/chr/"/>
-    
-    <category term="ord" scheme="https://zanazhong.github.io/tags/ord/"/>
     
   </entry>
   
