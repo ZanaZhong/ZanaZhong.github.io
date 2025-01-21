@@ -26,25 +26,25 @@
     var CONFIG = {"hostname":"zanazhong.github.io","root":"/","scheme":"Gemini","version":"8.0.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":true,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}};
   </script>
 
-  <meta name="description" content="Docker 是什麼？Docker 是現代開發與運維中不可或缺的工具、是一種容器化技術，用來打包、部署和運行應用程序。它讓你能在任何環境中快速部署應用，實現「一次構建，隨處運行」的目標。">
+  <meta name="description" content="Docker 是什麼？Docker 是現代開發與運維中不可或缺的工具、是一種容器化技術，用來打包、部署和運行應用程式。它讓你能在任何環境中快速部署應用，實現「一次構建，隨處運行」的目標。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="深入淺出理解 Docker 的底層運作與架">
 <meta property="og:url" content="https://zanazhong.github.io/2025/01/16/%E6%B7%B1%E5%85%A5%E6%B7%BA%E5%87%BA%E7%90%86%E8%A7%A3-Docker-%E7%9A%84%E5%BA%95%E5%B1%A4%E9%81%8B%E4%BD%9C%E8%88%87%E6%9E%B6/index.html">
 <meta property="og:site_name" content="Hey I am Zana">
-<meta property="og:description" content="Docker 是什麼？Docker 是現代開發與運維中不可或缺的工具、是一種容器化技術，用來打包、部署和運行應用程序。它讓你能在任何環境中快速部署應用，實現「一次構建，隨處運行」的目標。">
+<meta property="og:description" content="Docker 是什麼？Docker 是現代開發與運維中不可或缺的工具、是一種容器化技術，用來打包、部署和運行應用程式。它讓你能在任何環境中快速部署應用，實現「一次構建，隨處運行」的目標。">
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="https://hackmd.io/_uploads/H1Hyw48Dkg.jpg">
 <meta property="article:published_time" content="2025-01-16T07:07:49.000Z">
-<meta property="article:modified_time" content="2025-01-16T11:04:41.984Z">
+<meta property="article:modified_time" content="2025-01-21T06:01:59.611Z">
 <meta property="article:author" content="Zana">
 <meta property="article:tag" content="Docker">
 <meta property="article:tag" content="Architecture">
 <meta property="article:tag" content="基礎架構">
-<meta property="article:tag" content="容器化技術">
 <meta property="article:tag" content="Linux">
 <meta property="article:tag" content="Namespace">
 <meta property="article:tag" content="Cgroups">
 <meta property="article:tag" content="UnionFS">
+<meta property="article:tag" content="容器化技術">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://hackmd.io/_uploads/H1Hyw48Dkg.jpg">
 
@@ -340,10 +340,16 @@
         <i class="far fa-calendar"></i>
       </span>
       <span class="post-meta-item-text">Posted on</span>
-      
 
-      <time title="Created: 2025-01-16 15:07:49 / Modified: 19:04:41" itemprop="dateCreated datePublished" datetime="2025-01-16T15:07:49+08:00">2025-01-16</time>
+      <time title="Created: 2025-01-16 15:07:49" itemprop="dateCreated datePublished" datetime="2025-01-16T15:07:49+08:00">2025-01-16</time>
     </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">Edited on</span>
+        <time title="Modified: 2025-01-21 14:01:59" itemprop="dateModified" datetime="2025-01-21T14:01:59+08:00">2025-01-21</time>
+      </span>
 
   
     <span class="post-meta-item" title="Views" id="busuanzi_container_page_pv" style="display: none;">
@@ -376,14 +382,14 @@
     
     
     <div class="post-body" itemprop="articleBody">
-        <h2 id="Docker-是什麼？"><a href="#Docker-是什麼？" class="headerlink" title="Docker 是什麼？"></a>Docker 是什麼？</h2><p>Docker 是現代開發與運維中不可或缺的工具、是一種容器化技術，用來打包、部署和運行應用程序。它讓你能在任何環境中快速部署應用，實現「一次構建，隨處運行」的目標。</p>
+        <h2 id="Docker-是什麼？"><a href="#Docker-是什麼？" class="headerlink" title="Docker 是什麼？"></a>Docker 是什麼？</h2><p>Docker 是現代開發與運維中不可或缺的工具、是一種容器化技術，用來打包、部署和運行應用程式。它讓你能在任何環境中快速部署應用，實現「一次構建，隨處運行」的目標。</p>
 <span id="more"></span>
 
 <h2 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h2><p>要理解 Docker 的運作，我們需要先了解幾個核心概念：</p>
 <ul>
 <li><p><strong>Image</strong>：</p>
 <ul>
-<li>應用的靜態模板，包含應用程序及其運行所需的依賴（EX:程式碼、程式庫）。</li>
+<li>應用服務的靜態模板，包含應用程式 (Application) 及其運行所需的依賴（EX:程式碼、程式庫）。</li>
 <li>類似於 VM 中的「快照」(Snapeshot)。</li>
 </ul>
 </li>
@@ -478,17 +484,17 @@
 <li>分配資源（EX: CPU、Memory）並設置 Namespace。</li>
 </ul>
 </li>
-<li><p><strong>運行應用程序</strong>：</p>
+<li><p><strong>運行應用程式</strong>：</p>
 <ul>
-<li>啟動容器中的應用程序。</li>
-<li>使用者可以通過容器內的網路端口與應用程序交互。</li>
+<li>啟動容器中的應用程式。</li>
+<li>使用者可以通過容器內的網路端口與應用程式互動。</li>
 </ul>
 </li>
 </ol>
 <h2 id="應用場景"><a href="#應用場景" class="headerlink" title="應用場景"></a>應用場景</h2><ul>
 <li><p><strong>開發環境一致性</strong>：<br> 開發人員可以在本地運行與生產環境完全一致的環境，避免「在我這能跑」的問題。</p>
 </li>
-<li><p><strong>CI&#x2F;CD 流程</strong>：<br> 快速打包、測試和部署應用程序，大幅縮短交付周期。</p>
+<li><p><strong>CI&#x2F;CD 流程</strong>：<br> 快速打包、測試和部署應用程式，大幅縮短交付周期。</p>
 </li>
 <li><p><strong>微服務架構</strong>：<br> 每個微服務打包成獨立的容器，實現高效管理和擴展。</p>
 </li>
@@ -527,11 +533,11 @@
               <a href="/tags/Docker/" rel="tag"># Docker</a>
               <a href="/tags/Architecture/" rel="tag"># Architecture</a>
               <a href="/tags/%E5%9F%BA%E7%A4%8E%E6%9E%B6%E6%A7%8B/" rel="tag"># 基礎架構</a>
-              <a href="/tags/%E5%AE%B9%E5%99%A8%E5%8C%96%E6%8A%80%E8%A1%93/" rel="tag"># 容器化技術</a>
               <a href="/tags/Linux/" rel="tag"># Linux</a>
               <a href="/tags/Namespace/" rel="tag"># Namespace</a>
               <a href="/tags/Cgroups/" rel="tag"># Cgroups</a>
               <a href="/tags/UnionFS/" rel="tag"># UnionFS</a>
+              <a href="/tags/%E5%AE%B9%E5%99%A8%E5%8C%96%E6%8A%80%E8%A1%93/" rel="tag"># 容器化技術</a>
           </div>
 
         
