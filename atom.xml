@@ -6,7 +6,7 @@
   <link href="https://zanazhong.github.io/atom.xml" rel="self"/>
   
   <link href="https://zanazhong.github.io/"/>
-  <updated>2025-01-21T07:16:46.368Z</updated>
+  <updated>2025-01-21T15:34:01.927Z</updated>
   <id>https://zanazhong.github.io/</id>
   
   <author>
@@ -15,6 +15,33 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Docker Compose：輕鬆管理多個容器</title>
+    <link href="https://zanazhong.github.io/2025/01/21/Docker-Compose%EF%BC%9A%E8%BC%95%E9%AC%86%E7%AE%A1%E7%90%86%E5%A4%9A%E5%80%8B%E5%AE%B9%E5%99%A8/"/>
+    <id>https://zanazhong.github.io/2025/01/21/Docker-Compose%EF%BC%9A%E8%BC%95%E9%AC%86%E7%AE%A1%E7%90%86%E5%A4%9A%E5%80%8B%E5%AE%B9%E5%99%A8/</id>
+    <published>2025-01-21T15:32:58.000Z</published>
+    <updated>2025-01-21T15:34:01.927Z</updated>
+    
+    <content type="html"><![CDATA[<p>在現代應用開發中，微服務架構已成為主流，而 Docker 提供了優秀的 Containerlize 解決方案。但當需要同時管理多個 Container 時，手動啟動與配置每個 Container 可能得繁瑣，這時候 Docker Compose 就派上用場。本文將介紹 Docker Compose 的基本概念、使用方式以及實際應用場景，幫助您快速掌握這項工具。</p><span id="more"></span><h2 id="什麼是-Docker-Compose？"><a href="#什麼是-Docker-Compose？" class="headerlink" title="什麼是 Docker Compose？"></a>什麼是 Docker Compose？</h2><p>Docker Compose 是一個用來定義和管理多個 Docker Container 的工具。透過編寫 <code>docker-compose.yml</code> 檔案，可以使用簡單的命令來同時啟動、停止和協調多個 Container，讓應用程式各組件能夠順暢的一同運作。</p><h3 id="優勢"><a href="#優勢" class="headerlink" title="優勢"></a>優勢</h3><ul><li><strong>簡化多個 Container 管理</strong>：使用 YAML 文件一次性定義所有 Container ，省去繁瑣的指令操作。</li><li><strong>環境一致性</strong>：確保開發、測試、部署環境一致。</li><li><strong>自動化服務啟動</strong>：設定依賴關係，按順序啟動 Container 。</li><li><strong>支援擴展性</strong>：輕鬆擴展或縮小 Container 數量，適應不同需求。</li></ul><h2 id="基本架構"><a href="#基本架構" class="headerlink" title="基本架構"></a>基本架構</h2><p><code>docker-compose.yml</code> 文件包含以下幾個部分：</p><figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">version:</span> <span class="string">&#x27;1&#x27;</span></span><br><span class="line"><span class="attr">services:</span></span><br><span class="line">  <span class="attr">web:</span></span><br><span class="line">    <span class="attr">image:</span> <span class="string">nginx:latest</span></span><br><span class="line">    <span class="attr">ports:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">&quot;8080:80&quot;</span></span><br><span class="line">    <span class="attr">volumes:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">./html:/usr/share/nginx/html</span></span><br><span class="line">  <span class="attr">db:</span></span><br><span class="line">    <span class="attr">image:</span> <span class="string">mysql:5.7</span></span><br><span class="line">    <span class="attr">environment:</span></span><br><span class="line">      <span class="attr">MYSQL_ROOT_PASSWORD:</span> <span class="string">example</span></span><br><span class="line">    <span class="attr">ports:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">&quot;3306:3306&quot;</span></span><br></pre></td></tr></table></figure><ul><li><code>version</code>: 指定 Compose 文件的版本。</li><li><code>services</code>: 定義應用服務，EX: <code>web</code>（NGINX）與 <code>db</code>（MySQL）。</li><li><code>image</code>: 指定使用的 Docker image。</li><li><code>ports</code>: 將容器內部 Port 映射到主機。</li><li><code>volumes</code>: 掛載主機目錄到容器內。</li><li><code>environment</code>: 設置環境變數，例如 MySQL 的 root 密碼。</li></ul><h2 id="基本指令"><a href="#基本指令" class="headerlink" title="基本指令"></a>基本指令</h2><blockquote><p>啟動與管理容器</p></blockquote><table><thead><tr><th>指令</th><th>功能說明</th></tr></thead><tbody><tr><td><code>docker-compose up</code></td><td>啟動所有服務</td></tr><tr><td><code>docker-compose up -d</code></td><td>以背景模式運行容器</td></tr><tr><td><code>docker-compose down</code></td><td>停止並移除所有容器</td></tr><tr><td><code>docker-compose ps</code></td><td>查看運行中容器的狀態</td></tr><tr><td><code>docker-compose logs</code></td><td>查看容器日誌</td></tr><tr><td><code>docker-compose restart</code></td><td>重新啟動服務</td></tr><tr><td><code>docker-compose build</code></td><td>建立 image 檔，通常用於自定義 Dockerfile</td></tr></tbody></table><h2 id="使用範例"><a href="#使用範例" class="headerlink" title="使用範例"></a>使用範例</h2><h3 id="範例：簡單的-LAMP-環境（Linux-Apache-MySQL-PHP）"><a href="#範例：簡單的-LAMP-環境（Linux-Apache-MySQL-PHP）" class="headerlink" title="範例：簡單的 LAMP 環境（Linux + Apache + MySQL + PHP）"></a>範例：簡單的 LAMP 環境（Linux + Apache + MySQL + PHP）</h3><figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">version:</span> <span class="string">&#x27;3.8&#x27;</span></span><br><span class="line"><span class="attr">services:</span></span><br><span class="line">  <span class="attr">apache:</span></span><br><span class="line">    <span class="attr">image:</span> <span class="string">httpd:latest</span></span><br><span class="line">    <span class="attr">ports:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">&quot;8080:80&quot;</span></span><br><span class="line">    <span class="attr">volumes:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">./www:/usr/local/apache2/htdocs/</span></span><br><span class="line">  <span class="attr">mysql:</span></span><br><span class="line">    <span class="attr">image:</span> <span class="string">mysql:5.7</span></span><br><span class="line">    <span class="attr">environment:</span></span><br><span class="line">      <span class="attr">MYSQL_ROOT_PASSWORD:</span> <span class="string">rootpass</span></span><br><span class="line">    <span class="attr">ports:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">&quot;3306:3306&quot;</span></span><br><span class="line">  <span class="attr">php:</span></span><br><span class="line">    <span class="attr">image:</span> <span class="string">php:7.4-apache</span></span><br><span class="line">    <span class="attr">volumes:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">./www:/var/www/html/</span></span><br></pre></td></tr></table></figure><p>啟動該應用環境：</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker-compose up -d</span><br></pre></td></tr></table></figure><p>瀏覽 <code>http://localhost:8080</code>，即可看到運行的網站。</p><h2 id="應用場景"><a href="#應用場景" class="headerlink" title="應用場景"></a>應用場景</h2><p>Docker Compose 適合以下情境：</p><ul><li><strong>開發與測試環境搭建</strong>：快速啟動所需服務（EX: 資料庫、快取、API）。</li><li><strong>CI&#x2F;CD 自動化測試</strong>：在 CI&#x2F;CD 流水線中管理多個微服務。</li><li><strong>本機模擬雲端架構</strong>：模擬實際部署環境，提升開發一致性。</li></ul><h2 id="進階功能介紹"><a href="#進階功能介紹" class="headerlink" title="進階功能介紹"></a>進階功能介紹</h2><h3 id="多環境配置"><a href="#多環境配置" class="headerlink" title="多環境配置"></a>多環境配置</h3><p>可以使用多個 Compose 文件來管理不同的環境，例如：</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker-compose -f docker-compose.dev.yml up</span><br></pre></td></tr></table></figure><h3 id="擴展與縮放"><a href="#擴展與縮放" class="headerlink" title="擴展與縮放"></a>擴展與縮放</h3><p>使用以下指令快速擴展服務數量：</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker-compose up --scale web=3</span><br></pre></td></tr></table></figure><h2 id="常見問題與除錯"><a href="#常見問題與除錯" class="headerlink" title="常見問題與除錯"></a>常見問題與除錯</h2><h3 id="Container-啟動失敗"><a href="#Container-啟動失敗" class="headerlink" title="Container 啟動失敗"></a>Container 啟動失敗</h3><ul><li>檢查 <code>docker-compose logs</code> 取得詳細錯誤資訊。</li><li>確保 YAML 文件格式正確，避免縮排錯誤。</li></ul><h3 id="Port-衝突"><a href="#Port-衝突" class="headerlink" title="Port 衝突"></a>Port 衝突</h3><ul><li>確保主機 Port 未被其他應用佔用，或修改 <code>ports</code> 設定。</li></ul><h3 id="無法連接容器間服務"><a href="#無法連接容器間服務" class="headerlink" title="無法連接容器間服務"></a>無法連接容器間服務</h3><ul><li>使用服務名稱而非 IP，例如 <code>db</code> 連接 <code>mysql</code> 而非 <code>localhost</code>。</li></ul>]]></content>
+    
+    
+    <summary type="html">&lt;p&gt;在現代應用開發中，微服務架構已成為主流，而 Docker 提供了優秀的 Containerlize 解決方案。但當需要同時管理多個 Container 時，手動啟動與配置每個 Container 可能得繁瑣，這時候 Docker Compose 就派上用場。本文將介紹 Docker Compose 的基本概念、使用方式以及實際應用場景，幫助您快速掌握這項工具。&lt;/p&gt;</summary>
+    
+    
+    
+    
+    <category term="Docker" scheme="https://zanazhong.github.io/tags/Docker/"/>
+    
+    <category term="DockerCompose" scheme="https://zanazhong.github.io/tags/DockerCompose/"/>
+    
+    <category term="容器化" scheme="https://zanazhong.github.io/tags/%E5%AE%B9%E5%99%A8%E5%8C%96/"/>
+    
+    <category term="微服務" scheme="https://zanazhong.github.io/tags/%E5%BE%AE%E6%9C%8D%E5%8B%99/"/>
+    
+    <category term="DevOps" scheme="https://zanazhong.github.io/tags/DevOps/"/>
+    
+  </entry>
   
   <entry>
     <title>深入解析：列式資料（Column-Oriented）與鍵值資料（Key-Value）</title>
@@ -155,11 +182,11 @@
     
     
     
+    <category term="微服務" scheme="https://zanazhong.github.io/tags/%E5%BE%AE%E6%9C%8D%E5%8B%99/"/>
+    
     <category term="Monolithic" scheme="https://zanazhong.github.io/tags/Monolithic/"/>
     
     <category term="Microservices" scheme="https://zanazhong.github.io/tags/Microservices/"/>
-    
-    <category term="微服務" scheme="https://zanazhong.github.io/tags/%E5%BE%AE%E6%9C%8D%E5%8B%99/"/>
     
     <category term="單體架構" scheme="https://zanazhong.github.io/tags/%E5%96%AE%E9%AB%94%E6%9E%B6%E6%A7%8B/"/>
     
@@ -569,35 +596,6 @@
     <category term="map" scheme="https://zanazhong.github.io/tags/map/"/>
     
     <category term="any" scheme="https://zanazhong.github.io/tags/any/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>[筆記] Check.io - Date and Time Converter</title>
-    <link href="https://zanazhong.github.io/2021/04/25/%E7%AD%86%E8%A8%98-Check-io-Date-and-Time-Converter/"/>
-    <id>https://zanazhong.github.io/2021/04/25/%E7%AD%86%E8%A8%98-Check-io-Date-and-Time-Converter/</id>
-    <published>2021-04-25T14:33:41.000Z</published>
-    <updated>2021-05-01T13:29:36.000Z</updated>
-    
-    <content type="html"><![CDATA[<blockquote><p><a href="https://py.checkio.org/en/mission/date-and-time-converter/">check.io</a> 上的題目：將字串轉成規定的格式<br>此系列文章主要是自己在解題時覺得有趣的題目，記錄下來讓自己以後方便複習，有興趣的人可以參考看看</p></blockquote><span id="more"></span><h2 id="先來看看題目"><a href="#先來看看題目" class="headerlink" title="先來看看題目"></a>先來看看題目</h2><p><img src="https://i.imgur.com/1IHEoPk.png"></p><h2 id="解題步驟"><a href="#解題步驟" class="headerlink" title="解題步驟"></a>解題步驟</h2><h2 id=""><a href="#" class="headerlink" title="- "></a>- </h2><p>strptime<br>strftime<br>format</p><p><a href="https://www.geeksforgeeks.org/python-strftime-function/"><img src="https://i.imgur.com/cKcNfZx.png" alt="參考來源"></a></p><h2 id="解題"><a href="#解題" class="headerlink" title="解題"></a>解題</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> datetime</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">date_time</span>(<span class="params">time: <span class="built_in">str</span></span>) -&gt; <span class="built_in">str</span>:</span></span><br><span class="line">    <span class="comment">#convert string to datetime</span></span><br><span class="line">    date_time = datetime.datetime.strptime(time, <span class="string">&quot;%d.%m.%Y %H:%M&quot;</span>)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> date_time.strftime(<span class="string">f&quot;<span class="subst">&#123;date_time.day&#125;</span> %B %Y year <span class="subst">&#123;date_time.hour&#125;</span> hour<span class="subst">&#123;<span class="string">&#x27;s&#x27;</span> <span class="keyword">if</span> date_time.hour != <span class="number">1</span> <span class="keyword">else</span> <span class="string">&#x27;&#x27;</span>&#125;</span> <span class="subst">&#123;date_time.minute&#125;</span> minute<span class="subst">&#123;<span class="string">&#x27;s&#x27;</span> <span class="keyword">if</span> date_time.minute != <span class="number">1</span> <span class="keyword">else</span> <span class="string">&#x27;&#x27;</span>&#125;</span>&quot;</span>)</span><br></pre></td></tr></table></figure><p>分享一個查到的不錯的方法</p><pre><code class="python">import datetimedef date_time(time: str) -&gt; str:    #convert string to datetime    date_time = datetime.datetime.strptime(time, &quot;%d.%m.%Y %H:%M&quot;)    return date_time.strftime(f&quot;&#123;date_time.day&#125; %B %Y year &#123;date_time.hour&#125; &#123;[&#39;hours&#39;, &#39;hour&#39;][date_time.hour == 1]&#125; &#123;date_time.minute&#125; &#123;[&#39;minutes&#39;, &#39;minute&#39;][date_time.minute == 1]&#125;&quot;)</code></pre>]]></content>
-    
-    
-    <summary type="html">&lt;blockquote&gt;
-&lt;p&gt;&lt;a href=&quot;https://py.checkio.org/en/mission/date-and-time-converter/&quot;&gt;check.io&lt;/a&gt; 上的題目：將字串轉成規定的格式&lt;br&gt;此系列文章主要是自己在解題時覺得有趣的題目，記錄下來讓自己以後方便複習，有興趣的人可以參考看看&lt;/p&gt;
-&lt;/blockquote&gt;</summary>
-    
-    
-    
-    <category term="Check.io" scheme="https://zanazhong.github.io/categories/Check-io/"/>
-    
-    <category term="python" scheme="https://zanazhong.github.io/categories/Check-io/python/"/>
-    
-    
-    <category term="Check.io" scheme="https://zanazhong.github.io/tags/Check-io/"/>
-    
-    <category term="python" scheme="https://zanazhong.github.io/tags/python/"/>
-    
-    <category term="datetime" scheme="https://zanazhong.github.io/tags/datetime/"/>
     
   </entry>
   
