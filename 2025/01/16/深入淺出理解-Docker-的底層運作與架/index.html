@@ -35,7 +35,7 @@
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="https://hackmd.io/_uploads/H1Hyw48Dkg.jpg">
 <meta property="article:published_time" content="2025-01-16T07:07:49.000Z">
-<meta property="article:modified_time" content="2025-01-21T06:01:59.611Z">
+<meta property="article:modified_time" content="2025-01-21T06:11:36.409Z">
 <meta property="article:author" content="Zana">
 <meta property="article:tag" content="Docker">
 <meta property="article:tag" content="Architecture">
@@ -348,7 +348,7 @@
           <i class="far fa-calendar-check"></i>
         </span>
         <span class="post-meta-item-text">Edited on</span>
-        <time title="Modified: 2025-01-21 14:01:59" itemprop="dateModified" datetime="2025-01-21T14:01:59+08:00">2025-01-21</time>
+        <time title="Modified: 2025-01-21 14:11:36" itemprop="dateModified" datetime="2025-01-21T14:11:36+08:00">2025-01-21</time>
       </span>
 
   
@@ -364,14 +364,14 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">Symbols count in article: </span>
-      <span>1.6k</span>
+      <span>1.7k</span>
     </span>
     <span class="post-meta-item" title="Reading time">
       <span class="post-meta-item-icon">
         <i class="far fa-clock"></i>
       </span>
       <span class="post-meta-item-text">Reading time &asymp;</span>
-      <span>1 mins.</span>
+      <span>2 mins.</span>
     </span>
 </div>
 
@@ -389,7 +389,10 @@
 <ul>
 <li><p><strong>Image</strong>：</p>
 <ul>
-<li>應用服務的靜態模板，包含應用程式 (Application) 及其運行所需的依賴（EX:程式碼、程式庫）。</li>
+<li>應用服務的靜態模板，包含應用程式 (Application) 及其運行所需的相依性資源 (Dependency) (EX: 程式碼、程式庫)。<blockquote>
+<p>Dependency: 官方以 bins&#x2F; libs 稱之，為二進位執行檔 binaries &amp; 函式庫 libraries</p>
+</blockquote>
+</li>
 <li>類似於 VM 中的「快照」(Snapeshot)。</li>
 </ul>
 </li>
@@ -401,7 +404,7 @@
 </li>
 <li><p><strong>Registry</strong>：</p>
 <ul>
-<li>儲存和分發 Image 的地方（EX: Docker Hub or Private Registry）。</li>
+<li>儲存和分發 Image 的地方 (EX: Docker Hub or Private Registry)。</li>
 </ul>
 </li>
 </ul>
@@ -435,20 +438,20 @@
 </li>
 <li><p><strong>Container Runtime</strong></p>
 <ul>
-<li>Docker 使用 <strong>containerd</strong> 作為 Container Runtime，負責管理 Container 的生命周期（啟動、停止、刪除）。</li>
+<li>Docker 使用 <strong>containerd</strong> 作為 Container Runtime，負責管理 Container 的生命周期 (啟動、停止、刪除)。</li>
 </ul>
 </li>
 </ul>
 <h2 id="核心架構"><a href="#核心架構" class="headerlink" title="核心架構"></a>核心架構</h2><ul>
 <li><p><strong>Docker Client</strong>：</p>
 <ul>
-<li>用戶與 Docker 互動的介面，接受指令（EX: <code>docker run</code>）</li>
+<li>用戶與 Docker 互動的介面，接受指令 (EX: <code>docker run</code>)</li>
 <li>將請求發送給 Docker Daemon。</li>
 </ul>
 </li>
 <li><p><strong>Docker Daemon</strong>：</p>
 <ul>
-<li>Docker 的核心，負責處理容器操作（EX: 啟動、停止）以及管理 Image 和網絡等資源。</li>
+<li>Docker 的核心，負責處理容器操作 (EX: 啟動、停止)以及管理 Image 和網絡等資源。</li>
 <li>持續運行，並++監聽來自 Docker Client 的請求++。</li>
 </ul>
 </li>
@@ -463,9 +466,9 @@
 <li>Container 的核心執行環境，管理容器的生命周期。</li>
 </ul>
 </li>
-<li><p><strong>OCI Runtime（Open Container Initiative）</strong>：</p>
+<li><p>**OCI Runtime (Open Container Initiative)**：</p>
 <ul>
-<li>標準化的 Container Runtime（EX: runc），負責真正啟動和運行容器。</li>
+<li>標準化的 Container Runtime (EX: runc)，負責真正啟動和運行容器。</li>
 </ul>
 </li>
 </ul>
@@ -481,7 +484,7 @@
 <li><p><strong>啟動容器</strong>：</p>
 <ul>
 <li>使用下載的 Image 創建容器。</li>
-<li>分配資源（EX: CPU、Memory）並設置 Namespace。</li>
+<li>分配資源 (EX: CPU、Memory)並設置 Namespace。</li>
 </ul>
 </li>
 <li><p><strong>運行應用程式</strong>：</p>
@@ -508,11 +511,11 @@
 </thead>
 <tbody><tr>
 <td>輕量級：共享 OS 核心，減少資源需求</td>
-<td>容器隔離性不如虛擬機（需注意安全設置）</td>
+<td>容器隔離性不如虛擬機 (需注意安全設置)</td>
 </tr>
 <tr>
 <td>啟動速度快：秒級啟動，提升開發效率</td>
-<td>高效管理需要學習曲線（如編排工具 Kubernetes）</td>
+<td>高效管理需要學習曲線 (如編排工具 Kubernetes)</td>
 </tr>
 <tr>
 <td>高可移植性：支援跨平台部署</td>
