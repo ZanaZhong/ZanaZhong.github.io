@@ -426,6 +426,47 @@
       </tags>
   </entry>
   <entry>
+    <title>[學習] Pyton  try - except</title>
+    <url>/2021/01/31/%E5%AD%B8%E7%BF%92-Pyton-try-except/</url>
+    <content><![CDATA[<blockquote>
+<p>在開發程式的過程中，難免有會遇到錯誤，例如：使用者輸入不正確的資料、網路連線問題或語法上的問題等，如果沒有做好例外處理的機制，程式碼可能因此而中斷，還會讓使用者看到錯誤訊息，對產品使用的觀感不佳，體驗也會大打折扣。因此，在開發的過程中要考慮到錯誤發生時，程式碼要如何做適當的反應。</p>
+</blockquote>
+<span id="more"></span>
+
+<p>Python 在例外處理的機制為：</p>
+<div class="note default"><p>try 執行<br>except 例外<br>else 都沒出錯就執行這區塊<br>finally 任何狀況下都會執行的區塊</p>
+</div>
+
+<p>而錯誤類型可以至<a href="https://docs.python.org/3.6/library/exceptions.html">該網址</a>查看，常見ValueError(ex: int(hi))、ZeroDivisionError(ex: x &#x3D; 2&#x2F;0)、</p>
+<p>先來個完整的架構的範例：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">func</span>(<span class="params">x, y</span>):</span></span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        result = x / y</span><br><span class="line">    <span class="keyword">except</span> ZeroDivisionError:</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;不能除以零！&quot;</span>)</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;結果是：&quot;</span>, result)</span><br><span class="line">    <span class="keyword">finally</span>:</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;Hi，我一定會執行&quot;</span>)</span><br><span class="line">func(<span class="number">4</span>, <span class="number">2</span>)</span><br><span class="line"></span><br><span class="line">func(<span class="number">2</span>, <span class="number">0</span>)</span><br></pre></td></tr></table></figure>
+
+<p>output：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">結果是： 2.0</span><br><span class="line">Hi，我一定會執行</span><br><span class="line">--------------</span><br><span class="line">不能除以零！</span><br><span class="line">Hi，我一定會執行</span><br></pre></td></tr></table></figure>
+
+<p>一般來說可以這樣寫：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">try:</span><br><span class="line">    正常時要執行的程式</span><br><span class="line">except &lt;error type&gt;:</span><br><span class="line">    錯誤時要執行程式</span><br></pre></td></tr></table></figure>
+
+<p>不確定的錯誤類型的話 error type 可以不寫</p>
+<p>example：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">func</span>(<span class="params">x, y</span>):</span></span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        result = x / y</span><br><span class="line">    <span class="keyword">except</span>:</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;something wrong&quot;</span>)</span><br><span class="line"></span><br><span class="line">func(<span class="number">4</span>, <span class="number">0</span>)</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">something wrong</span><br></pre></td></tr></table></figure>
+
+<p>sys.exc_info()[0] 可以用來取出 except 的錯誤訊息</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> sys</span><br><span class="line"></span><br><span class="line">i = <span class="string">&#x27;o&#x27;</span></span><br><span class="line"><span class="keyword">try</span>:</span><br><span class="line">    result = i / <span class="number">0</span></span><br><span class="line">    <span class="built_in">print</span>(result)</span><br><span class="line"><span class="keyword">except</span>:</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;Unexpected error:&quot;</span>, sys.exc_info()[<span class="number">0</span>])</span><br></pre></td></tr></table></figure>
+
+<p>output：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Unexpected error: &lt;class &#39;TypeError&#39;&gt;</span><br></pre></td></tr></table></figure>]]></content>
+      <categories>
+        <category>python</category>
+      </categories>
+      <tags>
+        <tag>python</tag>
+        <tag>try-except</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>[學習] Python List</title>
     <url>/2021/03/22/%E5%AD%B8%E7%BF%92-Python-List/</url>
     <content><![CDATA[<p>常遇到的問題</p>
@@ -524,47 +565,6 @@
       <tags>
         <tag>python</tag>
         <tag>string</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>[學習] Pyton  try - except</title>
-    <url>/2021/01/31/%E5%AD%B8%E7%BF%92-Pyton-try-except/</url>
-    <content><![CDATA[<blockquote>
-<p>在開發程式的過程中，難免有會遇到錯誤，例如：使用者輸入不正確的資料、網路連線問題或語法上的問題等，如果沒有做好例外處理的機制，程式碼可能因此而中斷，還會讓使用者看到錯誤訊息，對產品使用的觀感不佳，體驗也會大打折扣。因此，在開發的過程中要考慮到錯誤發生時，程式碼要如何做適當的反應。</p>
-</blockquote>
-<span id="more"></span>
-
-<p>Python 在例外處理的機制為：</p>
-<div class="note default"><p>try 執行<br>except 例外<br>else 都沒出錯就執行這區塊<br>finally 任何狀況下都會執行的區塊</p>
-</div>
-
-<p>而錯誤類型可以至<a href="https://docs.python.org/3.6/library/exceptions.html">該網址</a>查看，常見ValueError(ex: int(hi))、ZeroDivisionError(ex: x &#x3D; 2&#x2F;0)、</p>
-<p>先來個完整的架構的範例：</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">func</span>(<span class="params">x, y</span>):</span></span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        result = x / y</span><br><span class="line">    <span class="keyword">except</span> ZeroDivisionError:</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;不能除以零！&quot;</span>)</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;結果是：&quot;</span>, result)</span><br><span class="line">    <span class="keyword">finally</span>:</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;Hi，我一定會執行&quot;</span>)</span><br><span class="line">func(<span class="number">4</span>, <span class="number">2</span>)</span><br><span class="line"></span><br><span class="line">func(<span class="number">2</span>, <span class="number">0</span>)</span><br></pre></td></tr></table></figure>
-
-<p>output：</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">結果是： 2.0</span><br><span class="line">Hi，我一定會執行</span><br><span class="line">--------------</span><br><span class="line">不能除以零！</span><br><span class="line">Hi，我一定會執行</span><br></pre></td></tr></table></figure>
-
-<p>一般來說可以這樣寫：</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">try:</span><br><span class="line">    正常時要執行的程式</span><br><span class="line">except &lt;error type&gt;:</span><br><span class="line">    錯誤時要執行程式</span><br></pre></td></tr></table></figure>
-
-<p>不確定的錯誤類型的話 error type 可以不寫</p>
-<p>example：</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">func</span>(<span class="params">x, y</span>):</span></span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        result = x / y</span><br><span class="line">    <span class="keyword">except</span>:</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;something wrong&quot;</span>)</span><br><span class="line"></span><br><span class="line">func(<span class="number">4</span>, <span class="number">0</span>)</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">something wrong</span><br></pre></td></tr></table></figure>
-
-<p>sys.exc_info()[0] 可以用來取出 except 的錯誤訊息</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> sys</span><br><span class="line"></span><br><span class="line">i = <span class="string">&#x27;o&#x27;</span></span><br><span class="line"><span class="keyword">try</span>:</span><br><span class="line">    result = i / <span class="number">0</span></span><br><span class="line">    <span class="built_in">print</span>(result)</span><br><span class="line"><span class="keyword">except</span>:</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;Unexpected error:&quot;</span>, sys.exc_info()[<span class="number">0</span>])</span><br></pre></td></tr></table></figure>
-
-<p>output：</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Unexpected error: &lt;class &#39;TypeError&#39;&gt;</span><br></pre></td></tr></table></figure>]]></content>
-      <categories>
-        <category>python</category>
-      </categories>
-      <tags>
-        <tag>python</tag>
-        <tag>try-except</tag>
       </tags>
   </entry>
   <entry>
@@ -794,21 +794,6 @@
         <tag>Architecture</tag>
         <tag>基礎架構</tag>
         <tag>容器化技術</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>[筆記] Leetcode - 1822. Sign of the Product of an Array</title>
-    <url>/2023/05/02/%E7%AD%86-Leetcode-1822-Sign-of-the-Product-of-an-Array/</url>
-    <content><![CDATA[<p><a href="https://leetcode.com/problems/sign-of-the-product-of-an-array/">https://leetcode.com/problems/sign-of-the-product-of-an-array/</a></p>
-<blockquote>
-<p>There is a function signFunc(x) that returns:<br>1 if x is positive.<br>-1 if x is negative.<br>0 if x is equal to 0.<br>You are given an integer array nums. Let product be the product of all values in the array nums.<br>Return signFunc(product).</p>
-</blockquote>
-<p><img src="https://i.imgur.com/v6fBWOf.png"></p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">arraySign</span>(<span class="params">self, nums: <span class="type">List</span>[<span class="built_in">int</span>]</span>) -&gt; <span class="built_in">int</span>:</span></span><br><span class="line">        sign = <span class="number">1</span></span><br><span class="line">        <span class="keyword">for</span> num <span class="keyword">in</span> nums:</span><br><span class="line">            <span class="keyword">if</span> num == <span class="number">0</span>:</span><br><span class="line">                <span class="keyword">return</span> <span class="number">0</span></span><br><span class="line">            <span class="keyword">if</span> num &lt; <span class="number">0</span>:</span><br><span class="line">                sign = -sign</span><br><span class="line">        <span class="keyword">return</span> sign</span><br></pre></td></tr></table></figure>]]></content>
-      <tags>
-        <tag>Leetcode</tag>
-        <tag>Python</tag>
-        <tag>Coding</tag>
       </tags>
   </entry>
   <entry>
@@ -1077,6 +1062,69 @@
       </tags>
   </entry>
   <entry>
+    <title>[筆記] Leetcode - 1903. Largest Odd Number in String</title>
+    <url>/2023/12/09/%E7%AD%86%E8%A8%98-1903.-Largest-Odd%20Number-in-String/</url>
+    <content><![CDATA[<blockquote>
+<p>You are given a string num, representing a large integer. Return the largest-valued odd integer (as a string) that is a non-empty substring of num, or an empty string “” if no odd integer exists.</p>
+</blockquote>
+<p>A substring is a contiguous sequence of characters within a string.</p>
+<p>Example 1:</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Input: num &#x3D; &quot;52&quot;</span><br><span class="line">Output: &quot;5&quot;</span><br><span class="line">Explanation: The only non-empty substrings are &quot;5&quot;, &quot;2&quot;, and &quot;52&quot;. &quot;5&quot; is the only odd number.</span><br></pre></td></tr></table></figure>
+<p>Example 2:</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Input: num &#x3D; &quot;4206&quot;</span><br><span class="line">Output: &quot;&quot;</span><br><span class="line">Explanation: There are no odd numbers in &quot;4206&quot;.</span><br></pre></td></tr></table></figure>
+<p>Example 3:</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Input: num &#x3D; &quot;35427&quot;</span><br><span class="line">Output: &quot;35427&quot;</span><br><span class="line">Explanation: &quot;35427&quot; is already an odd number.</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">largestOddNumber</span>(<span class="params">self, num: <span class="built_in">str</span></span>) -&gt; <span class="built_in">str</span>:</span></span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">len</span>(num) - <span class="number">1</span>, -<span class="number">1</span>, -<span class="number">1</span>):</span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span> <span class="built_in">int</span>(num[i]) % <span class="number">2</span>:</span><br><span class="line">                <span class="keyword">return</span> num[:i + <span class="number">1</span>]</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> <span class="string">&#x27;&#x27;</span></span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <tags>
+        <tag>list</tag>
+        <tag>Leetcode</tag>
+        <tag>Python</tag>
+        <tag>reverse</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>[筆記] Leetcode - 1822. Sign of the Product of an Array</title>
+    <url>/2023/05/02/%E7%AD%86-Leetcode-1822-Sign-of-the-Product-of-an-Array/</url>
+    <content><![CDATA[<p><a href="https://leetcode.com/problems/sign-of-the-product-of-an-array/">https://leetcode.com/problems/sign-of-the-product-of-an-array/</a></p>
+<blockquote>
+<p>There is a function signFunc(x) that returns:<br>1 if x is positive.<br>-1 if x is negative.<br>0 if x is equal to 0.<br>You are given an integer array nums. Let product be the product of all values in the array nums.<br>Return signFunc(product).</p>
+</blockquote>
+<p><img src="https://i.imgur.com/v6fBWOf.png"></p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">arraySign</span>(<span class="params">self, nums: <span class="type">List</span>[<span class="built_in">int</span>]</span>) -&gt; <span class="built_in">int</span>:</span></span><br><span class="line">        sign = <span class="number">1</span></span><br><span class="line">        <span class="keyword">for</span> num <span class="keyword">in</span> nums:</span><br><span class="line">            <span class="keyword">if</span> num == <span class="number">0</span>:</span><br><span class="line">                <span class="keyword">return</span> <span class="number">0</span></span><br><span class="line">            <span class="keyword">if</span> num &lt; <span class="number">0</span>:</span><br><span class="line">                sign = -sign</span><br><span class="line">        <span class="keyword">return</span> sign</span><br></pre></td></tr></table></figure>]]></content>
+      <tags>
+        <tag>Leetcode</tag>
+        <tag>Python</tag>
+        <tag>Coding</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>[筆記] Leetcode - 1913. Maximum Product Difference Between Two Pairs</title>
+    <url>/2023/12/18/%E7%AD%86%E8%A8%98-1913.-Maximum-Product%20Difference-Between-Two-Pairs/</url>
+    <content><![CDATA[<p><a href="https://leetcode.com/problems/maximum-product-difference-between-two-pairs/">https://leetcode.com/problems/maximum-product-difference-between-two-pairs/</a></p>
+<blockquote>
+<p>The product difference between two pairs (a, b) and (c, d) is defined as (a * b) - (c * d).</p>
+<p>For example, the product difference between (5, 6) and (2, 7) is (5 * 6) - (2 * 7) &#x3D; 16.<br>Given an integer array nums, choose four distinct indices w, x, y, and z such that the product difference between pairs (nums[w], nums[x]) and (nums[y], nums[z]) is maximized.</p>
+<p>Return the maximum such product difference.</p>
+</blockquote>
+<span id="more"></span>
+
+<p>Example 1:</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Input: nums &#x3D; [5,6,2,7,4]</span><br><span class="line">Output: 34</span><br><span class="line">Explanation: We can choose indices 1 and 3 for the first pair (6, 7) and indices 2 and 4 for the second pair (2, 4).</span><br><span class="line">The product difference is (6 * 7) - (2 * 4) &#x3D; 34.</span><br></pre></td></tr></table></figure>
+<p>Example 2:</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Input: nums &#x3D; [4,2,5,9,7,4,8]</span><br><span class="line">Output: 64</span><br><span class="line">Explanation: We can choose indices 3 and 6 for the first pair (9, 8) and indices 1 and 5 for the second pair (2, 4).</span><br><span class="line">The product difference is (9 * 8) - (2 * 4) &#x3D; 64.</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">maxProductDifference</span>(<span class="params">self, nums: <span class="type">List</span>[<span class="built_in">int</span>]</span>) -&gt; <span class="built_in">int</span>:</span></span><br><span class="line">        min_num1, min_num2 = math.inf, math.inf</span><br><span class="line">        max_num1, max_num2 = -math.inf, -math.inf</span><br><span class="line">    </span><br><span class="line">        <span class="keyword">for</span> number <span class="keyword">in</span> nums: </span><br><span class="line">            <span class="keyword">if</span> number &gt; max_num1:</span><br><span class="line">                max_num1, max_num2 = number, max_num1</span><br><span class="line">            <span class="keyword">elif</span> number &gt; max_num2:</span><br><span class="line">                max_num2 = number</span><br><span class="line">    </span><br><span class="line">            <span class="keyword">if</span> number &lt; min_num1:</span><br><span class="line">                min_num1, min_num2 = number, min_num1</span><br><span class="line">            <span class="keyword">elif</span> number &lt; min_num2:</span><br><span class="line">                min_num2 = number</span><br><span class="line">    </span><br><span class="line">        <span class="keyword">return</span> max_num1 * max_num2 - min_num1 * min_num2</span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <tags>
+        <tag>Leetcode</tag>
+        <tag>Python</tag>
+        <tag>Math</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>[筆記] Boostrape-table 列上編輯功能</title>
     <url>/2020/09/20/%E7%AD%86%E8%A8%98-Boostrape-table-%E5%88%97%E4%B8%8A%E7%B7%A8%E8%BC%AF%E5%8A%9F%E8%83%BD/</url>
     <content><![CDATA[<blockquote>
@@ -1142,54 +1190,6 @@
       </tags>
   </entry>
   <entry>
-    <title>[筆記] Leetcode - 1903. Largest Odd Number in String</title>
-    <url>/2023/12/09/%E7%AD%86%E8%A8%98-1903.-Largest-Odd%20Number-in-String/</url>
-    <content><![CDATA[<blockquote>
-<p>You are given a string num, representing a large integer. Return the largest-valued odd integer (as a string) that is a non-empty substring of num, or an empty string “” if no odd integer exists.</p>
-</blockquote>
-<p>A substring is a contiguous sequence of characters within a string.</p>
-<p>Example 1:</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Input: num &#x3D; &quot;52&quot;</span><br><span class="line">Output: &quot;5&quot;</span><br><span class="line">Explanation: The only non-empty substrings are &quot;5&quot;, &quot;2&quot;, and &quot;52&quot;. &quot;5&quot; is the only odd number.</span><br></pre></td></tr></table></figure>
-<p>Example 2:</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Input: num &#x3D; &quot;4206&quot;</span><br><span class="line">Output: &quot;&quot;</span><br><span class="line">Explanation: There are no odd numbers in &quot;4206&quot;.</span><br></pre></td></tr></table></figure>
-<p>Example 3:</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Input: num &#x3D; &quot;35427&quot;</span><br><span class="line">Output: &quot;35427&quot;</span><br><span class="line">Explanation: &quot;35427&quot; is already an odd number.</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">largestOddNumber</span>(<span class="params">self, num: <span class="built_in">str</span></span>) -&gt; <span class="built_in">str</span>:</span></span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">len</span>(num) - <span class="number">1</span>, -<span class="number">1</span>, -<span class="number">1</span>):</span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span> <span class="built_in">int</span>(num[i]) % <span class="number">2</span>:</span><br><span class="line">                <span class="keyword">return</span> num[:i + <span class="number">1</span>]</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> <span class="string">&#x27;&#x27;</span></span><br></pre></td></tr></table></figure>
-
-]]></content>
-      <tags>
-        <tag>list</tag>
-        <tag>Leetcode</tag>
-        <tag>Python</tag>
-        <tag>reverse</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>[筆記] Leetcode - 1913. Maximum Product Difference Between Two Pairs</title>
-    <url>/2023/12/18/%E7%AD%86%E8%A8%98-1913.-Maximum-Product%20Difference-Between-Two-Pairs/</url>
-    <content><![CDATA[<p><a href="https://leetcode.com/problems/maximum-product-difference-between-two-pairs/">https://leetcode.com/problems/maximum-product-difference-between-two-pairs/</a></p>
-<blockquote>
-<p>The product difference between two pairs (a, b) and (c, d) is defined as (a * b) - (c * d).</p>
-<p>For example, the product difference between (5, 6) and (2, 7) is (5 * 6) - (2 * 7) &#x3D; 16.<br>Given an integer array nums, choose four distinct indices w, x, y, and z such that the product difference between pairs (nums[w], nums[x]) and (nums[y], nums[z]) is maximized.</p>
-<p>Return the maximum such product difference.</p>
-</blockquote>
-<span id="more"></span>
-
-<p>Example 1:</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Input: nums &#x3D; [5,6,2,7,4]</span><br><span class="line">Output: 34</span><br><span class="line">Explanation: We can choose indices 1 and 3 for the first pair (6, 7) and indices 2 and 4 for the second pair (2, 4).</span><br><span class="line">The product difference is (6 * 7) - (2 * 4) &#x3D; 34.</span><br></pre></td></tr></table></figure>
-<p>Example 2:</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Input: nums &#x3D; [4,2,5,9,7,4,8]</span><br><span class="line">Output: 64</span><br><span class="line">Explanation: We can choose indices 3 and 6 for the first pair (9, 8) and indices 1 and 5 for the second pair (2, 4).</span><br><span class="line">The product difference is (9 * 8) - (2 * 4) &#x3D; 64.</span><br></pre></td></tr></table></figure>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">maxProductDifference</span>(<span class="params">self, nums: <span class="type">List</span>[<span class="built_in">int</span>]</span>) -&gt; <span class="built_in">int</span>:</span></span><br><span class="line">        min_num1, min_num2 = math.inf, math.inf</span><br><span class="line">        max_num1, max_num2 = -math.inf, -math.inf</span><br><span class="line">    </span><br><span class="line">        <span class="keyword">for</span> number <span class="keyword">in</span> nums: </span><br><span class="line">            <span class="keyword">if</span> number &gt; max_num1:</span><br><span class="line">                max_num1, max_num2 = number, max_num1</span><br><span class="line">            <span class="keyword">elif</span> number &gt; max_num2:</span><br><span class="line">                max_num2 = number</span><br><span class="line">    </span><br><span class="line">            <span class="keyword">if</span> number &lt; min_num1:</span><br><span class="line">                min_num1, min_num2 = number, min_num1</span><br><span class="line">            <span class="keyword">elif</span> number &lt; min_num2:</span><br><span class="line">                min_num2 = number</span><br><span class="line">    </span><br><span class="line">        <span class="keyword">return</span> max_num1 * max_num2 - min_num1 * min_num2</span><br></pre></td></tr></table></figure>
-
-]]></content>
-      <tags>
-        <tag>Leetcode</tag>
-        <tag>Python</tag>
-        <tag>Math</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>[筆記] Check.io - Pawn Brotherhood</title>
     <url>/2021/04/25/%E7%AD%86%E8%A8%98-Check-io-Pawn-Brotherhood/</url>
     <content><![CDATA[<blockquote>
@@ -1239,6 +1239,63 @@ def date_time(time: str) -&gt; str:
         <tag>Check.io</tag>
         <tag>python</tag>
         <tag>datetime</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>[筆記] GitHub pages + Hexo 搭建 Blog (Mac)</title>
+    <url>/2020/09/11/%E7%AD%86%E8%A8%98-GitHub-pages-Hexo-%E6%90%AD%E5%BB%BA-Blog-Mac/</url>
+    <content><![CDATA[<blockquote>
+<p>自己在建置的時候查了很多資料，整理完希望幫助到有需要的人<br>完整手把手教學  GitHub pages + Hexo 搭建</p>
+</blockquote>
+<span id="more"></span>
+
+<h3 id="環境建置"><a href="#環境建置" class="headerlink" title="環境建置"></a>環境建置</h3><ul>
+<li>安裝 <a href="https://nodejs.org/en/">Node.js</a><figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line">brew install node</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h3 id="安裝-Hexo"><a href="#安裝-Hexo" class="headerlink" title="安裝 Hexo"></a>安裝 Hexo</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">npm install -g hexo-cli</span><br></pre></td></tr></table></figure>
+
+<h3 id="初始化-Hexo"><a href="#初始化-Hexo" class="headerlink" title="初始化 Hexo"></a>初始化 Hexo</h3><p>安裝完 Hexo 後，執行下方指令，Hexo 就會在指定資料夾 <folder name> 中新建所需要的的檔案。</p>
+<figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line">hexo init &lt;folder name&gt;</span><br><span class="line"><span class="built_in">cd</span> &lt;folder name&gt;</span><br><span class="line">npm install</span><br><span class="line">//安裝 git 部署套件</span><br><span class="line">npm install hexo-deployer-git --save  </span><br></pre></td></tr></table></figure>
+
+<h3 id="啟動-Hexo"><a href="#啟動-Hexo" class="headerlink" title="啟動 Hexo"></a>啟動 Hexo</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">hexo g</span><br><span class="line">hexo s</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>指令介紹<br>hexo generate (hexo g) 產生靜態檔案，會在目錄下產生public 資料夾<br>hexo server (hexo s) 預覽、啟動伺服器，預設 <a href="http://localhost:4000/">http://localhost:4000/</a><br>hexo deploy (hexo d) 部署網站 (EX: github, heroku … ）</p>
+</li>
+<li><p>常用組合<br>hexo d -g # 產生靜態檔後部署<br>hexo s -g # 產生靜態檔後預覽</p>
+</li>
+</ul>
+<h3 id="網站配置-config-yml"><a href="#網站配置-config-yml" class="headerlink" title="網站配置 _config.yml"></a>網站配置 _config.yml</h3><p>5 ~ 12 行</p>
+<figure class="highlight yml"><table><tr><td class="code"><pre><span class="line"><span class="comment"># Site</span></span><br><span class="line"><span class="attr">title:</span> </span><br><span class="line"><span class="attr">subtitle:</span> <span class="string">&#x27;&#x27;</span></span><br><span class="line"><span class="string">//</span> <span class="string">內容描述(給搜尋引擎看的)</span></span><br><span class="line"><span class="attr">description:</span> <span class="string">&#x27;&#x27;</span></span><br><span class="line"><span class="attr">keywords:</span> </span><br><span class="line"><span class="attr">author:</span> </span><br><span class="line"><span class="attr">language:</span> <span class="string">en</span></span><br><span class="line"><span class="attr">timezone:</span> <span class="string">&#x27;&#x27;</span></span><br></pre></td></tr></table></figure>
+<h3 id="將-Hexo-配置到-GitHub"><a href="#將-Hexo-配置到-GitHub" class="headerlink" title="將 Hexo 配置到 GitHub"></a>將 Hexo 配置到 GitHub</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">url: https:&#x2F;&#x2F;&lt;username&gt;.github.io&#x2F;</span><br><span class="line"></span><br><span class="line">deploy:</span><br><span class="line">  type: git</span><br><span class="line">  repo: https:&#x2F;&#x2F;github.com&#x2F;&lt;username&gt;&#x2F;&lt;username&gt;&lt;&#x2F;username&gt;.github.io.git</span><br><span class="line">  branch: master</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>若沒有 GitHub 帳號<ol>
+<li>至 <a href="https://github.com/">GitHub</a> 申請</li>
+<li>新建 Repositories 取名為 &lt;blogname.github.io&gt;.github.io</li>
+</ol>
+</li>
+</ul>
+<h3 id="更換主題"><a href="#更換主題" class="headerlink" title="更換主題"></a>更換主題</h3><p>可至 <a href="https://hexo.io/themes/">Themes</a> 挑選，據說最多人用的是 <a href="https://theme-next.org/">NexT</a></p>
+<ul>
+<li><p>安裝 NexT</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">git clone https:&#x2F;&#x2F;github.com&#x2F;theme-next&#x2F;hexo-theme-next.git themes&#x2F;next</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>修改 _config.yml</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">theme: next ( default landscape )</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>重新啟動 server</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">hexo server</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h3 id="新增文章"><a href="#新增文章" class="headerlink" title="新增文章"></a>新增文章</h3><p>文章會以 Markdown 格式來撰寫，並且檔案存放在 <folder name>&#x2F;source&#x2F;_posts&#x2F;  </p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">hexo new &quot;&lt;title&gt;&quot;</span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <tags>
+        <tag>GitHub</tag>
+        <tag>Hexo</tag>
+        <tag>GitHub pages</tag>
+        <tag>Blog</tag>
       </tags>
   </entry>
   <entry>
@@ -1365,63 +1422,6 @@ def date_time(time: str) -&gt; str:
         <tag>GitHub pages</tag>
         <tag>Blog</tag>
         <tag>Mac</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>[筆記] GitHub pages + Hexo 搭建 Blog (Mac)</title>
-    <url>/2020/09/11/%E7%AD%86%E8%A8%98-GitHub-pages-Hexo-%E6%90%AD%E5%BB%BA-Blog-Mac/</url>
-    <content><![CDATA[<blockquote>
-<p>自己在建置的時候查了很多資料，整理完希望幫助到有需要的人<br>完整手把手教學  GitHub pages + Hexo 搭建</p>
-</blockquote>
-<span id="more"></span>
-
-<h3 id="環境建置"><a href="#環境建置" class="headerlink" title="環境建置"></a>環境建置</h3><ul>
-<li>安裝 <a href="https://nodejs.org/en/">Node.js</a><figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line">brew install node</span><br></pre></td></tr></table></figure></li>
-</ul>
-<h3 id="安裝-Hexo"><a href="#安裝-Hexo" class="headerlink" title="安裝 Hexo"></a>安裝 Hexo</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">npm install -g hexo-cli</span><br></pre></td></tr></table></figure>
-
-<h3 id="初始化-Hexo"><a href="#初始化-Hexo" class="headerlink" title="初始化 Hexo"></a>初始化 Hexo</h3><p>安裝完 Hexo 後，執行下方指令，Hexo 就會在指定資料夾 <folder name> 中新建所需要的的檔案。</p>
-<figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line">hexo init &lt;folder name&gt;</span><br><span class="line"><span class="built_in">cd</span> &lt;folder name&gt;</span><br><span class="line">npm install</span><br><span class="line">//安裝 git 部署套件</span><br><span class="line">npm install hexo-deployer-git --save  </span><br></pre></td></tr></table></figure>
-
-<h3 id="啟動-Hexo"><a href="#啟動-Hexo" class="headerlink" title="啟動 Hexo"></a>啟動 Hexo</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">hexo g</span><br><span class="line">hexo s</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li><p>指令介紹<br>hexo generate (hexo g) 產生靜態檔案，會在目錄下產生public 資料夾<br>hexo server (hexo s) 預覽、啟動伺服器，預設 <a href="http://localhost:4000/">http://localhost:4000/</a><br>hexo deploy (hexo d) 部署網站 (EX: github, heroku … ）</p>
-</li>
-<li><p>常用組合<br>hexo d -g # 產生靜態檔後部署<br>hexo s -g # 產生靜態檔後預覽</p>
-</li>
-</ul>
-<h3 id="網站配置-config-yml"><a href="#網站配置-config-yml" class="headerlink" title="網站配置 _config.yml"></a>網站配置 _config.yml</h3><p>5 ~ 12 行</p>
-<figure class="highlight yml"><table><tr><td class="code"><pre><span class="line"><span class="comment"># Site</span></span><br><span class="line"><span class="attr">title:</span> </span><br><span class="line"><span class="attr">subtitle:</span> <span class="string">&#x27;&#x27;</span></span><br><span class="line"><span class="string">//</span> <span class="string">內容描述(給搜尋引擎看的)</span></span><br><span class="line"><span class="attr">description:</span> <span class="string">&#x27;&#x27;</span></span><br><span class="line"><span class="attr">keywords:</span> </span><br><span class="line"><span class="attr">author:</span> </span><br><span class="line"><span class="attr">language:</span> <span class="string">en</span></span><br><span class="line"><span class="attr">timezone:</span> <span class="string">&#x27;&#x27;</span></span><br></pre></td></tr></table></figure>
-<h3 id="將-Hexo-配置到-GitHub"><a href="#將-Hexo-配置到-GitHub" class="headerlink" title="將 Hexo 配置到 GitHub"></a>將 Hexo 配置到 GitHub</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">url: https:&#x2F;&#x2F;&lt;username&gt;.github.io&#x2F;</span><br><span class="line"></span><br><span class="line">deploy:</span><br><span class="line">  type: git</span><br><span class="line">  repo: https:&#x2F;&#x2F;github.com&#x2F;&lt;username&gt;&#x2F;&lt;username&gt;&lt;&#x2F;username&gt;.github.io.git</span><br><span class="line">  branch: master</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>若沒有 GitHub 帳號<ol>
-<li>至 <a href="https://github.com/">GitHub</a> 申請</li>
-<li>新建 Repositories 取名為 &lt;blogname.github.io&gt;.github.io</li>
-</ol>
-</li>
-</ul>
-<h3 id="更換主題"><a href="#更換主題" class="headerlink" title="更換主題"></a>更換主題</h3><p>可至 <a href="https://hexo.io/themes/">Themes</a> 挑選，據說最多人用的是 <a href="https://theme-next.org/">NexT</a></p>
-<ul>
-<li><p>安裝 NexT</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">git clone https:&#x2F;&#x2F;github.com&#x2F;theme-next&#x2F;hexo-theme-next.git themes&#x2F;next</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>修改 _config.yml</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">theme: next ( default landscape )</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>重新啟動 server</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">hexo server</span><br></pre></td></tr></table></figure></li>
-</ul>
-<h3 id="新增文章"><a href="#新增文章" class="headerlink" title="新增文章"></a>新增文章</h3><p>文章會以 Markdown 格式來撰寫，並且檔案存放在 <folder name>&#x2F;source&#x2F;_posts&#x2F;  </p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">hexo new &quot;&lt;title&gt;&quot;</span><br></pre></td></tr></table></figure>
-
-]]></content>
-      <tags>
-        <tag>GitHub</tag>
-        <tag>Hexo</tag>
-        <tag>GitHub pages</tag>
-        <tag>Blog</tag>
       </tags>
   </entry>
   <entry>
@@ -1595,90 +1595,6 @@ def date_time(time: str) -&gt; str:
       </tags>
   </entry>
   <entry>
-    <title>[筆記] Leetcode - 1716. Calculate Money in Leetcode Bank</title>
-    <url>/2023/12/07/%E7%AD%86%E8%A8%98-Leetcode-%201716.-Calculate%20Money-in%20Leetcode-Bank/</url>
-    <content><![CDATA[<p><a href="https://leetcode.com/problems/calculate-money-in-leetcode-bank">https://leetcode.com/problems/calculate-money-in-leetcode-bank</a></p>
-<blockquote>
-<p>Hercy wants to save money for his first car. He puts money in the Leetcode bank every day.</p>
-</blockquote>
-<p>He starts by putting in $1 on Monday, the first day. Every day from Tuesday to Sunday, he will put in $1 more than the day before. On every subsequent Monday, he will put in $1 more than the previous Monday.<br>Given n, return the total amount of money he will have in the Leetcode bank at the end of the nth day.</p>
-<p><img src="https://hackmd.io/_uploads/HJQMMQkL6.png" alt="image"></p>
-<span id="more"></span>
-
-<blockquote>
-<p>key: 總和用上底加下底乘高除二計算，再加上剩餘天數</p>
-</blockquote>
-<p>第一週: 1 + 2 + 3 + 4 + 5 + 6 + 7 &#x3D; 28<br>第二週: 2 + 3 + 4 + 5 + 6 + 7 + 8 &#x3D; 28 + 7<br>第三週為: 3 + 4 + 5 + 6 + 7 + 8 + 9 &#x3D; 28 + 7 x 2<br>.<br>.<br>.<br>N 週過去，總金額為: 28 + (28 + 7) + (28 + 7 × 2) + …… + [28 + 7 × (N - 1)]</p>
-<p>{[28 + 28 + 7(N - 1)] × R} ÷ 2 </p>
-<p>最後記得加上不滿週的天數: (N + 1) + (N + 2) + … + (N + D)<br>[(N + 1) + (N + D)] x D ÷ 2 </p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">totalMoney</span>(<span class="params">self, n: <span class="built_in">int</span></span>) -&gt; <span class="built_in">int</span>:</span></span><br><span class="line">        week, day = <span class="built_in">divmod</span>(n, <span class="number">7</span>)</span><br><span class="line">        <span class="keyword">return</span> (<span class="number">28</span> + <span class="number">28</span> + <span class="number">7</span> * (week - <span class="number">1</span>)) * week // <span class="number">2</span> + (week * <span class="number">2</span> + day + <span class="number">1</span>) * day // <span class="number">2</span></span><br></pre></td></tr></table></figure>]]></content>
-      <tags>
-        <tag>Leetcode</tag>
-        <tag>Python</tag>
-        <tag>Math</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>[筆記] Leetcode - 905. Sort Array By Parity</title>
-    <url>/2023/09/29/%E7%AD%86%E8%A8%98-Leetcode-%20905.-Sort-Array-By-Parity/</url>
-    <content><![CDATA[<p><a href="https://leetcode.com/problems/contains-duplicate/">https://leetcode.com/problems/contains-duplicate/</a></p>
-<blockquote>
-<p>Given an integer array nums, move all the even integers at the beginning of the array followed by all the odd integers.<br>Return any array that satisfies this condition.</p>
-</blockquote>
-<p><img src="https://hackmd.io/_uploads/SJBmot7lp.png"></p>
-<span id="more"></span>
-
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">sortArrayByParity</span>(<span class="params">self, nums: <span class="type">List</span>[<span class="built_in">int</span>]</span>) -&gt; <span class="type">List</span>[<span class="built_in">int</span>]:</span></span><br><span class="line">        left, right = <span class="number">0</span>, <span class="built_in">len</span>(nums) - <span class="number">1</span></span><br><span class="line"></span><br><span class="line">        <span class="keyword">while</span> left &lt; right: </span><br><span class="line">            <span class="keyword">if</span> nums[right] % <span class="number">2</span> == <span class="number">0</span> <span class="keyword">and</span> nums[left] % <span class="number">2</span> == <span class="number">1</span>:</span><br><span class="line">                nums[right], nums[left] = nums[left], nums[right]</span><br><span class="line">                left += <span class="number">1</span></span><br><span class="line">                right -= <span class="number">1</span></span><br><span class="line">            </span><br><span class="line">            <span class="keyword">if</span> nums[left] % <span class="number">2</span> == <span class="number">0</span>:</span><br><span class="line">                left += <span class="number">1</span></span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span> nums[right] % <span class="number">2</span> == <span class="number">1</span>:</span><br><span class="line">                right -= <span class="number">1</span></span><br><span class="line">        <span class="keyword">return</span> nums</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">sortArrayByParity</span>(<span class="params">self, nums: <span class="type">List</span>[<span class="built_in">int</span>]</span>) -&gt; <span class="type">List</span>[<span class="built_in">int</span>]:</span>        even_idx = <span class="number">0</span></span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">len</span>(nums)):</span><br><span class="line">            <span class="keyword">if</span> nums[i] % <span class="number">2</span> == <span class="number">0</span>:</span><br><span class="line">                nums[even_idx], nums[i] = nums[i], nums[even_idx]</span><br><span class="line">                even_idx += <span class="number">1</span></span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> nums</span><br></pre></td></tr></table></figure>]]></content>
-      <tags>
-        <tag>list</tag>
-        <tag>Leetcode</tag>
-        <tag>Python</tag>
-        <tag>Coding</tag>
-        <tag>two pointer</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>[筆記] Leetcode - 136. Single Number</title>
-    <url>/2023/09/28/%E7%AD%86%E8%A8%98-Leetcode-%20136.-Single%20Number/</url>
-    <content><![CDATA[<p><a href="https://leetcode.com/problems/single-number/">https://leetcode.com/problems/single-number/</a></p>
-<blockquote>
-<p>Given a non-empty array of integers nums, every element appears twice except for one. Find that single one.<br>You must implement a solution with a linear runtime complexity and use only constant extra space.</p>
-</blockquote>
-<p><img src="https://hackmd.io/_uploads/BJfpj0Mx6.png"></p>
-<span id="more"></span>
-
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">singleNumber</span>(<span class="params">self, nums: <span class="type">List</span>[<span class="built_in">int</span>]</span>) -&gt; <span class="built_in">int</span>:</span></span><br><span class="line">        <span class="built_in">list</span> = []</span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> nums:</span><br><span class="line">            <span class="keyword">if</span> i <span class="keyword">in</span> <span class="built_in">list</span>:</span><br><span class="line">                <span class="built_in">list</span>.remove(i)</span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                <span class="built_in">list</span>.append(i)</span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">list</span>.pop()</span><br></pre></td></tr></table></figure>
-]]></content>
-      <tags>
-        <tag>list</tag>
-        <tag>Leetcode</tag>
-        <tag>Python</tag>
-        <tag>Coding</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>[筆記] Leetcode - 56. Merge Intervals</title>
-    <url>/2023/09/05/%E7%AD%86%E8%A8%98-Leetcode-%2056.-Merge%20Intervals/</url>
-    <content><![CDATA[<p><a href="https://leetcode.com/problems/merge-intervals/">https://leetcode.com/problems/merge-intervals/</a></p>
-<p><img src="https://i.imgur.com/FaQwh8J.png"><br>It means each list in intervals is a range, just to merge the overlapping one, others stay the same.</p>
-<span id="more"></span>
-
-
-<p>解題:</p>
-<ol>
-<li>sort</li>
-</ol>
-<p>sort by the start of each range<br>save the first one in result<br>if any the start of each range smaller then the last item in result, it should be merged, otherwise append in result</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>(<span class="params"><span class="built_in">object</span></span>):</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">merge</span>(<span class="params">self, intervals</span>):</span></span><br><span class="line">        <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">        :type intervals: List[List[int]]</span></span><br><span class="line"><span class="string">        :rtype: List[List[int]]</span></span><br><span class="line"><span class="string">        &quot;&quot;&quot;</span></span><br><span class="line">        <span class="comment"># internals.sort(key = lambda x = x[0])</span></span><br><span class="line">        sort_intervals = <span class="built_in">sorted</span>(intervals, key = <span class="keyword">lambda</span> x: x[<span class="number">0</span>])</span><br><span class="line"></span><br><span class="line">        res = [sort_intervals[<span class="number">0</span>]]</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> start, end <span class="keyword">in</span> sort_intervals[<span class="number">1</span>:]:</span><br><span class="line">            <span class="keyword">if</span> res[-<span class="number">1</span>][<span class="number">1</span>] &gt;= start:</span><br><span class="line">                res[-<span class="number">1</span>][<span class="number">1</span>] = <span class="built_in">max</span>(res[-<span class="number">1</span>][<span class="number">1</span>], end)</span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                res.append([start, end])</span><br><span class="line">        <span class="keyword">return</span> res</span><br></pre></td></tr></table></figure>]]></content>
-      <tags>
-        <tag>Leetcode</tag>
-        <tag>Python</tag>
-        <tag>Coding</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>[筆記] 深入淺出理解 Kubernetes/ Docker/ Container/ VM 概念</title>
     <url>/2025/01/14/%E7%AD%86%E8%A8%98-Kubernetes:-Docker:-Container:-VM-%E6%A6%82%E5%BF%B5/</url>
     <content><![CDATA[<h2 id="為什麼需要這些技術？"><a href="#為什麼需要這些技術？" class="headerlink" title="為什麼需要這些技術？"></a>為什麼需要這些技術？</h2><p>隨著應用程式越來越複雜，我們需要更靈活、高效的方式來部署和管理它們。傳統的硬體配置已經無法滿足快速變動的需求，因此「虛擬化技術」和「容器化技術」應運而生。</p>
@@ -1818,6 +1734,69 @@ def date_time(time: str) -&gt; str:
       </tags>
   </entry>
   <entry>
+    <title>[筆記] Leetcode - 136. Single Number</title>
+    <url>/2023/09/28/%E7%AD%86%E8%A8%98-Leetcode-%20136.-Single%20Number/</url>
+    <content><![CDATA[<p><a href="https://leetcode.com/problems/single-number/">https://leetcode.com/problems/single-number/</a></p>
+<blockquote>
+<p>Given a non-empty array of integers nums, every element appears twice except for one. Find that single one.<br>You must implement a solution with a linear runtime complexity and use only constant extra space.</p>
+</blockquote>
+<p><img src="https://hackmd.io/_uploads/BJfpj0Mx6.png"></p>
+<span id="more"></span>
+
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">singleNumber</span>(<span class="params">self, nums: <span class="type">List</span>[<span class="built_in">int</span>]</span>) -&gt; <span class="built_in">int</span>:</span></span><br><span class="line">        <span class="built_in">list</span> = []</span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> nums:</span><br><span class="line">            <span class="keyword">if</span> i <span class="keyword">in</span> <span class="built_in">list</span>:</span><br><span class="line">                <span class="built_in">list</span>.remove(i)</span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                <span class="built_in">list</span>.append(i)</span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">list</span>.pop()</span><br></pre></td></tr></table></figure>
+]]></content>
+      <tags>
+        <tag>list</tag>
+        <tag>Leetcode</tag>
+        <tag>Python</tag>
+        <tag>Coding</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>[筆記] Leetcode - 1716. Calculate Money in Leetcode Bank</title>
+    <url>/2023/12/07/%E7%AD%86%E8%A8%98-Leetcode-%201716.-Calculate%20Money-in%20Leetcode-Bank/</url>
+    <content><![CDATA[<p><a href="https://leetcode.com/problems/calculate-money-in-leetcode-bank">https://leetcode.com/problems/calculate-money-in-leetcode-bank</a></p>
+<blockquote>
+<p>Hercy wants to save money for his first car. He puts money in the Leetcode bank every day.</p>
+</blockquote>
+<p>He starts by putting in $1 on Monday, the first day. Every day from Tuesday to Sunday, he will put in $1 more than the day before. On every subsequent Monday, he will put in $1 more than the previous Monday.<br>Given n, return the total amount of money he will have in the Leetcode bank at the end of the nth day.</p>
+<p><img src="https://hackmd.io/_uploads/HJQMMQkL6.png" alt="image"></p>
+<span id="more"></span>
+
+<blockquote>
+<p>key: 總和用上底加下底乘高除二計算，再加上剩餘天數</p>
+</blockquote>
+<p>第一週: 1 + 2 + 3 + 4 + 5 + 6 + 7 &#x3D; 28<br>第二週: 2 + 3 + 4 + 5 + 6 + 7 + 8 &#x3D; 28 + 7<br>第三週為: 3 + 4 + 5 + 6 + 7 + 8 + 9 &#x3D; 28 + 7 x 2<br>.<br>.<br>.<br>N 週過去，總金額為: 28 + (28 + 7) + (28 + 7 × 2) + …… + [28 + 7 × (N - 1)]</p>
+<p>{[28 + 28 + 7(N - 1)] × R} ÷ 2 </p>
+<p>最後記得加上不滿週的天數: (N + 1) + (N + 2) + … + (N + D)<br>[(N + 1) + (N + D)] x D ÷ 2 </p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">totalMoney</span>(<span class="params">self, n: <span class="built_in">int</span></span>) -&gt; <span class="built_in">int</span>:</span></span><br><span class="line">        week, day = <span class="built_in">divmod</span>(n, <span class="number">7</span>)</span><br><span class="line">        <span class="keyword">return</span> (<span class="number">28</span> + <span class="number">28</span> + <span class="number">7</span> * (week - <span class="number">1</span>)) * week // <span class="number">2</span> + (week * <span class="number">2</span> + day + <span class="number">1</span>) * day // <span class="number">2</span></span><br></pre></td></tr></table></figure>]]></content>
+      <tags>
+        <tag>Leetcode</tag>
+        <tag>Python</tag>
+        <tag>Math</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>[筆記] Leetcode - 56. Merge Intervals</title>
+    <url>/2023/09/05/%E7%AD%86%E8%A8%98-Leetcode-%2056.-Merge%20Intervals/</url>
+    <content><![CDATA[<p><a href="https://leetcode.com/problems/merge-intervals/">https://leetcode.com/problems/merge-intervals/</a></p>
+<p><img src="https://i.imgur.com/FaQwh8J.png"><br>It means each list in intervals is a range, just to merge the overlapping one, others stay the same.</p>
+<span id="more"></span>
+
+
+<p>解題:</p>
+<ol>
+<li>sort</li>
+</ol>
+<p>sort by the start of each range<br>save the first one in result<br>if any the start of each range smaller then the last item in result, it should be merged, otherwise append in result</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>(<span class="params"><span class="built_in">object</span></span>):</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">merge</span>(<span class="params">self, intervals</span>):</span></span><br><span class="line">        <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">        :type intervals: List[List[int]]</span></span><br><span class="line"><span class="string">        :rtype: List[List[int]]</span></span><br><span class="line"><span class="string">        &quot;&quot;&quot;</span></span><br><span class="line">        <span class="comment"># internals.sort(key = lambda x = x[0])</span></span><br><span class="line">        sort_intervals = <span class="built_in">sorted</span>(intervals, key = <span class="keyword">lambda</span> x: x[<span class="number">0</span>])</span><br><span class="line"></span><br><span class="line">        res = [sort_intervals[<span class="number">0</span>]]</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> start, end <span class="keyword">in</span> sort_intervals[<span class="number">1</span>:]:</span><br><span class="line">            <span class="keyword">if</span> res[-<span class="number">1</span>][<span class="number">1</span>] &gt;= start:</span><br><span class="line">                res[-<span class="number">1</span>][<span class="number">1</span>] = <span class="built_in">max</span>(res[-<span class="number">1</span>][<span class="number">1</span>], end)</span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                res.append([start, end])</span><br><span class="line">        <span class="keyword">return</span> res</span><br></pre></td></tr></table></figure>]]></content>
+      <tags>
+        <tag>Leetcode</tag>
+        <tag>Python</tag>
+        <tag>Coding</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>[筆記] Leetcode - 217. Contains Duplicate</title>
     <url>/2023/09/28/%E7%AD%86%E8%A8%98-Leetcode-%20217.-Contains-Duplicate/</url>
     <content><![CDATA[<p><a href="https://leetcode.com/problems/contains-duplicate/">https://leetcode.com/problems/contains-duplicate/</a></p>
@@ -1838,6 +1817,49 @@ def date_time(time: str) -&gt; str:
         <tag>Python</tag>
         <tag>Coding</tag>
         <tag>set</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>[筆記] Leetcode - 905. Sort Array By Parity</title>
+    <url>/2023/09/29/%E7%AD%86%E8%A8%98-Leetcode-%20905.-Sort-Array-By-Parity/</url>
+    <content><![CDATA[<p><a href="https://leetcode.com/problems/contains-duplicate/">https://leetcode.com/problems/contains-duplicate/</a></p>
+<blockquote>
+<p>Given an integer array nums, move all the even integers at the beginning of the array followed by all the odd integers.<br>Return any array that satisfies this condition.</p>
+</blockquote>
+<p><img src="https://hackmd.io/_uploads/SJBmot7lp.png"></p>
+<span id="more"></span>
+
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">sortArrayByParity</span>(<span class="params">self, nums: <span class="type">List</span>[<span class="built_in">int</span>]</span>) -&gt; <span class="type">List</span>[<span class="built_in">int</span>]:</span></span><br><span class="line">        left, right = <span class="number">0</span>, <span class="built_in">len</span>(nums) - <span class="number">1</span></span><br><span class="line"></span><br><span class="line">        <span class="keyword">while</span> left &lt; right: </span><br><span class="line">            <span class="keyword">if</span> nums[right] % <span class="number">2</span> == <span class="number">0</span> <span class="keyword">and</span> nums[left] % <span class="number">2</span> == <span class="number">1</span>:</span><br><span class="line">                nums[right], nums[left] = nums[left], nums[right]</span><br><span class="line">                left += <span class="number">1</span></span><br><span class="line">                right -= <span class="number">1</span></span><br><span class="line">            </span><br><span class="line">            <span class="keyword">if</span> nums[left] % <span class="number">2</span> == <span class="number">0</span>:</span><br><span class="line">                left += <span class="number">1</span></span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span> nums[right] % <span class="number">2</span> == <span class="number">1</span>:</span><br><span class="line">                right -= <span class="number">1</span></span><br><span class="line">        <span class="keyword">return</span> nums</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">sortArrayByParity</span>(<span class="params">self, nums: <span class="type">List</span>[<span class="built_in">int</span>]</span>) -&gt; <span class="type">List</span>[<span class="built_in">int</span>]:</span>        even_idx = <span class="number">0</span></span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">len</span>(nums)):</span><br><span class="line">            <span class="keyword">if</span> nums[i] % <span class="number">2</span> == <span class="number">0</span>:</span><br><span class="line">                nums[even_idx], nums[i] = nums[i], nums[even_idx]</span><br><span class="line">                even_idx += <span class="number">1</span></span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> nums</span><br></pre></td></tr></table></figure>]]></content>
+      <tags>
+        <tag>list</tag>
+        <tag>Leetcode</tag>
+        <tag>Python</tag>
+        <tag>Coding</tag>
+        <tag>two pointer</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>[筆記] Leetcode - 867. Transpose Matrix</title>
+    <url>/2023/12/10/%E7%AD%86%E8%A8%98-Leetcode-867.-Transpose-Matrix/</url>
+    <content><![CDATA[<p><a href="https://leetcode.com/problems/transpose-matrix/">https://leetcode.com/problems/transpose-matrix/</a></p>
+<blockquote>
+<p>Given a 2D integer array matrix, return the transpose of matrix.</p>
+<p>The transpose of a matrix is the matrix flipped over its main diagonal, switching the matrix’s row and column indices.</p>
+</blockquote>
+<span id="more"></span>
+
+<p>Example 1:</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Input: matrix &#x3D; [[1,2,3],[4,5,6],[7,8,9]]</span><br><span class="line">Output: [[1,4,7],[2,5,8],[3,6,9]]</span><br></pre></td></tr></table></figure>
+<p>Example 2:</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Input: matrix &#x3D; [[1,2,3],[4,5,6]]</span><br><span class="line">Output: [[1,4],[2,5],[3,6]]</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">transpose</span>(<span class="params">self, matrix: <span class="type">List</span>[<span class="type">List</span>[<span class="built_in">int</span>]]</span>) -&gt; <span class="type">List</span>[<span class="type">List</span>[<span class="built_in">int</span>]]:</span></span><br><span class="line">        result = []</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> col <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">len</span>(matrix[<span class="number">0</span>])):</span><br><span class="line">            new_matrix = []</span><br><span class="line"></span><br><span class="line">            <span class="keyword">for</span> row <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">len</span>(matrix)):</span><br><span class="line">                new_matrix.append(matrix[row][col])</span><br><span class="line"></span><br><span class="line">            result.append(new_matrix)</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> result</span><br></pre></td></tr></table></figure>]]></content>
+      <tags>
+        <tag>Leetcode</tag>
+        <tag>Python</tag>
+        <tag>Matrix</tag>
       </tags>
   </entry>
   <entry>
@@ -1864,25 +1886,183 @@ def date_time(time: str) -&gt; str:
       </tags>
   </entry>
   <entry>
-    <title>[筆記] Leetcode - 867. Transpose Matrix</title>
-    <url>/2023/12/10/%E7%AD%86%E8%A8%98-Leetcode-867.-Transpose-Matrix/</url>
-    <content><![CDATA[<p><a href="https://leetcode.com/problems/transpose-matrix/">https://leetcode.com/problems/transpose-matrix/</a></p>
-<blockquote>
-<p>Given a 2D integer array matrix, return the transpose of matrix.</p>
-<p>The transpose of a matrix is the matrix flipped over its main diagonal, switching the matrix’s row and column indices.</p>
+    <title>[筆記] Relative Dropdown List</title>
+    <url>/2021/03/30/%E7%AD%86%E8%A8%98-Relative-Dropdown-List/</url>
+    <content><![CDATA[<blockquote>
+<p>實習開發網站，常遇到一些功能需求要上網查詢，整理成筆記以後再用到就不用又從頭開始找，也希望幫助到正在找學這些功能的人</p>
 </blockquote>
 <span id="more"></span>
 
-<p>Example 1:</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Input: matrix &#x3D; [[1,2,3],[4,5,6],[7,8,9]]</span><br><span class="line">Output: [[1,4,7],[2,5,8],[3,6,9]]</span><br></pre></td></tr></table></figure>
-<p>Example 2:</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Input: matrix &#x3D; [[1,2,3],[4,5,6]]</span><br><span class="line">Output: [[1,4],[2,5],[3,6]]</span><br></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="comment">// get the one which just select</span></span><br><span class="line">$(<span class="string">&#x27;.form_select select&#x27;</span>).change(<span class="function"><span class="keyword">function</span>(<span class="params">e</span>) </span>&#123; </span><br><span class="line">  <span class="keyword">var</span> current_selected = <span class="built_in">this</span>.id;</span><br><span class="line">  <span class="comment">// get all Dropdown in the form</span></span><br><span class="line">  <span class="comment">// remove val of dropdowns except current select </span></span><br><span class="line">  $(<span class="string">&#x27;.form_select select:not(#&#x27;</span> + current_selected + <span class="string">&#x27;)&#x27;</span>).each(<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    $(<span class="string">&#x27;#&#x27;</span> + <span class="built_in">this</span>.id).val(<span class="string">&#x27;&#x27;</span>);</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
 
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">transpose</span>(<span class="params">self, matrix: <span class="type">List</span>[<span class="type">List</span>[<span class="built_in">int</span>]]</span>) -&gt; <span class="type">List</span>[<span class="type">List</span>[<span class="built_in">int</span>]]:</span></span><br><span class="line">        result = []</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> col <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">len</span>(matrix[<span class="number">0</span>])):</span><br><span class="line">            new_matrix = []</span><br><span class="line"></span><br><span class="line">            <span class="keyword">for</span> row <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">len</span>(matrix)):</span><br><span class="line">                new_matrix.append(matrix[row][col])</span><br><span class="line"></span><br><span class="line">            result.append(new_matrix)</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> result</span><br></pre></td></tr></table></figure>]]></content>
+
+<iframe width="100%" height="500" src="https://codepen.io/ZZYume/embed/MWJjPGa?height=265&theme-id=dark&default-tab=html,result" frameborder="0">See the Pen <a href='https://codepen.io/ZZYume/pen/MWJjPGa'>Relative Dropdown List </a> by Yume
+  (<a href='https://codepen.io/ZZYume'>@ZZYume</a>) on <a href='https://codepen.io'>CodePen</a>.</iframe>
+
+]]></content>
+      <categories>
+        <category>html</category>
+      </categories>
+      <tags>
+        <tag>html</tag>
+        <tag>css</tag>
+        <tag>javascript</tag>
+        <tag>jquery</tag>
+        <tag>dropdown</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>[筆記] Leetcode - 2215. Find the Difference of Two Arrays</title>
+    <url>/2023/05/03/%E7%AD%86%E8%A8%98-Leetcode-1822-Sign-of-the-Product-of-an-Array/</url>
+    <content><![CDATA[<span id="more"></span>
+
+<blockquote>
+<p>Given two 0-indexed integer arrays nums1 and nums2, return a list answer of size 2 where:</p>
+<ul>
+<li>answer[0] is a list of all distinct integers in nums1 which are not present in nums2.</li>
+<li>answer[1] is a list of all distinct integers in nums2 which are not present in nums1.</li>
+</ul>
+<p>Note that the integers in the lists may be returned in any order.</p>
+</blockquote>
+<p><img src="https://i.imgur.com/mN6RB67.png"></p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">findDifference</span>(<span class="params">self, nums1: <span class="type">List</span>[<span class="built_in">int</span>], nums2: <span class="type">List</span>[<span class="built_in">int</span>]</span>) -&gt; <span class="type">List</span>[<span class="type">List</span>[<span class="built_in">int</span>]]:</span></span><br><span class="line">        set1 = <span class="built_in">set</span>(nums1)</span><br><span class="line">        set2 = <span class="built_in">set</span>(nums2)</span><br><span class="line">        <span class="keyword">return</span> [ <span class="built_in">list</span>(set1 - set2), <span class="built_in">list</span>(set2 - set1)]</span><br></pre></td></tr></table></figure>]]></content>
       <tags>
         <tag>Leetcode</tag>
         <tag>Python</tag>
-        <tag>Matrix</tag>
+        <tag>Coding</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>[筆記] 網頁版面 - 側邊欄</title>
+    <url>/2020/09/20/%E7%AD%86%E8%A8%98-%E7%B6%B2%E9%A0%81%E7%89%88%E9%9D%A2-%E5%81%B4%E9%82%8A%E6%AC%84/</url>
+    <content><![CDATA[<blockquote>
+<p>實習開發網站，常遇到一些功能需求要上網查詢，整理成筆記以後再用到就不用又從頭開始找，也希望幫助到正在找學這些功能的人</p>
+</blockquote>
+<span id="more"></span>
+
+
+<iframe width="100%" height="500" src="https://codepen.io/ZZYume/embed/WNwaPpJ?height=265&theme-id=dark&default-tab=result" frameborder="0"></iframe>
+
+<p>想看比較清楚的 code，我也有放在 <a href="https://github.com/ZanaZhong/side-nav.github.io">Github</a></p>
+]]></content>
+      <tags>
+        <tag>html</tag>
+        <tag>css</tag>
+        <tag>javascript</tag>
+        <tag>jquery</tag>
+        <tag>Bootstrap</tag>
+        <tag>Bootstrap-table</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>軟體升級不崩潰！向前兼容與向後兼容的秘密</title>
+    <url>/2025/02/04/%E8%BB%9F%E9%AB%94%E5%8D%87%E7%B4%9A%E4%B8%8D%E5%B4%A9%E6%BD%B0%EF%BC%81%E5%90%91%E5%89%8D%E5%85%BC%E5%AE%B9%E8%88%87%E5%90%91%E5%BE%8C%E5%85%BC%E5%AE%B9%E7%9A%84%E7%A7%98%E5%AF%86/</url>
+    <content><![CDATA[<p>想像一下，你有一本舊筆記本，裡面記錄了多年來的重要資訊。某天，你買了一本新筆記本，希望能夠繼續使用舊的筆記內容，而不會因為格式變了就讀不懂。這其實就像軟體的<strong>兼容性 (Compatibility)</strong> 問題，確保系統或應用程式在不同版本之間能夠順暢運作，避免升級帶來的麻煩。</p>
+<p>在軟體開發與系統設計中，<strong>向前兼容 (Forward Compatibility)</strong> 和 <strong>向後兼容 (Backward Compatibility)</strong> 是兩個重要的概念，影響著系統升級、API 設計、資料格式變更等。</p>
+<span id="more"></span>
+
+<h2 id="什麼是向前兼容-Forward-Compatibility-？"><a href="#什麼是向前兼容-Forward-Compatibility-？" class="headerlink" title="什麼是向前兼容 (Forward Compatibility)？"></a>什麼是向前兼容 (Forward Compatibility)？</h2><blockquote>
+<p>向前兼容指的是「舊版本的系統或軟體能夠與未來的新版本兼容」，就像老舊的 DVD 播放機可以讀取最新的 DVD 影片，即使畫質可能沒那麼完美，至少還能播放。</p>
+</blockquote>
+<ul>
+<li><strong>文件格式：</strong> 舊版本的應用程式仍然能打開新的文件格式，即使無法解析新增加的內容。</li>
+<li><strong>API 設計：</strong> API 的回應增加新欄位，但舊版本的客戶端仍可正常運行，因為它們可以忽略未知欄位。</li>
+</ul>
+<h3 id="如何實現向前兼容"><a href="#如何實現向前兼容" class="headerlink" title="如何實現向前兼容"></a>如何實現向前兼容</h3><ol>
+<li><strong>保持核心功能不變</strong>：確保舊版本能夠正常運行，即使遇到新版本的變更。</li>
+<li><strong>使用可選欄位</strong>：在 JSON 或 XML 回應中，新增欄位時確保舊版本能夠忽略未識別的內容。</li>
+<li><strong>版本控制</strong>：在 API 或文件格式中提供版本標記，例如 <code>v1</code>、<code>v2</code>，確保不同版本可共存。</li>
+</ol>
+<h2 id="什麼是向後兼容-Backward-Compatibility-？"><a href="#什麼是向後兼容-Backward-Compatibility-？" class="headerlink" title="什麼是向後兼容 (Backward Compatibility)？"></a>什麼是向後兼容 (Backward Compatibility)？</h2><blockquote>
+<p>向後兼容指的是「新版本的系統或軟體能夠與舊版本的輸入或數據兼容」，就像新的遊戲主機 (EX:  PS5)仍然可以玩舊的 PS4 遊戲，這樣就不需要重新買一大堆遊戲。</p>
+</blockquote>
+<ul>
+<li><strong>作業系統相容性：</strong> 新版本的 Windows 仍然可以運行舊版本的應用程式。</li>
+<li><strong>API 保持相容性：</strong> 新版 API 仍然支持舊版 API 的請求格式。</li>
+</ul>
+<h3 id="如何實現向後兼容？"><a href="#如何實現向後兼容？" class="headerlink" title="如何實現向後兼容？"></a>如何實現向後兼容？</h3><ol>
+<li><strong>保留舊功能</strong>：即使新增了新功能，也要確保舊功能不受影響。</li>
+<li><strong>避免直接刪除舊接口</strong>：如果要移除舊功能，應該提供過渡方案，EX: 標記 <code>Deprecated</code>，並給出替代方案。</li>
+<li><strong>數據結構升級時考慮回溯</strong>：確保新系統仍能讀取舊格式的數據，避免數據丟失。</li>
+</ol>
+<h2 id="比較"><a href="#比較" class="headerlink" title="比較"></a>比較</h2><table>
+<thead>
+<tr>
+<th><strong>項目</strong></th>
+<th><strong>向前兼容 (Forward Compatibility)</strong></th>
+<th><strong>向後兼容 (Backward Compatibility)</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>定義</strong></td>
+<td>舊版本能讀取新版本的數據或請求</td>
+<td>新版本能讀取舊版本的數據或請求</td>
+</tr>
+<tr>
+<td><strong>重點</strong></td>
+<td>舊系統適應新變更</td>
+<td>新系統適應舊數據</td>
+</tr>
+<tr>
+<td><strong>應用場景</strong></td>
+<td>API 擴展、文件格式更新</td>
+<td>軟體升級、資料庫遷移</td>
+</tr>
+<tr>
+<td><strong>挑戰</strong></td>
+<td>需要讓舊版忽略未知內容</td>
+<td>需要確保新版本能處理舊格式</td>
+</tr>
+</tbody></table>
+<h2 id="如何確保你的軟體的兼容性？"><a href="#如何確保你的軟體的兼容性？" class="headerlink" title="如何確保你的軟體的兼容性？"></a>如何確保你的軟體的兼容性？</h2><ol>
+<li><p><strong>API 設計</strong></p>
+<ul>
+<li>使用版本控制，例如 <code>v1</code>, <code>v2</code>，確保不同版本能夠共存。</li>
+<li>在 API 回應中新增欄位時，確保舊版客戶端能夠忽略這些新欄位，不影響運作。</li>
+<li>提供過渡期，避免一次性刪除舊 API，讓開發者有時間適應新版本。</li>
+</ul>
+</li>
+<li><p><strong>資料庫遷移</strong></p>
+<ul>
+<li>新增新欄位時，不要立即移除舊欄位，以確保舊版本的應用仍可正常運行。</li>
+<li>使用 <strong>Feature Flags</strong> 控制新功能的啟用，確保舊版用戶不受影響。</li>
+<li>記錄變更日誌，監控相容性問題，確保遷移過程中不影響舊系統。</li>
+</ul>
+</li>
+<li><p><strong>文件格式更新</strong></p>
+<ul>
+<li>確保新版本的軟體仍能讀取舊的文件格式，避免因版本升級導致文件無法打開。</li>
+<li>允許舊版本的軟體忽略新格式中的未知內容，避免解析失敗。</li>
+</ul>
+</li>
+</ol>
+<h3 id="不建議使用向前兼容的情境"><a href="#不建議使用向前兼容的情境" class="headerlink" title="不建議使用向前兼容的情境"></a>不建議使用<code>向前兼容</code>的情境</h3><ol>
+<li><p><strong>新功能與舊版本完全不相容</strong><br>如果新版本引入的變更過於重大，EX: 資料格式、協議或架構發生根本性改變，那麼強行向前兼容可能會導致代碼變得複雜且難以維護。<br>EX：如果某個舊版應用不支援 JSON，而新版 API 全面改為 JSON 格式，那麼向前兼容的成本過高，不如讓舊版用戶升級。</p>
+</li>
+<li><p><strong>安全性考量</strong><br>某些安全漏洞可能存在於舊版本，強行讓舊版本相容新系統可能會帶來額外風險。<br>EX：新版的身份驗證方式比舊版更安全，保留舊版兼容性可能會讓攻擊者利用舊的驗證漏洞。</p>
+</li>
+<li><p><strong>技術債過重</strong><br>如果為了向前兼容而導致代碼變得複雜、難以維護，可能反而拖慢開發速度。<br>EX：長期支持的 API 可能因為過多歷史包袱而難以推動技術更新，這時候可能要考慮完全淘汰舊版。</p>
+</li>
+</ol>
+<h3 id="不建議使用向後兼容的情境"><a href="#不建議使用向後兼容的情境" class="headerlink" title="不建議使用向後兼容的情境"></a>不建議使用<code>向後兼容</code>的情境</h3><ol>
+<li><p><strong>架構大變動</strong><br>如果新版本的技術棄用了舊的核心架構，那麼兼容舊版本的代價可能非常高。<br>EX：舊系統基於 SQL，新系統全面改為 NoSQL，這兩者的數據結構與查詢方式完全不同，強行向後兼容可能得不償失。</p>
+</li>
+<li><p><strong>性能影響</strong><br>新版本可能針對效能優化，向後兼容可能會帶來額外的性能負擔。<br>EX：某些高效能的 API 需要使用 gRPC，但舊版仍在使用 REST，保留舊版可能影響整體效能。</p>
+</li>
+<li><p><strong>安全性考量</strong><br>與向前兼容相似，某些向後兼容的設計可能會保留已知的安全漏洞，讓系統暴露在風險中。<br>EX：舊版 API 使用較弱的加密標準（EX：SHA-1），新版本全面改用更安全的演算法（EX：SHA-256），這時應該放棄舊版支援。</p>
+</li>
+</ol>
+<h2 id="總結"><a href="#總結" class="headerlink" title="總結"></a>總結</h2><p>向前兼容與向後兼容其實就是軟體世界裡的「溝通橋樑」，確保不同版本的系統能夠互相理解，減少升級帶來的麻煩。如果沒有兼容性，每次更新就像換了一個全新的語言，讓舊版本的使用者瞬間變成「聽不懂」的狀態。</p>
+<p>所以，當設計系統時，選擇適當的兼容性策略，不僅能讓使用者體驗更順暢，開發維護成本也會大幅降低。</p>
+<p>不過，兼容性設計也不是萬能的，它需要根據實際需求權衡。如果舊版本的維護成本過高、安全風險大、或嚴重影響技術演進，那麼不兼容可能是一個更好的選擇，這時應該透過<strong>公告、過渡期、文檔指引</strong>來幫助用戶平滑升級。</p>
+]]></content>
+      <tags>
+        <tag>Compatibility</tag>
+        <tag>Forward Compatibility</tag>
+        <tag>Backward Compatibility</tag>
+        <tag>軟體開發</tag>
+        <tag>向前兼容</tag>
+        <tag>向後兼容</tag>
       </tags>
   </entry>
   <entry>
@@ -2004,186 +2184,6 @@ def date_time(time: str) -&gt; str:
         <tag>Microservices</tag>
         <tag>單體架構</tag>
         <tag>系統架構</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>[筆記] 網頁版面 - 側邊欄</title>
-    <url>/2020/09/20/%E7%AD%86%E8%A8%98-%E7%B6%B2%E9%A0%81%E7%89%88%E9%9D%A2-%E5%81%B4%E9%82%8A%E6%AC%84/</url>
-    <content><![CDATA[<blockquote>
-<p>實習開發網站，常遇到一些功能需求要上網查詢，整理成筆記以後再用到就不用又從頭開始找，也希望幫助到正在找學這些功能的人</p>
-</blockquote>
-<span id="more"></span>
-
-
-<iframe width="100%" height="500" src="https://codepen.io/ZZYume/embed/WNwaPpJ?height=265&theme-id=dark&default-tab=result" frameborder="0"></iframe>
-
-<p>想看比較清楚的 code，我也有放在 <a href="https://github.com/ZanaZhong/side-nav.github.io">Github</a></p>
-]]></content>
-      <tags>
-        <tag>html</tag>
-        <tag>css</tag>
-        <tag>javascript</tag>
-        <tag>jquery</tag>
-        <tag>Bootstrap</tag>
-        <tag>Bootstrap-table</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>[筆記] Relative Dropdown List</title>
-    <url>/2021/03/30/%E7%AD%86%E8%A8%98-Relative-Dropdown-List/</url>
-    <content><![CDATA[<blockquote>
-<p>實習開發網站，常遇到一些功能需求要上網查詢，整理成筆記以後再用到就不用又從頭開始找，也希望幫助到正在找學這些功能的人</p>
-</blockquote>
-<span id="more"></span>
-
-<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="comment">// get the one which just select</span></span><br><span class="line">$(<span class="string">&#x27;.form_select select&#x27;</span>).change(<span class="function"><span class="keyword">function</span>(<span class="params">e</span>) </span>&#123; </span><br><span class="line">  <span class="keyword">var</span> current_selected = <span class="built_in">this</span>.id;</span><br><span class="line">  <span class="comment">// get all Dropdown in the form</span></span><br><span class="line">  <span class="comment">// remove val of dropdowns except current select </span></span><br><span class="line">  $(<span class="string">&#x27;.form_select select:not(#&#x27;</span> + current_selected + <span class="string">&#x27;)&#x27;</span>).each(<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    $(<span class="string">&#x27;#&#x27;</span> + <span class="built_in">this</span>.id).val(<span class="string">&#x27;&#x27;</span>);</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
-
-
-<iframe width="100%" height="500" src="https://codepen.io/ZZYume/embed/MWJjPGa?height=265&theme-id=dark&default-tab=html,result" frameborder="0">See the Pen <a href='https://codepen.io/ZZYume/pen/MWJjPGa'>Relative Dropdown List </a> by Yume
-  (<a href='https://codepen.io/ZZYume'>@ZZYume</a>) on <a href='https://codepen.io'>CodePen</a>.</iframe>
-
-]]></content>
-      <categories>
-        <category>html</category>
-      </categories>
-      <tags>
-        <tag>html</tag>
-        <tag>css</tag>
-        <tag>javascript</tag>
-        <tag>jquery</tag>
-        <tag>dropdown</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>軟體升級不崩潰！向前兼容與向後兼容的秘密</title>
-    <url>/2025/02/04/%E8%BB%9F%E9%AB%94%E5%8D%87%E7%B4%9A%E4%B8%8D%E5%B4%A9%E6%BD%B0%EF%BC%81%E5%90%91%E5%89%8D%E5%85%BC%E5%AE%B9%E8%88%87%E5%90%91%E5%BE%8C%E5%85%BC%E5%AE%B9%E7%9A%84%E7%A7%98%E5%AF%86/</url>
-    <content><![CDATA[<p>想像一下，你有一本舊筆記本，裡面記錄了多年來的重要資訊。某天，你買了一本新筆記本，希望能夠繼續使用舊的筆記內容，而不會因為格式變了就讀不懂。這其實就像軟體的<strong>兼容性 (Compatibility)</strong> 問題，確保系統或應用程式在不同版本之間能夠順暢運作，避免升級帶來的麻煩。</p>
-<p>在軟體開發與系統設計中，<strong>向前兼容 (Forward Compatibility)</strong> 和 <strong>向後兼容 (Backward Compatibility)</strong> 是兩個重要的概念，影響著系統升級、API 設計、資料格式變更等。</p>
-<span id="more"></span>
-
-<h2 id="什麼是向前兼容-Forward-Compatibility-？"><a href="#什麼是向前兼容-Forward-Compatibility-？" class="headerlink" title="什麼是向前兼容 (Forward Compatibility)？"></a>什麼是向前兼容 (Forward Compatibility)？</h2><blockquote>
-<p>向前兼容指的是「舊版本的系統或軟體能夠與未來的新版本兼容」，就像老舊的 DVD 播放機可以讀取最新的 DVD 影片，即使畫質可能沒那麼完美，至少還能播放。</p>
-</blockquote>
-<ul>
-<li><strong>文件格式：</strong> 舊版本的應用程式仍然能打開新的文件格式，即使無法解析新增加的內容。</li>
-<li><strong>API 設計：</strong> API 的回應增加新欄位，但舊版本的客戶端仍可正常運行，因為它們可以忽略未知欄位。</li>
-</ul>
-<h3 id="如何實現向前兼容"><a href="#如何實現向前兼容" class="headerlink" title="如何實現向前兼容"></a>如何實現向前兼容</h3><ol>
-<li><strong>保持核心功能不變</strong>：確保舊版本能夠正常運行，即使遇到新版本的變更。</li>
-<li><strong>使用可選欄位</strong>：在 JSON 或 XML 回應中，新增欄位時確保舊版本能夠忽略未識別的內容。</li>
-<li><strong>版本控制</strong>：在 API 或文件格式中提供版本標記，例如 <code>v1</code>、<code>v2</code>，確保不同版本可共存。</li>
-</ol>
-<h2 id="什麼是向後兼容-Backward-Compatibility-？"><a href="#什麼是向後兼容-Backward-Compatibility-？" class="headerlink" title="什麼是向後兼容 (Backward Compatibility)？"></a>什麼是向後兼容 (Backward Compatibility)？</h2><blockquote>
-<p>向後兼容指的是「新版本的系統或軟體能夠與舊版本的輸入或數據兼容」，就像新的遊戲主機 (EX:  PS5)仍然可以玩舊的 PS4 遊戲，這樣就不需要重新買一大堆遊戲。</p>
-</blockquote>
-<ul>
-<li><strong>作業系統相容性：</strong> 新版本的 Windows 仍然可以運行舊版本的應用程式。</li>
-<li><strong>API 保持相容性：</strong> 新版 API 仍然支持舊版 API 的請求格式。</li>
-</ul>
-<h3 id="如何實現向後兼容？"><a href="#如何實現向後兼容？" class="headerlink" title="如何實現向後兼容？"></a>如何實現向後兼容？</h3><ol>
-<li><strong>保留舊功能</strong>：即使新增了新功能，也要確保舊功能不受影響。</li>
-<li><strong>避免直接刪除舊接口</strong>：如果要移除舊功能，應該提供過渡方案，EX: 標記 <code>Deprecated</code>，並給出替代方案。</li>
-<li><strong>數據結構升級時考慮回溯</strong>：確保新系統仍能讀取舊格式的數據，避免數據丟失。</li>
-</ol>
-<h2 id="比較"><a href="#比較" class="headerlink" title="比較"></a>比較</h2><table>
-<thead>
-<tr>
-<th><strong>項目</strong></th>
-<th><strong>向前兼容 (Forward Compatibility)</strong></th>
-<th><strong>向後兼容 (Backward Compatibility)</strong></th>
-</tr>
-</thead>
-<tbody><tr>
-<td><strong>定義</strong></td>
-<td>舊版本能讀取新版本的數據或請求</td>
-<td>新版本能讀取舊版本的數據或請求</td>
-</tr>
-<tr>
-<td><strong>重點</strong></td>
-<td>舊系統適應新變更</td>
-<td>新系統適應舊數據</td>
-</tr>
-<tr>
-<td><strong>應用場景</strong></td>
-<td>API 擴展、文件格式更新</td>
-<td>軟體升級、資料庫遷移</td>
-</tr>
-<tr>
-<td><strong>挑戰</strong></td>
-<td>需要讓舊版忽略未知內容</td>
-<td>需要確保新版本能處理舊格式</td>
-</tr>
-</tbody></table>
-<h2 id="如何確保你的軟體兼容？"><a href="#如何確保你的軟體兼容？" class="headerlink" title="如何確保你的軟體兼容？"></a>如何確保你的軟體兼容？</h2><ol>
-<li><p><strong>API 設計</strong></p>
-<ul>
-<li>使用版本控制，例如 <code>v1</code>, <code>v2</code>，確保不同版本能夠共存。</li>
-<li>在 API 回應中新增欄位時，確保舊版客戶端能夠忽略這些新欄位，不影響運作。</li>
-<li>提供過渡期，避免一次性刪除舊 API，讓開發者有時間適應新版本。</li>
-</ul>
-</li>
-<li><p><strong>數據庫遷移</strong></p>
-<ul>
-<li>新增新欄位時，不要立即移除舊欄位，以確保舊版本的應用仍可正常運行。</li>
-<li>使用 <strong>Feature Flags</strong> 控制新功能的啟用，確保舊版用戶不受影響。</li>
-<li>記錄變更日誌，監控相容性問題，確保遷移過程中不影響舊系統。</li>
-</ul>
-</li>
-<li><p><strong>文件格式更新</strong></p>
-<ul>
-<li>確保新版本的軟體仍能讀取舊格式的文件，避免因版本升級導致文件無法打開。</li>
-<li>允許舊版本的軟體忽略新格式中的未知內容，避免解析失敗。</li>
-</ul>
-</li>
-</ol>
-<h3 id="不建議使用向前兼容的情境"><a href="#不建議使用向前兼容的情境" class="headerlink" title="不建議使用向前兼容的情境"></a>不建議使用向前兼容的情境</h3><ol>
-<li><p><strong>新功能與舊版本完全不相容</strong><br>如果新版本引入的變更過於重大，EX: 資料格式、協議或架構發生根本性改變，那麼強行向前兼容可能會導致代碼變得複雜且難以維護。<br>EX：如果某個舊版應用不支援 JSON，而新版 API 全面改為 JSON 格式，那麼向前兼容的成本過高，不如讓舊版用戶升級。</p>
-</li>
-<li><p><strong>安全性考量</strong><br>某些安全漏洞可能存在於舊版本，強行讓舊版本相容新系統可能會帶來額外風險。<br>EX：新版的身份驗證方式比舊版更安全，保留舊版兼容性可能會讓攻擊者利用舊的驗證漏洞。</p>
-</li>
-<li><p><strong>技術債過重</strong><br>如果為了向前兼容而導致代碼變得複雜、難以維護，可能反而拖慢開發速度。<br>EX：長期支持的 API 可能因為過多歷史包袱而難以推動技術更新，這時候可能要考慮完全淘汰舊版。</p>
-</li>
-</ol>
-<h3 id="不建議使用向後兼容的情境"><a href="#不建議使用向後兼容的情境" class="headerlink" title="不建議使用向後兼容的情境"></a>不建議使用向後兼容的情境</h3><ol>
-<li><p><strong>架構大變動</strong><br>如果新版本的技術棄用了舊的核心架構，那麼兼容舊版本的代價可能非常高。<br>EX：舊系統基於 SQL，新系統全面改為 NoSQL，這兩者的數據結構與查詢方式完全不同，強行向後兼容可能得不償失。</p>
-</li>
-<li><p><strong>性能影響</strong><br>新版本可能針對效能優化，向後兼容可能會帶來額外的性能負擔。<br>EX：某些高效能的 API 需要使用 gRPC，但舊版仍在使用 REST，保留舊版可能影響整體效能。</p>
-</li>
-<li><p><strong>安全性考量</strong><br>與向前兼容相似，某些向後兼容的設計可能會保留已知的安全漏洞，讓系統暴露在風險中。<br>EX：舊版 API 使用較弱的加密標準（EX：SHA-1），新版本全面改用更安全的演算法（EX：SHA-256），這時應該放棄舊版支援。</p>
-</li>
-</ol>
-<h2 id="總結"><a href="#總結" class="headerlink" title="總結"></a>總結</h2><p>向前兼容與向後兼容其實就是軟體世界裡的「溝通橋樑」，確保不同版本的系統能夠互相理解，減少升級帶來的麻煩。如果沒有兼容性，每次更新就像換了一個全新的語言，讓舊版本的使用者瞬間變成「聽不懂」的狀態。</p>
-<p>所以，當設計系統時，選擇適當的兼容性策略，不僅能讓使用者體驗更順暢，開發維護成本也會大幅降低。</p>
-<p>不過，兼容性設計也不是萬能的，它需要根據實際需求權衡。如果舊版本的維護成本過高、安全風險大、或嚴重影響技術演進，那麼不兼容可能是一個更好的選擇，這時應該透過<strong>公告、過渡期、文檔指引</strong>來幫助用戶平滑升級。</p>
-]]></content>
-      <tags>
-        <tag>Compatibility</tag>
-        <tag>Forward Compatibility</tag>
-        <tag>Backward Compatibility</tag>
-        <tag>軟體開發</tag>
-        <tag>向前兼容</tag>
-        <tag>向後兼容</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>[筆記] Leetcode - 2215. Find the Difference of Two Arrays</title>
-    <url>/2023/05/03/%E7%AD%86%E8%A8%98-Leetcode-1822-Sign-of-the-Product-of-an-Array/</url>
-    <content><![CDATA[<span id="more"></span>
-
-<blockquote>
-<p>Given two 0-indexed integer arrays nums1 and nums2, return a list answer of size 2 where:</p>
-<ul>
-<li>answer[0] is a list of all distinct integers in nums1 which are not present in nums2.</li>
-<li>answer[1] is a list of all distinct integers in nums2 which are not present in nums1.</li>
-</ul>
-<p>Note that the integers in the lists may be returned in any order.</p>
-</blockquote>
-<p><img src="https://i.imgur.com/mN6RB67.png"></p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">findDifference</span>(<span class="params">self, nums1: <span class="type">List</span>[<span class="built_in">int</span>], nums2: <span class="type">List</span>[<span class="built_in">int</span>]</span>) -&gt; <span class="type">List</span>[<span class="type">List</span>[<span class="built_in">int</span>]]:</span></span><br><span class="line">        set1 = <span class="built_in">set</span>(nums1)</span><br><span class="line">        set2 = <span class="built_in">set</span>(nums2)</span><br><span class="line">        <span class="keyword">return</span> [ <span class="built_in">list</span>(set1 - set2), <span class="built_in">list</span>(set2 - set1)]</span><br></pre></td></tr></table></figure>]]></content>
-      <tags>
-        <tag>Leetcode</tag>
-        <tag>Python</tag>
-        <tag>Coding</tag>
       </tags>
   </entry>
 </search>
