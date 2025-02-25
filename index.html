@@ -152,17 +152,17 @@
   </li>
         <li class="menu-item menu-item-tags">
 
-    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">77</span></a>
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">84</span></a>
 
   </li>
         <li class="menu-item menu-item-categories">
 
-    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">7</span></a>
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">8</span></a>
 
   </li>
         <li class="menu-item menu-item-archives">
 
-    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">37</span></a>
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">38</span></a>
 
   </li>
       <li class="menu-item menu-item-search">
@@ -236,20 +236,20 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">37</span>
+          <span class="site-state-item-count">38</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">7</span>
+        <span class="site-state-item-count">8</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">77</span>
+        <span class="site-state-item-count">84</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
@@ -297,6 +297,106 @@
       
 
       
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://zanazhong.github.io/2025/02/25/Go-Concurrency%EF%BC%9AGoroutine%E3%80%81Channel%E3%80%81WaitGroup%E3%80%81Mutex-%E4%B8%80%E6%AC%A1%E6%90%9E%E6%87%82%EF%BC%81/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/headshot.jpg">
+      <meta itemprop="name" content="Zana">
+      <meta itemprop="description" content="ɪᴛ ɪs ɪᴍᴘᴏʀᴛᴀɴᴛ ᴛᴏ sᴇᴇ ʜᴏᴡ ғᴀʀ ʏᴏᴜ'ᴠᴇ ᴄᴏᴍᴇ🐾">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hey I am Zana">
+    </span>
+
+    
+    
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2025/02/25/Go-Concurrency%EF%BC%9AGoroutine%E3%80%81Channel%E3%80%81WaitGroup%E3%80%81Mutex-%E4%B8%80%E6%AC%A1%E6%90%9E%E6%87%82%EF%BC%81/" class="post-title-link" itemprop="url">Go Concurrency：Goroutine、Channel、WaitGroup、Mutex 一次搞懂！</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+      
+
+      <time title="Created: 2025-02-25 08:37:50 / Modified: 08:41:52" itemprop="dateCreated datePublished" datetime="2025-02-25T08:37:50+08:00">2025-02-25</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Golang/" itemprop="url" rel="index"><span itemprop="name">Golang</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="Symbols count in article">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">Symbols count in article: </span>
+      <span>4.4k</span>
+    </span>
+    <span class="post-meta-item" title="Reading time">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">Reading time &asymp;</span>
+      <span>4 mins.</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p>在寫程式時，你是否曾遇過這樣的問題：</p>
+<ul>
+<li>程式跑得很慢，某些函式明明可以同時執行，卻得一個等一個？</li>
+<li>想要讓多個工作並行，但又怕不同的程序互相干擾？</li>
+<li>處理龐大的計算或 I&#x2F;O 任務時，CPU 占用率極低，白白浪費資源？</li>
+</ul>
+<p>這時候，你需要的是 <strong>並發（Concurrency）</strong>！而 Go 語言提供了一種超級簡單且高效的並發工具： <strong>Goroutine</strong>。</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2025/02/25/Go-Concurrency%EF%BC%9AGoroutine%E3%80%81Channel%E3%80%81WaitGroup%E3%80%81Mutex-%E4%B8%80%E6%AC%A1%E6%90%9E%E6%87%82%EF%BC%81/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+  
+  
+  
+
       
   
   
@@ -1094,101 +1194,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://zanazhong.github.io/2023/12/10/%E7%AD%86%E8%A8%98-Leetcode-867.-Transpose-Matrix/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/headshot.jpg">
-      <meta itemprop="name" content="Zana">
-      <meta itemprop="description" content="ɪᴛ ɪs ɪᴍᴘᴏʀᴛᴀɴᴛ ᴛᴏ sᴇᴇ ʜᴏᴡ ғᴀʀ ʏᴏᴜ'ᴠᴇ ᴄᴏᴍᴇ🐾">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hey I am Zana">
-    </span>
-
-    
-    
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2023/12/10/%E7%AD%86%E8%A8%98-Leetcode-867.-Transpose-Matrix/" class="post-title-link" itemprop="url">[筆記] Leetcode - 867. Transpose Matrix</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">Posted on</span>
-
-      <time title="Created: 2023-12-10 12:59:38" itemprop="dateCreated datePublished" datetime="2023-12-10T12:59:38+08:00">2023-12-10</time>
-    </span>
-      <span class="post-meta-item">
-        <span class="post-meta-item-icon">
-          <i class="far fa-calendar-check"></i>
-        </span>
-        <span class="post-meta-item-text">Edited on</span>
-        <time title="Modified: 2023-12-18 21:59:48" itemprop="dateModified" datetime="2023-12-18T21:59:48+08:00">2023-12-18</time>
-      </span>
-
-  
-    <span class="post-meta-item" title="Symbols count in article">
-      <span class="post-meta-item-icon">
-        <i class="far fa-file-word"></i>
-      </span>
-      <span class="post-meta-item-text">Symbols count in article: </span>
-      <span>602</span>
-    </span>
-    <span class="post-meta-item" title="Reading time">
-      <span class="post-meta-item-icon">
-        <i class="far fa-clock"></i>
-      </span>
-      <span class="post-meta-item-text">Reading time &asymp;</span>
-      <span>1 mins.</span>
-    </span>
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p><a target="_blank" rel="noopener" href="https://leetcode.com/problems/transpose-matrix/">https://leetcode.com/problems/transpose-matrix/</a></p>
-<blockquote>
-<p>Given a 2D integer array matrix, return the transpose of matrix.</p>
-<p>The transpose of a matrix is the matrix flipped over its main diagonal, switching the matrix’s row and column indices.</p>
-</blockquote>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2023/12/10/%E7%AD%86%E8%A8%98-Leetcode-867.-Transpose-Matrix/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1244,13 +1249,13 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-line"></i>
     </span>
-    <span title="Symbols count total">45k</span>
+    <span title="Symbols count total">49k</span>
   </span>
   <span class="post-meta-item">
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="Reading time total">41 mins.</span>
+    <span title="Reading time total">45 mins.</span>
   </span>
 </div>
 <div class="busuanzi-count">
