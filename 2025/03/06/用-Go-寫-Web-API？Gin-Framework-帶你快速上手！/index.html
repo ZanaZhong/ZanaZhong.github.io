@@ -26,15 +26,15 @@
     var CONFIG = {"hostname":"zanazhong.github.io","root":"/","scheme":"Gemini","version":"8.0.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":true,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}};
   </script>
 
-  <meta name="description" content="今天要跟大家分享如何使用 Gin Framework 這個強大的 Go 語言 Web 框架，快速開發高效能的 Web API。無論你是 Go 語言的新手，或是想尋找更輕巧快速的框架，Gin 絕對值得你一試。 什麼是 Gin？ 輕量級的 Go Web 框架快餐店Gin，正如其名，是一個用 Go 語言打造的 輕量級 且 高效能 的 Web 框架。它以 簡單易用 和 速度快 著稱，深受許多開發者喜愛。你">
+  <meta name="description" content="今天要跟大家分享如何使用 Gin Framework 這個強大的 Go 語言 Web 框架，快速開發高效能的 Web API。無論你是 Go 語言的新手，或是想尋找更輕巧快速的框架，Gin 絕對值得你一試。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="用 Go 寫 Web API？Gin Framework 帶你快速上手！">
 <meta property="og:url" content="https://zanazhong.github.io/2025/03/06/%E7%94%A8-Go-%E5%AF%AB-Web-API%EF%BC%9FGin-Framework-%E5%B8%B6%E4%BD%A0%E5%BF%AB%E9%80%9F%E4%B8%8A%E6%89%8B%EF%BC%81/index.html">
 <meta property="og:site_name" content="Hey I am Zana">
-<meta property="og:description" content="今天要跟大家分享如何使用 Gin Framework 這個強大的 Go 語言 Web 框架，快速開發高效能的 Web API。無論你是 Go 語言的新手，或是想尋找更輕巧快速的框架，Gin 絕對值得你一試。 什麼是 Gin？ 輕量級的 Go Web 框架快餐店Gin，正如其名，是一個用 Go 語言打造的 輕量級 且 高效能 的 Web 框架。它以 簡單易用 和 速度快 著稱，深受許多開發者喜愛。你">
+<meta property="og:description" content="今天要跟大家分享如何使用 Gin Framework 這個強大的 Go 語言 Web 框架，快速開發高效能的 Web API。無論你是 Go 語言的新手，或是想尋找更輕巧快速的框架，Gin 絕對值得你一試。">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2025-03-06T00:09:34.000Z">
-<meta property="article:modified_time" content="2025-03-06T00:14:20.631Z">
+<meta property="article:modified_time" content="2025-03-06T00:19:50.425Z">
 <meta property="article:author" content="Zana">
 <meta property="article:tag" content="Golang">
 <meta property="article:tag" content="Gin Framework">
@@ -335,7 +335,7 @@
       <span class="post-meta-item-text">Posted on</span>
       
 
-      <time title="Created: 2025-03-06 08:09:34 / Modified: 08:14:20" itemprop="dateCreated datePublished" datetime="2025-03-06T08:09:34+08:00">2025-03-06</time>
+      <time title="Created: 2025-03-06 08:09:34 / Modified: 08:19:50" itemprop="dateCreated datePublished" datetime="2025-03-06T08:09:34+08:00">2025-03-06</time>
     </span>
 
   
@@ -370,7 +370,8 @@
     
     <div class="post-body" itemprop="articleBody">
         <p>今天要跟大家分享如何使用 Gin Framework 這個強大的 Go 語言 Web 框架，快速開發高效能的 Web API。無論你是 Go 語言的新手，或是想尋找更輕巧快速的框架，Gin 絕對值得你一試。</p>
-<h2 id="什麼是-Gin？-輕量級的-Go-Web-框架快餐店"><a href="#什麼是-Gin？-輕量級的-Go-Web-框架快餐店" class="headerlink" title="什麼是 Gin？ 輕量級的 Go Web 框架快餐店"></a>什麼是 Gin？ 輕量級的 Go Web 框架快餐店</h2><p>Gin，正如其名，是一個用 Go 語言打造的 <strong>輕量級</strong> 且 <strong>高效能</strong> 的 Web 框架。它以 <strong>簡單易用</strong> 和 <strong>速度快</strong> 著稱，深受許多開發者喜愛。你可以把它想像成 Web 開發界的「<strong>快餐店</strong>」。</p>
+<span id="more"></span>
+<h2 id="什麼是-Gin？-輕量級的-Go-Web-框架快餐店"><a href="#什麼是-Gin？-輕量級的-Go-Web-框架快餐店" class="headerlink" title="什麼是 Gin？ 輕量級的 Go Web 框架快餐店"></a>什麼是 Gin？ 輕量級的 Go Web 框架快餐店</h2><p>Gin，正如其名，是一個用 Go 語言打造的<strong>輕量級</strong>且<strong>高效能</strong>的 Web 框架。它以<strong>簡單易用</strong>和<strong>速度快</strong>著稱，深受許多開發者喜愛。你可以把它想像成 Web 開發界的「<strong>快餐店</strong>」。</p>
 <p><strong>想像一下快餐店的運作模式：</strong></p>
 <ol>
 <li>**客人點餐 (HTTP 請求)**：使用者透過網路發送請求，例如：「我要一份使用者資料」。</li>
@@ -378,12 +379,12 @@
 <li>**廚房準備餐點 (處理請求並返回資料)**：伺服器根據請求，處理邏輯並準備好對應的資料，例如使用者資料 JSON。</li>
 <li>**服務生送餐 (HTTP 回應)**：伺服器將準備好的資料，以 HTTP 回應的方式送回給使用者。</li>
 </ol>
-<p>Gin Framework 就如同這間快餐店的管理系統，幫你 <strong>快速且有條理地處理網路請求與回應</strong>。它簡化了許多底層的複雜操作，讓開發者能更專注於 <strong>業務邏輯的實作</strong>，快速搭建 Web 應用程式或 API 服務。</p>
+<p>Gin Framework 就如同這間快餐店的管理系統，幫你<strong>快速且有條理地處理網路請求與回應</strong>。它簡化了許多底層的複雜操作，讓開發者能更專注於<strong>業務邏輯的實作</strong>，快速搭建 Web 應用程式或 API 服務。</p>
 <h2 id="為什麼選擇-Gin-Framework？Gin-的優勢分析"><a href="#為什麼選擇-Gin-Framework？Gin-的優勢分析" class="headerlink" title="為什麼選擇 Gin Framework？Gin 的優勢分析"></a>為什麼選擇 Gin Framework？Gin 的優勢分析</h2><p>在眾多 Web 框架中，為何 Gin 能夠脫穎而出，成為許多開發者的首選呢？我認為 Gin 擁有以下幾個關鍵優勢：</p>
 <ol>
 <li><p><strong>極致效能：快如閃電的速度</strong><br>Gin 底層基於 <code>httprouter</code> 這個高效能的路由引擎，擁有 <strong>極快的路由速度</strong>。在高流量的環境下，Gin 依然能保持 <strong>優異的效能與穩定性</strong>，就像跑車一樣，速度與穩定兼具。</p>
 </li>
-<li><p><strong>簡潔易學：上手無門檻</strong><br>Gin 的 API 設計 <strong>非常直觀</strong>，語法 <strong>清晰易懂</strong>，即使是 Go 語言新手也能快速上手。如同組裝樂高，說明書清晰，零件好辨識，很快就能組裝出模型。</p>
+<li><p><strong>簡潔易學：上手無門檻</strong><br>Gin 的 API 設計<strong>非常直觀</strong>，語法<strong>清晰易懂</strong>，即使是 Go 語言新手也能快速上手。如同組裝樂高，說明書清晰，零件好辨識，很快就能組裝出模型。</p>
 </li>
 <li><p><strong>豐富的 Middleware 支援：彈性擴充的積木</strong><br><strong>Middleware (中介層)</strong> 是 Gin 的重要特色，它允許你在請求處理流程中，自由加入額外的處理邏輯，例如：</p>
 <ul>
@@ -393,7 +394,7 @@
 </ul>
 <p> Gin 內建多種常用的 Middleware，也支援自訂 Middleware，就像積木一樣，可以彈性擴充功能。</p>
 </li>
-<li><p><strong>完善的文件與社群：堅實的後盾</strong><br>Gin 擁有 <strong>完善的官方文件</strong> 以及 <strong>活躍的社群</strong>。無論遇到任何問題，都能 সহজে 在網路上找到解答，或向社群尋求協助，學習資源豐富。</p>
+<li><p><strong>完善的文件與社群：可靠的後盾</strong><br>Gin 擁有<strong>完善的官方文件</strong>以及<strong>活躍的社群</strong>。無論遇到任何問題，都能在網路上找到解答，或向社群尋求協助，學習資源豐富。</p>
 </li>
 </ol>
 <h2 id="Gin-的核心概念：理解運作原理"><a href="#Gin-的核心概念：理解運作原理" class="headerlink" title="Gin 的核心概念：理解運作原理"></a>Gin 的核心概念：理解運作原理</h2><p>開始使用 Gin 之前，先了解幾個核心概念，能幫助你更深入地理解 Gin 的運作方式：</p>
@@ -456,13 +457,13 @@
 
 <ul>
 <li><code>func Logger() gin.HandlerFunc &#123; ... &#125;</code>： 定義一個名為 <code>Logger</code> 的 Middleware 函式，返回 <code>gin.HandlerFunc</code> 類型。</li>
-<li><code>c.Next()</code>： <strong>Middleware 的關鍵！</strong>  <code>c.Next()</code> 會 <strong>繼續執行後續的 Handler 或其他 Middleware</strong>。若沒有呼叫 <code>c.Next()</code>，請求流程會在此處終止。</li>
-<li><code>r.Use(Logger())</code>： 使用 <code>r.Use()</code> 方法 <strong>註冊 Middleware</strong>。此處為全局註冊，所有路由都會經過 <code>Logger</code> Middleware 的處理。</li>
+<li><code>c.Next()</code>： <strong>Middleware 的關鍵！</strong>  <code>c.Next()</code> 會<strong>繼續執行後續的 Handler 或其他 Middleware</strong>。若沒有呼叫 <code>c.Next()</code>，請求流程會在此處終止。</li>
+<li><code>r.Use(Logger())</code>： 使用 <code>r.Use()</code> 方法<strong>註冊 Middleware</strong>。此處為全局註冊，所有路由都會經過 <code>Logger</code> Middleware 的處理。</li>
 </ul>
-<p><strong>執行程式碼</strong> 並訪問 <code>/ping</code>，你將在終端機看到類似以下的日誌輸出：</p>
+<p><strong>執行程式碼</strong>並訪問 <code>/ping</code>，你將在終端機看到類似以下的日誌輸出：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[GIN-debug] [2023&#x2F;10&#x2F;27-15:30:00] | 200 |    127.0.0.1 |      247µs |             &#x2F;ping |            |</span><br><span class="line">請求日誌: GET &#x2F;ping 延遲: 250.397µs</span><br></pre></td></tr></table></figure>
 
-<h2 id="總結：Gin-Framework，Go-Web-開發的得力助手"><a href="#總結：Gin-Framework，Go-Web-開發的得力助手" class="headerlink" title="總結：Gin Framework，Go Web 開發的得力助手"></a>總結：Gin Framework，Go Web 開發的得力助手</h2><p>Gin Framework 以其 <strong>簡單、高效能</strong> 的特性，成為 Go 語言 Web 開發的熱門選擇。無論是開發 API 服務、Web 應用程式，甚至是微服務架構，Gin 都能助你一臂之力。<br>如果你熟悉 Express 或 Flask 等框架，相信你能快速上手 Gin。</p>
+<h2 id="總結：Gin-Framework，Go-Web-開發的得力助手"><a href="#總結：Gin-Framework，Go-Web-開發的得力助手" class="headerlink" title="總結：Gin Framework，Go Web 開發的得力助手"></a>總結：Gin Framework，Go Web 開發的得力助手</h2><p>Gin Framework 以其<strong>簡單、高效能</strong>的特性，成為 Go 語言 Web 開發的熱門選擇。無論是開發 API 服務、Web 應用程式，甚至是微服務架構，Gin 都能助你一臂之力。<br>如果你熟悉 Express 或 Flask 等框架，相信你能快速上手 Gin。</p>
 
     </div>
 
