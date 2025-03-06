@@ -330,7 +330,7 @@
       <span class="post-meta-item-text">Posted on</span>
       
 
-      <time title="Created: 2025-03-06 08:09:34 / Modified: 08:13:20" itemprop="dateCreated datePublished" datetime="2025-03-06T08:09:34+08:00">2025-03-06</time>
+      <time title="Created: 2025-03-06 08:09:34 / Modified: 08:14:20" itemprop="dateCreated datePublished" datetime="2025-03-06T08:09:34+08:00">2025-03-06</time>
     </span>
 
   
@@ -411,20 +411,20 @@
 <li>在瀏覽器或使用 <code>curl</code> 等工具訪問 <code>http://localhost:8080/hello</code>，你應該會看到 “Hello, Gin Framework!” 的訊息。</li>
 </ol>
 <h2 id="進階範例：讓-API-更靈活"><a href="#進階範例：讓-API-更靈活" class="headerlink" title="進階範例：讓 API 更靈活"></a>進階範例：讓 API 更靈活</h2><p>Web API 通常需要處理各種不同的路由與參數，讓使用者可以更精確地獲取或操作資料。Gin 提供了靈活的方式來處理這些需求。</p>
-<h3 id="路由參數-動態-URL"><a href="#路由參數-動態-URL" class="headerlink" title="路由參數 (動態 URL)"></a><strong>路由參數 (動態 URL)</strong></h3><p>有時我們需要處理<strong>動態的 URL</strong>，例如 <code>/user/&#123;id&#125;</code>，其中 <code>&#123;id&#125;</code> 可以是不同的使用者 ID。</p>
+<h3 id="路由參數-動態-URL"><a href="#路由參數-動態-URL" class="headerlink" title="路由參數 (動態 URL)"></a>路由參數 (動態 URL)</h3><p>有時我們需要處理<strong>動態的 URL</strong>，例如 <code>/user/&#123;id&#125;</code>，其中 <code>&#123;id&#125;</code> 可以是不同的使用者 ID。</p>
 <figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">r.GET(<span class="string">&quot;/user/:id&quot;</span>, <span class="function"><span class="keyword">func</span><span class="params">(c *gin.Context)</span></span> &#123;</span><br><span class="line">    userID := c.Param(<span class="string">&quot;id&quot;</span>) <span class="comment">// 取得路由參數 &quot;id&quot; 的值</span></span><br><span class="line">    c.JSON(<span class="number">200</span>, gin.H&#123;<span class="string">&quot;user_id&quot;</span>: userID&#125;) <span class="comment">// 回應 JSON</span></span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
 
 <ul>
 <li><code>r.GET(&quot;/user/:id&quot;, ...)</code>： 使用 <code>:id</code> 表示此處為動態路由參數。</li>
 <li><code>c.Param(&quot;id&quot;)</code>： 使用 <code>c.Param()</code> 方法取得路由參數 <code>id</code> 的值。</li>
 </ul>
-<h3 id="Query-參數-查詢字串"><a href="#Query-參數-查詢字串" class="headerlink" title="Query 參數 (查詢字串)"></a><strong>Query 參數 (查詢字串)</strong></h3><p>使用者也可以透過 <strong>Query String</strong> 傳遞參數，例如 <code>/search?query=Gin</code>。</p>
+<h3 id="Query-參數-查詢字串"><a href="#Query-參數-查詢字串" class="headerlink" title="Query 參數 (查詢字串)"></a>Query 參數 (查詢字串)</h3><p>使用者也可以透過 <strong>Query String</strong> 傳遞參數，例如 <code>/search?query=Gin</code>。</p>
 <figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">r.GET(<span class="string">&quot;/search&quot;</span>, <span class="function"><span class="keyword">func</span><span class="params">(c *gin.Context)</span></span> &#123;</span><br><span class="line">    query := c.Query(<span class="string">&quot;query&quot;</span>) <span class="comment">// 取得 Query 參數 &quot;query&quot; 的值</span></span><br><span class="line">    c.JSON(<span class="number">200</span>, gin.H&#123;<span class="string">&quot;search_result&quot;</span>: <span class="string">&quot;You searched for &quot;</span> + query&#125;)</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
 
 <ul>
 <li><code>c.Query(&quot;query&quot;)</code>： 使用 <code>c.Query()</code> 方法取得 Query 參數 <code>query</code> 的值。</li>
 </ul>
-<h3 id="處理-POST-請求與-JSON-資料"><a href="#處理-POST-請求與-JSON-資料" class="headerlink" title="處理 POST 請求與 JSON 資料"></a><strong>處理 POST 請求與 JSON 資料</strong></h3><p>API 經常需要接收前端傳來的 JSON 資料，例如使用者登入、提交表單等。</p>
+<h3 id="處理-POST-請求與-JSON-資料"><a href="#處理-POST-請求與-JSON-資料" class="headerlink" title="處理 POST 請求與 JSON 資料"></a>處理 POST 請求與 JSON 資料</h3><p>API 經常需要接收前端傳來的 JSON 資料，例如使用者登入、提交表單等。</p>
 <figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">r.POST(<span class="string">&quot;/login&quot;</span>, <span class="function"><span class="keyword">func</span><span class="params">(c *gin.Context)</span></span> &#123;</span><br><span class="line">    <span class="keyword">var</span> account <span class="keyword">struct</span> &#123; <span class="comment">// 定義接收 JSON 資料的結構</span></span><br><span class="line">        Username <span class="keyword">string</span> <span class="string">`json:&quot;username&quot;`</span> <span class="comment">// JSON 欄位名為 &quot;username&quot;</span></span><br><span class="line">        Password <span class="keyword">string</span> <span class="string">`json:&quot;password&quot;`</span> <span class="comment">// JSON 欄位名為 &quot;password&quot;</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 將請求 Body 中的 JSON 資料綁定到 `account` 結構體</span></span><br><span class="line">    <span class="keyword">if</span> err := c.ShouldBindJSON(&amp;user); err != <span class="literal">nil</span> &#123;</span><br><span class="line">        c.JSON(<span class="number">400</span>, gin.H&#123;<span class="string">&quot;error&quot;</span>: <span class="string">&quot;Invalid input&quot;</span>&#125;) <span class="comment">// 綁定失敗，回應錯誤</span></span><br><span class="line">        <span class="keyword">return</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    c.JSON(<span class="number">200</span>, gin.H&#123;<span class="string">&quot;message&quot;</span>: <span class="string">&quot;Welcome, &quot;</span> + user.Username&#125;) <span class="comment">// 綁定成功，回應歡迎訊息</span></span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
 
 <ul>
