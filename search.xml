@@ -101,99 +101,6 @@
       </tags>
   </entry>
   <entry>
-    <title>Go Concurrency：Goroutine、Channel、WaitGroup、Mutex 一次搞懂！</title>
-    <url>/2025/02/25/Go-Concurrency%EF%BC%9AGoroutine%E3%80%81Channel%E3%80%81WaitGroup%E3%80%81Mutex-%E4%B8%80%E6%AC%A1%E6%90%9E%E6%87%82%EF%BC%81/</url>
-    <content><![CDATA[<p>在寫程式時，你是否曾遇過這樣的問題：</p>
-<ul>
-<li>程式跑得很慢，某些函式明明可以同時執行，卻得一個等一個？</li>
-<li>想要讓多個工作並行，但又怕不同的程序互相干擾？</li>
-<li>處理龐大的計算或 I&#x2F;O 任務時，CPU 占用率極低，白白浪費資源？</li>
-</ul>
-<p>這時候，你需要的是 <strong>並發（Concurrency）</strong>！而 Go 語言提供了一種超級簡單且高效的並發工具： <strong>Goroutine</strong>。</p>
-<span id="more"></span>
-
-<p>在 Go 語言中，並發是其核心特性之一，而 Goroutine 則是實現並發的關鍵。你可以把它想像成一個「輕量級的執行緒」，但它比傳統執行緒更高效、佔用更少資源，並且能夠輕鬆地創建成千上萬個 Goroutine。</p>
-<h2 id="Goroutine-是什麼？為什麼它這麼強？"><a href="#Goroutine-是什麼？為什麼它這麼強？" class="headerlink" title="Goroutine 是什麼？為什麼它這麼強？"></a>Goroutine 是什麼？為什麼它這麼強？</h2><p>Goroutine 是 Go 語言的 <strong>輕量級執行緒（Lightweight Thread）</strong>，讓你可以輕鬆執行並發程式，而不需要手動管理繁瑣的系統執行緒。</p>
-<ul>
-<li><strong>輕量級</strong>：相比於傳統的作業系統執行緒（Thread），Goroutine 的記憶體開銷極低。</li>
-<li><strong>執行簡單</strong>：只要在函式前加上 <code>go</code>，就能讓它跑在背景，完全不需要設定任何 Thread！</li>
-<li><strong>獨立運行</strong>：Goroutine 之間互不影響，即使某個 Goroutine 崩潰，也不會導致其他 Goroutine 失敗。</li>
-<li><strong>高效</strong>：Go 運行時（runtime）會自動管理 Goroutine 的調度，避免過度依賴作業系統的執行緒管理。</li>
-</ul>
-<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">    <span class="string">&quot;fmt&quot;</span></span><br><span class="line">    <span class="string">&quot;time&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">hello</span><span class="params">()</span></span> &#123;</span><br><span class="line">    fmt.Println(<span class="string">&quot;Hello, Goroutine!&quot;</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">    <span class="keyword">go</span> hello() <span class="comment">// 啟動 Goroutine</span></span><br><span class="line">    fmt.Println(<span class="string">&quot;Main 函式結束&quot;</span>)</span><br><span class="line">    time.Sleep(time.Second) <span class="comment">// 等待 Goroutine 執行完成</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>輸出</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Main 函式結束</span><br><span class="line">Hello, Goroutine!</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li><code>go hello()</code> 會在背景執行，而 <code>main()</code> 函式會繼續往下執行。</li>
-<li>這樣我們的程式就可以同時進行兩個工作，提升效率！</li>
-</ul>
-<p>⚠ 但這裡有個問題—— Goroutine 是異步執行的，main() 可能在 hello() 結束前就已執行完畢，因此 time.Sleep() 讓主執行緒暫停一下，確保 Goroutine 執行。</p>
-<div class="note info"><p><strong>main 函式結束後，所有 Goroutine 也會立即結束</strong>，這就引出了下一個重要工具： <strong>WaitGroup</strong>。</p>
-</div>
-
-<h2 id="WaitGroup：讓主程式等-Goroutine-完成，確保-Goroutine-全部完成"><a href="#WaitGroup：讓主程式等-Goroutine-完成，確保-Goroutine-全部完成" class="headerlink" title="WaitGroup：讓主程式等 Goroutine 完成，確保 Goroutine 全部完成"></a>WaitGroup：讓主程式等 Goroutine 完成，確保 Goroutine 全部完成</h2><p>當我們開啟多個 Goroutine 時，<code>main()</code> 可能還沒等 Goroutine 執行完就結束了，導致 Goroutine 被強制終止。為了解決這個問題，我們可以使用 <strong>sync.WaitGroup</strong>。</p>
-<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">    <span class="string">&quot;fmt&quot;</span></span><br><span class="line">    <span class="string">&quot;sync&quot;</span></span><br><span class="line">    <span class="string">&quot;time&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> wg sync.WaitGroup</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">printMessage</span><span class="params">(message <span class="keyword">string</span>)</span></span> &#123;</span><br><span class="line">    <span class="keyword">defer</span> wg.Done() <span class="comment">// Goroutine 結束時通知 WaitGroup</span></span><br><span class="line">    <span class="keyword">for</span> i := <span class="number">0</span>; i &lt; <span class="number">5</span>; i++ &#123;</span><br><span class="line">        fmt.Println(message, i)</span><br><span class="line">        time.Sleep(time.Millisecond * <span class="number">500</span>)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">    wg.Add(<span class="number">2</span>) <span class="comment">// 設定有 2 個 Goroutine</span></span><br><span class="line">    <span class="keyword">go</span> printMessage(<span class="string">&quot;Hello from Goroutine 1&quot;</span>)</span><br><span class="line">    <span class="keyword">go</span> printMessage(<span class="string">&quot;Hello from Goroutine 2&quot;</span>)</span><br><span class="line"></span><br><span class="line">    wg.Wait() <span class="comment">// 等待所有 Goroutine 結束</span></span><br><span class="line">    fmt.Println(<span class="string">&quot;All Goroutines Finished!&quot;</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<ul>
-<li><code>wg.Add(2)</code> 告訴 WaitGroup 需要等 2 個 Goroutine。   &lt;- 增加計數器 </li>
-<li><code>wg.Done()</code> 會在 Goroutine 執行結束時通知 WaitGroup。 &lt;- 減少計數器</li>
-<li><code>wg.Wait()</code> 讓 <code>main()</code> 等待所有 Goroutine 結束後才繼續。 &lt;- 等待計數器歸零</li>
-</ul>
-<p>這樣就能確保主程式不會提前結束！<br>我們再看一個範例：</p>
-<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">    <span class="string">&quot;fmt&quot;</span></span><br><span class="line">    <span class="string">&quot;sync&quot;</span></span><br><span class="line">    <span class="string">&quot;time&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">worker</span><span class="params">(id <span class="keyword">int</span>, wg *sync.WaitGroup)</span></span> &#123;</span><br><span class="line">    <span class="keyword">defer</span> wg.Done() <span class="comment">// 告知 WaitGroup 這個 Goroutine 完成</span></span><br><span class="line">    fmt.Printf(<span class="string">&quot;Worker %d 開始工作\n&quot;</span>, id)</span><br><span class="line">    time.Sleep(time.Second)</span><br><span class="line">    fmt.Printf(<span class="string">&quot;Worker %d 完成工作\n&quot;</span>, id)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">    <span class="keyword">var</span> wg sync.WaitGroup</span><br><span class="line">    <span class="keyword">for</span> i := <span class="number">1</span>; i &lt;= <span class="number">3</span>; i++ &#123;</span><br><span class="line">        wg.Add(<span class="number">1</span>)</span><br><span class="line">        <span class="keyword">go</span> worker(i, &amp;wg)</span><br><span class="line">    &#125;</span><br><span class="line">    wg.Wait() <span class="comment">// 等待所有 Goroutine 結束</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h2 id="Channel：Goroutine-之間的溝通管道"><a href="#Channel：Goroutine-之間的溝通管道" class="headerlink" title="Channel：Goroutine 之間的溝通管道"></a>Channel：Goroutine 之間的溝通管道</h2><p>Goroutine 之間如何傳遞資料呢？我們可以使用 <strong>Channel</strong>，它就像是一條輸送帶，負責在 Goroutine 之間傳遞訊息，確保 <strong>Goroutine 之間安全地交換資料</strong>！</p>
-<p>Channel 的基本語法</p>
-<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="string">&quot;fmt&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">    ch := <span class="built_in">make</span>(<span class="keyword">chan</span> <span class="keyword">string</span>) <span class="comment">// 創建 Channel</span></span><br><span class="line">    </span><br><span class="line">    <span class="keyword">go</span> <span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123;</span><br><span class="line">        ch &lt;- <span class="string">&quot;Hello from Goroutine!&quot;</span> <span class="comment">// 發送訊息到 Channel</span></span><br><span class="line">    &#125;()</span><br><span class="line">    </span><br><span class="line">    message := &lt;-ch <span class="comment">// 從 Channel 接收訊息</span></span><br><span class="line">    fmt.Println(message)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>輸出：</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Hello from Goroutine!</span><br></pre></td></tr></table></figure>
-<p>另一種寫法（匿名函式）</p>
-<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="string">&quot;fmt&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">sendMessage</span><span class="params">(ch <span class="keyword">chan</span> <span class="keyword">string</span>)</span></span> &#123;</span><br><span class="line">    ch &lt;- <span class="string">&quot;Hello from Goroutine!&quot;</span> <span class="comment">// 發送訊息</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">    ch := <span class="built_in">make</span>(<span class="keyword">chan</span> <span class="keyword">string</span>) <span class="comment">// 建立 Channel</span></span><br><span class="line">    <span class="keyword">go</span> sendMessage(ch)</span><br><span class="line">    message := &lt;-ch <span class="comment">// 從 Channel 接收訊息</span></span><br><span class="line">    fmt.Println(message)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<ul>
-<li><code>ch := make(chan string)</code> 建立了一個 <code>string</code> 類型的 Channel。</li>
-<li><code>ch &lt;- &quot;Hello&quot;</code> 讓 Goroutine 發送訊息。</li>
-<li><code>&lt;-ch</code> 讓主程式接收訊息。</li>
-</ul>
-<p>這兩種寫法的主要差異在於：</p>
-<ol>
-<li>第一種寫法：將 <code>sendMessage</code> 定義為一個獨立函式，這樣的方式有助於程式的結構化，使程式碼更具可讀性和可維護性。</li>
-<li>第二種寫法：使用匿名函式（<code>go func() &#123;&#125;</code>）直接啟動 Goroutine，這種方式適合用於簡單的情境，例如臨時的併發操作，而不需要額外定義函式。</li>
-</ol>
-<p>在選擇哪種方式時，通常如果該 Goroutine 需要重複使用，則應該定義成獨立函式；如果只是一次性操作，則可以使用匿名函式。</p>
-<h3 id="Buffered-Channel（有緩衝的-Channel）"><a href="#Buffered-Channel（有緩衝的-Channel）" class="headerlink" title="Buffered Channel（有緩衝的 Channel）"></a>Buffered Channel（有緩衝的 Channel）</h3><p>Buffered channel 允許 goroutine 發送多個訊息而不會馬上被接收：</p>
-<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="string">&quot;fmt&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">    ch := <span class="built_in">make</span>(<span class="keyword">chan</span> <span class="keyword">int</span>, <span class="number">3</span>) <span class="comment">// 緩衝區大小為 3</span></span><br><span class="line"></span><br><span class="line">    ch &lt;- <span class="number">1</span></span><br><span class="line">    ch &lt;- <span class="number">2</span></span><br><span class="line">    ch &lt;- <span class="number">3</span></span><br><span class="line"></span><br><span class="line">    fmt.Println(&lt;-ch)</span><br><span class="line">    fmt.Println(&lt;-ch)</span><br><span class="line">    fmt.Println(&lt;-ch)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<blockquote>
-<p>這樣的 Channel 允許存入 3 個數據而不會阻塞 Goroutine。<br>緩衝區滿了後，goroutine 會阻塞直到有空間可用。</p>
-</blockquote>
-<h2 id="Mutex：避免-Goroutine-同時修改資料"><a href="#Mutex：避免-Goroutine-同時修改資料" class="headerlink" title="Mutex：避免 Goroutine 同時修改資料"></a>Mutex：避免 Goroutine 同時修改資料</h2><p>當多個 Goroutine 需要共享同一個變數時，可能會發生 <strong>競爭條件（Race Condition）</strong>，導致不一致的結果。這時候就需要 <strong>Mutex（互斥鎖）</strong> 來確保資料安全。</p>
-<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">    <span class="string">&quot;fmt&quot;</span></span><br><span class="line">    <span class="string">&quot;sync&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> (</span><br><span class="line">    counter <span class="keyword">int</span></span><br><span class="line">    lock sync.Mutex</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">increment</span><span class="params">()</span></span> &#123;</span><br><span class="line">    lock.Lock()   <span class="comment">// 加鎖</span></span><br><span class="line">    counter++</span><br><span class="line">    lock.Unlock() <span class="comment">// 解鎖</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">    <span class="keyword">var</span> wg sync.WaitGroup</span><br><span class="line">    wg.Add(<span class="number">1000</span>)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> i := <span class="number">0</span>; i &lt; <span class="number">1000</span>; i++ &#123;</span><br><span class="line">        <span class="keyword">go</span> <span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123;</span><br><span class="line">            <span class="keyword">defer</span> wg.Done()</span><br><span class="line">            increment()</span><br><span class="line">        &#125;()</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    wg.Wait()</span><br><span class="line">    fmt.Println(<span class="string">&quot;Final Counter:&quot;</span>, counter)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p><code>increment()</code> 用於增加計數器，使用 <code>mutex.Lock()</code> 和 <code>mutex.Unlock()</code> 保護 <code>counter</code> 變數。<code>main()</code> 啟動多個 Goroutine，每個 Goroutine 都會調用 <code>increment()</code> 。使用 <code>sync.Mutex </code>可以確保 <code>counter</code> 的值正確。</p>
-<ul>
-<li><code>lock.Lock()</code> 確保只有一個 Goroutine 能修改 <code>counter</code>。</li>
-<li><code>lock.Unlock()</code> 讓其他 Goroutine 繼續執行。</li>
-</ul>
-<p>這樣就能保證並發環境下數據的一致性！</p>
-<h2 id="結論"><a href="#結論" class="headerlink" title="結論"></a>結論</h2><p>Goroutine 讓 Go 的並發變得輕鬆簡單，但為了讓多個 Goroutine 之間能夠順利協作，我們需要：</p>
-<ul>
-<li><strong>WaitGroup</strong> 讓主程式等 Goroutine 執行完。</li>
-<li><strong>Channel</strong> 讓 Goroutine 之間安全地交換數據。</li>
-<li><strong>Mutex</strong> 避免多個 Goroutine 同時修改共享變數。</li>
-</ul>
-]]></content>
-      <categories>
-        <category>Golang</category>
-      </categories>
-      <tags>
-        <tag>Go</tag>
-        <tag>Goroutine</tag>
-        <tag>Concurrency</tag>
-        <tag>Channel</tag>
-        <tag>WaitGroup</tag>
-        <tag>Mutex</tag>
-        <tag>技術教學</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>深入淺出理解 Kubernetes/ Docker/ Container/ VM 概念</title>
     <url>/2025/01/14/Kubernetes:-Docker:-Container:-VM-%E6%A6%82%E5%BF%B5/</url>
     <content><![CDATA[<h2 id="為什麼需要這些技術？"><a href="#為什麼需要這些技術？" class="headerlink" title="為什麼需要這些技術？"></a>為什麼需要這些技術？</h2><p>隨著應用程式越來越複雜，我們需要更靈活、高效的方式來部署和管理它們。傳統的硬體配置已經無法滿足快速變動的需求，因此「虛擬化技術」和「容器化技術」應運而生。</p>
@@ -330,6 +237,99 @@
         <tag>Virtualized</tag>
         <tag>容器化技術</tag>
         <tag>虛擬化</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Go Concurrency：Goroutine、Channel、WaitGroup、Mutex 一次搞懂！</title>
+    <url>/2025/02/25/Go-Concurrency%EF%BC%9AGoroutine%E3%80%81Channel%E3%80%81WaitGroup%E3%80%81Mutex-%E4%B8%80%E6%AC%A1%E6%90%9E%E6%87%82%EF%BC%81/</url>
+    <content><![CDATA[<p>在寫程式時，你是否曾遇過這樣的問題：</p>
+<ul>
+<li>程式跑得很慢，某些函式明明可以同時執行，卻得一個等一個？</li>
+<li>想要讓多個工作並行，但又怕不同的程序互相干擾？</li>
+<li>處理龐大的計算或 I&#x2F;O 任務時，CPU 占用率極低，白白浪費資源？</li>
+</ul>
+<p>這時候，你需要的是 <strong>並發（Concurrency）</strong>！而 Go 語言提供了一種超級簡單且高效的並發工具： <strong>Goroutine</strong>。</p>
+<span id="more"></span>
+
+<p>在 Go 語言中，並發是其核心特性之一，而 Goroutine 則是實現並發的關鍵。你可以把它想像成一個「輕量級的執行緒」，但它比傳統執行緒更高效、佔用更少資源，並且能夠輕鬆地創建成千上萬個 Goroutine。</p>
+<h2 id="Goroutine-是什麼？為什麼它這麼強？"><a href="#Goroutine-是什麼？為什麼它這麼強？" class="headerlink" title="Goroutine 是什麼？為什麼它這麼強？"></a>Goroutine 是什麼？為什麼它這麼強？</h2><p>Goroutine 是 Go 語言的 <strong>輕量級執行緒（Lightweight Thread）</strong>，讓你可以輕鬆執行並發程式，而不需要手動管理繁瑣的系統執行緒。</p>
+<ul>
+<li><strong>輕量級</strong>：相比於傳統的作業系統執行緒（Thread），Goroutine 的記憶體開銷極低。</li>
+<li><strong>執行簡單</strong>：只要在函式前加上 <code>go</code>，就能讓它跑在背景，完全不需要設定任何 Thread！</li>
+<li><strong>獨立運行</strong>：Goroutine 之間互不影響，即使某個 Goroutine 崩潰，也不會導致其他 Goroutine 失敗。</li>
+<li><strong>高效</strong>：Go 運行時（runtime）會自動管理 Goroutine 的調度，避免過度依賴作業系統的執行緒管理。</li>
+</ul>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">    <span class="string">&quot;fmt&quot;</span></span><br><span class="line">    <span class="string">&quot;time&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">hello</span><span class="params">()</span></span> &#123;</span><br><span class="line">    fmt.Println(<span class="string">&quot;Hello, Goroutine!&quot;</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">    <span class="keyword">go</span> hello() <span class="comment">// 啟動 Goroutine</span></span><br><span class="line">    fmt.Println(<span class="string">&quot;Main 函式結束&quot;</span>)</span><br><span class="line">    time.Sleep(time.Second) <span class="comment">// 等待 Goroutine 執行完成</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>輸出</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Main 函式結束</span><br><span class="line">Hello, Goroutine!</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><code>go hello()</code> 會在背景執行，而 <code>main()</code> 函式會繼續往下執行。</li>
+<li>這樣我們的程式就可以同時進行兩個工作，提升效率！</li>
+</ul>
+<p>⚠ 但這裡有個問題—— Goroutine 是異步執行的，main() 可能在 hello() 結束前就已執行完畢，因此 time.Sleep() 讓主執行緒暫停一下，確保 Goroutine 執行。</p>
+<div class="note info"><p><strong>main 函式結束後，所有 Goroutine 也會立即結束</strong>，這就引出了下一個重要工具： <strong>WaitGroup</strong>。</p>
+</div>
+
+<h2 id="WaitGroup：讓主程式等-Goroutine-完成，確保-Goroutine-全部完成"><a href="#WaitGroup：讓主程式等-Goroutine-完成，確保-Goroutine-全部完成" class="headerlink" title="WaitGroup：讓主程式等 Goroutine 完成，確保 Goroutine 全部完成"></a>WaitGroup：讓主程式等 Goroutine 完成，確保 Goroutine 全部完成</h2><p>當我們開啟多個 Goroutine 時，<code>main()</code> 可能還沒等 Goroutine 執行完就結束了，導致 Goroutine 被強制終止。為了解決這個問題，我們可以使用 <strong>sync.WaitGroup</strong>。</p>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">    <span class="string">&quot;fmt&quot;</span></span><br><span class="line">    <span class="string">&quot;sync&quot;</span></span><br><span class="line">    <span class="string">&quot;time&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> wg sync.WaitGroup</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">printMessage</span><span class="params">(message <span class="keyword">string</span>)</span></span> &#123;</span><br><span class="line">    <span class="keyword">defer</span> wg.Done() <span class="comment">// Goroutine 結束時通知 WaitGroup</span></span><br><span class="line">    <span class="keyword">for</span> i := <span class="number">0</span>; i &lt; <span class="number">5</span>; i++ &#123;</span><br><span class="line">        fmt.Println(message, i)</span><br><span class="line">        time.Sleep(time.Millisecond * <span class="number">500</span>)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">    wg.Add(<span class="number">2</span>) <span class="comment">// 設定有 2 個 Goroutine</span></span><br><span class="line">    <span class="keyword">go</span> printMessage(<span class="string">&quot;Hello from Goroutine 1&quot;</span>)</span><br><span class="line">    <span class="keyword">go</span> printMessage(<span class="string">&quot;Hello from Goroutine 2&quot;</span>)</span><br><span class="line"></span><br><span class="line">    wg.Wait() <span class="comment">// 等待所有 Goroutine 結束</span></span><br><span class="line">    fmt.Println(<span class="string">&quot;All Goroutines Finished!&quot;</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li><code>wg.Add(2)</code> 告訴 WaitGroup 需要等 2 個 Goroutine。   &lt;- 增加計數器 </li>
+<li><code>wg.Done()</code> 會在 Goroutine 執行結束時通知 WaitGroup。 &lt;- 減少計數器</li>
+<li><code>wg.Wait()</code> 讓 <code>main()</code> 等待所有 Goroutine 結束後才繼續。 &lt;- 等待計數器歸零</li>
+</ul>
+<p>這樣就能確保主程式不會提前結束！<br>我們再看一個範例：</p>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">    <span class="string">&quot;fmt&quot;</span></span><br><span class="line">    <span class="string">&quot;sync&quot;</span></span><br><span class="line">    <span class="string">&quot;time&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">worker</span><span class="params">(id <span class="keyword">int</span>, wg *sync.WaitGroup)</span></span> &#123;</span><br><span class="line">    <span class="keyword">defer</span> wg.Done() <span class="comment">// 告知 WaitGroup 這個 Goroutine 完成</span></span><br><span class="line">    fmt.Printf(<span class="string">&quot;Worker %d 開始工作\n&quot;</span>, id)</span><br><span class="line">    time.Sleep(time.Second)</span><br><span class="line">    fmt.Printf(<span class="string">&quot;Worker %d 完成工作\n&quot;</span>, id)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">    <span class="keyword">var</span> wg sync.WaitGroup</span><br><span class="line">    <span class="keyword">for</span> i := <span class="number">1</span>; i &lt;= <span class="number">3</span>; i++ &#123;</span><br><span class="line">        wg.Add(<span class="number">1</span>)</span><br><span class="line">        <span class="keyword">go</span> worker(i, &amp;wg)</span><br><span class="line">    &#125;</span><br><span class="line">    wg.Wait() <span class="comment">// 等待所有 Goroutine 結束</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="Channel：Goroutine-之間的溝通管道"><a href="#Channel：Goroutine-之間的溝通管道" class="headerlink" title="Channel：Goroutine 之間的溝通管道"></a>Channel：Goroutine 之間的溝通管道</h2><p>Goroutine 之間如何傳遞資料呢？我們可以使用 <strong>Channel</strong>，它就像是一條輸送帶，負責在 Goroutine 之間傳遞訊息，確保 <strong>Goroutine 之間安全地交換資料</strong>！</p>
+<p>Channel 的基本語法</p>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="string">&quot;fmt&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">    ch := <span class="built_in">make</span>(<span class="keyword">chan</span> <span class="keyword">string</span>) <span class="comment">// 創建 Channel</span></span><br><span class="line">    </span><br><span class="line">    <span class="keyword">go</span> <span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123;</span><br><span class="line">        ch &lt;- <span class="string">&quot;Hello from Goroutine!&quot;</span> <span class="comment">// 發送訊息到 Channel</span></span><br><span class="line">    &#125;()</span><br><span class="line">    </span><br><span class="line">    message := &lt;-ch <span class="comment">// 從 Channel 接收訊息</span></span><br><span class="line">    fmt.Println(message)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>輸出：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Hello from Goroutine!</span><br></pre></td></tr></table></figure>
+<p>另一種寫法（匿名函式）</p>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="string">&quot;fmt&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">sendMessage</span><span class="params">(ch <span class="keyword">chan</span> <span class="keyword">string</span>)</span></span> &#123;</span><br><span class="line">    ch &lt;- <span class="string">&quot;Hello from Goroutine!&quot;</span> <span class="comment">// 發送訊息</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">    ch := <span class="built_in">make</span>(<span class="keyword">chan</span> <span class="keyword">string</span>) <span class="comment">// 建立 Channel</span></span><br><span class="line">    <span class="keyword">go</span> sendMessage(ch)</span><br><span class="line">    message := &lt;-ch <span class="comment">// 從 Channel 接收訊息</span></span><br><span class="line">    fmt.Println(message)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li><code>ch := make(chan string)</code> 建立了一個 <code>string</code> 類型的 Channel。</li>
+<li><code>ch &lt;- &quot;Hello&quot;</code> 讓 Goroutine 發送訊息。</li>
+<li><code>&lt;-ch</code> 讓主程式接收訊息。</li>
+</ul>
+<p>這兩種寫法的主要差異在於：</p>
+<ol>
+<li>第一種寫法：將 <code>sendMessage</code> 定義為一個獨立函式，這樣的方式有助於程式的結構化，使程式碼更具可讀性和可維護性。</li>
+<li>第二種寫法：使用匿名函式（<code>go func() &#123;&#125;</code>）直接啟動 Goroutine，這種方式適合用於簡單的情境，例如臨時的併發操作，而不需要額外定義函式。</li>
+</ol>
+<p>在選擇哪種方式時，通常如果該 Goroutine 需要重複使用，則應該定義成獨立函式；如果只是一次性操作，則可以使用匿名函式。</p>
+<h3 id="Buffered-Channel（有緩衝的-Channel）"><a href="#Buffered-Channel（有緩衝的-Channel）" class="headerlink" title="Buffered Channel（有緩衝的 Channel）"></a>Buffered Channel（有緩衝的 Channel）</h3><p>Buffered channel 允許 goroutine 發送多個訊息而不會馬上被接收：</p>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="string">&quot;fmt&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">    ch := <span class="built_in">make</span>(<span class="keyword">chan</span> <span class="keyword">int</span>, <span class="number">3</span>) <span class="comment">// 緩衝區大小為 3</span></span><br><span class="line"></span><br><span class="line">    ch &lt;- <span class="number">1</span></span><br><span class="line">    ch &lt;- <span class="number">2</span></span><br><span class="line">    ch &lt;- <span class="number">3</span></span><br><span class="line"></span><br><span class="line">    fmt.Println(&lt;-ch)</span><br><span class="line">    fmt.Println(&lt;-ch)</span><br><span class="line">    fmt.Println(&lt;-ch)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>這樣的 Channel 允許存入 3 個數據而不會阻塞 Goroutine。<br>緩衝區滿了後，goroutine 會阻塞直到有空間可用。</p>
+</blockquote>
+<h2 id="Mutex：避免-Goroutine-同時修改資料"><a href="#Mutex：避免-Goroutine-同時修改資料" class="headerlink" title="Mutex：避免 Goroutine 同時修改資料"></a>Mutex：避免 Goroutine 同時修改資料</h2><p>當多個 Goroutine 需要共享同一個變數時，可能會發生 <strong>競爭條件（Race Condition）</strong>，導致不一致的結果。這時候就需要 <strong>Mutex（互斥鎖）</strong> 來確保資料安全。</p>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">    <span class="string">&quot;fmt&quot;</span></span><br><span class="line">    <span class="string">&quot;sync&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> (</span><br><span class="line">    counter <span class="keyword">int</span></span><br><span class="line">    lock sync.Mutex</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">increment</span><span class="params">()</span></span> &#123;</span><br><span class="line">    lock.Lock()   <span class="comment">// 加鎖</span></span><br><span class="line">    counter++</span><br><span class="line">    lock.Unlock() <span class="comment">// 解鎖</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">    <span class="keyword">var</span> wg sync.WaitGroup</span><br><span class="line">    wg.Add(<span class="number">1000</span>)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> i := <span class="number">0</span>; i &lt; <span class="number">1000</span>; i++ &#123;</span><br><span class="line">        <span class="keyword">go</span> <span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123;</span><br><span class="line">            <span class="keyword">defer</span> wg.Done()</span><br><span class="line">            increment()</span><br><span class="line">        &#125;()</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    wg.Wait()</span><br><span class="line">    fmt.Println(<span class="string">&quot;Final Counter:&quot;</span>, counter)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><code>increment()</code> 用於增加計數器，使用 <code>mutex.Lock()</code> 和 <code>mutex.Unlock()</code> 保護 <code>counter</code> 變數。<code>main()</code> 啟動多個 Goroutine，每個 Goroutine 都會調用 <code>increment()</code> 。使用 <code>sync.Mutex </code>可以確保 <code>counter</code> 的值正確。</p>
+<ul>
+<li><code>lock.Lock()</code> 確保只有一個 Goroutine 能修改 <code>counter</code>。</li>
+<li><code>lock.Unlock()</code> 讓其他 Goroutine 繼續執行。</li>
+</ul>
+<p>這樣就能保證並發環境下數據的一致性！</p>
+<h2 id="結論"><a href="#結論" class="headerlink" title="結論"></a>結論</h2><p>Goroutine 讓 Go 的並發變得輕鬆簡單，但為了讓多個 Goroutine 之間能夠順利協作，我們需要：</p>
+<ul>
+<li><strong>WaitGroup</strong> 讓主程式等 Goroutine 執行完。</li>
+<li><strong>Channel</strong> 讓 Goroutine 之間安全地交換數據。</li>
+<li><strong>Mutex</strong> 避免多個 Goroutine 同時修改共享變數。</li>
+</ul>
+]]></content>
+      <categories>
+        <category>Golang</category>
+      </categories>
+      <tags>
+        <tag>Go</tag>
+        <tag>Goroutine</tag>
+        <tag>Concurrency</tag>
+        <tag>Channel</tag>
+        <tag>WaitGroup</tag>
+        <tag>Mutex</tag>
+        <tag>技術教學</tag>
       </tags>
   </entry>
   <entry>
@@ -503,32 +503,6 @@
       </tags>
   </entry>
   <entry>
-    <title>[分享] Website Layout - Sidebar + Flexed</title>
-    <url>/2021/04/01/%E5%88%86%E4%BA%AB-Website-Layout-Sidebar-Flexed/</url>
-    <content><![CDATA[<blockquote>
-<p>實習開發網站，常遇到一些功能需求要上網查詢，整理成筆記以後再用到就不用又從頭開始找，也希望幫助到正在找學這些功能的人</p>
-</blockquote>
-<span id="more"></span>
-
-<iframe width="100%" height="500" src="https://codepen.io/ZZYume/embed/NWddogz?height=265&theme-id=dark&default-tab=result" frameborder="0"></iframe>
-
-<p>&#x2F;&#x2F; 有空再認真補教學</p>
-]]></content>
-      <categories>
-        <category>html</category>
-      </categories>
-      <tags>
-        <tag>sidebar</tag>
-        <tag>html</tag>
-        <tag>css</tag>
-        <tag>javascript</tag>
-        <tag>jquery</tag>
-        <tag>Bootstrap</tag>
-        <tag>Bootstrap-table</tag>
-        <tag>card</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>單體架構 vs 微服務架構：選擇的關鍵與應用</title>
     <url>/2025/01/15/%E5%96%AE%E9%AB%94%E6%9E%B6%E6%A7%8B-vs-%E5%BE%AE%E6%9C%8D%E5%8B%99%E6%9E%B6%E6%A7%8B%EF%BC%9A%E9%81%B8%E6%93%87%E7%9A%84%E9%97%9C%E9%8D%B5%E8%88%87%E6%87%89%E7%94%A8/</url>
     <content><![CDATA[<h2 id="為什麼要了解單體架構和微服務架構？"><a href="#為什麼要了解單體架構和微服務架構？" class="headerlink" title="為什麼要了解單體架構和微服務架構？"></a>為什麼要了解單體架構和微服務架構？</h2><p>隨著技術的快速發展，軟體架構設計已經成為每個工程師必須掌握的核心知識之一。<br>無論你是正在開發新產品的初創團隊，還是維護大型系統的資深工程師，選擇適合的架構直接影響系統的穩定性、性能和團隊效率。</p>
@@ -650,6 +624,32 @@
       </tags>
   </entry>
   <entry>
+    <title>[分享] Website Layout - Sidebar + Flexed</title>
+    <url>/2021/04/01/%E5%88%86%E4%BA%AB-Website-Layout-Sidebar-Flexed/</url>
+    <content><![CDATA[<blockquote>
+<p>實習開發網站，常遇到一些功能需求要上網查詢，整理成筆記以後再用到就不用又從頭開始找，也希望幫助到正在找學這些功能的人</p>
+</blockquote>
+<span id="more"></span>
+
+<iframe width="100%" height="500" src="https://codepen.io/ZZYume/embed/NWddogz?height=265&theme-id=dark&default-tab=result" frameborder="0"></iframe>
+
+<p>&#x2F;&#x2F; 有空再認真補教學</p>
+]]></content>
+      <categories>
+        <category>html</category>
+      </categories>
+      <tags>
+        <tag>sidebar</tag>
+        <tag>html</tag>
+        <tag>css</tag>
+        <tag>javascript</tag>
+        <tag>jquery</tag>
+        <tag>Bootstrap</tag>
+        <tag>Bootstrap-table</tag>
+        <tag>card</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>[學習] Check.io - Bigger Price</title>
     <url>/2021/03/17/%E5%AD%B8%E7%BF%92-Check-io-Bigger-Price/</url>
     <content><![CDATA[<blockquote>
@@ -697,6 +697,107 @@
         <tag>sort</tag>
         <tag>list</tag>
         <tag>dictionary</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>[學習] Pyton - String</title>
+    <url>/2021/01/20/%E5%AD%B8%E7%BF%92-Pyton-String/</url>
+    <content><![CDATA[<blockquote>
+<p>一些關於 String 單字或字首大寫處理的用法</p>
+</blockquote>
+<span id="more"></span>
+
+<h2 id="字首大寫"><a href="#字首大寫" class="headerlink" title="字首大寫"></a>字首大寫</h2><ul>
+<li>capitalize(): 只會將字串的字首轉成大寫，其餘若有大寫的字會轉成小寫</li>
+<li>title(): 將字串中所有“單字”的字首轉成大寫</li>
+</ul>
+<p>input:</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">text = <span class="string">&quot;greetings, fiends&quot;</span></span><br><span class="line"><span class="built_in">print</span>(text.capitalize())</span><br><span class="line"><span class="built_in">print</span>(text.title())</span><br></pre></td></tr></table></figure>
+
+<p>output:</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#39;Greetings, friends&#39;</span><br><span class="line">&#39;Greetings, Fiends&#39;</span><br></pre></td></tr></table></figure>
+
+<p>但 capitalize() 可能會遇到一個問題，若是原本句子中有人名或地名，本身字首就是大寫的單子，在使用 capitalize() 後會變成小寫，因此有另一種方法，如下：</p>
+<p>input:</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">text = <span class="string">&quot;welcome to New York&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(text[<span class="number">0</span>].upper() + text[<span class="number">1</span>:])</span><br></pre></td></tr></table></figure>
+<p>output:</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&quot;Welcome to New York&quot;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>lower(): 將字串全部轉成小寫</li>
+<li>upper(): 將字串全部轉成大寫</li>
+<li>islowewr(): 檢查字串是否全小寫</li>
+<li>isupper(): 檢查字串是否全大寫</li>
+</ul>
+<p>input:</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">text = <span class="string">&quot;Hi, my Name is Zana&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(text.lower())</span><br><span class="line"><span class="built_in">print</span>(text.upper())</span><br><span class="line"><span class="built_in">print</span>(text.islowewr())</span><br><span class="line"><span class="built_in">print</span>(text.isupper())</span><br></pre></td></tr></table></figure>
+<p>output:</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&quot;hi, my name is zana&quot;</span><br><span class="line">&quot;HI, MY NAME IS ZANA&quot;</span><br><span class="line">False</span><br><span class="line">False</span><br></pre></td></tr></table></figure>]]></content>
+      <categories>
+        <category>python</category>
+      </categories>
+      <tags>
+        <tag>python</tag>
+        <tag>string</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>[學習] Python List</title>
+    <url>/2021/03/22/%E5%AD%B8%E7%BF%92-Python-List/</url>
+    <content><![CDATA[<p>常遇到的問題</p>
+<ul>
+<li>find the duplicate elements in the list</li>
+<li>count the duplicate elements in the list</li>
+<li>remove the duplicate elements in the list</li>
+</ul>
+<span id="more"></span>
+
+<h3 id="List-count-用法"><a href="#List-count-用法" class="headerlink" title="List.count() 用法"></a>List.count() 用法</h3><blockquote>
+<p>計算指定的值在 list 出現幾次</p>
+</blockquote>
+<div class="note default"><p>語法：list.count(element)</p>
+</div>
+
+<p>input:</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">my_list = [<span class="number">2</span>, <span class="number">3</span>, <span class="number">1</span>, <span class="number">4</span>, <span class="number">2</span>, <span class="number">5</span>, <span class="number">3</span>, <span class="number">7</span>]</span><br><span class="line"><span class="built_in">print</span>(my_list.count(<span class="number">3</span>))</span><br><span class="line"><span class="built_in">print</span>(my_list.count(<span class="number">7</span>))</span><br></pre></td></tr></table></figure>
+<p>output:</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">2</span><br><span class="line">1</span><br></pre></td></tr></table></figure>
+
+<h4 id="進階"><a href="#進階" class="headerlink" title="進階"></a>進階</h4><blockquote>
+<p>將 list 裡面所有的 element 都記錄下有幾個</p>
+</blockquote>
+<p>input:</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">dup_list = [<span class="string">&quot;a&quot;</span>, <span class="string">&quot;c&quot;</span>, <span class="string">&quot;a&quot;</span>, <span class="string">&quot;c&quot;</span>, <span class="string">&quot;b&quot;</span>, <span class="string">&quot;a&quot;</span>]</span><br><span class="line">clear_dict = &#123;i: dup_list.count(i) <span class="keyword">for</span> i <span class="keyword">in</span> dup_list&#125;</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(clear_dict)</span><br></pre></td></tr></table></figure>
+<p>output: </p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#123;&#39;a&#39;: 3, &#39;c&#39;: 2, &#39;b&#39;: 1&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="另一種用法-Counter"><a href="#另一種用法-Counter" class="headerlink" title="另一種用法 Counter"></a>另一種用法 Counter</h3><div class="note default"><p>需要先 import<br>語法：<br>from collections import Counter<br>Counter(List&#x2F;String)</p>
+</div>
+<blockquote>
+<p>counter 出來的型態通常會轉成 Dictionary 會比較方便～<br>在下面也會示範有轉成 dict 跟沒轉成 dict 的差別</p>
+</blockquote>
+<p>input:</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> collections <span class="keyword">import</span> Counter</span><br><span class="line">dup_list = [<span class="string">&quot;a&quot;</span>, <span class="string">&quot;c&quot;</span>, <span class="string">&quot;a&quot;</span>, <span class="string">&quot;c&quot;</span>, <span class="string">&quot;b&quot;</span>, <span class="string">&quot;a&quot;</span>]</span><br><span class="line">count_list = <span class="built_in">dict</span>(Counter(dup_list))</span><br><span class="line">count_string = Counter(<span class="string">&#x27;acacaba&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(count_list)</span><br><span class="line"><span class="built_in">print</span>(count_string)</span><br></pre></td></tr></table></figure>
+<p>output:</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#123;&#39;a&#39;: 3, &#39;c&#39;: 2, &#39;b&#39;: 1&#125;</span><br><span class="line">Counter(&#123;&#39;a&#39;: 4, &#39;b&#39;: 1, &#39;c&#39;: 2&#125;)</span><br></pre></td></tr></table></figure>
+
+<h4 id="Counter-的額外用法"><a href="#Counter-的額外用法" class="headerlink" title="Counter 的額外用法"></a>Counter 的額外用法</h4><blockquote>
+<p>找出出現次數前 n 多</p>
+</blockquote>
+<div class="note default"><p>語法： Counter.most_common()</p>
+</div>
+
+<p>input:</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 接續上一個例子</span></span><br><span class="line"><span class="built_in">print</span>(count_string.most_common(<span class="number">1</span>))</span><br><span class="line"><span class="built_in">print</span>(count_string.most_common(<span class="number">2</span>))</span><br></pre></td></tr></table></figure>
+<p>output:</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[(&#39;a&#39;, 4)]</span><br><span class="line">[(&#39;a&#39;, 4), (&#39;c&#39;, 2)]</span><br></pre></td></tr></table></figure>]]></content>
+      <categories>
+        <category>python</category>
+      </categories>
+      <tags>
+        <tag>python</tag>
+        <tag>list</tag>
+        <tag>count</tag>
       </tags>
   </entry>
   <entry>
@@ -779,65 +880,6 @@
       </tags>
   </entry>
   <entry>
-    <title>[學習] Python List</title>
-    <url>/2021/03/22/%E5%AD%B8%E7%BF%92-Python-List/</url>
-    <content><![CDATA[<p>常遇到的問題</p>
-<ul>
-<li>find the duplicate elements in the list</li>
-<li>count the duplicate elements in the list</li>
-<li>remove the duplicate elements in the list</li>
-</ul>
-<span id="more"></span>
-
-<h3 id="List-count-用法"><a href="#List-count-用法" class="headerlink" title="List.count() 用法"></a>List.count() 用法</h3><blockquote>
-<p>計算指定的值在 list 出現幾次</p>
-</blockquote>
-<div class="note default"><p>語法：list.count(element)</p>
-</div>
-
-<p>input:</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">my_list = [<span class="number">2</span>, <span class="number">3</span>, <span class="number">1</span>, <span class="number">4</span>, <span class="number">2</span>, <span class="number">5</span>, <span class="number">3</span>, <span class="number">7</span>]</span><br><span class="line"><span class="built_in">print</span>(my_list.count(<span class="number">3</span>))</span><br><span class="line"><span class="built_in">print</span>(my_list.count(<span class="number">7</span>))</span><br></pre></td></tr></table></figure>
-<p>output:</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">2</span><br><span class="line">1</span><br></pre></td></tr></table></figure>
-
-<h4 id="進階"><a href="#進階" class="headerlink" title="進階"></a>進階</h4><blockquote>
-<p>將 list 裡面所有的 element 都記錄下有幾個</p>
-</blockquote>
-<p>input:</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">dup_list = [<span class="string">&quot;a&quot;</span>, <span class="string">&quot;c&quot;</span>, <span class="string">&quot;a&quot;</span>, <span class="string">&quot;c&quot;</span>, <span class="string">&quot;b&quot;</span>, <span class="string">&quot;a&quot;</span>]</span><br><span class="line">clear_dict = &#123;i: dup_list.count(i) <span class="keyword">for</span> i <span class="keyword">in</span> dup_list&#125;</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(clear_dict)</span><br></pre></td></tr></table></figure>
-<p>output: </p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#123;&#39;a&#39;: 3, &#39;c&#39;: 2, &#39;b&#39;: 1&#125;</span><br></pre></td></tr></table></figure>
-
-<h3 id="另一種用法-Counter"><a href="#另一種用法-Counter" class="headerlink" title="另一種用法 Counter"></a>另一種用法 Counter</h3><div class="note default"><p>需要先 import<br>語法：<br>from collections import Counter<br>Counter(List&#x2F;String)</p>
-</div>
-<blockquote>
-<p>counter 出來的型態通常會轉成 Dictionary 會比較方便～<br>在下面也會示範有轉成 dict 跟沒轉成 dict 的差別</p>
-</blockquote>
-<p>input:</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> collections <span class="keyword">import</span> Counter</span><br><span class="line">dup_list = [<span class="string">&quot;a&quot;</span>, <span class="string">&quot;c&quot;</span>, <span class="string">&quot;a&quot;</span>, <span class="string">&quot;c&quot;</span>, <span class="string">&quot;b&quot;</span>, <span class="string">&quot;a&quot;</span>]</span><br><span class="line">count_list = <span class="built_in">dict</span>(Counter(dup_list))</span><br><span class="line">count_string = Counter(<span class="string">&#x27;acacaba&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(count_list)</span><br><span class="line"><span class="built_in">print</span>(count_string)</span><br></pre></td></tr></table></figure>
-<p>output:</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#123;&#39;a&#39;: 3, &#39;c&#39;: 2, &#39;b&#39;: 1&#125;</span><br><span class="line">Counter(&#123;&#39;a&#39;: 4, &#39;b&#39;: 1, &#39;c&#39;: 2&#125;)</span><br></pre></td></tr></table></figure>
-
-<h4 id="Counter-的額外用法"><a href="#Counter-的額外用法" class="headerlink" title="Counter 的額外用法"></a>Counter 的額外用法</h4><blockquote>
-<p>找出出現次數前 n 多</p>
-</blockquote>
-<div class="note default"><p>語法： Counter.most_common()</p>
-</div>
-
-<p>input:</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 接續上一個例子</span></span><br><span class="line"><span class="built_in">print</span>(count_string.most_common(<span class="number">1</span>))</span><br><span class="line"><span class="built_in">print</span>(count_string.most_common(<span class="number">2</span>))</span><br></pre></td></tr></table></figure>
-<p>output:</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[(&#39;a&#39;, 4)]</span><br><span class="line">[(&#39;a&#39;, 4), (&#39;c&#39;, 2)]</span><br></pre></td></tr></table></figure>]]></content>
-      <categories>
-        <category>python</category>
-      </categories>
-      <tags>
-        <tag>python</tag>
-        <tag>list</tag>
-        <tag>count</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>[學習] Pyton  try - except</title>
     <url>/2021/01/31/%E5%AD%B8%E7%BF%92-Pyton-try-except/</url>
     <content><![CDATA[<blockquote>
@@ -876,48 +918,6 @@
       <tags>
         <tag>python</tag>
         <tag>try-except</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>[學習] Pyton - String</title>
-    <url>/2021/01/20/%E5%AD%B8%E7%BF%92-Pyton-String/</url>
-    <content><![CDATA[<blockquote>
-<p>一些關於 String 單字或字首大寫處理的用法</p>
-</blockquote>
-<span id="more"></span>
-
-<h2 id="字首大寫"><a href="#字首大寫" class="headerlink" title="字首大寫"></a>字首大寫</h2><ul>
-<li>capitalize(): 只會將字串的字首轉成大寫，其餘若有大寫的字會轉成小寫</li>
-<li>title(): 將字串中所有“單字”的字首轉成大寫</li>
-</ul>
-<p>input:</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">text = <span class="string">&quot;greetings, fiends&quot;</span></span><br><span class="line"><span class="built_in">print</span>(text.capitalize())</span><br><span class="line"><span class="built_in">print</span>(text.title())</span><br></pre></td></tr></table></figure>
-
-<p>output:</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#39;Greetings, friends&#39;</span><br><span class="line">&#39;Greetings, Fiends&#39;</span><br></pre></td></tr></table></figure>
-
-<p>但 capitalize() 可能會遇到一個問題，若是原本句子中有人名或地名，本身字首就是大寫的單子，在使用 capitalize() 後會變成小寫，因此有另一種方法，如下：</p>
-<p>input:</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">text = <span class="string">&quot;welcome to New York&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(text[<span class="number">0</span>].upper() + text[<span class="number">1</span>:])</span><br></pre></td></tr></table></figure>
-<p>output:</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&quot;Welcome to New York&quot;</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>lower(): 將字串全部轉成小寫</li>
-<li>upper(): 將字串全部轉成大寫</li>
-<li>islowewr(): 檢查字串是否全小寫</li>
-<li>isupper(): 檢查字串是否全大寫</li>
-</ul>
-<p>input:</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">text = <span class="string">&quot;Hi, my Name is Zana&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(text.lower())</span><br><span class="line"><span class="built_in">print</span>(text.upper())</span><br><span class="line"><span class="built_in">print</span>(text.islowewr())</span><br><span class="line"><span class="built_in">print</span>(text.isupper())</span><br></pre></td></tr></table></figure>
-<p>output:</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&quot;hi, my name is zana&quot;</span><br><span class="line">&quot;HI, MY NAME IS ZANA&quot;</span><br><span class="line">False</span><br><span class="line">False</span><br></pre></td></tr></table></figure>]]></content>
-      <categories>
-        <category>python</category>
-      </categories>
-      <tags>
-        <tag>python</tag>
-        <tag>string</tag>
       </tags>
   </entry>
   <entry>
@@ -1415,111 +1415,6 @@
       </tags>
   </entry>
   <entry>
-    <title>用 Go 寫 Web API？Gin Framework 帶你快速上手！</title>
-    <url>/2025/03/06/%E7%94%A8-Go-%E5%AF%AB-Web-API%EF%BC%9FGin-Framework-%E5%B8%B6%E4%BD%A0%E5%BF%AB%E9%80%9F%E4%B8%8A%E6%89%8B%EF%BC%81/</url>
-    <content><![CDATA[<p>今天要跟大家分享如何使用 Gin Framework 這個強大的 Go 語言 Web 框架，快速開發高效能的 Web API。無論你是 Go 語言的新手，或是想尋找更輕巧快速的框架，Gin 絕對值得你一試。</p>
-<span id="more"></span>
-<h2 id="什麼是-Gin？-輕量級的-Go-Web-框架快餐店"><a href="#什麼是-Gin？-輕量級的-Go-Web-框架快餐店" class="headerlink" title="什麼是 Gin？ 輕量級的 Go Web 框架快餐店"></a>什麼是 Gin？ 輕量級的 Go Web 框架快餐店</h2><p>Gin，正如其名，是一個用 Go 語言打造的<strong>輕量級</strong>且<strong>高效能</strong>的 Web 框架。它以<strong>簡單易用</strong>和<strong>速度快</strong>著稱，深受許多開發者喜愛。你可以把它想像成 Web 開發界的「<strong>快餐店</strong>」。</p>
-<p><strong>想像一下快餐店的運作模式：</strong></p>
-<ol>
-<li>**客人點餐 (HTTP 請求)**：使用者透過網路發送請求，例如：「我要一份使用者資料」。</li>
-<li>**快餐店接單 (Gin 伺服器接收請求)**：Gin 伺服器接收到使用者的請求。</li>
-<li>**廚房準備餐點 (處理請求並返回資料)**：伺服器根據請求，處理邏輯並準備好對應的資料，例如使用者資料 JSON。</li>
-<li>**服務生送餐 (HTTP 回應)**：伺服器將準備好的資料，以 HTTP 回應的方式送回給使用者。</li>
-</ol>
-<p>Gin Framework 就如同這間快餐店的管理系統，幫你<strong>快速且有條理地處理網路請求與回應</strong>。它簡化了許多底層的複雜操作，讓開發者能更專注於<strong>業務邏輯的實作</strong>，快速搭建 Web 應用程式或 API 服務。</p>
-<h2 id="為什麼選擇-Gin-Framework？Gin-的優勢分析"><a href="#為什麼選擇-Gin-Framework？Gin-的優勢分析" class="headerlink" title="為什麼選擇 Gin Framework？Gin 的優勢分析"></a>為什麼選擇 Gin Framework？Gin 的優勢分析</h2><p>在眾多 Web 框架中，為何 Gin 能夠脫穎而出，成為許多開發者的首選呢？我認為 Gin 擁有以下幾個關鍵優勢：</p>
-<ol>
-<li><p><strong>極致效能：快如閃電的速度</strong><br>Gin 底層基於 <code>httprouter</code> 這個高效能的路由引擎，擁有 <strong>極快的路由速度</strong>。在高流量的環境下，Gin 依然能保持 <strong>優異的效能與穩定性</strong>，就像跑車一樣，速度與穩定兼具。</p>
-</li>
-<li><p><strong>簡潔易學：上手無門檻</strong><br>Gin 的 API 設計<strong>非常直觀</strong>，語法<strong>清晰易懂</strong>，即使是 Go 語言新手也能快速上手。如同組裝樂高，說明書清晰，零件好辨識，很快就能組裝出模型。</p>
-</li>
-<li><p><strong>豐富的 Middleware 支援：彈性擴充的積木</strong><br><strong>Middleware (中介層)</strong> 是 Gin 的重要特色，它允許你在請求處理流程中，自由加入額外的處理邏輯，例如：</p>
-<ul>
-<li>**日誌記錄 (Logging)**：記錄每個請求的資訊，方便追蹤與 debug。</li>
-<li>**身份驗證 (Authentication)**：驗證使用者身份，保護 API 安全。</li>
-<li>**錯誤處理 (Error Handling)**：統一處理應用程式錯誤，提升穩定性。</li>
-</ul>
-<p> Gin 內建多種常用的 Middleware，也支援自訂 Middleware，就像積木一樣，可以彈性擴充功能。</p>
-</li>
-<li><p><strong>完善的文件與社群：可靠的後盾</strong><br>Gin 擁有<strong>完善的官方文件</strong>以及<strong>活躍的社群</strong>。無論遇到任何問題，都能在網路上找到解答，或向社群尋求協助，學習資源豐富。</p>
-</li>
-</ol>
-<h2 id="Gin-的核心概念：理解運作原理"><a href="#Gin-的核心概念：理解運作原理" class="headerlink" title="Gin 的核心概念：理解運作原理"></a>Gin 的核心概念：理解運作原理</h2><p>開始使用 Gin 之前，先了解幾個核心概念，能幫助你更深入地理解 Gin 的運作方式：</p>
-<ul>
-<li>**Router (路由)**：<br>負責將 HTTP 請求導向到對應的處理函式 (Handler)。就像交通警察，依照路標 (URL) 指揮車輛 (請求) 到達目的地 (Handler)。</li>
-<li><strong>Context (上下文)<strong>：<br>每次 HTTP 請求都會建立一個 Context 實例，它就像一個容器，</strong>封裝了請求與回應的所有資訊</strong>，例如請求 URL、Header、Body，以及用於設定回應的各種方法。你可以想像成服務生的托盤，上面承載著顧客 (請求) 的需求與要送上的餐點 (回應)。</li>
-<li>**Middleware (中介層)**：<br>如同請求處理流程中的關卡，每個請求都會 <strong>依序通過 Middleware 的處理</strong>。常見功能如日誌、驗證、錯誤處理等。如同工廠生產線，產品 (請求) 經過不同站點 (Middleware) 進行加工。</li>
-</ul>
-<h2 id="快速開始：你的第一個-Gin-應用程式"><a href="#快速開始：你的第一個-Gin-應用程式" class="headerlink" title="快速開始：你的第一個 Gin 應用程式"></a>快速開始：你的第一個 Gin 應用程式</h2><p>現在，讓我們從最簡單的 “Hello World” 範例開始！</p>
-<h3 id="步驟-1：安裝-Gin"><a href="#步驟-1：安裝-Gin" class="headerlink" title="步驟 1：安裝 Gin"></a>步驟 1：安裝 Gin</h3><p>首先，確保你已安裝 Go 語言環境。接著，在終端機執行以下指令安裝 Gin：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">go get -u github.com/gin-gonic/gin</span><br></pre></td></tr></table></figure>
-
-<h3 id="步驟-2：建立-main-go"><a href="#步驟-2：建立-main-go" class="headerlink" title="步驟 2：建立 main.go"></a>步驟 2：建立 <code>main.go</code></h3><figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">    <span class="string">&quot;github.com/gin-gonic/gin&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">    <span class="comment">// 建立 Gin Router 實例 (預設包含 Logger 與 Recovery Middleware)</span></span><br><span class="line">    r := gin.Default()</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 設定 GET 路由規則與處理函式</span></span><br><span class="line">    r.GET(<span class="string">&quot;/hello&quot;</span>, <span class="function"><span class="keyword">func</span><span class="params">(c *gin.Context)</span></span> &#123;</span><br><span class="line">        c.String(<span class="number">200</span>, <span class="string">&quot;Hello, Gin Framework!&quot;</span>) <span class="comment">// 回應字串</span></span><br><span class="line">    &#125;)</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 啟動 HTTP 伺服器，監聽 8080 端口</span></span><br><span class="line">    r.Run(<span class="string">&quot;:8080&quot;</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<ul>
-<li><code>import &quot;github.com/gin-gonic/gin&quot;</code>： 匯入 Gin Framework 套件。</li>
-<li><code>r := gin.Default()</code>： 建立預設的 Gin Router。<code>gin.Default()</code> 已預先載入 <strong>Logger (日誌)</strong> 和 <strong>Recovery (錯誤復原)</strong> 兩個實用的 Middleware。</li>
-<li><code>r.GET(&quot;/hello&quot;, func(c *gin.Context) &#123; ... &#125;)</code>： 定義了一個 GET API，設定 <strong>GET 請求</strong>的路由規則。當收到 <code>/hello</code> 路徑的 GET 請求時，會執行後面的匿名函式作為處理函式 (Handler)。<ul>
-<li><code>c *gin.Context</code>： 處理函式的參數為 <code>gin.Context</code>，包含當前請求的所有資訊。</li>
-<li><code>c.String(200, &quot;Hello, Gin Framework!&quot;)</code>： 使用 <code>c.String()</code> 方法設定 HTTP 回應。<code>200</code> 為 HTTP 狀態碼 (成功)，<code>&quot;Hello, Gin Framework!&quot;</code> 為回應的字串內容。</li>
-</ul>
-</li>
-<li><code>r.Run(&quot;:8080&quot;)</code>： 啟動 HTTP 伺服器，並監聽 <code>8080</code> 端口。</li>
-</ul>
-<h3 id="步驟-3：執行程式碼"><a href="#步驟-3：執行程式碼" class="headerlink" title="步驟 3：執行程式碼"></a>步驟 3：執行程式碼</h3><ol>
-<li>開啟終端機，切換到 <code>main.go</code> 所在的目錄。</li>
-<li>執行 <code>go run main.go</code> 命令編譯並執行程式碼。</li>
-<li>在瀏覽器或使用 <code>curl</code> 等工具訪問 <code>http://localhost:8080/hello</code>，你應該會看到 “Hello, Gin Framework!” 的訊息。</li>
-</ol>
-<h2 id="進階範例：讓-API-更靈活"><a href="#進階範例：讓-API-更靈活" class="headerlink" title="進階範例：讓 API 更靈活"></a>進階範例：讓 API 更靈活</h2><p>Web API 通常需要處理各種不同的路由與參數，讓使用者可以更精確地獲取或操作資料。Gin 提供了靈活的方式來處理這些需求。</p>
-<h3 id="路由參數-動態-URL"><a href="#路由參數-動態-URL" class="headerlink" title="路由參數 (動態 URL)"></a>路由參數 (動態 URL)</h3><p>有時我們需要處理<strong>動態的 URL</strong>，例如 <code>/user/&#123;id&#125;</code>，其中 <code>&#123;id&#125;</code> 可以是不同的使用者 ID。</p>
-<figure class="highlight go"><table><tr><td class="code"><pre><span class="line">r.GET(<span class="string">&quot;/user/:id&quot;</span>, <span class="function"><span class="keyword">func</span><span class="params">(c *gin.Context)</span></span> &#123;</span><br><span class="line">    userID := c.Param(<span class="string">&quot;id&quot;</span>) <span class="comment">// 取得路由參數 &quot;id&quot; 的值</span></span><br><span class="line">    c.JSON(<span class="number">200</span>, gin.H&#123;<span class="string">&quot;user_id&quot;</span>: userID&#125;) <span class="comment">// 回應 JSON</span></span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li><code>r.GET(&quot;/user/:id&quot;, ...)</code>： 使用 <code>:id</code> 表示此處為動態路由參數。</li>
-<li><code>c.Param(&quot;id&quot;)</code>： 使用 <code>c.Param()</code> 方法取得路由參數 <code>id</code> 的值。</li>
-</ul>
-<h3 id="Query-參數-查詢字串"><a href="#Query-參數-查詢字串" class="headerlink" title="Query 參數 (查詢字串)"></a>Query 參數 (查詢字串)</h3><p>使用者也可以透過 <strong>Query String</strong> 傳遞參數，例如 <code>/search?query=Gin</code>。</p>
-<figure class="highlight go"><table><tr><td class="code"><pre><span class="line">r.GET(<span class="string">&quot;/search&quot;</span>, <span class="function"><span class="keyword">func</span><span class="params">(c *gin.Context)</span></span> &#123;</span><br><span class="line">    query := c.Query(<span class="string">&quot;query&quot;</span>) <span class="comment">// 取得 Query 參數 &quot;query&quot; 的值</span></span><br><span class="line">    c.JSON(<span class="number">200</span>, gin.H&#123;<span class="string">&quot;search_result&quot;</span>: <span class="string">&quot;You searched for &quot;</span> + query&#125;)</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li><code>c.Query(&quot;query&quot;)</code>： 使用 <code>c.Query()</code> 方法取得 Query 參數 <code>query</code> 的值。</li>
-</ul>
-<h3 id="處理-POST-請求與-JSON-資料"><a href="#處理-POST-請求與-JSON-資料" class="headerlink" title="處理 POST 請求與 JSON 資料"></a>處理 POST 請求與 JSON 資料</h3><p>API 經常需要接收前端傳來的 JSON 資料，例如使用者登入、提交表單等。</p>
-<figure class="highlight go"><table><tr><td class="code"><pre><span class="line">r.POST(<span class="string">&quot;/login&quot;</span>, <span class="function"><span class="keyword">func</span><span class="params">(c *gin.Context)</span></span> &#123;</span><br><span class="line">    <span class="keyword">var</span> account <span class="keyword">struct</span> &#123; <span class="comment">// 定義接收 JSON 資料的結構</span></span><br><span class="line">        Username <span class="keyword">string</span> <span class="string">`json:&quot;username&quot;`</span> <span class="comment">// JSON 欄位名為 &quot;username&quot;</span></span><br><span class="line">        Password <span class="keyword">string</span> <span class="string">`json:&quot;password&quot;`</span> <span class="comment">// JSON 欄位名為 &quot;password&quot;</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 將請求 Body 中的 JSON 資料綁定到 `account` 結構體</span></span><br><span class="line">    <span class="keyword">if</span> err := c.ShouldBindJSON(&amp;user); err != <span class="literal">nil</span> &#123;</span><br><span class="line">        c.JSON(<span class="number">400</span>, gin.H&#123;<span class="string">&quot;error&quot;</span>: <span class="string">&quot;Invalid input&quot;</span>&#125;) <span class="comment">// 綁定失敗，回應錯誤</span></span><br><span class="line">        <span class="keyword">return</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    c.JSON(<span class="number">200</span>, gin.H&#123;<span class="string">&quot;message&quot;</span>: <span class="string">&quot;Welcome, &quot;</span> + user.Username&#125;) <span class="comment">// 綁定成功，回應歡迎訊息</span></span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li><code>var user struct &#123; ... &#125;</code>： 定義了一個叫做 <code>account</code> 的資料結構，它就像是一個<strong>表格</strong>，用來<strong>對應</strong>接收到的 JSON 資料。<code>user:&quot;username&quot;</code> 這些叫做 struct tag，就像是表格上的欄位名稱，告訴 Go 語言 JSON 裡面的<code>username</code>欄位要放到這個結構體的哪個地方。</li>
-<li><code>c.ShouldBindJSON(&amp;user)</code>： 把 Request Body 送來的 JSON 資料填入定義好的<code>account</code>表格裡的對應欄位。如果送來的 JSON 資料 式不對，或是內容跟表格定義的欄位名稱不一樣，就會回傳錯誤。</li>
-</ul>
-<p>前端發送以下 JSON 資料到 <code>/login</code>：</p>
-<figure class="highlight json"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="attr">&quot;username&quot;</span>: <span class="string">&quot;go_dev&quot;</span>,</span><br><span class="line">  <span class="attr">&quot;password&quot;</span>: <span class="string">&quot;securepass&quot;</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>伺服器會回應：</p>
-<figure class="highlight json"><table><tr><td class="code"><pre><span class="line">&#123;<span class="attr">&quot;message&quot;</span>: <span class="string">&quot;Welcome, go_dev&quot;</span>&#125;</span><br></pre></td></tr></table></figure>
-
-<h2 id="中介軟體-Middleware-：為請求處理流程增添魔法"><a href="#中介軟體-Middleware-：為請求處理流程增添魔法" class="headerlink" title="中介軟體 (Middleware)：為請求處理流程增添魔法"></a>中介軟體 (Middleware)：為請求處理流程增添魔法</h2><p><strong>中介軟體 (Middleware)</strong> 是 Gin 非常重要的概念，它就像請求處理流程中的 <strong>攔截器</strong>，允許你在請求到達 Handler 之前或之後，執行額外的邏輯，可以用來記錄請求、驗證身份、處理錯誤 …等。</p>
-<p><strong>範例：請求日誌 Middleware</strong></p>
-<p>以下範例示範如何建立一個 <strong>請求日誌 Middleware</strong>，記錄每個請求的 method 和 path。</p>
-<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> (</span><br><span class="line">    <span class="string">&quot;log&quot;</span></span><br><span class="line">    <span class="string">&quot;time&quot;</span></span><br><span class="line"></span><br><span class="line">    <span class="string">&quot;github.com/gin-gonic/gin&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">Logger</span><span class="params">()</span> <span class="title">gin</span>.<span class="title">HandlerFunc</span></span> &#123; <span class="comment">// 定義 Logger Middleware 函式</span></span><br><span class="line">    <span class="keyword">return</span> <span class="function"><span class="keyword">func</span><span class="params">(c *gin.Context)</span></span> &#123;</span><br><span class="line">        startTime := time.Now() <span class="comment">// 記錄請求開始時間</span></span><br><span class="line"></span><br><span class="line">        c.Next() <span class="comment">// 執行後續的 Handler</span></span><br><span class="line"></span><br><span class="line">        endTime := time.Now()   <span class="comment">// 記錄請求結束時間</span></span><br><span class="line">        latency := endTime.Sub(startTime) <span class="comment">// 計算請求延遲</span></span><br><span class="line"></span><br><span class="line">        log.Println(<span class="string">&quot;請求日誌:&quot;</span>, c.Request.Method, c.Request.URL.Path, <span class="string">&quot;延遲:&quot;</span>, latency) <span class="comment">// 輸出日誌</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">    r := gin.Default()</span><br><span class="line"></span><br><span class="line">    r.Use(Logger()) <span class="comment">// 註冊 Logger Middleware (全局註冊，所有路由都會經過此 Middleware)</span></span><br><span class="line"></span><br><span class="line">    r.GET(<span class="string">&quot;/ping&quot;</span>, <span class="function"><span class="keyword">func</span><span class="params">(c *gin.Context)</span></span> &#123;</span><br><span class="line">        c.JSON(<span class="number">200</span>, gin.H&#123;<span class="string">&quot;message&quot;</span>: <span class="string">&quot;pong&quot;</span>&#125;)</span><br><span class="line">    &#125;)</span><br><span class="line"></span><br><span class="line">    r.Run(<span class="string">&quot;:8080&quot;</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li><code>func Logger() gin.HandlerFunc &#123; ... &#125;</code>： 定義一個名為 <code>Logger</code> 的 Middleware 函式，返回 <code>gin.HandlerFunc</code> 類型。</li>
-<li><code>c.Next()</code>： <strong>Middleware 的關鍵！</strong>  <code>c.Next()</code> 會<strong>繼續執行後續的 Handler 或其他 Middleware</strong>。若沒有呼叫 <code>c.Next()</code>，請求流程會在此處終止。</li>
-<li><code>r.Use(Logger())</code>： 使用 <code>r.Use()</code> 方法<strong>註冊 Middleware</strong>。此處為全局註冊，所有路由都會經過 <code>Logger</code> Middleware 的處理。</li>
-</ul>
-<p><strong>執行程式碼</strong>並訪問 <code>/ping</code>，你將在終端機看到類似以下的日誌輸出：</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[GIN-debug] [2023&#x2F;10&#x2F;27-15:30:00] | 200 |    127.0.0.1 |      247µs |             &#x2F;ping |            |</span><br><span class="line">請求日誌: GET &#x2F;ping 延遲: 250.397µs</span><br></pre></td></tr></table></figure>
-
-<h2 id="總結：Gin-Framework，Go-Web-開發的得力助手"><a href="#總結：Gin-Framework，Go-Web-開發的得力助手" class="headerlink" title="總結：Gin Framework，Go Web 開發的得力助手"></a>總結：Gin Framework，Go Web 開發的得力助手</h2><p>Gin Framework 以其<strong>簡單、高效能</strong>的特性，成為 Go 語言 Web 開發的熱門選擇。無論是開發 API 服務、Web 應用程式，甚至是微服務架構，Gin 都能助你一臂之力。<br>如果你熟悉 Express 或 Flask 等框架，相信你能快速上手 Gin。</p>
-]]></content>
-      <tags>
-        <tag>Golang</tag>
-        <tag>Gin Framework</tag>
-        <tag>Web API</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>[筆記] Leetcode - 1822. Sign of the Product of an Array</title>
     <url>/2023/05/02/%E7%AD%86-Leetcode-1822-Sign-of-the-Product-of-an-Array/</url>
     <content><![CDATA[<p><a href="https://leetcode.com/problems/sign-of-the-product-of-an-array/">https://leetcode.com/problems/sign-of-the-product-of-an-array/</a></p>
@@ -1580,6 +1475,111 @@
         <tag>Leetcode</tag>
         <tag>Python</tag>
         <tag>Math</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>用 Go 寫 Web API？Gin Framework 帶你快速上手！</title>
+    <url>/2025/03/06/%E7%94%A8-Go-%E5%AF%AB-Web-API%EF%BC%9FGin-Framework-%E5%B8%B6%E4%BD%A0%E5%BF%AB%E9%80%9F%E4%B8%8A%E6%89%8B%EF%BC%81/</url>
+    <content><![CDATA[<p>今天要跟大家分享如何使用 Gin Framework 這個強大的 Go 語言 Web 框架，快速開發高效能的 Web API。無論你是 Go 語言的新手，或是想尋找更輕巧快速的框架，Gin 絕對值得你一試。</p>
+<span id="more"></span>
+<h2 id="什麼是-Gin？-輕量級的-Go-Web-框架快餐店"><a href="#什麼是-Gin？-輕量級的-Go-Web-框架快餐店" class="headerlink" title="什麼是 Gin？ 輕量級的 Go Web 框架快餐店"></a>什麼是 Gin？ 輕量級的 Go Web 框架快餐店</h2><p>Gin，正如其名，是一個用 Go 語言打造的<strong>輕量級</strong>且<strong>高效能</strong>的 Web 框架。它以<strong>簡單易用</strong>和<strong>速度快</strong>著稱，深受許多開發者喜愛。你可以把它想像成 Web 開發界的「<strong>快餐店</strong>」。</p>
+<p><strong>想像一下快餐店的運作模式：</strong></p>
+<ol>
+<li>**客人點餐 (HTTP 請求)**：使用者透過網路發送請求，例如：「我要一份使用者資料」。</li>
+<li>**快餐店接單 (Gin 伺服器接收請求)**：Gin 伺服器接收到使用者的請求。</li>
+<li>**廚房準備餐點 (處理請求並返回資料)**：伺服器根據請求，處理邏輯並準備好對應的資料，例如使用者資料 JSON。</li>
+<li>**服務生送餐 (HTTP 回應)**：伺服器將準備好的資料，以 HTTP 回應的方式送回給使用者。</li>
+</ol>
+<p>Gin Framework 就如同這間快餐店的管理系統，幫你<strong>快速且有條理地處理網路請求與回應</strong>。它簡化了許多底層的複雜操作，讓開發者能更專注於<strong>業務邏輯的實作</strong>，快速搭建 Web 應用程式或 API 服務。</p>
+<h2 id="為什麼選擇-Gin-Framework？Gin-的優勢分析"><a href="#為什麼選擇-Gin-Framework？Gin-的優勢分析" class="headerlink" title="為什麼選擇 Gin Framework？Gin 的優勢分析"></a>為什麼選擇 Gin Framework？Gin 的優勢分析</h2><p>在眾多 Web 框架中，為何 Gin 能夠脫穎而出，成為許多開發者的首選呢？我認為 Gin 擁有以下幾個關鍵優勢：</p>
+<ol>
+<li><p><strong>極致效能：快如閃電的速度</strong><br>Gin 底層基於 <code>httprouter</code> 這個高效能的路由引擎，擁有 <strong>極快的路由速度</strong>。在高流量的環境下，Gin 依然能保持 <strong>優異的效能與穩定性</strong>，就像跑車一樣，速度與穩定兼具。</p>
+</li>
+<li><p><strong>簡潔易學：上手無門檻</strong><br>Gin 的 API 設計<strong>非常直觀</strong>，語法<strong>清晰易懂</strong>，即使是 Go 語言新手也能快速上手。如同組裝樂高，說明書清晰，零件好辨識，很快就能組裝出模型。</p>
+</li>
+<li><p><strong>豐富的 Middleware 支援：彈性擴充的積木</strong><br><strong>Middleware (中介層)</strong> 是 Gin 的重要特色，它允許你在請求處理流程中，自由加入額外的處理邏輯，例如：</p>
+<ul>
+<li>**日誌記錄 (Logging)**：記錄每個請求的資訊，方便追蹤與 debug。</li>
+<li>**身份驗證 (Authentication)**：驗證使用者身份，保護 API 安全。</li>
+<li>**錯誤處理 (Error Handling)**：統一處理應用程式錯誤，提升穩定性。</li>
+</ul>
+<p> Gin 內建多種常用的 Middleware，也支援自訂 Middleware，就像積木一樣，可以彈性擴充功能。</p>
+</li>
+<li><p><strong>完善的文件與社群：可靠的後盾</strong><br>Gin 擁有<strong>完善的官方文件</strong>以及<strong>活躍的社群</strong>。無論遇到任何問題，都能在網路上找到解答，或向社群尋求協助，學習資源豐富。</p>
+</li>
+</ol>
+<h2 id="Gin-的核心概念：理解運作原理"><a href="#Gin-的核心概念：理解運作原理" class="headerlink" title="Gin 的核心概念：理解運作原理"></a>Gin 的核心概念：理解運作原理</h2><p>開始使用 Gin 之前，先了解幾個核心概念，能幫助你更深入地理解 Gin 的運作方式：</p>
+<ul>
+<li>**Router (路由)**：<br>負責將 HTTP 請求導向到對應的處理函式 (Handler)。就像交通警察，依照路標 (URL) 指揮車輛 (請求) 到達目的地 (Handler)。</li>
+<li><strong>Context (上下文)<strong>：<br>每次 HTTP 請求都會建立一個 Context 實例，它就像一個容器，</strong>封裝了請求與回應的所有資訊</strong>，例如請求 URL、Header、Body，以及用於設定回應的各種方法。你可以想像成服務生的托盤，上面承載著顧客 (請求) 的需求與要送上的餐點 (回應)。</li>
+<li><strong>Middleware (中介層)<strong>：<br>如同請求處理流程中的關卡，每個請求都會</strong>依序通過 Middleware 的處理</strong>。常見功能如 Log、驗證、錯誤處理等。如同工廠生產線，產品 (請求) 經過不同站點 (Middleware) 進行加工。</li>
+</ul>
+<h2 id="快速開始：你的第一個-Gin-應用程式"><a href="#快速開始：你的第一個-Gin-應用程式" class="headerlink" title="快速開始：你的第一個 Gin 應用程式"></a>快速開始：你的第一個 Gin 應用程式</h2><p>現在，讓我們從最簡單的 “Hello World” 範例開始！</p>
+<h3 id="步驟-1：安裝-Gin"><a href="#步驟-1：安裝-Gin" class="headerlink" title="步驟 1：安裝 Gin"></a>步驟 1：安裝 Gin</h3><p>首先，確保你已安裝 Go 語言環境。接著，在終端機執行以下指令安裝 Gin：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">go get -u github.com/gin-gonic/gin</span><br></pre></td></tr></table></figure>
+
+<h3 id="步驟-2：建立-main-go"><a href="#步驟-2：建立-main-go" class="headerlink" title="步驟 2：建立 main.go"></a>步驟 2：建立 <code>main.go</code></h3><figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">    <span class="string">&quot;github.com/gin-gonic/gin&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">    <span class="comment">// 建立 Gin Router 實例 (預設包含 Logger 與 Recovery Middleware)</span></span><br><span class="line">    r := gin.Default()</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 設定 GET 路由規則與處理函式</span></span><br><span class="line">    r.GET(<span class="string">&quot;/hello&quot;</span>, <span class="function"><span class="keyword">func</span><span class="params">(c *gin.Context)</span></span> &#123;</span><br><span class="line">        c.String(<span class="number">200</span>, <span class="string">&quot;Hello, Gin Framework!&quot;</span>) <span class="comment">// 回應字串</span></span><br><span class="line">    &#125;)</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 啟動 HTTP 伺服器，監聽 8080 端口</span></span><br><span class="line">    r.Run(<span class="string">&quot;:8080&quot;</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li><code>import &quot;github.com/gin-gonic/gin&quot;</code>： 匯入 Gin Framework 套件。</li>
+<li><code>r := gin.Default()</code>： 建立預設的 Gin Router。<code>gin.Default()</code> 已預先載入 <strong>Logger (日誌)</strong> 和 <strong>Recovery (錯誤復原)</strong> 兩個實用的 Middleware。</li>
+<li><code>r.GET(&quot;/hello&quot;, func(c *gin.Context) &#123; ... &#125;)</code>： 定義了一個 GET API，設定 <strong>GET 請求</strong>的路由規則。當收到 <code>/hello</code> 路徑的 GET 請求時，會執行後面的匿名函式作為處理函式 (Handler)。<ul>
+<li><code>c *gin.Context</code>： 處理函式的參數為 <code>gin.Context</code>，包含當前請求的所有資訊。</li>
+<li><code>c.String(200, &quot;Hello, Gin Framework!&quot;)</code>： 使用 <code>c.String()</code> 方法設定 HTTP 回應。<code>200</code> 為 HTTP 狀態碼 (成功)，<code>&quot;Hello, Gin Framework!&quot;</code> 為回應的字串內容。</li>
+</ul>
+</li>
+<li><code>r.Run(&quot;:8080&quot;)</code>： 啟動 HTTP 伺服器，並監聽 <code>8080</code> 端口。</li>
+</ul>
+<h3 id="步驟-3：執行程式碼"><a href="#步驟-3：執行程式碼" class="headerlink" title="步驟 3：執行程式碼"></a>步驟 3：執行程式碼</h3><ol>
+<li>開啟終端機，切換到 <code>main.go</code> 所在的目錄。</li>
+<li>執行 <code>go run main.go</code> 命令編譯並執行程式碼。</li>
+<li>在瀏覽器或使用 <code>curl</code> 等工具訪問 <code>http://localhost:8080/hello</code>，你應該會看到 “Hello, Gin Framework!” 的訊息。</li>
+</ol>
+<h2 id="進階範例：讓-API-更靈活"><a href="#進階範例：讓-API-更靈活" class="headerlink" title="進階範例：讓 API 更靈活"></a>進階範例：讓 API 更靈活</h2><p>Web API 通常需要處理各種不同的路由與參數，讓使用者可以更精確地獲取或操作資料。Gin 提供了靈活的方式來處理這些需求。</p>
+<h3 id="路由參數-動態-URL"><a href="#路由參數-動態-URL" class="headerlink" title="路由參數 (動態 URL)"></a>路由參數 (動態 URL)</h3><p>有時我們需要處理<strong>動態的 URL</strong>，例如 <code>/user/&#123;id&#125;</code>，其中 <code>&#123;id&#125;</code> 可以是不同的使用者 ID。</p>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line">r.GET(<span class="string">&quot;/user/:id&quot;</span>, <span class="function"><span class="keyword">func</span><span class="params">(c *gin.Context)</span></span> &#123;</span><br><span class="line">    userID := c.Param(<span class="string">&quot;id&quot;</span>) <span class="comment">// 取得路由參數 &quot;id&quot; 的值</span></span><br><span class="line">    c.JSON(<span class="number">200</span>, gin.H&#123;<span class="string">&quot;user_id&quot;</span>: userID&#125;) <span class="comment">// 回應 JSON</span></span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><code>r.GET(&quot;/user/:id&quot;, ...)</code>： 使用 <code>:id</code> 表示此處為動態路由參數。</li>
+<li><code>c.Param(&quot;id&quot;)</code>： 使用 <code>c.Param()</code> 方法取得路由參數 <code>id</code> 的值。</li>
+</ul>
+<h3 id="Query-參數-查詢字串"><a href="#Query-參數-查詢字串" class="headerlink" title="Query 參數 (查詢字串)"></a>Query 參數 (查詢字串)</h3><p>使用者也可以透過 <strong>Query String</strong> 傳遞參數，例如 <code>/search?query=Gin</code>。</p>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line">r.GET(<span class="string">&quot;/search&quot;</span>, <span class="function"><span class="keyword">func</span><span class="params">(c *gin.Context)</span></span> &#123;</span><br><span class="line">    query := c.Query(<span class="string">&quot;query&quot;</span>) <span class="comment">// 取得 Query 參數 &quot;query&quot; 的值</span></span><br><span class="line">    c.JSON(<span class="number">200</span>, gin.H&#123;<span class="string">&quot;search_result&quot;</span>: <span class="string">&quot;You searched for &quot;</span> + query&#125;)</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><code>c.Query(&quot;query&quot;)</code>： 使用 <code>c.Query()</code> 方法取得 Query 參數 <code>query</code> 的值。</li>
+</ul>
+<h3 id="處理-POST-請求與-JSON-資料"><a href="#處理-POST-請求與-JSON-資料" class="headerlink" title="處理 POST 請求與 JSON 資料"></a>處理 POST 請求與 JSON 資料</h3><p>API 經常需要接收前端傳來的 JSON 資料，例如使用者登入、提交表單等。</p>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line">r.POST(<span class="string">&quot;/login&quot;</span>, <span class="function"><span class="keyword">func</span><span class="params">(c *gin.Context)</span></span> &#123;</span><br><span class="line">    <span class="keyword">var</span> account <span class="keyword">struct</span> &#123; <span class="comment">// 定義接收 JSON 資料的結構</span></span><br><span class="line">        Username <span class="keyword">string</span> <span class="string">`json:&quot;username&quot;`</span> <span class="comment">// JSON 欄位名為 &quot;username&quot;</span></span><br><span class="line">        Password <span class="keyword">string</span> <span class="string">`json:&quot;password&quot;`</span> <span class="comment">// JSON 欄位名為 &quot;password&quot;</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 將請求 Body 中的 JSON 資料綁定到 `account` 結構體</span></span><br><span class="line">    <span class="keyword">if</span> err := c.ShouldBindJSON(&amp;user); err != <span class="literal">nil</span> &#123;</span><br><span class="line">        c.JSON(<span class="number">400</span>, gin.H&#123;<span class="string">&quot;error&quot;</span>: <span class="string">&quot;Invalid input&quot;</span>&#125;) <span class="comment">// 綁定失敗，回應錯誤</span></span><br><span class="line">        <span class="keyword">return</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    c.JSON(<span class="number">200</span>, gin.H&#123;<span class="string">&quot;message&quot;</span>: <span class="string">&quot;Welcome, &quot;</span> + user.Username&#125;) <span class="comment">// 綁定成功，回應歡迎訊息</span></span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><code>var user struct &#123; ... &#125;</code>： 定義了一個叫做 <code>account</code> 的資料結構，它就像是一個<strong>表格</strong>，用來<strong>對應</strong>接收到的 JSON 資料。<code>user:&quot;username&quot;</code> 這些叫做 struct tag，就像是表格上的欄位名稱，告訴 Go 語言 JSON 裡面的<code>username</code>欄位要放到這個結構體的哪個地方。</li>
+<li><code>c.ShouldBindJSON(&amp;user)</code>： 把 Request Body 送來的 JSON 資料填入定義好的<code>account</code>表格裡的對應欄位。如果送來的 JSON 資料 式不對，或是內容跟表格定義的欄位名稱不一樣，就會回傳錯誤。</li>
+</ul>
+<p>前端發送以下 JSON 資料到 <code>/login</code>：</p>
+<figure class="highlight json"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="attr">&quot;username&quot;</span>: <span class="string">&quot;go_dev&quot;</span>,</span><br><span class="line">  <span class="attr">&quot;password&quot;</span>: <span class="string">&quot;securepass&quot;</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>伺服器會回應：</p>
+<figure class="highlight json"><table><tr><td class="code"><pre><span class="line">&#123;<span class="attr">&quot;message&quot;</span>: <span class="string">&quot;Welcome, go_dev&quot;</span>&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="中介軟體-Middleware-：為請求處理流程增添魔法"><a href="#中介軟體-Middleware-：為請求處理流程增添魔法" class="headerlink" title="中介軟體 (Middleware)：為請求處理流程增添魔法"></a>中介軟體 (Middleware)：為請求處理流程增添魔法</h2><p><strong>中介軟體 (Middleware)</strong> 是 Gin 非常重要的概念，它就像請求處理流程中的<strong>攔截器</strong>，允許你在請求到達 Handler 之前或之後，執行額外的邏輯，可以用來記錄請求、驗證身份、處理錯誤 …等。</p>
+<p><strong>範例：Request Log Middleware</strong></p>
+<p>以下範例示範如何建立一個 <strong>Request Log Middleware</strong>，記錄每個請求的 method 和 path。</p>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> (</span><br><span class="line">    <span class="string">&quot;log&quot;</span></span><br><span class="line">    <span class="string">&quot;time&quot;</span></span><br><span class="line"></span><br><span class="line">    <span class="string">&quot;github.com/gin-gonic/gin&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">Logger</span><span class="params">()</span> <span class="title">gin</span>.<span class="title">HandlerFunc</span></span> &#123; <span class="comment">// 定義 Logger Middleware 函式</span></span><br><span class="line">    <span class="keyword">return</span> <span class="function"><span class="keyword">func</span><span class="params">(c *gin.Context)</span></span> &#123;</span><br><span class="line">        startTime := time.Now() <span class="comment">// 記錄請求開始時間</span></span><br><span class="line"></span><br><span class="line">        c.Next() <span class="comment">// 執行後續的 Handler</span></span><br><span class="line"></span><br><span class="line">        endTime := time.Now()   <span class="comment">// 記錄請求結束時間</span></span><br><span class="line">        latency := endTime.Sub(startTime) <span class="comment">// 計算請求延遲</span></span><br><span class="line"></span><br><span class="line">        log.Println(<span class="string">&quot;請求日誌:&quot;</span>, c.Request.Method, c.Request.URL.Path, <span class="string">&quot;延遲:&quot;</span>, latency) <span class="comment">// 輸出日誌</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">    r := gin.Default()</span><br><span class="line"></span><br><span class="line">    r.Use(Logger()) <span class="comment">// 註冊 Logger Middleware (全局註冊，所有路由都會經過此 Middleware)</span></span><br><span class="line"></span><br><span class="line">    r.GET(<span class="string">&quot;/ping&quot;</span>, <span class="function"><span class="keyword">func</span><span class="params">(c *gin.Context)</span></span> &#123;</span><br><span class="line">        c.JSON(<span class="number">200</span>, gin.H&#123;<span class="string">&quot;message&quot;</span>: <span class="string">&quot;pong&quot;</span>&#125;)</span><br><span class="line">    &#125;)</span><br><span class="line"></span><br><span class="line">    r.Run(<span class="string">&quot;:8080&quot;</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><code>func Logger() gin.HandlerFunc &#123; ... &#125;</code>： 定義一個名為 <code>Logger</code> 的 Middleware 函式，返回 <code>gin.HandlerFunc</code> 類型。</li>
+<li><code>c.Next()</code>： <strong>Middleware 的關鍵！</strong>  <code>c.Next()</code> 會<strong>繼續執行後續的 Handler 或其他 Middleware</strong>。若沒有呼叫 <code>c.Next()</code>，請求流程會在此處終止。</li>
+<li><code>r.Use(Logger())</code>： 使用 <code>r.Use()</code> 方法<strong>註冊 Middleware</strong>。此處為全局註冊，所有路由都會經過 <code>Logger</code> Middleware 的處理。</li>
+</ul>
+<p><strong>執行程式碼</strong>並訪問 <code>/ping</code>，你將在終端機看到類似以下的日誌輸出：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[GIN-debug] [2023&#x2F;10&#x2F;27-15:30:00] | 200 |    127.0.0.1 |      247µs |             &#x2F;ping |            |</span><br><span class="line">請求日誌: GET &#x2F;ping 延遲: 250.397µs</span><br></pre></td></tr></table></figure>
+
+<h2 id="總結：Gin-Framework，Go-Web-開發的得力助手"><a href="#總結：Gin-Framework，Go-Web-開發的得力助手" class="headerlink" title="總結：Gin Framework，Go Web 開發的得力助手"></a>總結：Gin Framework，Go Web 開發的得力助手</h2><p>Gin Framework 以其<strong>簡單、高效能</strong>的特性，成為 Go 語言 Web 開發的熱門選擇。無論是開發 API 服務、Web 應用程式，甚至是微服務架構，Gin 都能助你一臂之力。<br>如果你熟悉 Express 或 Flask 等框架，相信你能快速上手 Gin。</p>
+]]></content>
+      <tags>
+        <tag>Golang</tag>
+        <tag>Gin Framework</tag>
+        <tag>Web API</tag>
       </tags>
   </entry>
   <entry>
@@ -1645,6 +1645,39 @@
         <tag>python</tag>
         <tag>map</tag>
         <tag>any</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>[筆記] Check.io - Date and Time Converter</title>
+    <url>/2021/04/25/%E7%AD%86%E8%A8%98-Check-io-Date-and-Time-Converter/</url>
+    <content><![CDATA[<blockquote>
+<p><a href="https://py.checkio.org/en/mission/date-and-time-converter/">check.io</a> 上的題目：將字串轉成規定的格式<br>此系列文章主要是自己在解題時覺得有趣的題目，記錄下來讓自己以後方便複習，有興趣的人可以參考看看</p>
+</blockquote>
+<span id="more"></span>
+
+<h2 id="先來看看題目"><a href="#先來看看題目" class="headerlink" title="先來看看題目"></a>先來看看題目</h2><p><img src="https://i.imgur.com/1IHEoPk.png"></p>
+<h2 id="解題步驟"><a href="#解題步驟" class="headerlink" title="解題步驟"></a>解題步驟</h2><h2 id=""><a href="#" class="headerlink" title="- "></a>- </h2><p>strptime<br>strftime<br>format</p>
+<p><a href="https://www.geeksforgeeks.org/python-strftime-function/"><img src="https://i.imgur.com/cKcNfZx.png" alt="參考來源"></a></p>
+<h2 id="解題"><a href="#解題" class="headerlink" title="解題"></a>解題</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> datetime</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">date_time</span>(<span class="params">time: <span class="built_in">str</span></span>) -&gt; <span class="built_in">str</span>:</span></span><br><span class="line">    <span class="comment">#convert string to datetime</span></span><br><span class="line">    date_time = datetime.datetime.strptime(time, <span class="string">&quot;%d.%m.%Y %H:%M&quot;</span>)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> date_time.strftime(<span class="string">f&quot;<span class="subst">&#123;date_time.day&#125;</span> %B %Y year <span class="subst">&#123;date_time.hour&#125;</span> hour<span class="subst">&#123;<span class="string">&#x27;s&#x27;</span> <span class="keyword">if</span> date_time.hour != <span class="number">1</span> <span class="keyword">else</span> <span class="string">&#x27;&#x27;</span>&#125;</span> <span class="subst">&#123;date_time.minute&#125;</span> minute<span class="subst">&#123;<span class="string">&#x27;s&#x27;</span> <span class="keyword">if</span> date_time.minute != <span class="number">1</span> <span class="keyword">else</span> <span class="string">&#x27;&#x27;</span>&#125;</span>&quot;</span>)</span><br></pre></td></tr></table></figure>
+
+<p>分享一個查到的不錯的方法</p>
+<pre><code class="python">import datetime
+
+def date_time(time: str) -&gt; str:
+    #convert string to datetime
+    date_time = datetime.datetime.strptime(time, &quot;%d.%m.%Y %H:%M&quot;)
+
+    return date_time.strftime(f&quot;&#123;date_time.day&#125; %B %Y year &#123;date_time.hour&#125; &#123;[&#39;hours&#39;, &#39;hour&#39;][date_time.hour == 1]&#125; &#123;date_time.minute&#125; &#123;[&#39;minutes&#39;, &#39;minute&#39;][date_time.minute == 1]&#125;&quot;)
+</code></pre>
+]]></content>
+      <categories>
+        <category>Check.io</category>
+        <category>python</category>
+      </categories>
+      <tags>
+        <tag>Check.io</tag>
+        <tag>python</tag>
+        <tag>datetime</tag>
       </tags>
   </entry>
   <entry>
@@ -1721,39 +1754,6 @@
         <tag>Hexo</tag>
         <tag>GitHub pages</tag>
         <tag>Blog</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>[筆記] Check.io - Date and Time Converter</title>
-    <url>/2021/04/25/%E7%AD%86%E8%A8%98-Check-io-Date-and-Time-Converter/</url>
-    <content><![CDATA[<blockquote>
-<p><a href="https://py.checkio.org/en/mission/date-and-time-converter/">check.io</a> 上的題目：將字串轉成規定的格式<br>此系列文章主要是自己在解題時覺得有趣的題目，記錄下來讓自己以後方便複習，有興趣的人可以參考看看</p>
-</blockquote>
-<span id="more"></span>
-
-<h2 id="先來看看題目"><a href="#先來看看題目" class="headerlink" title="先來看看題目"></a>先來看看題目</h2><p><img src="https://i.imgur.com/1IHEoPk.png"></p>
-<h2 id="解題步驟"><a href="#解題步驟" class="headerlink" title="解題步驟"></a>解題步驟</h2><h2 id=""><a href="#" class="headerlink" title="- "></a>- </h2><p>strptime<br>strftime<br>format</p>
-<p><a href="https://www.geeksforgeeks.org/python-strftime-function/"><img src="https://i.imgur.com/cKcNfZx.png" alt="參考來源"></a></p>
-<h2 id="解題"><a href="#解題" class="headerlink" title="解題"></a>解題</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> datetime</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">date_time</span>(<span class="params">time: <span class="built_in">str</span></span>) -&gt; <span class="built_in">str</span>:</span></span><br><span class="line">    <span class="comment">#convert string to datetime</span></span><br><span class="line">    date_time = datetime.datetime.strptime(time, <span class="string">&quot;%d.%m.%Y %H:%M&quot;</span>)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> date_time.strftime(<span class="string">f&quot;<span class="subst">&#123;date_time.day&#125;</span> %B %Y year <span class="subst">&#123;date_time.hour&#125;</span> hour<span class="subst">&#123;<span class="string">&#x27;s&#x27;</span> <span class="keyword">if</span> date_time.hour != <span class="number">1</span> <span class="keyword">else</span> <span class="string">&#x27;&#x27;</span>&#125;</span> <span class="subst">&#123;date_time.minute&#125;</span> minute<span class="subst">&#123;<span class="string">&#x27;s&#x27;</span> <span class="keyword">if</span> date_time.minute != <span class="number">1</span> <span class="keyword">else</span> <span class="string">&#x27;&#x27;</span>&#125;</span>&quot;</span>)</span><br></pre></td></tr></table></figure>
-
-<p>分享一個查到的不錯的方法</p>
-<pre><code class="python">import datetime
-
-def date_time(time: str) -&gt; str:
-    #convert string to datetime
-    date_time = datetime.datetime.strptime(time, &quot;%d.%m.%Y %H:%M&quot;)
-
-    return date_time.strftime(f&quot;&#123;date_time.day&#125; %B %Y year &#123;date_time.hour&#125; &#123;[&#39;hours&#39;, &#39;hour&#39;][date_time.hour == 1]&#125; &#123;date_time.minute&#125; &#123;[&#39;minutes&#39;, &#39;minute&#39;][date_time.minute == 1]&#125;&quot;)
-</code></pre>
-]]></content>
-      <categories>
-        <category>Check.io</category>
-        <category>python</category>
-      </categories>
-      <tags>
-        <tag>Check.io</tag>
-        <tag>python</tag>
-        <tag>datetime</tag>
       </tags>
   </entry>
   <entry>
@@ -1976,6 +1976,25 @@ def date_time(time: str) -&gt; str:
       </tags>
   </entry>
   <entry>
+    <title>[筆記] Leetcode - 136. Single Number</title>
+    <url>/2023/09/28/%E7%AD%86%E8%A8%98-Leetcode-%20136.-Single%20Number/</url>
+    <content><![CDATA[<p><a href="https://leetcode.com/problems/single-number/">https://leetcode.com/problems/single-number/</a></p>
+<blockquote>
+<p>Given a non-empty array of integers nums, every element appears twice except for one. Find that single one.<br>You must implement a solution with a linear runtime complexity and use only constant extra space.</p>
+</blockquote>
+<p><img src="https://hackmd.io/_uploads/BJfpj0Mx6.png"></p>
+<span id="more"></span>
+
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">singleNumber</span>(<span class="params">self, nums: <span class="type">List</span>[<span class="built_in">int</span>]</span>) -&gt; <span class="built_in">int</span>:</span></span><br><span class="line">        <span class="built_in">list</span> = []</span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> nums:</span><br><span class="line">            <span class="keyword">if</span> i <span class="keyword">in</span> <span class="built_in">list</span>:</span><br><span class="line">                <span class="built_in">list</span>.remove(i)</span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                <span class="built_in">list</span>.append(i)</span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">list</span>.pop()</span><br></pre></td></tr></table></figure>
+]]></content>
+      <tags>
+        <tag>list</tag>
+        <tag>Leetcode</tag>
+        <tag>Python</tag>
+        <tag>Coding</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>[筆記] Hexo - 換電腦重新部署環境</title>
     <url>/2023/04/17/%E7%AD%86%E8%A8%98-Hexo-%E6%8F%9B%E9%9B%BB%E8%85%A6%E9%87%8D%E6%96%B0%E9%83%A8%E7%BD%B2%E7%92%B0%E5%A2%83/</url>
     <content><![CDATA[<blockquote>
@@ -2053,22 +2072,26 @@ def date_time(time: str) -&gt; str:
       </tags>
   </entry>
   <entry>
-    <title>[筆記] Leetcode - 136. Single Number</title>
-    <url>/2023/09/28/%E7%AD%86%E8%A8%98-Leetcode-%20136.-Single%20Number/</url>
-    <content><![CDATA[<p><a href="https://leetcode.com/problems/single-number/">https://leetcode.com/problems/single-number/</a></p>
+    <title>[筆記] Leetcode - 217. Contains Duplicate</title>
+    <url>/2023/09/28/%E7%AD%86%E8%A8%98-Leetcode-%20217.-Contains-Duplicate/</url>
+    <content><![CDATA[<p><a href="https://leetcode.com/problems/contains-duplicate/">https://leetcode.com/problems/contains-duplicate/</a></p>
 <blockquote>
-<p>Given a non-empty array of integers nums, every element appears twice except for one. Find that single one.<br>You must implement a solution with a linear runtime complexity and use only constant extra space.</p>
+<p>Given an integer array nums, return true if any value appears at least twice in the array, and return false if every element is distinct.</p>
 </blockquote>
-<p><img src="https://hackmd.io/_uploads/BJfpj0Mx6.png"></p>
+<p><img src="https://hackmd.io/_uploads/H1SgWl7ga.png"></p>
 <span id="more"></span>
 
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">singleNumber</span>(<span class="params">self, nums: <span class="type">List</span>[<span class="built_in">int</span>]</span>) -&gt; <span class="built_in">int</span>:</span></span><br><span class="line">        <span class="built_in">list</span> = []</span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> nums:</span><br><span class="line">            <span class="keyword">if</span> i <span class="keyword">in</span> <span class="built_in">list</span>:</span><br><span class="line">                <span class="built_in">list</span>.remove(i)</span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                <span class="built_in">list</span>.append(i)</span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">list</span>.pop()</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">containsDuplicate</span>(<span class="params">self, nums: <span class="type">List</span>[<span class="built_in">int</span>]</span>) -&gt; <span class="built_in">bool</span>:</span></span><br><span class="line">        ans = &#123;&#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> num <span class="keyword">in</span> nums:</span><br><span class="line">            <span class="keyword">if</span> num <span class="keyword">in</span> ans:</span><br><span class="line">                <span class="keyword">return</span> <span class="literal">True</span></span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                ans[num] = <span class="number">1</span></span><br><span class="line">            </span><br><span class="line">        <span class="keyword">return</span> <span class="literal">False</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">containsDuplicate</span>(<span class="params">self, nums: <span class="type">List</span>[<span class="built_in">int</span>]</span>) -&gt; <span class="built_in">bool</span>:</span></span><br><span class="line">        ans = &#123;&#125;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">for</span> num <span class="keyword">in</span> nums:</span><br><span class="line">            <span class="keyword">if</span> ans.get(num):</span><br><span class="line">                <span class="keyword">return</span> <span class="literal">True</span></span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                ans[num] = <span class="number">1</span></span><br><span class="line">        </span><br><span class="line">        <span class="keyword">return</span> <span class="literal">False</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">containsDuplicate</span>(<span class="params">self, nums: <span class="type">List</span>[<span class="built_in">int</span>]</span>) -&gt; <span class="built_in">bool</span>:</span></span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">len</span>(nums) != <span class="built_in">len</span>(<span class="built_in">list</span>(<span class="built_in">set</span>(nums)))</span><br></pre></td></tr></table></figure>
 ]]></content>
       <tags>
         <tag>list</tag>
         <tag>Leetcode</tag>
         <tag>Python</tag>
         <tag>Coding</tag>
+        <tag>set</tag>
       </tags>
   </entry>
   <entry>
@@ -2093,29 +2116,6 @@ def date_time(time: str) -&gt; str:
         <tag>Leetcode</tag>
         <tag>Python</tag>
         <tag>Math</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>[筆記] Leetcode - 217. Contains Duplicate</title>
-    <url>/2023/09/28/%E7%AD%86%E8%A8%98-Leetcode-%20217.-Contains-Duplicate/</url>
-    <content><![CDATA[<p><a href="https://leetcode.com/problems/contains-duplicate/">https://leetcode.com/problems/contains-duplicate/</a></p>
-<blockquote>
-<p>Given an integer array nums, return true if any value appears at least twice in the array, and return false if every element is distinct.</p>
-</blockquote>
-<p><img src="https://hackmd.io/_uploads/H1SgWl7ga.png"></p>
-<span id="more"></span>
-
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">containsDuplicate</span>(<span class="params">self, nums: <span class="type">List</span>[<span class="built_in">int</span>]</span>) -&gt; <span class="built_in">bool</span>:</span></span><br><span class="line">        ans = &#123;&#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> num <span class="keyword">in</span> nums:</span><br><span class="line">            <span class="keyword">if</span> num <span class="keyword">in</span> ans:</span><br><span class="line">                <span class="keyword">return</span> <span class="literal">True</span></span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                ans[num] = <span class="number">1</span></span><br><span class="line">            </span><br><span class="line">        <span class="keyword">return</span> <span class="literal">False</span></span><br></pre></td></tr></table></figure>
-
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">containsDuplicate</span>(<span class="params">self, nums: <span class="type">List</span>[<span class="built_in">int</span>]</span>) -&gt; <span class="built_in">bool</span>:</span></span><br><span class="line">        ans = &#123;&#125;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">for</span> num <span class="keyword">in</span> nums:</span><br><span class="line">            <span class="keyword">if</span> ans.get(num):</span><br><span class="line">                <span class="keyword">return</span> <span class="literal">True</span></span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                ans[num] = <span class="number">1</span></span><br><span class="line">        </span><br><span class="line">        <span class="keyword">return</span> <span class="literal">False</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">containsDuplicate</span>(<span class="params">self, nums: <span class="type">List</span>[<span class="built_in">int</span>]</span>) -&gt; <span class="built_in">bool</span>:</span></span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">len</span>(nums) != <span class="built_in">len</span>(<span class="built_in">list</span>(<span class="built_in">set</span>(nums)))</span><br></pre></td></tr></table></figure>
-]]></content>
-      <tags>
-        <tag>list</tag>
-        <tag>Leetcode</tag>
-        <tag>Python</tag>
-        <tag>Coding</tag>
-        <tag>set</tag>
       </tags>
   </entry>
   <entry>
@@ -2252,6 +2252,28 @@ def date_time(time: str) -&gt; str:
       </tags>
   </entry>
   <entry>
+    <title>[筆記] 網頁版面 - 側邊欄</title>
+    <url>/2020/09/20/%E7%AD%86%E8%A8%98-%E7%B6%B2%E9%A0%81%E7%89%88%E9%9D%A2-%E5%81%B4%E9%82%8A%E6%AC%84/</url>
+    <content><![CDATA[<blockquote>
+<p>實習開發網站，常遇到一些功能需求要上網查詢，整理成筆記以後再用到就不用又從頭開始找，也希望幫助到正在找學這些功能的人</p>
+</blockquote>
+<span id="more"></span>
+
+
+<iframe width="100%" height="500" src="https://codepen.io/ZZYume/embed/WNwaPpJ?height=265&theme-id=dark&default-tab=result" frameborder="0"></iframe>
+
+<p>想看比較清楚的 code，我也有放在 <a href="https://github.com/ZanaZhong/side-nav.github.io">Github</a></p>
+]]></content>
+      <tags>
+        <tag>html</tag>
+        <tag>css</tag>
+        <tag>javascript</tag>
+        <tag>jquery</tag>
+        <tag>Bootstrap</tag>
+        <tag>Bootstrap-table</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>軟體升級不崩潰！向前兼容與向後兼容的秘密</title>
     <url>/2025/02/04/%E8%BB%9F%E9%AB%94%E5%8D%87%E7%B4%9A%E4%B8%8D%E5%B4%A9%E6%BD%B0%EF%BC%81%E5%90%91%E5%89%8D%E5%85%BC%E5%AE%B9%E8%88%87%E5%90%91%E5%BE%8C%E5%85%BC%E5%AE%B9%E7%9A%84%E7%A7%98%E5%AF%86/</url>
     <content><![CDATA[<p>想像一下，你有一本舊筆記本，裡面記錄了多年來的重要資訊。某天，你買了一本新筆記本，希望能夠繼續使用舊的筆記內容，而不會因為格式變了就讀不懂。這其實就像軟體的<strong>兼容性 (Compatibility)</strong> 問題，確保系統或應用程式在不同版本之間能夠順暢運作，避免升級帶來的麻煩。</p>
@@ -2360,28 +2382,6 @@ def date_time(time: str) -&gt; str:
         <tag>軟體開發</tag>
         <tag>向前兼容</tag>
         <tag>向後兼容</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>[筆記] 網頁版面 - 側邊欄</title>
-    <url>/2020/09/20/%E7%AD%86%E8%A8%98-%E7%B6%B2%E9%A0%81%E7%89%88%E9%9D%A2-%E5%81%B4%E9%82%8A%E6%AC%84/</url>
-    <content><![CDATA[<blockquote>
-<p>實習開發網站，常遇到一些功能需求要上網查詢，整理成筆記以後再用到就不用又從頭開始找，也希望幫助到正在找學這些功能的人</p>
-</blockquote>
-<span id="more"></span>
-
-
-<iframe width="100%" height="500" src="https://codepen.io/ZZYume/embed/WNwaPpJ?height=265&theme-id=dark&default-tab=result" frameborder="0"></iframe>
-
-<p>想看比較清楚的 code，我也有放在 <a href="https://github.com/ZanaZhong/side-nav.github.io">Github</a></p>
-]]></content>
-      <tags>
-        <tag>html</tag>
-        <tag>css</tag>
-        <tag>javascript</tag>
-        <tag>jquery</tag>
-        <tag>Bootstrap</tag>
-        <tag>Bootstrap-table</tag>
       </tags>
   </entry>
 </search>
