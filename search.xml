@@ -650,56 +650,6 @@
       </tags>
   </entry>
   <entry>
-    <title>[學習] Check.io - Bigger Price</title>
-    <url>/2021/03/17/%E5%AD%B8%E7%BF%92-Check-io-Bigger-Price/</url>
-    <content><![CDATA[<blockquote>
-<p>check.io 上的題目：求出 list 裡 topN 貴的物品儲存方式是dicionary，每個物品各有兩個 key 分別為 name &amp; price<br>此系列文章主要是自己在解題時覺得有趣的題目，記錄下來讓自己以後好複習，有興趣的人可以參考看看</p>
-</blockquote>
-<span id="more"></span>
-
-<p>先來看看題目</p>
-<p><img src="https://i.imgur.com/ss2IjD4.png"></p>
-<p>看完題目可能會覺得小複雜，一般題目出有關 dictionary 的題目大多都只要找出一個最大或最小的 key 值，很直覺就會想到要用max&#x2F;min的函式來解決(詳細用法在<a href="https://zanazhong.github.io/2021/01/14/%E5%AD%B8%E7%BF%92-Check-io-Nearest-Value/#more">此篇文章</a>有提到)，這裡還要找不只一個，但認真想想其實也沒很難，用sort就可以一行輕鬆解決了。</p>
-<h3 id="sorted-的用法"><a href="#sorted-的用法" class="headerlink" title="sorted 的用法"></a>sorted 的用法</h3><div class="note default"><p>語法：sorted(list, key&#x3D;parameters, reverse&#x3D;True&#x2F;False)</p>
-</div>
-
-<h4 id="基本"><a href="#基本" class="headerlink" title="基本"></a>基本</h4><figure class="highlight python"><table><tr><td class="code"><pre><span class="line">x = [<span class="number">3</span>, <span class="number">2</span>, <span class="number">6</span>, <span class="number">1</span>, <span class="number">9</span>]</span><br><span class="line">y = <span class="built_in">sorted</span>(x)</span><br><span class="line"><span class="built_in">print</span>(y)</span><br></pre></td></tr></table></figure>
-<p>output:</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[1, 2, 3, 6, 9]</span><br></pre></td></tr></table></figure>
-
-<p>反向排序(大到小)</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">y = <span class="built_in">sorted</span>(x, reverse=<span class="literal">True</span>)</span><br></pre></td></tr></table></figure>
-<p>output:</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[9, 6, 3, 2, 1]</span><br></pre></td></tr></table></figure>
-
-<h4 id="進階"><a href="#進階" class="headerlink" title="進階"></a>進階</h4><p>example 1:</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">x = [(<span class="string">&quot;Amy&quot;</span>, <span class="number">150</span>, <span class="number">60</span>),</span><br><span class="line">     (<span class="string">&quot;Emily&quot;</span>, <span class="number">154</span>, <span class="number">55</span>),</span><br><span class="line">     (<span class="string">&quot;Wen&quot;</span>, <span class="number">145</span>, <span class="number">70</span>)]</span><br><span class="line"><span class="built_in">print</span>(<span class="built_in">sorted</span>(x, key=<span class="keyword">lambda</span> a: a[<span class="number">1</span>]))</span><br></pre></td></tr></table></figure>
-<p>output:</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[(&#39;Wen&#39;, 145, 70), (&#39;Amy&#39;, 150, 60), (&#39;Emily&#39;, 154, 55)]</span><br></pre></td></tr></table></figure>
-
-<p>example 2:</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">x = [&#123;<span class="string">&quot;fruit&quot;</span>: <span class="string">&quot;apple&quot;</span>, <span class="string">&quot;price&quot;</span>: <span class="number">20</span>&#125;,</span><br><span class="line">     &#123;<span class="string">&quot;fruit&quot;</span>: <span class="string">&quot;banana&quot;</span>, <span class="string">&quot;price&quot;</span>: <span class="number">18</span>&#125;,</span><br><span class="line">     &#123;<span class="string">&quot;fruit&quot;</span>: <span class="string">&quot;peach&quot;</span>, <span class="string">&quot;price&quot;</span>: <span class="number">25</span>&#125;] </span><br><span class="line"><span class="built_in">print</span>(<span class="built_in">sorted</span>(x, key=<span class="keyword">lambda</span> x: x[<span class="string">&quot;price&quot;</span>]))</span><br></pre></td></tr></table></figure>
-<p>output:</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[&#123;&#39;fruit&#39;: &#39;banana&#39;, &#39;price&#39;: 18&#125;, &#123;&#39;fruit&#39;: &#39;apple&#39;, &#39;price&#39;: 20&#125;, &#123;&#39;fruit&#39;: &#39;peach&#39;, &#39;price&#39;: 25&#125;]</span><br></pre></td></tr></table></figure>
-
-<h3 id="解答："><a href="#解答：" class="headerlink" title="解答："></a>解答：</h3><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">bigger_price</span>(<span class="params">limit: <span class="built_in">int</span>, data: <span class="built_in">list</span></span>) -&gt; <span class="built_in">list</span>:</span></span><br><span class="line">    <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">        TOP most expensive goods</span></span><br><span class="line"><span class="string">    &quot;&quot;&quot;</span></span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">sorted</span>(data, key=<span class="keyword">lambda</span> d: d[<span class="string">&#x27;price&#x27;</span>], reverse=<span class="literal">True</span>)[:limit]</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    <span class="keyword">from</span> pprint <span class="keyword">import</span> pprint</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&#x27;Example:&#x27;</span>)</span><br><span class="line">    pprint(bigger_price(<span class="number">2</span>, [</span><br><span class="line">        &#123;<span class="string">&quot;name&quot;</span>: <span class="string">&quot;bread&quot;</span>, <span class="string">&quot;price&quot;</span>: <span class="number">100</span>&#125;,</span><br><span class="line">        &#123;<span class="string">&quot;name&quot;</span>: <span class="string">&quot;wine&quot;</span>, <span class="string">&quot;price&quot;</span>: <span class="number">138</span>&#125;,</span><br><span class="line">        &#123;<span class="string">&quot;name&quot;</span>: <span class="string">&quot;meat&quot;</span>, <span class="string">&quot;price&quot;</span>: <span class="number">15</span>&#125;,</span><br><span class="line">        &#123;<span class="string">&quot;name&quot;</span>: <span class="string">&quot;water&quot;</span>, <span class="string">&quot;price&quot;</span>: <span class="number">1</span>&#125;</span><br><span class="line">    ]))</span><br><span class="line"></span><br><span class="line">    <span class="comment"># These &quot;asserts&quot; using for self-checking and not for auto-testing</span></span><br><span class="line">    <span class="keyword">assert</span> bigger_price(<span class="number">2</span>, [</span><br><span class="line">        &#123;<span class="string">&quot;name&quot;</span>: <span class="string">&quot;bread&quot;</span>, <span class="string">&quot;price&quot;</span>: <span class="number">100</span>&#125;,</span><br><span class="line">        &#123;<span class="string">&quot;name&quot;</span>: <span class="string">&quot;wine&quot;</span>, <span class="string">&quot;price&quot;</span>: <span class="number">138</span>&#125;,</span><br><span class="line">        &#123;<span class="string">&quot;name&quot;</span>: <span class="string">&quot;meat&quot;</span>, <span class="string">&quot;price&quot;</span>: <span class="number">15</span>&#125;,</span><br><span class="line">        &#123;<span class="string">&quot;name&quot;</span>: <span class="string">&quot;water&quot;</span>, <span class="string">&quot;price&quot;</span>: <span class="number">1</span>&#125;</span><br><span class="line">    ]) == [</span><br><span class="line">        &#123;<span class="string">&quot;name&quot;</span>: <span class="string">&quot;wine&quot;</span>, <span class="string">&quot;price&quot;</span>: <span class="number">138</span>&#125;,</span><br><span class="line">        &#123;<span class="string">&quot;name&quot;</span>: <span class="string">&quot;bread&quot;</span>, <span class="string">&quot;price&quot;</span>: <span class="number">100</span>&#125;</span><br><span class="line">    ], <span class="string">&quot;First&quot;</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">assert</span> bigger_price(<span class="number">1</span>, [</span><br><span class="line">        &#123;<span class="string">&quot;name&quot;</span>: <span class="string">&quot;pen&quot;</span>, <span class="string">&quot;price&quot;</span>: <span class="number">5</span>&#125;,</span><br><span class="line">        &#123;<span class="string">&quot;name&quot;</span>: <span class="string">&quot;whiteboard&quot;</span>, <span class="string">&quot;price&quot;</span>: <span class="number">170</span>&#125;</span><br><span class="line">    ]) == [&#123;<span class="string">&quot;name&quot;</span>: <span class="string">&quot;whiteboard&quot;</span>, <span class="string">&quot;price&quot;</span>: <span class="number">170</span>&#125;], <span class="string">&quot;Second&quot;</span></span><br><span class="line"></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&#x27;Done! Looks like it is fine. Go and check it&#x27;</span>)</span><br></pre></td></tr></table></figure>
-
-
-]]></content>
-      <categories>
-        <category>Check.io</category>
-        <category>python</category>
-      </categories>
-      <tags>
-        <tag>Check.io</tag>
-        <tag>python</tag>
-        <tag>lambda</tag>
-        <tag>sort</tag>
-        <tag>list</tag>
-        <tag>dictionary</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>[學習] Check.io - Nearest Value</title>
     <url>/2021/01/14/%E5%AD%B8%E7%BF%92-Check-io-Nearest-Value/</url>
     <content><![CDATA[<blockquote>
@@ -774,8 +724,117 @@
         <tag>Check.io</tag>
         <tag>python</tag>
         <tag>lambda</tag>
-        <tag>list</tag>
         <tag>min/max</tag>
+        <tag>list</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>[學習] Check.io - Bigger Price</title>
+    <url>/2021/03/17/%E5%AD%B8%E7%BF%92-Check-io-Bigger-Price/</url>
+    <content><![CDATA[<blockquote>
+<p>check.io 上的題目：求出 list 裡 topN 貴的物品儲存方式是dicionary，每個物品各有兩個 key 分別為 name &amp; price<br>此系列文章主要是自己在解題時覺得有趣的題目，記錄下來讓自己以後好複習，有興趣的人可以參考看看</p>
+</blockquote>
+<span id="more"></span>
+
+<p>先來看看題目</p>
+<p><img src="https://i.imgur.com/ss2IjD4.png"></p>
+<p>看完題目可能會覺得小複雜，一般題目出有關 dictionary 的題目大多都只要找出一個最大或最小的 key 值，很直覺就會想到要用max&#x2F;min的函式來解決(詳細用法在<a href="https://zanazhong.github.io/2021/01/14/%E5%AD%B8%E7%BF%92-Check-io-Nearest-Value/#more">此篇文章</a>有提到)，這裡還要找不只一個，但認真想想其實也沒很難，用sort就可以一行輕鬆解決了。</p>
+<h3 id="sorted-的用法"><a href="#sorted-的用法" class="headerlink" title="sorted 的用法"></a>sorted 的用法</h3><div class="note default"><p>語法：sorted(list, key&#x3D;parameters, reverse&#x3D;True&#x2F;False)</p>
+</div>
+
+<h4 id="基本"><a href="#基本" class="headerlink" title="基本"></a>基本</h4><figure class="highlight python"><table><tr><td class="code"><pre><span class="line">x = [<span class="number">3</span>, <span class="number">2</span>, <span class="number">6</span>, <span class="number">1</span>, <span class="number">9</span>]</span><br><span class="line">y = <span class="built_in">sorted</span>(x)</span><br><span class="line"><span class="built_in">print</span>(y)</span><br></pre></td></tr></table></figure>
+<p>output:</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[1, 2, 3, 6, 9]</span><br></pre></td></tr></table></figure>
+
+<p>反向排序(大到小)</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">y = <span class="built_in">sorted</span>(x, reverse=<span class="literal">True</span>)</span><br></pre></td></tr></table></figure>
+<p>output:</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[9, 6, 3, 2, 1]</span><br></pre></td></tr></table></figure>
+
+<h4 id="進階"><a href="#進階" class="headerlink" title="進階"></a>進階</h4><p>example 1:</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">x = [(<span class="string">&quot;Amy&quot;</span>, <span class="number">150</span>, <span class="number">60</span>),</span><br><span class="line">     (<span class="string">&quot;Emily&quot;</span>, <span class="number">154</span>, <span class="number">55</span>),</span><br><span class="line">     (<span class="string">&quot;Wen&quot;</span>, <span class="number">145</span>, <span class="number">70</span>)]</span><br><span class="line"><span class="built_in">print</span>(<span class="built_in">sorted</span>(x, key=<span class="keyword">lambda</span> a: a[<span class="number">1</span>]))</span><br></pre></td></tr></table></figure>
+<p>output:</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[(&#39;Wen&#39;, 145, 70), (&#39;Amy&#39;, 150, 60), (&#39;Emily&#39;, 154, 55)]</span><br></pre></td></tr></table></figure>
+
+<p>example 2:</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">x = [&#123;<span class="string">&quot;fruit&quot;</span>: <span class="string">&quot;apple&quot;</span>, <span class="string">&quot;price&quot;</span>: <span class="number">20</span>&#125;,</span><br><span class="line">     &#123;<span class="string">&quot;fruit&quot;</span>: <span class="string">&quot;banana&quot;</span>, <span class="string">&quot;price&quot;</span>: <span class="number">18</span>&#125;,</span><br><span class="line">     &#123;<span class="string">&quot;fruit&quot;</span>: <span class="string">&quot;peach&quot;</span>, <span class="string">&quot;price&quot;</span>: <span class="number">25</span>&#125;] </span><br><span class="line"><span class="built_in">print</span>(<span class="built_in">sorted</span>(x, key=<span class="keyword">lambda</span> x: x[<span class="string">&quot;price&quot;</span>]))</span><br></pre></td></tr></table></figure>
+<p>output:</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[&#123;&#39;fruit&#39;: &#39;banana&#39;, &#39;price&#39;: 18&#125;, &#123;&#39;fruit&#39;: &#39;apple&#39;, &#39;price&#39;: 20&#125;, &#123;&#39;fruit&#39;: &#39;peach&#39;, &#39;price&#39;: 25&#125;]</span><br></pre></td></tr></table></figure>
+
+<h3 id="解答："><a href="#解答：" class="headerlink" title="解答："></a>解答：</h3><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">bigger_price</span>(<span class="params">limit: <span class="built_in">int</span>, data: <span class="built_in">list</span></span>) -&gt; <span class="built_in">list</span>:</span></span><br><span class="line">    <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">        TOP most expensive goods</span></span><br><span class="line"><span class="string">    &quot;&quot;&quot;</span></span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">sorted</span>(data, key=<span class="keyword">lambda</span> d: d[<span class="string">&#x27;price&#x27;</span>], reverse=<span class="literal">True</span>)[:limit]</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    <span class="keyword">from</span> pprint <span class="keyword">import</span> pprint</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&#x27;Example:&#x27;</span>)</span><br><span class="line">    pprint(bigger_price(<span class="number">2</span>, [</span><br><span class="line">        &#123;<span class="string">&quot;name&quot;</span>: <span class="string">&quot;bread&quot;</span>, <span class="string">&quot;price&quot;</span>: <span class="number">100</span>&#125;,</span><br><span class="line">        &#123;<span class="string">&quot;name&quot;</span>: <span class="string">&quot;wine&quot;</span>, <span class="string">&quot;price&quot;</span>: <span class="number">138</span>&#125;,</span><br><span class="line">        &#123;<span class="string">&quot;name&quot;</span>: <span class="string">&quot;meat&quot;</span>, <span class="string">&quot;price&quot;</span>: <span class="number">15</span>&#125;,</span><br><span class="line">        &#123;<span class="string">&quot;name&quot;</span>: <span class="string">&quot;water&quot;</span>, <span class="string">&quot;price&quot;</span>: <span class="number">1</span>&#125;</span><br><span class="line">    ]))</span><br><span class="line"></span><br><span class="line">    <span class="comment"># These &quot;asserts&quot; using for self-checking and not for auto-testing</span></span><br><span class="line">    <span class="keyword">assert</span> bigger_price(<span class="number">2</span>, [</span><br><span class="line">        &#123;<span class="string">&quot;name&quot;</span>: <span class="string">&quot;bread&quot;</span>, <span class="string">&quot;price&quot;</span>: <span class="number">100</span>&#125;,</span><br><span class="line">        &#123;<span class="string">&quot;name&quot;</span>: <span class="string">&quot;wine&quot;</span>, <span class="string">&quot;price&quot;</span>: <span class="number">138</span>&#125;,</span><br><span class="line">        &#123;<span class="string">&quot;name&quot;</span>: <span class="string">&quot;meat&quot;</span>, <span class="string">&quot;price&quot;</span>: <span class="number">15</span>&#125;,</span><br><span class="line">        &#123;<span class="string">&quot;name&quot;</span>: <span class="string">&quot;water&quot;</span>, <span class="string">&quot;price&quot;</span>: <span class="number">1</span>&#125;</span><br><span class="line">    ]) == [</span><br><span class="line">        &#123;<span class="string">&quot;name&quot;</span>: <span class="string">&quot;wine&quot;</span>, <span class="string">&quot;price&quot;</span>: <span class="number">138</span>&#125;,</span><br><span class="line">        &#123;<span class="string">&quot;name&quot;</span>: <span class="string">&quot;bread&quot;</span>, <span class="string">&quot;price&quot;</span>: <span class="number">100</span>&#125;</span><br><span class="line">    ], <span class="string">&quot;First&quot;</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">assert</span> bigger_price(<span class="number">1</span>, [</span><br><span class="line">        &#123;<span class="string">&quot;name&quot;</span>: <span class="string">&quot;pen&quot;</span>, <span class="string">&quot;price&quot;</span>: <span class="number">5</span>&#125;,</span><br><span class="line">        &#123;<span class="string">&quot;name&quot;</span>: <span class="string">&quot;whiteboard&quot;</span>, <span class="string">&quot;price&quot;</span>: <span class="number">170</span>&#125;</span><br><span class="line">    ]) == [&#123;<span class="string">&quot;name&quot;</span>: <span class="string">&quot;whiteboard&quot;</span>, <span class="string">&quot;price&quot;</span>: <span class="number">170</span>&#125;], <span class="string">&quot;Second&quot;</span></span><br><span class="line"></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&#x27;Done! Looks like it is fine. Go and check it&#x27;</span>)</span><br></pre></td></tr></table></figure>
+
+
+]]></content>
+      <categories>
+        <category>Check.io</category>
+        <category>python</category>
+      </categories>
+      <tags>
+        <tag>Check.io</tag>
+        <tag>python</tag>
+        <tag>lambda</tag>
+        <tag>list</tag>
+        <tag>sort</tag>
+        <tag>dictionary</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>[學習] Python List</title>
+    <url>/2021/03/22/%E5%AD%B8%E7%BF%92-Python-List/</url>
+    <content><![CDATA[<p>常遇到的問題</p>
+<ul>
+<li>find the duplicate elements in the list</li>
+<li>count the duplicate elements in the list</li>
+<li>remove the duplicate elements in the list</li>
+</ul>
+<span id="more"></span>
+
+<h3 id="List-count-用法"><a href="#List-count-用法" class="headerlink" title="List.count() 用法"></a>List.count() 用法</h3><blockquote>
+<p>計算指定的值在 list 出現幾次</p>
+</blockquote>
+<div class="note default"><p>語法：list.count(element)</p>
+</div>
+
+<p>input:</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">my_list = [<span class="number">2</span>, <span class="number">3</span>, <span class="number">1</span>, <span class="number">4</span>, <span class="number">2</span>, <span class="number">5</span>, <span class="number">3</span>, <span class="number">7</span>]</span><br><span class="line"><span class="built_in">print</span>(my_list.count(<span class="number">3</span>))</span><br><span class="line"><span class="built_in">print</span>(my_list.count(<span class="number">7</span>))</span><br></pre></td></tr></table></figure>
+<p>output:</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">2</span><br><span class="line">1</span><br></pre></td></tr></table></figure>
+
+<h4 id="進階"><a href="#進階" class="headerlink" title="進階"></a>進階</h4><blockquote>
+<p>將 list 裡面所有的 element 都記錄下有幾個</p>
+</blockquote>
+<p>input:</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">dup_list = [<span class="string">&quot;a&quot;</span>, <span class="string">&quot;c&quot;</span>, <span class="string">&quot;a&quot;</span>, <span class="string">&quot;c&quot;</span>, <span class="string">&quot;b&quot;</span>, <span class="string">&quot;a&quot;</span>]</span><br><span class="line">clear_dict = &#123;i: dup_list.count(i) <span class="keyword">for</span> i <span class="keyword">in</span> dup_list&#125;</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(clear_dict)</span><br></pre></td></tr></table></figure>
+<p>output: </p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#123;&#39;a&#39;: 3, &#39;c&#39;: 2, &#39;b&#39;: 1&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="另一種用法-Counter"><a href="#另一種用法-Counter" class="headerlink" title="另一種用法 Counter"></a>另一種用法 Counter</h3><div class="note default"><p>需要先 import<br>語法：<br>from collections import Counter<br>Counter(List&#x2F;String)</p>
+</div>
+<blockquote>
+<p>counter 出來的型態通常會轉成 Dictionary 會比較方便～<br>在下面也會示範有轉成 dict 跟沒轉成 dict 的差別</p>
+</blockquote>
+<p>input:</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> collections <span class="keyword">import</span> Counter</span><br><span class="line">dup_list = [<span class="string">&quot;a&quot;</span>, <span class="string">&quot;c&quot;</span>, <span class="string">&quot;a&quot;</span>, <span class="string">&quot;c&quot;</span>, <span class="string">&quot;b&quot;</span>, <span class="string">&quot;a&quot;</span>]</span><br><span class="line">count_list = <span class="built_in">dict</span>(Counter(dup_list))</span><br><span class="line">count_string = Counter(<span class="string">&#x27;acacaba&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(count_list)</span><br><span class="line"><span class="built_in">print</span>(count_string)</span><br></pre></td></tr></table></figure>
+<p>output:</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#123;&#39;a&#39;: 3, &#39;c&#39;: 2, &#39;b&#39;: 1&#125;</span><br><span class="line">Counter(&#123;&#39;a&#39;: 4, &#39;b&#39;: 1, &#39;c&#39;: 2&#125;)</span><br></pre></td></tr></table></figure>
+
+<h4 id="Counter-的額外用法"><a href="#Counter-的額外用法" class="headerlink" title="Counter 的額外用法"></a>Counter 的額外用法</h4><blockquote>
+<p>找出出現次數前 n 多</p>
+</blockquote>
+<div class="note default"><p>語法： Counter.most_common()</p>
+</div>
+
+<p>input:</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 接續上一個例子</span></span><br><span class="line"><span class="built_in">print</span>(count_string.most_common(<span class="number">1</span>))</span><br><span class="line"><span class="built_in">print</span>(count_string.most_common(<span class="number">2</span>))</span><br></pre></td></tr></table></figure>
+<p>output:</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[(&#39;a&#39;, 4)]</span><br><span class="line">[(&#39;a&#39;, 4), (&#39;c&#39;, 2)]</span><br></pre></td></tr></table></figure>]]></content>
+      <categories>
+        <category>python</category>
+      </categories>
+      <tags>
+        <tag>python</tag>
+        <tag>list</tag>
+        <tag>count</tag>
       </tags>
   </entry>
   <entry>
@@ -859,65 +918,6 @@
       <tags>
         <tag>python</tag>
         <tag>try-except</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>[學習] Python List</title>
-    <url>/2021/03/22/%E5%AD%B8%E7%BF%92-Python-List/</url>
-    <content><![CDATA[<p>常遇到的問題</p>
-<ul>
-<li>find the duplicate elements in the list</li>
-<li>count the duplicate elements in the list</li>
-<li>remove the duplicate elements in the list</li>
-</ul>
-<span id="more"></span>
-
-<h3 id="List-count-用法"><a href="#List-count-用法" class="headerlink" title="List.count() 用法"></a>List.count() 用法</h3><blockquote>
-<p>計算指定的值在 list 出現幾次</p>
-</blockquote>
-<div class="note default"><p>語法：list.count(element)</p>
-</div>
-
-<p>input:</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">my_list = [<span class="number">2</span>, <span class="number">3</span>, <span class="number">1</span>, <span class="number">4</span>, <span class="number">2</span>, <span class="number">5</span>, <span class="number">3</span>, <span class="number">7</span>]</span><br><span class="line"><span class="built_in">print</span>(my_list.count(<span class="number">3</span>))</span><br><span class="line"><span class="built_in">print</span>(my_list.count(<span class="number">7</span>))</span><br></pre></td></tr></table></figure>
-<p>output:</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">2</span><br><span class="line">1</span><br></pre></td></tr></table></figure>
-
-<h4 id="進階"><a href="#進階" class="headerlink" title="進階"></a>進階</h4><blockquote>
-<p>將 list 裡面所有的 element 都記錄下有幾個</p>
-</blockquote>
-<p>input:</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">dup_list = [<span class="string">&quot;a&quot;</span>, <span class="string">&quot;c&quot;</span>, <span class="string">&quot;a&quot;</span>, <span class="string">&quot;c&quot;</span>, <span class="string">&quot;b&quot;</span>, <span class="string">&quot;a&quot;</span>]</span><br><span class="line">clear_dict = &#123;i: dup_list.count(i) <span class="keyword">for</span> i <span class="keyword">in</span> dup_list&#125;</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(clear_dict)</span><br></pre></td></tr></table></figure>
-<p>output: </p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#123;&#39;a&#39;: 3, &#39;c&#39;: 2, &#39;b&#39;: 1&#125;</span><br></pre></td></tr></table></figure>
-
-<h3 id="另一種用法-Counter"><a href="#另一種用法-Counter" class="headerlink" title="另一種用法 Counter"></a>另一種用法 Counter</h3><div class="note default"><p>需要先 import<br>語法：<br>from collections import Counter<br>Counter(List&#x2F;String)</p>
-</div>
-<blockquote>
-<p>counter 出來的型態通常會轉成 Dictionary 會比較方便～<br>在下面也會示範有轉成 dict 跟沒轉成 dict 的差別</p>
-</blockquote>
-<p>input:</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> collections <span class="keyword">import</span> Counter</span><br><span class="line">dup_list = [<span class="string">&quot;a&quot;</span>, <span class="string">&quot;c&quot;</span>, <span class="string">&quot;a&quot;</span>, <span class="string">&quot;c&quot;</span>, <span class="string">&quot;b&quot;</span>, <span class="string">&quot;a&quot;</span>]</span><br><span class="line">count_list = <span class="built_in">dict</span>(Counter(dup_list))</span><br><span class="line">count_string = Counter(<span class="string">&#x27;acacaba&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(count_list)</span><br><span class="line"><span class="built_in">print</span>(count_string)</span><br></pre></td></tr></table></figure>
-<p>output:</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#123;&#39;a&#39;: 3, &#39;c&#39;: 2, &#39;b&#39;: 1&#125;</span><br><span class="line">Counter(&#123;&#39;a&#39;: 4, &#39;b&#39;: 1, &#39;c&#39;: 2&#125;)</span><br></pre></td></tr></table></figure>
-
-<h4 id="Counter-的額外用法"><a href="#Counter-的額外用法" class="headerlink" title="Counter 的額外用法"></a>Counter 的額外用法</h4><blockquote>
-<p>找出出現次數前 n 多</p>
-</blockquote>
-<div class="note default"><p>語法： Counter.most_common()</p>
-</div>
-
-<p>input:</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 接續上一個例子</span></span><br><span class="line"><span class="built_in">print</span>(count_string.most_common(<span class="number">1</span>))</span><br><span class="line"><span class="built_in">print</span>(count_string.most_common(<span class="number">2</span>))</span><br></pre></td></tr></table></figure>
-<p>output:</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[(&#39;a&#39;, 4)]</span><br><span class="line">[(&#39;a&#39;, 4), (&#39;c&#39;, 2)]</span><br></pre></td></tr></table></figure>]]></content>
-      <categories>
-        <category>python</category>
-      </categories>
-      <tags>
-        <tag>python</tag>
-        <tag>list</tag>
-        <tag>count</tag>
       </tags>
   </entry>
   <entry>
@@ -1307,168 +1307,6 @@
       </tags>
   </entry>
   <entry>
-    <title>用 Go 寫 Web API？Gin Framework 帶你快速上手！</title>
-    <url>/2025/03/06/%E7%94%A8-Go-%E5%AF%AB-Web-API%EF%BC%9FGin-Framework-%E5%B8%B6%E4%BD%A0%E5%BF%AB%E9%80%9F%E4%B8%8A%E6%89%8B%EF%BC%81/</url>
-    <content><![CDATA[<p>大家好，我是一個在剛開始學習 Golang 的工程師，今天想和大家聊聊 <strong>Gin Framework</strong> ——一個簡單又強大的 Go 語言 Web Framework。如果你聽過 Golang，一定知道它以高效能和簡潔聞名，而 Gin 就像你常用的悠遊卡，小巧方便，卻能輕鬆應付各種場景。接下來，讓我們從零開始認識 Gin。</p>
-<span id="more"></span>
-
-<h2 id="什麼是-Gin-Framework？"><a href="#什麼是-Gin-Framework？" class="headerlink" title="什麼是 Gin Framework？"></a>什麼是 Gin Framework？</h2><p>想像你在開一家咖啡店，顧客進門點單，你得快速把咖啡端上桌。Gin 就像是你店裡的咖啡機：它不負責種咖啡豆（那是資料庫的事），也不負責裝潢店面（那是前端的事），但它能幫你快速接收訂單（HTTP 請求）、處理需求（路由與邏輯），然後端出成品（回應）。簡單來說，Gin 是一個輕量級的 Web Framework，專注於處理 HTTP request 和 Routing，特別適合用來打造 API 或簡單的網站。</p>
-<p>相比其他框架，如 Flask 或 Express，Gin 的優勢在於速度快和語法簡潔。Flask 簡單易上手但效能需額外優化，Express 靈活且生態豐富卻受單執行緒限制。而 Gin 就像一台『迷你跑車』，輕巧高效，讓你在 Web 開發中跑得又快又穩。</p>
-<h2 id="安裝與第一個「Hello-World-」"><a href="#安裝與第一個「Hello-World-」" class="headerlink" title="安裝與第一個「Hello, World!」"></a>安裝與第一個「Hello, World!」</h2><p>在開始之前，假設你已經安裝了 Go（可以用 <code>go version</code> 檢查）。接著，我們需要把 Gin 安裝到你的工具箱裡。</p>
-<h3 id="Step-1-安裝-Gin"><a href="#Step-1-安裝-Gin" class="headerlink" title="Step 1: 安裝 Gin"></a>Step 1: 安裝 Gin</h3><p>打開終端機，輸入以下指令，就像去超市買食材一樣：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">go get -u github.com/gin-gonic/gin</span><br></pre></td></tr></table></figure>
-
-<p>這會下載 Gin 的最新版本並加入你的 Go 專案。</p>
-<h3 id="Step-2-寫一個簡單的-Web-服務"><a href="#Step-2-寫一個簡單的-Web-服務" class="headerlink" title="Step 2: 寫一個簡單的 Web 服務"></a>Step 2: 寫一個簡單的 Web 服務</h3><p>新建一個檔案叫做 <code>main.go</code>，就像準備開始煮咖啡一樣，我們先把基本架構搭起來：</p>
-<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="string">&quot;github.com/gin-gonic/gin&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">    <span class="comment">// 建立一個新的 Gin 引擎，就像開啟一台咖啡機</span></span><br><span class="line">    r := gin.Default()</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 定義一個路由：當有人訪問 &quot;/&quot; 時，回應 &quot;Hello, World!&quot;</span></span><br><span class="line">    r.GET(<span class="string">&quot;/&quot;</span>, <span class="function"><span class="keyword">func</span><span class="params">(c *gin.Context)</span></span> &#123;</span><br><span class="line">        c.String(<span class="number">200</span>, <span class="string">&quot;Hello, World!&quot;</span>)</span><br><span class="line">    &#125;)</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 啟動服務，預設跑在 8080 埠</span></span><br><span class="line">    r.Run() </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h3 id="Step-3-啟動服務"><a href="#Step-3-啟動服務" class="headerlink" title="Step 3: 啟動服務"></a>Step 3: 啟動服務</h3><p>在終端機輸入：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">go run main.go</span><br></pre></td></tr></table></figure>
-
-<p>打開瀏覽器，輸入 <code>http://localhost:8080</code>，你會看到「Hello, World!」跳出來。這就像你第一次試著泡咖啡——簡單幾步，卻已經能端出一杯讓人滿足的飲品。</p>
-<h2 id="Gin-的核心概念"><a href="#Gin-的核心概念" class="headerlink" title="Gin 的核心概念"></a>Gin 的核心概念</h2><p>Gin 的運作有三個關鍵：</p>
-<ol>
-<li>**引擎 (Engine)**：<code>gin.Default()</code> 是你的料理機開關，負責啟動服務和分配訂單。</li>
-<li>**路由 (Routing)**：根據顧客的點單（URL），決定端出什麼咖啡（回應）。</li>
-<li>**上下文 (Context)**：<code>gin.Context</code> 就像訂單小票，記下顧客需求並告訴你怎麼回應。</li>
-</ol>
-<h2 id="Gin-路由解析：如何處理請求"><a href="#Gin-路由解析：如何處理請求" class="headerlink" title="Gin 路由解析：如何處理請求"></a>Gin 路由解析：如何處理請求</h2><p>在 Gin 裡，路由（Routing）就像是咖啡店的點單流程。比如：</p>
-<ul>
-<li>顧客說「我要拿鐵」 → 你把訂單送到 <code>/latte</code> 這條路線。</li>
-<li>顧客說「我要查帳單」 → 你把訂單送到 <code>/bill</code> 這條路線。</li>
-</ul>
-<p>我們來加幾個路由看看：</p>
-<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="string">&quot;github.com/gin-gonic/gin&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">    r := gin.Default()</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 根路由：歡迎顧客</span></span><br><span class="line">    r.GET <span class="string">&quot;/&quot;</span>, <span class="function"><span class="keyword">func</span><span class="params">(c *gin.Context)</span></span> &#123;</span><br><span class="line">        c.String(<span class="number">200</span>, <span class="string">&quot;歡迎來到我的咖啡店！&quot;</span>)</span><br><span class="line">    &#125;)</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 拿鐵訂單</span></span><br><span class="line">    r.GET(<span class="string">&quot;/latte&quot;</span>, <span class="function"><span class="keyword">func</span><span class="params">(c *gin.Context)</span></span> &#123;</span><br><span class="line">        c.String(<span class="number">200</span>, <span class="string">&quot;這是一杯熱拿鐵，享用吧！&quot;</span>)</span><br><span class="line">    &#125;)</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 查詢帳單</span></span><br><span class="line">    r.GET(<span class="string">&quot;/bill&quot;</span>, <span class="function"><span class="keyword">func</span><span class="params">(c *gin.Context)</span></span> &#123;</span><br><span class="line">        c.String(<span class="number">200</span>, <span class="string">&quot;今天的帳單是 50 元。&quot;</span>)</span><br><span class="line">    &#125;)</span><br><span class="line"></span><br><span class="line">    r.Run()</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>現在訪問 <code>http://localhost:8080/latte</code>，你會看到拿鐵的回應；訪問 <code>http://localhost:8080/bill</code>，則會看到帳單。這就是路由的基本概念：根據顧客的需求（URL），提供不同的服務（回應）。</p>
-<h2 id="處理顧客的特殊需求：參數與-JSON"><a href="#處理顧客的特殊需求：參數與-JSON" class="headerlink" title="處理顧客的特殊需求：參數與 JSON"></a>處理顧客的特殊需求：參數與 JSON</h2><p>假設有個顧客說：「我要一杯拿鐵，但大小要中杯，糖要少一點。」這時候，單純的 <code>/latte</code> 不夠用了，我們需要從 URL 或請求中提取參數。</p>
-<h3 id="用-URL-參數"><a href="#用-URL-參數" class="headerlink" title="用 URL 參數"></a>用 URL 參數</h3><p>改進程式碼，讓顧客可以指定杯子大小：</p>
-<figure class="highlight go"><table><tr><td class="code"><pre><span class="line">r.GET(<span class="string">&quot;/latte/:size&quot;</span>, <span class="function"><span class="keyword">func</span><span class="params">(c *gin.Context)</span></span> &#123;</span><br><span class="line">    size := c.Param(<span class="string">&quot;size&quot;</span>) <span class="comment">// 從 URL 中提取 &quot;size&quot; 參數</span></span><br><span class="line">    c.String(<span class="number">200</span>, <span class="string">&quot;這是一杯 %s 拿鐵，享用吧！&quot;</span>, size)</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
-
-<p>訪問 <code>http://localhost:8080/latte/medium</code>，你會看到「這是一杯 medium 拿鐵，享用吧！」。</p>
-<h3 id="用-JSON-處理更複雜的訂單"><a href="#用-JSON-處理更複雜的訂單" class="headerlink" title="用 JSON 處理更複雜的訂單"></a>用 JSON 處理更複雜的訂單</h3><p>如果顧客的需求更詳細（例如糖量、溫度），可以用 POST 請求傳 JSON：</p>
-<figure class="highlight go"><table><tr><td class="code"><pre><span class="line">r.POST(<span class="string">&quot;/order&quot;</span>, <span class="function"><span class="keyword">func</span><span class="params">(c *gin.Context)</span></span> &#123;</span><br><span class="line">    <span class="keyword">type</span> CoffeeOrder <span class="keyword">struct</span> &#123;</span><br><span class="line">        Type   <span class="keyword">string</span> <span class="string">`json:&quot;type&quot;`</span></span><br><span class="line">        Size   <span class="keyword">string</span> <span class="string">`json:&quot;size&quot;`</span></span><br><span class="line">        Sugar  <span class="keyword">int</span>    <span class="string">`json:&quot;sugar&quot;`</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">var</span> order CoffeeOrder</span><br><span class="line">    <span class="keyword">if</span> err := c.BindJSON(&amp;order); err != <span class="literal">nil</span> &#123;</span><br><span class="line">        c.String(<span class="number">400</span>, <span class="string">&quot;訂單格式錯誤！&quot;</span>)</span><br><span class="line">        <span class="keyword">return</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    c.JSON(<span class="number">200</span>, gin.H&#123;</span><br><span class="line">        <span class="string">&quot;message&quot;</span>: <span class="string">&quot;訂單收到！&quot;</span>,</span><br><span class="line">        <span class="string">&quot;order&quot;</span>:   order,</span><br><span class="line">    &#125;)</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
-
-<p>用工具（例如 Postman）發送以下 POST 請求到 <code>http://localhost:8080/order</code>：</p>
-<figure class="highlight json"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    <span class="attr">&quot;type&quot;</span>: <span class="string">&quot;latte&quot;</span>,</span><br><span class="line">    <span class="attr">&quot;size&quot;</span>: <span class="string">&quot;large&quot;</span>,</span><br><span class="line">    <span class="attr">&quot;sugar&quot;</span>: <span class="number">2</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>你會得到回應：</p>
-<figure class="highlight json"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    <span class="attr">&quot;message&quot;</span>: <span class="string">&quot;訂單收到！&quot;</span>,</span><br><span class="line">    <span class="attr">&quot;order&quot;</span>: &#123;</span><br><span class="line">        <span class="attr">&quot;type&quot;</span>: <span class="string">&quot;latte&quot;</span>,</span><br><span class="line">        <span class="attr">&quot;size&quot;</span>: <span class="string">&quot;large&quot;</span>,</span><br><span class="line">        <span class="attr">&quot;sugar&quot;</span>: <span class="number">2</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>這就像顧客填好訂單表，你確認後回覆一樣，簡單又清楚。</p>
-<h2 id="讓我們總結一下：Gin-的魅力"><a href="#讓我們總結一下：Gin-的魅力" class="headerlink" title="讓我們總結一下：Gin 的魅力"></a>讓我們總結一下：Gin 的魅力</h2><p>Gin 的設計哲學就像咖啡店的經營之道：<strong>簡單、快速、靈活</strong>。它不強迫你用複雜的設定，而是提供直觀的工具，讓你專注在業務邏輯上。透過今天的例子，我們學會了：</p>
-<ol>
-<li>如何安裝和啟動 Gin。</li>
-<li>用路由處理不同的請求。</li>
-<li>接收參數和 JSON，提升服務的彈性。</li>
-</ol>
-<p>下次如果你想打造一個輕量級 API（例如給手機 App 用的後端）、Web 應用程式，甚至是微服務架構，不妨試試 Gin，它能助你一臂之力。</p>
-]]></content>
-      <categories>
-        <category>Golang</category>
-        <category>Web API</category>
-      </categories>
-      <tags>
-        <tag>Golang</tag>
-        <tag>Gin Framework</tag>
-        <tag>Web API</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>[筆記] Leetcode - 1822. Sign of the Product of an Array</title>
-    <url>/2023/05/02/%E7%AD%86-Leetcode-1822-Sign-of-the-Product-of-an-Array/</url>
-    <content><![CDATA[<p><a href="https://leetcode.com/problems/sign-of-the-product-of-an-array/">https://leetcode.com/problems/sign-of-the-product-of-an-array/</a></p>
-<blockquote>
-<p>There is a function signFunc(x) that returns:<br>1 if x is positive.<br>-1 if x is negative.<br>0 if x is equal to 0.<br>You are given an integer array nums. Let product be the product of all values in the array nums.<br>Return signFunc(product).</p>
-</blockquote>
-<p><img src="https://i.imgur.com/v6fBWOf.png"></p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">arraySign</span>(<span class="params">self, nums: <span class="type">List</span>[<span class="built_in">int</span>]</span>) -&gt; <span class="built_in">int</span>:</span></span><br><span class="line">        sign = <span class="number">1</span></span><br><span class="line">        <span class="keyword">for</span> num <span class="keyword">in</span> nums:</span><br><span class="line">            <span class="keyword">if</span> num == <span class="number">0</span>:</span><br><span class="line">                <span class="keyword">return</span> <span class="number">0</span></span><br><span class="line">            <span class="keyword">if</span> num &lt; <span class="number">0</span>:</span><br><span class="line">                sign = -sign</span><br><span class="line">        <span class="keyword">return</span> sign</span><br></pre></td></tr></table></figure>]]></content>
-      <tags>
-        <tag>Leetcode</tag>
-        <tag>Python</tag>
-        <tag>Coding</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>[筆記] Leetcode - 1903. Largest Odd Number in String</title>
-    <url>/2023/12/09/%E7%AD%86%E8%A8%98-1903.-Largest-Odd%20Number-in-String/</url>
-    <content><![CDATA[<blockquote>
-<p>You are given a string num, representing a large integer. Return the largest-valued odd integer (as a string) that is a non-empty substring of num, or an empty string “” if no odd integer exists.</p>
-</blockquote>
-<p>A substring is a contiguous sequence of characters within a string.</p>
-<p>Example 1:</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Input: num &#x3D; &quot;52&quot;</span><br><span class="line">Output: &quot;5&quot;</span><br><span class="line">Explanation: The only non-empty substrings are &quot;5&quot;, &quot;2&quot;, and &quot;52&quot;. &quot;5&quot; is the only odd number.</span><br></pre></td></tr></table></figure>
-<p>Example 2:</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Input: num &#x3D; &quot;4206&quot;</span><br><span class="line">Output: &quot;&quot;</span><br><span class="line">Explanation: There are no odd numbers in &quot;4206&quot;.</span><br></pre></td></tr></table></figure>
-<p>Example 3:</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Input: num &#x3D; &quot;35427&quot;</span><br><span class="line">Output: &quot;35427&quot;</span><br><span class="line">Explanation: &quot;35427&quot; is already an odd number.</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">largestOddNumber</span>(<span class="params">self, num: <span class="built_in">str</span></span>) -&gt; <span class="built_in">str</span>:</span></span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">len</span>(num) - <span class="number">1</span>, -<span class="number">1</span>, -<span class="number">1</span>):</span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span> <span class="built_in">int</span>(num[i]) % <span class="number">2</span>:</span><br><span class="line">                <span class="keyword">return</span> num[:i + <span class="number">1</span>]</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> <span class="string">&#x27;&#x27;</span></span><br></pre></td></tr></table></figure>
-
-]]></content>
-      <tags>
-        <tag>list</tag>
-        <tag>Leetcode</tag>
-        <tag>Python</tag>
-        <tag>reverse</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>[筆記] Leetcode - 1913. Maximum Product Difference Between Two Pairs</title>
-    <url>/2023/12/18/%E7%AD%86%E8%A8%98-1913.-Maximum-Product%20Difference-Between-Two-Pairs/</url>
-    <content><![CDATA[<p><a href="https://leetcode.com/problems/maximum-product-difference-between-two-pairs/">https://leetcode.com/problems/maximum-product-difference-between-two-pairs/</a></p>
-<blockquote>
-<p>The product difference between two pairs (a, b) and (c, d) is defined as (a * b) - (c * d).</p>
-<p>For example, the product difference between (5, 6) and (2, 7) is (5 * 6) - (2 * 7) &#x3D; 16.<br>Given an integer array nums, choose four distinct indices w, x, y, and z such that the product difference between pairs (nums[w], nums[x]) and (nums[y], nums[z]) is maximized.</p>
-<p>Return the maximum such product difference.</p>
-</blockquote>
-<span id="more"></span>
-
-<p>Example 1:</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Input: nums &#x3D; [5,6,2,7,4]</span><br><span class="line">Output: 34</span><br><span class="line">Explanation: We can choose indices 1 and 3 for the first pair (6, 7) and indices 2 and 4 for the second pair (2, 4).</span><br><span class="line">The product difference is (6 * 7) - (2 * 4) &#x3D; 34.</span><br></pre></td></tr></table></figure>
-<p>Example 2:</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Input: nums &#x3D; [4,2,5,9,7,4,8]</span><br><span class="line">Output: 64</span><br><span class="line">Explanation: We can choose indices 3 and 6 for the first pair (9, 8) and indices 1 and 5 for the second pair (2, 4).</span><br><span class="line">The product difference is (9 * 8) - (2 * 4) &#x3D; 64.</span><br></pre></td></tr></table></figure>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">maxProductDifference</span>(<span class="params">self, nums: <span class="type">List</span>[<span class="built_in">int</span>]</span>) -&gt; <span class="built_in">int</span>:</span></span><br><span class="line">        min_num1, min_num2 = math.inf, math.inf</span><br><span class="line">        max_num1, max_num2 = -math.inf, -math.inf</span><br><span class="line">    </span><br><span class="line">        <span class="keyword">for</span> number <span class="keyword">in</span> nums: </span><br><span class="line">            <span class="keyword">if</span> number &gt; max_num1:</span><br><span class="line">                max_num1, max_num2 = number, max_num1</span><br><span class="line">            <span class="keyword">elif</span> number &gt; max_num2:</span><br><span class="line">                max_num2 = number</span><br><span class="line">    </span><br><span class="line">            <span class="keyword">if</span> number &lt; min_num1:</span><br><span class="line">                min_num1, min_num2 = number, min_num1</span><br><span class="line">            <span class="keyword">elif</span> number &lt; min_num2:</span><br><span class="line">                min_num2 = number</span><br><span class="line">    </span><br><span class="line">        <span class="keyword">return</span> max_num1 * max_num2 - min_num1 * min_num2</span><br></pre></td></tr></table></figure>
-
-]]></content>
-      <tags>
-        <tag>Leetcode</tag>
-        <tag>Python</tag>
-        <tag>Math</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>[筆記] Boostrape-table 列上編輯功能</title>
-    <url>/2020/09/20/%E7%AD%86%E8%A8%98-Boostrape-table-%E5%88%97%E4%B8%8A%E7%B7%A8%E8%BC%AF%E5%8A%9F%E8%83%BD/</url>
-    <content><![CDATA[<blockquote>
-<p>實習開發網站，常遇到一些功能需求要上網查詢，整理成筆記以後再用到就不用又從頭開始找，也希望幫助到正在找學這些功能的人</p>
-</blockquote>
-<span id="more"></span>
-
-<h3 id="新增功能"><a href="#新增功能" class="headerlink" title="新增功能"></a>新增功能</h3><figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">$(<span class="built_in">document</span>).on(<span class="string">&quot;click&quot;</span>, <span class="string">&quot;.add&quot;</span>, <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">   <span class="keyword">var</span> empty = <span class="literal">false</span>;</span><br><span class="line">   <span class="keyword">var</span> input = $(<span class="built_in">this</span>).parents(<span class="string">&quot;tr&quot;</span>).find(<span class="string">&#x27;input[type=&quot;text&quot;]&#x27;</span>);</span><br><span class="line">   input.each(<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">     <span class="keyword">if</span>(!$(<span class="built_in">this</span>).val())&#123;</span><br><span class="line">       $(<span class="built_in">this</span>).addClass(<span class="string">&quot;error&quot;</span>);</span><br><span class="line">       empty = <span class="literal">true</span>;</span><br><span class="line">     &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">       $(<span class="built_in">this</span>).removeClass(<span class="string">&quot;error&quot;</span>);</span><br><span class="line">     &#125;</span><br><span class="line">   &#125;);</span><br><span class="line">   $(<span class="built_in">this</span>).parents(<span class="string">&quot;tr&quot;</span>).find(<span class="string">&quot;.error&quot;</span>).first().focus();</span><br><span class="line">   <span class="comment">// 新增或編輯完新增時檢查是否都有填</span></span><br><span class="line">   <span class="keyword">if</span>(!empty)&#123;</span><br><span class="line">     $(<span class="string">&#x27;input[type=text]&#x27;</span>).each(<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">       $(<span class="built_in">this</span>).parent(<span class="string">&quot;td&quot;</span>).html($(<span class="built_in">this</span>).val());  </span><br><span class="line">     &#125;);           </span><br><span class="line">     $(<span class="string">&#x27;input[type=date]&#x27;</span>).each(<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">       $(<span class="built_in">this</span>).parent(<span class="string">&quot;td&quot;</span>).html($(<span class="built_in">this</span>).val()); </span><br><span class="line">     &#125;)</span><br><span class="line">     $(<span class="built_in">this</span>).parents(<span class="string">&quot;tr&quot;</span>).find(<span class="string">&quot;.add, .edit&quot;</span>).toggle();</span><br><span class="line">     $(<span class="string">&quot;.add-new&quot;</span>).removeAttr(<span class="string">&quot;disabled&quot;</span>);</span><br><span class="line">   &#125;</span><br><span class="line"> &#125;);</span><br></pre></td></tr></table></figure>
-
-<h3 id="編輯功能"><a href="#編輯功能" class="headerlink" title="編輯功能"></a>編輯功能</h3><figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">$(<span class="built_in">document</span>).on(<span class="string">&quot;click&quot;</span>, <span class="string">&quot;.edit&quot;</span>, <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    $(<span class="built_in">this</span>).parents(<span class="string">&quot;tr&quot;</span>).find(<span class="string">&quot;td:not(:last-child)&quot;</span>).each(<span class="function"><span class="keyword">function</span>(<span class="params">index, value</span>)</span>&#123;</span><br><span class="line">      <span class="keyword">if</span> (index == <span class="number">1</span>) &#123;</span><br><span class="line">        $(<span class="built_in">this</span>).html(<span class="string">&#x27;&lt;input type=&quot;date&quot; class=&quot;form-control&quot; value=&quot;&#x27;</span> + $(<span class="built_in">this</span>).text() + <span class="string">&#x27;&quot;&gt;&#x27;</span>);</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="keyword">else</span> &#123;</span><br><span class="line">        $(<span class="built_in">this</span>).html(<span class="string">&#x27;&lt;input type=&quot;text&quot; class=&quot;form-control&quot; value=&quot;&#x27;</span> + $(<span class="built_in">this</span>).text() + <span class="string">&#x27;&quot;&gt;&#x27;</span>);</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;);     </span><br><span class="line">    $(<span class="built_in">this</span>).parents(<span class="string">&quot;tr&quot;</span>).find(<span class="string">&quot;.add, .edit&quot;</span>).toggle();</span><br><span class="line">    $(<span class="string">&quot;.add-new&quot;</span>).attr(<span class="string">&quot;disabled&quot;</span>, <span class="string">&quot;disabled&quot;</span>);</span><br><span class="line">  &#125;);</span><br></pre></td></tr></table></figure>
-
-<h3 id="刪除功能"><a href="#刪除功能" class="headerlink" title="刪除功能"></a>刪除功能</h3><figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">$(<span class="built_in">document</span>).on(<span class="string">&quot;click&quot;</span>, <span class="string">&quot;.delete&quot;</span>, <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">    $(<span class="built_in">this</span>).parents(<span class="string">&quot;tr&quot;</span>).remove();</span><br><span class="line">    $(<span class="string">&quot;.add-new&quot;</span>).removeAttr(<span class="string">&quot;disabled&quot;</span>);</span><br><span class="line">  &#125;);</span><br></pre></td></tr></table></figure>
-
-<iframe width="100%" height="500" src="https://codepen.io/ZZYume/embed/QWNVXoK?height=265&theme-id=dark&default-tab=result" frameborder="0"></iframe>
-
-
-<p>ref: <a href="https://www.tutorialrepublic.com/faq.php">https://www.tutorialrepublic.com/faq.php</a></p>
-]]></content>
-      <categories>
-        <category>Hexo</category>
-      </categories>
-      <tags>
-        <tag>html</tag>
-        <tag>css</tag>
-        <tag>javascript</tag>
-        <tag>jquery</tag>
-        <tag>Bootstrap</tag>
-        <tag>Bootstrap-table</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>深入解析：列式資料（Column-Oriented）與鍵值資料（Key-Value）</title>
     <url>/2025/01/20/%E6%B7%B1%E5%85%A5%E8%A7%A3%E6%9E%90%EF%BC%9A%E5%88%97%E5%BC%8F%E8%B3%87%E6%96%99%EF%BC%88Column-Oriented%EF%BC%89%E8%88%87%E9%8D%B5%E5%80%BC%E8%B3%87%E6%96%99%EF%BC%88Key-Value%EF%BC%89/</url>
     <content><![CDATA[<p>在現代應用程式開發中，選擇合適的資料庫類型對於系統效能與可擴展性非常重要。許多人常將列式資料 (Column-Oriented) 與鍵值資料 (Key-Value) 混淆，本文將介紹這兩種存儲方式的概念、優缺點與適用場景，幫助讀者更好地理解並選擇合適的解決方案。</p>
@@ -1577,6 +1415,168 @@
       </tags>
   </entry>
   <entry>
+    <title>用 Go 寫 Web API？Gin Framework 帶你快速上手！</title>
+    <url>/2025/03/06/%E7%94%A8-Go-%E5%AF%AB-Web-API%EF%BC%9FGin-Framework-%E5%B8%B6%E4%BD%A0%E5%BF%AB%E9%80%9F%E4%B8%8A%E6%89%8B%EF%BC%81/</url>
+    <content><![CDATA[<p>大家好，我是一個在剛開始學習 Golang 的工程師，今天想和大家聊聊 <strong>Gin Framework</strong> ——一個簡單又強大的 Go 語言 Web Framework。如果你聽過 Golang，一定知道它以高效能和簡潔聞名，而 Gin 就像你常用的悠遊卡，小巧方便，卻能輕鬆應付各種場景。接下來，讓我們從零開始認識 Gin。</p>
+<span id="more"></span>
+
+<h2 id="什麼是-Gin-Framework？"><a href="#什麼是-Gin-Framework？" class="headerlink" title="什麼是 Gin Framework？"></a>什麼是 Gin Framework？</h2><p>想像你在開一家咖啡店，顧客進門點單，你得快速把咖啡端上桌。Gin 就像是你店裡的咖啡機：它不負責種咖啡豆（那是資料庫的事），也不負責裝潢店面（那是前端的事），但它能幫你快速接收訂單（HTTP 請求）、處理需求（路由與邏輯），然後端出成品（回應）。簡單來說，Gin 是一個輕量級的 Web Framework，專注於處理 HTTP request 和 Routing，特別適合用來打造 API 或簡單的網站。</p>
+<p>相比其他框架，如 Flask 或 Express，Gin 的優勢在於速度快和語法簡潔。Flask 簡單易上手但效能需額外優化，Express 靈活且生態豐富卻受單執行緒限制。而 Gin 就像一台『迷你跑車』，輕巧高效，讓你在 Web 開發中跑得又快又穩。</p>
+<h2 id="安裝與第一個「Hello-World-」"><a href="#安裝與第一個「Hello-World-」" class="headerlink" title="安裝與第一個「Hello, World!」"></a>安裝與第一個「Hello, World!」</h2><p>在開始之前，假設你已經安裝了 Go（可以用 <code>go version</code> 檢查）。接著，我們需要把 Gin 安裝到你的工具箱裡。</p>
+<h3 id="Step-1-安裝-Gin"><a href="#Step-1-安裝-Gin" class="headerlink" title="Step 1: 安裝 Gin"></a>Step 1: 安裝 Gin</h3><p>打開終端機，輸入以下指令，就像去超市買食材一樣：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">go get -u github.com/gin-gonic/gin</span><br></pre></td></tr></table></figure>
+
+<p>這會下載 Gin 的最新版本並加入你的 Go 專案。</p>
+<h3 id="Step-2-寫一個簡單的-Web-服務"><a href="#Step-2-寫一個簡單的-Web-服務" class="headerlink" title="Step 2: 寫一個簡單的 Web 服務"></a>Step 2: 寫一個簡單的 Web 服務</h3><p>新建一個檔案叫做 <code>main.go</code>，就像準備開始煮咖啡一樣，我們先把基本架構搭起來：</p>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="string">&quot;github.com/gin-gonic/gin&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">    <span class="comment">// 建立一個新的 Gin 引擎，就像開啟一台咖啡機</span></span><br><span class="line">    r := gin.Default()</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 定義一個路由：當有人訪問 &quot;/&quot; 時，回應 &quot;Hello, World!&quot;</span></span><br><span class="line">    r.GET(<span class="string">&quot;/&quot;</span>, <span class="function"><span class="keyword">func</span><span class="params">(c *gin.Context)</span></span> &#123;</span><br><span class="line">        c.String(<span class="number">200</span>, <span class="string">&quot;Hello, World!&quot;</span>)</span><br><span class="line">    &#125;)</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 啟動服務，預設跑在 8080 埠</span></span><br><span class="line">    r.Run() </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="Step-3-啟動服務"><a href="#Step-3-啟動服務" class="headerlink" title="Step 3: 啟動服務"></a>Step 3: 啟動服務</h3><p>在終端機輸入：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">go run main.go</span><br></pre></td></tr></table></figure>
+
+<p>打開瀏覽器，輸入 <code>http://localhost:8080</code>，你會看到「Hello, World!」跳出來。這就像你第一次試著泡咖啡——簡單幾步，卻已經能端出一杯讓人滿足的飲品。</p>
+<h2 id="Gin-的核心概念"><a href="#Gin-的核心概念" class="headerlink" title="Gin 的核心概念"></a>Gin 的核心概念</h2><p>Gin 的運作有三個關鍵：</p>
+<ol>
+<li>**引擎 (Engine)**：<code>gin.Default()</code> 是你的料理機開關，負責啟動服務和分配訂單。</li>
+<li>**路由 (Routing)**：根據顧客的點單（URL），決定端出什麼咖啡（回應）。</li>
+<li>**上下文 (Context)**：<code>gin.Context</code> 就像訂單小票，記下顧客需求並告訴你怎麼回應。</li>
+</ol>
+<h2 id="Gin-路由解析：如何處理請求"><a href="#Gin-路由解析：如何處理請求" class="headerlink" title="Gin 路由解析：如何處理請求"></a>Gin 路由解析：如何處理請求</h2><p>在 Gin 裡，路由（Routing）就像是咖啡店的點單流程。比如：</p>
+<ul>
+<li>顧客說「我要拿鐵」 → 你把訂單送到 <code>/latte</code> 這條路線。</li>
+<li>顧客說「我要查帳單」 → 你把訂單送到 <code>/bill</code> 這條路線。</li>
+</ul>
+<p>我們來加幾個路由看看：</p>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="string">&quot;github.com/gin-gonic/gin&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">    r := gin.Default()</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 根路由：歡迎顧客</span></span><br><span class="line">    r.GET <span class="string">&quot;/&quot;</span>, <span class="function"><span class="keyword">func</span><span class="params">(c *gin.Context)</span></span> &#123;</span><br><span class="line">        c.String(<span class="number">200</span>, <span class="string">&quot;歡迎來到我的咖啡店！&quot;</span>)</span><br><span class="line">    &#125;)</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 拿鐵訂單</span></span><br><span class="line">    r.GET(<span class="string">&quot;/latte&quot;</span>, <span class="function"><span class="keyword">func</span><span class="params">(c *gin.Context)</span></span> &#123;</span><br><span class="line">        c.String(<span class="number">200</span>, <span class="string">&quot;這是一杯熱拿鐵，享用吧！&quot;</span>)</span><br><span class="line">    &#125;)</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 查詢帳單</span></span><br><span class="line">    r.GET(<span class="string">&quot;/bill&quot;</span>, <span class="function"><span class="keyword">func</span><span class="params">(c *gin.Context)</span></span> &#123;</span><br><span class="line">        c.String(<span class="number">200</span>, <span class="string">&quot;今天的帳單是 50 元。&quot;</span>)</span><br><span class="line">    &#125;)</span><br><span class="line"></span><br><span class="line">    r.Run()</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>現在訪問 <code>http://localhost:8080/latte</code>，你會看到拿鐵的回應；訪問 <code>http://localhost:8080/bill</code>，則會看到帳單。這就是路由的基本概念：根據顧客的需求（URL），提供不同的服務（回應）。</p>
+<h2 id="處理顧客的特殊需求：參數與-JSON"><a href="#處理顧客的特殊需求：參數與-JSON" class="headerlink" title="處理顧客的特殊需求：參數與 JSON"></a>處理顧客的特殊需求：參數與 JSON</h2><p>假設有個顧客說：「我要一杯拿鐵，但大小要中杯，糖要少一點。」這時候，單純的 <code>/latte</code> 不夠用了，我們需要從 URL 或請求中提取參數。</p>
+<h3 id="用-URL-參數"><a href="#用-URL-參數" class="headerlink" title="用 URL 參數"></a>用 URL 參數</h3><p>改進程式碼，讓顧客可以指定杯子大小：</p>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line">r.GET(<span class="string">&quot;/latte/:size&quot;</span>, <span class="function"><span class="keyword">func</span><span class="params">(c *gin.Context)</span></span> &#123;</span><br><span class="line">    size := c.Param(<span class="string">&quot;size&quot;</span>) <span class="comment">// 從 URL 中提取 &quot;size&quot; 參數</span></span><br><span class="line">    c.String(<span class="number">200</span>, <span class="string">&quot;這是一杯 %s 拿鐵，享用吧！&quot;</span>, size)</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+<p>訪問 <code>http://localhost:8080/latte/medium</code>，你會看到「這是一杯 medium 拿鐵，享用吧！」。</p>
+<h3 id="用-JSON-處理更複雜的訂單"><a href="#用-JSON-處理更複雜的訂單" class="headerlink" title="用 JSON 處理更複雜的訂單"></a>用 JSON 處理更複雜的訂單</h3><p>如果顧客的需求更詳細（例如糖量、溫度），可以用 POST 請求傳 JSON：</p>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line">r.POST(<span class="string">&quot;/order&quot;</span>, <span class="function"><span class="keyword">func</span><span class="params">(c *gin.Context)</span></span> &#123;</span><br><span class="line">    <span class="keyword">type</span> CoffeeOrder <span class="keyword">struct</span> &#123;</span><br><span class="line">        Type   <span class="keyword">string</span> <span class="string">`json:&quot;type&quot;`</span></span><br><span class="line">        Size   <span class="keyword">string</span> <span class="string">`json:&quot;size&quot;`</span></span><br><span class="line">        Sugar  <span class="keyword">int</span>    <span class="string">`json:&quot;sugar&quot;`</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">var</span> order CoffeeOrder</span><br><span class="line">    <span class="keyword">if</span> err := c.BindJSON(&amp;order); err != <span class="literal">nil</span> &#123;</span><br><span class="line">        c.String(<span class="number">400</span>, <span class="string">&quot;訂單格式錯誤！&quot;</span>)</span><br><span class="line">        <span class="keyword">return</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    c.JSON(<span class="number">200</span>, gin.H&#123;</span><br><span class="line">        <span class="string">&quot;message&quot;</span>: <span class="string">&quot;訂單收到！&quot;</span>,</span><br><span class="line">        <span class="string">&quot;order&quot;</span>:   order,</span><br><span class="line">    &#125;)</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+<p>用工具（例如 Postman）發送以下 POST 請求到 <code>http://localhost:8080/order</code>：</p>
+<figure class="highlight json"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    <span class="attr">&quot;type&quot;</span>: <span class="string">&quot;latte&quot;</span>,</span><br><span class="line">    <span class="attr">&quot;size&quot;</span>: <span class="string">&quot;large&quot;</span>,</span><br><span class="line">    <span class="attr">&quot;sugar&quot;</span>: <span class="number">2</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>你會得到回應：</p>
+<figure class="highlight json"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    <span class="attr">&quot;message&quot;</span>: <span class="string">&quot;訂單收到！&quot;</span>,</span><br><span class="line">    <span class="attr">&quot;order&quot;</span>: &#123;</span><br><span class="line">        <span class="attr">&quot;type&quot;</span>: <span class="string">&quot;latte&quot;</span>,</span><br><span class="line">        <span class="attr">&quot;size&quot;</span>: <span class="string">&quot;large&quot;</span>,</span><br><span class="line">        <span class="attr">&quot;sugar&quot;</span>: <span class="number">2</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>這就像顧客填好訂單表，你確認後回覆一樣，簡單又清楚。</p>
+<h2 id="讓我們總結一下：Gin-的魅力"><a href="#讓我們總結一下：Gin-的魅力" class="headerlink" title="讓我們總結一下：Gin 的魅力"></a>讓我們總結一下：Gin 的魅力</h2><p>Gin 的設計哲學就像咖啡店的經營之道：<strong>簡單、快速、靈活</strong>。它不強迫你用複雜的設定，而是提供直觀的工具，讓你專注在業務邏輯上。透過今天的例子，我們學會了：</p>
+<ol>
+<li>如何安裝和啟動 Gin。</li>
+<li>用路由處理不同的請求。</li>
+<li>接收參數和 JSON，提升服務的彈性。</li>
+</ol>
+<p>下次如果你想打造一個輕量級 API（例如給手機 App 用的後端）、Web 應用程式，甚至是微服務架構，不妨試試 Gin，它能助你一臂之力。</p>
+]]></content>
+      <categories>
+        <category>Golang</category>
+        <category>Web API</category>
+      </categories>
+      <tags>
+        <tag>Golang</tag>
+        <tag>Gin Framework</tag>
+        <tag>Web API</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>[筆記] Leetcode - 1822. Sign of the Product of an Array</title>
+    <url>/2023/05/02/%E7%AD%86-Leetcode-1822-Sign-of-the-Product-of-an-Array/</url>
+    <content><![CDATA[<p><a href="https://leetcode.com/problems/sign-of-the-product-of-an-array/">https://leetcode.com/problems/sign-of-the-product-of-an-array/</a></p>
+<blockquote>
+<p>There is a function signFunc(x) that returns:<br>1 if x is positive.<br>-1 if x is negative.<br>0 if x is equal to 0.<br>You are given an integer array nums. Let product be the product of all values in the array nums.<br>Return signFunc(product).</p>
+</blockquote>
+<p><img src="https://i.imgur.com/v6fBWOf.png"></p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">arraySign</span>(<span class="params">self, nums: <span class="type">List</span>[<span class="built_in">int</span>]</span>) -&gt; <span class="built_in">int</span>:</span></span><br><span class="line">        sign = <span class="number">1</span></span><br><span class="line">        <span class="keyword">for</span> num <span class="keyword">in</span> nums:</span><br><span class="line">            <span class="keyword">if</span> num == <span class="number">0</span>:</span><br><span class="line">                <span class="keyword">return</span> <span class="number">0</span></span><br><span class="line">            <span class="keyword">if</span> num &lt; <span class="number">0</span>:</span><br><span class="line">                sign = -sign</span><br><span class="line">        <span class="keyword">return</span> sign</span><br></pre></td></tr></table></figure>]]></content>
+      <tags>
+        <tag>Leetcode</tag>
+        <tag>Python</tag>
+        <tag>Coding</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>[筆記] Leetcode - 1913. Maximum Product Difference Between Two Pairs</title>
+    <url>/2023/12/18/%E7%AD%86%E8%A8%98-1913.-Maximum-Product%20Difference-Between-Two-Pairs/</url>
+    <content><![CDATA[<p><a href="https://leetcode.com/problems/maximum-product-difference-between-two-pairs/">https://leetcode.com/problems/maximum-product-difference-between-two-pairs/</a></p>
+<blockquote>
+<p>The product difference between two pairs (a, b) and (c, d) is defined as (a * b) - (c * d).</p>
+<p>For example, the product difference between (5, 6) and (2, 7) is (5 * 6) - (2 * 7) &#x3D; 16.<br>Given an integer array nums, choose four distinct indices w, x, y, and z such that the product difference between pairs (nums[w], nums[x]) and (nums[y], nums[z]) is maximized.</p>
+<p>Return the maximum such product difference.</p>
+</blockquote>
+<span id="more"></span>
+
+<p>Example 1:</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Input: nums &#x3D; [5,6,2,7,4]</span><br><span class="line">Output: 34</span><br><span class="line">Explanation: We can choose indices 1 and 3 for the first pair (6, 7) and indices 2 and 4 for the second pair (2, 4).</span><br><span class="line">The product difference is (6 * 7) - (2 * 4) &#x3D; 34.</span><br></pre></td></tr></table></figure>
+<p>Example 2:</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Input: nums &#x3D; [4,2,5,9,7,4,8]</span><br><span class="line">Output: 64</span><br><span class="line">Explanation: We can choose indices 3 and 6 for the first pair (9, 8) and indices 1 and 5 for the second pair (2, 4).</span><br><span class="line">The product difference is (9 * 8) - (2 * 4) &#x3D; 64.</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">maxProductDifference</span>(<span class="params">self, nums: <span class="type">List</span>[<span class="built_in">int</span>]</span>) -&gt; <span class="built_in">int</span>:</span></span><br><span class="line">        min_num1, min_num2 = math.inf, math.inf</span><br><span class="line">        max_num1, max_num2 = -math.inf, -math.inf</span><br><span class="line">    </span><br><span class="line">        <span class="keyword">for</span> number <span class="keyword">in</span> nums: </span><br><span class="line">            <span class="keyword">if</span> number &gt; max_num1:</span><br><span class="line">                max_num1, max_num2 = number, max_num1</span><br><span class="line">            <span class="keyword">elif</span> number &gt; max_num2:</span><br><span class="line">                max_num2 = number</span><br><span class="line">    </span><br><span class="line">            <span class="keyword">if</span> number &lt; min_num1:</span><br><span class="line">                min_num1, min_num2 = number, min_num1</span><br><span class="line">            <span class="keyword">elif</span> number &lt; min_num2:</span><br><span class="line">                min_num2 = number</span><br><span class="line">    </span><br><span class="line">        <span class="keyword">return</span> max_num1 * max_num2 - min_num1 * min_num2</span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <tags>
+        <tag>Leetcode</tag>
+        <tag>Python</tag>
+        <tag>Math</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>[筆記] Boostrape-table 列上編輯功能</title>
+    <url>/2020/09/20/%E7%AD%86%E8%A8%98-Boostrape-table-%E5%88%97%E4%B8%8A%E7%B7%A8%E8%BC%AF%E5%8A%9F%E8%83%BD/</url>
+    <content><![CDATA[<blockquote>
+<p>實習開發網站，常遇到一些功能需求要上網查詢，整理成筆記以後再用到就不用又從頭開始找，也希望幫助到正在找學這些功能的人</p>
+</blockquote>
+<span id="more"></span>
+
+<h3 id="新增功能"><a href="#新增功能" class="headerlink" title="新增功能"></a>新增功能</h3><figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">$(<span class="built_in">document</span>).on(<span class="string">&quot;click&quot;</span>, <span class="string">&quot;.add&quot;</span>, <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">   <span class="keyword">var</span> empty = <span class="literal">false</span>;</span><br><span class="line">   <span class="keyword">var</span> input = $(<span class="built_in">this</span>).parents(<span class="string">&quot;tr&quot;</span>).find(<span class="string">&#x27;input[type=&quot;text&quot;]&#x27;</span>);</span><br><span class="line">   input.each(<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">     <span class="keyword">if</span>(!$(<span class="built_in">this</span>).val())&#123;</span><br><span class="line">       $(<span class="built_in">this</span>).addClass(<span class="string">&quot;error&quot;</span>);</span><br><span class="line">       empty = <span class="literal">true</span>;</span><br><span class="line">     &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">       $(<span class="built_in">this</span>).removeClass(<span class="string">&quot;error&quot;</span>);</span><br><span class="line">     &#125;</span><br><span class="line">   &#125;);</span><br><span class="line">   $(<span class="built_in">this</span>).parents(<span class="string">&quot;tr&quot;</span>).find(<span class="string">&quot;.error&quot;</span>).first().focus();</span><br><span class="line">   <span class="comment">// 新增或編輯完新增時檢查是否都有填</span></span><br><span class="line">   <span class="keyword">if</span>(!empty)&#123;</span><br><span class="line">     $(<span class="string">&#x27;input[type=text]&#x27;</span>).each(<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">       $(<span class="built_in">this</span>).parent(<span class="string">&quot;td&quot;</span>).html($(<span class="built_in">this</span>).val());  </span><br><span class="line">     &#125;);           </span><br><span class="line">     $(<span class="string">&#x27;input[type=date]&#x27;</span>).each(<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">       $(<span class="built_in">this</span>).parent(<span class="string">&quot;td&quot;</span>).html($(<span class="built_in">this</span>).val()); </span><br><span class="line">     &#125;)</span><br><span class="line">     $(<span class="built_in">this</span>).parents(<span class="string">&quot;tr&quot;</span>).find(<span class="string">&quot;.add, .edit&quot;</span>).toggle();</span><br><span class="line">     $(<span class="string">&quot;.add-new&quot;</span>).removeAttr(<span class="string">&quot;disabled&quot;</span>);</span><br><span class="line">   &#125;</span><br><span class="line"> &#125;);</span><br></pre></td></tr></table></figure>
+
+<h3 id="編輯功能"><a href="#編輯功能" class="headerlink" title="編輯功能"></a>編輯功能</h3><figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">$(<span class="built_in">document</span>).on(<span class="string">&quot;click&quot;</span>, <span class="string">&quot;.edit&quot;</span>, <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    $(<span class="built_in">this</span>).parents(<span class="string">&quot;tr&quot;</span>).find(<span class="string">&quot;td:not(:last-child)&quot;</span>).each(<span class="function"><span class="keyword">function</span>(<span class="params">index, value</span>)</span>&#123;</span><br><span class="line">      <span class="keyword">if</span> (index == <span class="number">1</span>) &#123;</span><br><span class="line">        $(<span class="built_in">this</span>).html(<span class="string">&#x27;&lt;input type=&quot;date&quot; class=&quot;form-control&quot; value=&quot;&#x27;</span> + $(<span class="built_in">this</span>).text() + <span class="string">&#x27;&quot;&gt;&#x27;</span>);</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="keyword">else</span> &#123;</span><br><span class="line">        $(<span class="built_in">this</span>).html(<span class="string">&#x27;&lt;input type=&quot;text&quot; class=&quot;form-control&quot; value=&quot;&#x27;</span> + $(<span class="built_in">this</span>).text() + <span class="string">&#x27;&quot;&gt;&#x27;</span>);</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;);     </span><br><span class="line">    $(<span class="built_in">this</span>).parents(<span class="string">&quot;tr&quot;</span>).find(<span class="string">&quot;.add, .edit&quot;</span>).toggle();</span><br><span class="line">    $(<span class="string">&quot;.add-new&quot;</span>).attr(<span class="string">&quot;disabled&quot;</span>, <span class="string">&quot;disabled&quot;</span>);</span><br><span class="line">  &#125;);</span><br></pre></td></tr></table></figure>
+
+<h3 id="刪除功能"><a href="#刪除功能" class="headerlink" title="刪除功能"></a>刪除功能</h3><figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">$(<span class="built_in">document</span>).on(<span class="string">&quot;click&quot;</span>, <span class="string">&quot;.delete&quot;</span>, <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">    $(<span class="built_in">this</span>).parents(<span class="string">&quot;tr&quot;</span>).remove();</span><br><span class="line">    $(<span class="string">&quot;.add-new&quot;</span>).removeAttr(<span class="string">&quot;disabled&quot;</span>);</span><br><span class="line">  &#125;);</span><br></pre></td></tr></table></figure>
+
+<iframe width="100%" height="500" src="https://codepen.io/ZZYume/embed/QWNVXoK?height=265&theme-id=dark&default-tab=result" frameborder="0"></iframe>
+
+
+<p>ref: <a href="https://www.tutorialrepublic.com/faq.php">https://www.tutorialrepublic.com/faq.php</a></p>
+]]></content>
+      <categories>
+        <category>Hexo</category>
+      </categories>
+      <tags>
+        <tag>html</tag>
+        <tag>css</tag>
+        <tag>javascript</tag>
+        <tag>jquery</tag>
+        <tag>Bootstrap</tag>
+        <tag>Bootstrap-table</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>[筆記] Leetcode - 1903. Largest Odd Number in String</title>
+    <url>/2023/12/09/%E7%AD%86%E8%A8%98-1903.-Largest-Odd%20Number-in-String/</url>
+    <content><![CDATA[<blockquote>
+<p>You are given a string num, representing a large integer. Return the largest-valued odd integer (as a string) that is a non-empty substring of num, or an empty string “” if no odd integer exists.</p>
+</blockquote>
+<p>A substring is a contiguous sequence of characters within a string.</p>
+<p>Example 1:</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Input: num &#x3D; &quot;52&quot;</span><br><span class="line">Output: &quot;5&quot;</span><br><span class="line">Explanation: The only non-empty substrings are &quot;5&quot;, &quot;2&quot;, and &quot;52&quot;. &quot;5&quot; is the only odd number.</span><br></pre></td></tr></table></figure>
+<p>Example 2:</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Input: num &#x3D; &quot;4206&quot;</span><br><span class="line">Output: &quot;&quot;</span><br><span class="line">Explanation: There are no odd numbers in &quot;4206&quot;.</span><br></pre></td></tr></table></figure>
+<p>Example 3:</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Input: num &#x3D; &quot;35427&quot;</span><br><span class="line">Output: &quot;35427&quot;</span><br><span class="line">Explanation: &quot;35427&quot; is already an odd number.</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">largestOddNumber</span>(<span class="params">self, num: <span class="built_in">str</span></span>) -&gt; <span class="built_in">str</span>:</span></span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">len</span>(num) - <span class="number">1</span>, -<span class="number">1</span>, -<span class="number">1</span>):</span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span> <span class="built_in">int</span>(num[i]) % <span class="number">2</span>:</span><br><span class="line">                <span class="keyword">return</span> num[:i + <span class="number">1</span>]</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> <span class="string">&#x27;&#x27;</span></span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <tags>
+        <tag>list</tag>
+        <tag>Leetcode</tag>
+        <tag>Python</tag>
+        <tag>reverse</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>[筆記] Check.io - Acceptable Password II</title>
     <url>/2021/05/01/%E7%AD%86%E8%A8%98-Check-io-Acceptable-Password-II/</url>
     <content><![CDATA[<blockquote>
@@ -1611,6 +1611,25 @@
       </tags>
   </entry>
   <entry>
+    <title>[筆記] Check.io - Pawn Brotherhood</title>
+    <url>/2021/04/25/%E7%AD%86%E8%A8%98-Check-io-Pawn-Brotherhood/</url>
+    <content><![CDATA[<blockquote>
+<p><a href="https://py.checkio.org/en/mission/pawn-brotherhood/">check.io</a> 上的題目：判斷西洋棋中的兵有幾個是安全的<br>此系列文章主要是自己在解題時覺得有趣的題目，記錄下來讓自己以後好複習，有興趣的人可以參考看看</p>
+</blockquote>
+<h2 id="先來看看題目"><a href="#先來看看題目" class="headerlink" title="先來看看題目"></a>先來看看題目</h2><p><img src="https://i.imgur.com/oTOaA4z.jpg"><br>總結來說：兵的行徑方向走斜對角的(左前、右前)，若是兵的右下或左下有其他兵的話，他就是安全的</p>
+<h2 id="解題步驟"><a href="#解題步驟" class="headerlink" title="解題步驟"></a>解題步驟</h2><h2 id="解題"><a href="#解題" class="headerlink" title="解題"></a>解題</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">safe_pawns</span>(<span class="params">pawns: <span class="built_in">set</span></span>) -&gt; <span class="built_in">int</span>:</span></span><br><span class="line">    safe = <span class="number">0</span></span><br><span class="line">    <span class="keyword">for</span> p <span class="keyword">in</span> pawns:</span><br><span class="line">        <span class="keyword">if</span> <span class="built_in">chr</span>(<span class="built_in">ord</span>(p[<span class="number">0</span>]) + <span class="number">1</span>) + <span class="built_in">str</span>(<span class="built_in">int</span>(p[<span class="number">1</span>]) - <span class="number">1</span>) <span class="keyword">in</span> pawns <span class="keyword">or</span> <span class="built_in">chr</span>(<span class="built_in">ord</span>(p[<span class="number">0</span>]) - <span class="number">1</span>) + <span class="built_in">str</span>(<span class="built_in">int</span>(p[<span class="number">1</span>]) - <span class="number">1</span>) <span class="keyword">in</span> pawns:</span><br><span class="line">            safe += <span class="number">1</span></span><br><span class="line">    <span class="keyword">return</span> safe</span><br></pre></td></tr></table></figure>]]></content>
+      <categories>
+        <category>Check.io</category>
+        <category>python</category>
+      </categories>
+      <tags>
+        <tag>Check.io</tag>
+        <tag>python</tag>
+        <tag>chr</tag>
+        <tag>ord</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>[筆記] Check.io - Date and Time Converter</title>
     <url>/2021/04/25/%E7%AD%86%E8%A8%98-Check-io-Date-and-Time-Converter/</url>
     <content><![CDATA[<blockquote>
@@ -1641,25 +1660,6 @@ def date_time(time: str) -&gt; str:
         <tag>Check.io</tag>
         <tag>python</tag>
         <tag>datetime</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>[筆記] Check.io - Pawn Brotherhood</title>
-    <url>/2021/04/25/%E7%AD%86%E8%A8%98-Check-io-Pawn-Brotherhood/</url>
-    <content><![CDATA[<blockquote>
-<p><a href="https://py.checkio.org/en/mission/pawn-brotherhood/">check.io</a> 上的題目：判斷西洋棋中的兵有幾個是安全的<br>此系列文章主要是自己在解題時覺得有趣的題目，記錄下來讓自己以後好複習，有興趣的人可以參考看看</p>
-</blockquote>
-<h2 id="先來看看題目"><a href="#先來看看題目" class="headerlink" title="先來看看題目"></a>先來看看題目</h2><p><img src="https://i.imgur.com/oTOaA4z.jpg"><br>總結來說：兵的行徑方向走斜對角的(左前、右前)，若是兵的右下或左下有其他兵的話，他就是安全的</p>
-<h2 id="解題步驟"><a href="#解題步驟" class="headerlink" title="解題步驟"></a>解題步驟</h2><h2 id="解題"><a href="#解題" class="headerlink" title="解題"></a>解題</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">safe_pawns</span>(<span class="params">pawns: <span class="built_in">set</span></span>) -&gt; <span class="built_in">int</span>:</span></span><br><span class="line">    safe = <span class="number">0</span></span><br><span class="line">    <span class="keyword">for</span> p <span class="keyword">in</span> pawns:</span><br><span class="line">        <span class="keyword">if</span> <span class="built_in">chr</span>(<span class="built_in">ord</span>(p[<span class="number">0</span>]) + <span class="number">1</span>) + <span class="built_in">str</span>(<span class="built_in">int</span>(p[<span class="number">1</span>]) - <span class="number">1</span>) <span class="keyword">in</span> pawns <span class="keyword">or</span> <span class="built_in">chr</span>(<span class="built_in">ord</span>(p[<span class="number">0</span>]) - <span class="number">1</span>) + <span class="built_in">str</span>(<span class="built_in">int</span>(p[<span class="number">1</span>]) - <span class="number">1</span>) <span class="keyword">in</span> pawns:</span><br><span class="line">            safe += <span class="number">1</span></span><br><span class="line">    <span class="keyword">return</span> safe</span><br></pre></td></tr></table></figure>]]></content>
-      <categories>
-        <category>Check.io</category>
-        <category>python</category>
-      </categories>
-      <tags>
-        <tag>Check.io</tag>
-        <tag>python</tag>
-        <tag>chr</tag>
-        <tag>ord</tag>
       </tags>
   </entry>
   <entry>
@@ -1846,6 +1846,45 @@ def date_time(time: str) -&gt; str:
       </tags>
   </entry>
   <entry>
+    <title>[筆記] Hexo - nexT 基礎配置 (三)</title>
+    <url>/2020/09/14/%E7%AD%86%E8%A8%98-Hexo-nexT-%E5%9F%BA%E7%A4%8E%E9%85%8D%E7%BD%AE-%E4%B8%89/</url>
+    <content><![CDATA[<blockquote>
+<p>自己在建置的時候查了很多資料，整理完希望幫助到有需要的人<br>此篇文章主要教學 Disqus 建置</p>
+</blockquote>
+<span id="more"></span>
+
+
+<h3 id="新增留言功能"><a href="#新增留言功能" class="headerlink" title="新增留言功能"></a>新增留言功能</h3><ol>
+<li><p>至 <a href="https://disqus.com/">Disqus</a> 註冊帳號<br>  <img src="https://i.imgur.com/fJmBmr6.png" alt="圖片"></p>
+</li>
+<li><p>選擇 I want to install Disqus on my site<br>  <img src="https://i.imgur.com/muQV1ZW.jpg" alt="圖片"></p>
+</li>
+<li><p>.<br>  <img src="https://i.imgur.com/FqbITcy.png" alt="圖片"></p>
+</li>
+<li><p>到 <a href="https://disqus.com/api/applications/">Disqus API Application</a> 註冊 application<br>  <img src="https://i.imgur.com/uVVwI0b.png" alt="圖片"></p>
+<ul>
+<li>點選 Register new application</li>
+<li>完成後就會给你一個 API Key<br> <img src="https://i.imgur.com/HFKEZ37.png" alt="圖片"></li>
+</ul>
+</li>
+<li><p>設定 Hexo<br>themes&#x2F;next&#x2F;_config.yml</p>
+<figure class="highlight yml"><table><tr><td class="code"><pre><span class="line"><span class="comment"># Disqus</span></span><br><span class="line"><span class="attr">disqus:</span></span><br><span class="line">  <span class="attr">enable:</span> <span class="literal">true</span></span><br><span class="line">  <span class="attr">shortname:</span></span><br><span class="line">  <span class="attr">count:</span> <span class="literal">true</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># DisqusJS</span></span><br><span class="line"><span class="comment"># Alternative Disqus - Render comment component using Disqus API.</span></span><br><span class="line"><span class="comment"># Demo: https://suka.js.org/DisqusJS/</span></span><br><span class="line"><span class="comment"># For more information: https://github.com/SukkaW/DisqusJS</span></span><br><span class="line"><span class="attr">disqusjs:</span></span><br><span class="line">  <span class="attr">enable:</span> <span class="literal">true</span></span><br><span class="line">  <span class="comment"># API Endpoint of Disqus API (https://disqus.com/api/).</span></span><br><span class="line">  <span class="comment"># Leave api empty if you are able to connect to Disqus API. Otherwise you need a reverse proxy for it.</span></span><br><span class="line">  <span class="comment"># For example:</span></span><br><span class="line">  <span class="comment"># api: https://disqus.skk.moe/disqus/</span></span><br><span class="line">  <span class="attr">api:</span></span><br><span class="line">  <span class="attr">apikey:</span> <span class="comment"># Register new application from https://disqus.com/api/applications/</span></span><br><span class="line">  <span class="attr">shortname:</span> <span class="comment"># See: https://disqus.com/admin/settings/general/</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>完成<br>  <img src="https://i.imgur.com/iSG3tLo.png" alt="圖片"></p>
+</li>
+</ol>
+]]></content>
+      <categories>
+        <category>Hexo</category>
+      </categories>
+      <tags>
+        <tag>GitHub</tag>
+        <tag>Hexo</tag>
+        <tag>GitHub pages</tag>
+        <tag>Blog</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>[筆記] Hexo - nexT 基礎配置 (二)</title>
     <url>/2020/09/11/%E7%AD%86%E8%A8%98-Hexo-nexT-%E5%9F%BA%E7%A4%8E%E9%85%8D%E7%BD%AE-%E4%BA%8C/</url>
     <content><![CDATA[<blockquote>
@@ -1897,64 +1936,6 @@ def date_time(time: str) -&gt; str:
         <tag>Hexo</tag>
         <tag>GitHub pages</tag>
         <tag>Blog</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>[筆記] Hexo - nexT 基礎配置 (三)</title>
-    <url>/2020/09/14/%E7%AD%86%E8%A8%98-Hexo-nexT-%E5%9F%BA%E7%A4%8E%E9%85%8D%E7%BD%AE-%E4%B8%89/</url>
-    <content><![CDATA[<blockquote>
-<p>自己在建置的時候查了很多資料，整理完希望幫助到有需要的人<br>此篇文章主要教學 Disqus 建置</p>
-</blockquote>
-<span id="more"></span>
-
-
-<h3 id="新增留言功能"><a href="#新增留言功能" class="headerlink" title="新增留言功能"></a>新增留言功能</h3><ol>
-<li><p>至 <a href="https://disqus.com/">Disqus</a> 註冊帳號<br>  <img src="https://i.imgur.com/fJmBmr6.png" alt="圖片"></p>
-</li>
-<li><p>選擇 I want to install Disqus on my site<br>  <img src="https://i.imgur.com/muQV1ZW.jpg" alt="圖片"></p>
-</li>
-<li><p>.<br>  <img src="https://i.imgur.com/FqbITcy.png" alt="圖片"></p>
-</li>
-<li><p>到 <a href="https://disqus.com/api/applications/">Disqus API Application</a> 註冊 application<br>  <img src="https://i.imgur.com/uVVwI0b.png" alt="圖片"></p>
-<ul>
-<li>點選 Register new application</li>
-<li>完成後就會给你一個 API Key<br> <img src="https://i.imgur.com/HFKEZ37.png" alt="圖片"></li>
-</ul>
-</li>
-<li><p>設定 Hexo<br>themes&#x2F;next&#x2F;_config.yml</p>
-<figure class="highlight yml"><table><tr><td class="code"><pre><span class="line"><span class="comment"># Disqus</span></span><br><span class="line"><span class="attr">disqus:</span></span><br><span class="line">  <span class="attr">enable:</span> <span class="literal">true</span></span><br><span class="line">  <span class="attr">shortname:</span></span><br><span class="line">  <span class="attr">count:</span> <span class="literal">true</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># DisqusJS</span></span><br><span class="line"><span class="comment"># Alternative Disqus - Render comment component using Disqus API.</span></span><br><span class="line"><span class="comment"># Demo: https://suka.js.org/DisqusJS/</span></span><br><span class="line"><span class="comment"># For more information: https://github.com/SukkaW/DisqusJS</span></span><br><span class="line"><span class="attr">disqusjs:</span></span><br><span class="line">  <span class="attr">enable:</span> <span class="literal">true</span></span><br><span class="line">  <span class="comment"># API Endpoint of Disqus API (https://disqus.com/api/).</span></span><br><span class="line">  <span class="comment"># Leave api empty if you are able to connect to Disqus API. Otherwise you need a reverse proxy for it.</span></span><br><span class="line">  <span class="comment"># For example:</span></span><br><span class="line">  <span class="comment"># api: https://disqus.skk.moe/disqus/</span></span><br><span class="line">  <span class="attr">api:</span></span><br><span class="line">  <span class="attr">apikey:</span> <span class="comment"># Register new application from https://disqus.com/api/applications/</span></span><br><span class="line">  <span class="attr">shortname:</span> <span class="comment"># See: https://disqus.com/admin/settings/general/</span></span><br></pre></td></tr></table></figure>
-</li>
-<li><p>完成<br>  <img src="https://i.imgur.com/iSG3tLo.png" alt="圖片"></p>
-</li>
-</ol>
-]]></content>
-      <categories>
-        <category>Hexo</category>
-      </categories>
-      <tags>
-        <tag>GitHub</tag>
-        <tag>Hexo</tag>
-        <tag>GitHub pages</tag>
-        <tag>Blog</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>[筆記] Leetcode - 136. Single Number</title>
-    <url>/2023/09/28/%E7%AD%86%E8%A8%98-Leetcode-%20136.-Single%20Number/</url>
-    <content><![CDATA[<p><a href="https://leetcode.com/problems/single-number/">https://leetcode.com/problems/single-number/</a></p>
-<blockquote>
-<p>Given a non-empty array of integers nums, every element appears twice except for one. Find that single one.<br>You must implement a solution with a linear runtime complexity and use only constant extra space.</p>
-</blockquote>
-<p><img src="https://hackmd.io/_uploads/BJfpj0Mx6.png"></p>
-<span id="more"></span>
-
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">singleNumber</span>(<span class="params">self, nums: <span class="type">List</span>[<span class="built_in">int</span>]</span>) -&gt; <span class="built_in">int</span>:</span></span><br><span class="line">        <span class="built_in">list</span> = []</span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> nums:</span><br><span class="line">            <span class="keyword">if</span> i <span class="keyword">in</span> <span class="built_in">list</span>:</span><br><span class="line">                <span class="built_in">list</span>.remove(i)</span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                <span class="built_in">list</span>.append(i)</span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">list</span>.pop()</span><br></pre></td></tr></table></figure>
-]]></content>
-      <tags>
-        <tag>list</tag>
-        <tag>Leetcode</tag>
-        <tag>Python</tag>
-        <tag>Coding</tag>
       </tags>
   </entry>
   <entry>
@@ -2035,26 +2016,22 @@ def date_time(time: str) -&gt; str:
       </tags>
   </entry>
   <entry>
-    <title>[筆記] Leetcode - 217. Contains Duplicate</title>
-    <url>/2023/09/28/%E7%AD%86%E8%A8%98-Leetcode-%20217.-Contains-Duplicate/</url>
-    <content><![CDATA[<p><a href="https://leetcode.com/problems/contains-duplicate/">https://leetcode.com/problems/contains-duplicate/</a></p>
+    <title>[筆記] Leetcode - 136. Single Number</title>
+    <url>/2023/09/28/%E7%AD%86%E8%A8%98-Leetcode-%20136.-Single%20Number/</url>
+    <content><![CDATA[<p><a href="https://leetcode.com/problems/single-number/">https://leetcode.com/problems/single-number/</a></p>
 <blockquote>
-<p>Given an integer array nums, return true if any value appears at least twice in the array, and return false if every element is distinct.</p>
+<p>Given a non-empty array of integers nums, every element appears twice except for one. Find that single one.<br>You must implement a solution with a linear runtime complexity and use only constant extra space.</p>
 </blockquote>
-<p><img src="https://hackmd.io/_uploads/H1SgWl7ga.png"></p>
+<p><img src="https://hackmd.io/_uploads/BJfpj0Mx6.png"></p>
 <span id="more"></span>
 
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">containsDuplicate</span>(<span class="params">self, nums: <span class="type">List</span>[<span class="built_in">int</span>]</span>) -&gt; <span class="built_in">bool</span>:</span></span><br><span class="line">        ans = &#123;&#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> num <span class="keyword">in</span> nums:</span><br><span class="line">            <span class="keyword">if</span> num <span class="keyword">in</span> ans:</span><br><span class="line">                <span class="keyword">return</span> <span class="literal">True</span></span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                ans[num] = <span class="number">1</span></span><br><span class="line">            </span><br><span class="line">        <span class="keyword">return</span> <span class="literal">False</span></span><br></pre></td></tr></table></figure>
-
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">containsDuplicate</span>(<span class="params">self, nums: <span class="type">List</span>[<span class="built_in">int</span>]</span>) -&gt; <span class="built_in">bool</span>:</span></span><br><span class="line">        ans = &#123;&#125;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">for</span> num <span class="keyword">in</span> nums:</span><br><span class="line">            <span class="keyword">if</span> ans.get(num):</span><br><span class="line">                <span class="keyword">return</span> <span class="literal">True</span></span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                ans[num] = <span class="number">1</span></span><br><span class="line">        </span><br><span class="line">        <span class="keyword">return</span> <span class="literal">False</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">containsDuplicate</span>(<span class="params">self, nums: <span class="type">List</span>[<span class="built_in">int</span>]</span>) -&gt; <span class="built_in">bool</span>:</span></span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">len</span>(nums) != <span class="built_in">len</span>(<span class="built_in">list</span>(<span class="built_in">set</span>(nums)))</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">singleNumber</span>(<span class="params">self, nums: <span class="type">List</span>[<span class="built_in">int</span>]</span>) -&gt; <span class="built_in">int</span>:</span></span><br><span class="line">        <span class="built_in">list</span> = []</span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> nums:</span><br><span class="line">            <span class="keyword">if</span> i <span class="keyword">in</span> <span class="built_in">list</span>:</span><br><span class="line">                <span class="built_in">list</span>.remove(i)</span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                <span class="built_in">list</span>.append(i)</span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">list</span>.pop()</span><br></pre></td></tr></table></figure>
 ]]></content>
       <tags>
         <tag>list</tag>
         <tag>Leetcode</tag>
         <tag>Python</tag>
         <tag>Coding</tag>
-        <tag>set</tag>
       </tags>
   </entry>
   <entry>
@@ -2082,24 +2059,26 @@ def date_time(time: str) -&gt; str:
       </tags>
   </entry>
   <entry>
-    <title>[筆記] Leetcode - 905. Sort Array By Parity</title>
-    <url>/2023/09/29/%E7%AD%86%E8%A8%98-Leetcode-%20905.-Sort-Array-By-Parity/</url>
+    <title>[筆記] Leetcode - 217. Contains Duplicate</title>
+    <url>/2023/09/28/%E7%AD%86%E8%A8%98-Leetcode-%20217.-Contains-Duplicate/</url>
     <content><![CDATA[<p><a href="https://leetcode.com/problems/contains-duplicate/">https://leetcode.com/problems/contains-duplicate/</a></p>
 <blockquote>
-<p>Given an integer array nums, move all the even integers at the beginning of the array followed by all the odd integers.<br>Return any array that satisfies this condition.</p>
+<p>Given an integer array nums, return true if any value appears at least twice in the array, and return false if every element is distinct.</p>
 </blockquote>
-<p><img src="https://hackmd.io/_uploads/SJBmot7lp.png"></p>
+<p><img src="https://hackmd.io/_uploads/H1SgWl7ga.png"></p>
 <span id="more"></span>
 
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">sortArrayByParity</span>(<span class="params">self, nums: <span class="type">List</span>[<span class="built_in">int</span>]</span>) -&gt; <span class="type">List</span>[<span class="built_in">int</span>]:</span></span><br><span class="line">        left, right = <span class="number">0</span>, <span class="built_in">len</span>(nums) - <span class="number">1</span></span><br><span class="line"></span><br><span class="line">        <span class="keyword">while</span> left &lt; right: </span><br><span class="line">            <span class="keyword">if</span> nums[right] % <span class="number">2</span> == <span class="number">0</span> <span class="keyword">and</span> nums[left] % <span class="number">2</span> == <span class="number">1</span>:</span><br><span class="line">                nums[right], nums[left] = nums[left], nums[right]</span><br><span class="line">                left += <span class="number">1</span></span><br><span class="line">                right -= <span class="number">1</span></span><br><span class="line">            </span><br><span class="line">            <span class="keyword">if</span> nums[left] % <span class="number">2</span> == <span class="number">0</span>:</span><br><span class="line">                left += <span class="number">1</span></span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span> nums[right] % <span class="number">2</span> == <span class="number">1</span>:</span><br><span class="line">                right -= <span class="number">1</span></span><br><span class="line">        <span class="keyword">return</span> nums</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">containsDuplicate</span>(<span class="params">self, nums: <span class="type">List</span>[<span class="built_in">int</span>]</span>) -&gt; <span class="built_in">bool</span>:</span></span><br><span class="line">        ans = &#123;&#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> num <span class="keyword">in</span> nums:</span><br><span class="line">            <span class="keyword">if</span> num <span class="keyword">in</span> ans:</span><br><span class="line">                <span class="keyword">return</span> <span class="literal">True</span></span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                ans[num] = <span class="number">1</span></span><br><span class="line">            </span><br><span class="line">        <span class="keyword">return</span> <span class="literal">False</span></span><br></pre></td></tr></table></figure>
 
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">sortArrayByParity</span>(<span class="params">self, nums: <span class="type">List</span>[<span class="built_in">int</span>]</span>) -&gt; <span class="type">List</span>[<span class="built_in">int</span>]:</span>        even_idx = <span class="number">0</span></span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">len</span>(nums)):</span><br><span class="line">            <span class="keyword">if</span> nums[i] % <span class="number">2</span> == <span class="number">0</span>:</span><br><span class="line">                nums[even_idx], nums[i] = nums[i], nums[even_idx]</span><br><span class="line">                even_idx += <span class="number">1</span></span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> nums</span><br></pre></td></tr></table></figure>]]></content>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">containsDuplicate</span>(<span class="params">self, nums: <span class="type">List</span>[<span class="built_in">int</span>]</span>) -&gt; <span class="built_in">bool</span>:</span></span><br><span class="line">        ans = &#123;&#125;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">for</span> num <span class="keyword">in</span> nums:</span><br><span class="line">            <span class="keyword">if</span> ans.get(num):</span><br><span class="line">                <span class="keyword">return</span> <span class="literal">True</span></span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                ans[num] = <span class="number">1</span></span><br><span class="line">        </span><br><span class="line">        <span class="keyword">return</span> <span class="literal">False</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">containsDuplicate</span>(<span class="params">self, nums: <span class="type">List</span>[<span class="built_in">int</span>]</span>) -&gt; <span class="built_in">bool</span>:</span></span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">len</span>(nums) != <span class="built_in">len</span>(<span class="built_in">list</span>(<span class="built_in">set</span>(nums)))</span><br></pre></td></tr></table></figure>
+]]></content>
       <tags>
         <tag>list</tag>
         <tag>Leetcode</tag>
         <tag>Python</tag>
         <tag>Coding</tag>
-        <tag>two pointer</tag>
+        <tag>set</tag>
       </tags>
   </entry>
   <entry>
@@ -2123,25 +2102,24 @@ def date_time(time: str) -&gt; str:
       </tags>
   </entry>
   <entry>
-    <title>[筆記] Leetcode - 867. Transpose Matrix</title>
-    <url>/2023/12/10/%E7%AD%86%E8%A8%98-Leetcode-867.-Transpose-Matrix/</url>
-    <content><![CDATA[<p><a href="https://leetcode.com/problems/transpose-matrix/">https://leetcode.com/problems/transpose-matrix/</a></p>
+    <title>[筆記] Leetcode - 905. Sort Array By Parity</title>
+    <url>/2023/09/29/%E7%AD%86%E8%A8%98-Leetcode-%20905.-Sort-Array-By-Parity/</url>
+    <content><![CDATA[<p><a href="https://leetcode.com/problems/contains-duplicate/">https://leetcode.com/problems/contains-duplicate/</a></p>
 <blockquote>
-<p>Given a 2D integer array matrix, return the transpose of matrix.</p>
-<p>The transpose of a matrix is the matrix flipped over its main diagonal, switching the matrix’s row and column indices.</p>
+<p>Given an integer array nums, move all the even integers at the beginning of the array followed by all the odd integers.<br>Return any array that satisfies this condition.</p>
 </blockquote>
+<p><img src="https://hackmd.io/_uploads/SJBmot7lp.png"></p>
 <span id="more"></span>
 
-<p>Example 1:</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Input: matrix &#x3D; [[1,2,3],[4,5,6],[7,8,9]]</span><br><span class="line">Output: [[1,4,7],[2,5,8],[3,6,9]]</span><br></pre></td></tr></table></figure>
-<p>Example 2:</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Input: matrix &#x3D; [[1,2,3],[4,5,6]]</span><br><span class="line">Output: [[1,4],[2,5],[3,6]]</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">sortArrayByParity</span>(<span class="params">self, nums: <span class="type">List</span>[<span class="built_in">int</span>]</span>) -&gt; <span class="type">List</span>[<span class="built_in">int</span>]:</span></span><br><span class="line">        left, right = <span class="number">0</span>, <span class="built_in">len</span>(nums) - <span class="number">1</span></span><br><span class="line"></span><br><span class="line">        <span class="keyword">while</span> left &lt; right: </span><br><span class="line">            <span class="keyword">if</span> nums[right] % <span class="number">2</span> == <span class="number">0</span> <span class="keyword">and</span> nums[left] % <span class="number">2</span> == <span class="number">1</span>:</span><br><span class="line">                nums[right], nums[left] = nums[left], nums[right]</span><br><span class="line">                left += <span class="number">1</span></span><br><span class="line">                right -= <span class="number">1</span></span><br><span class="line">            </span><br><span class="line">            <span class="keyword">if</span> nums[left] % <span class="number">2</span> == <span class="number">0</span>:</span><br><span class="line">                left += <span class="number">1</span></span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span> nums[right] % <span class="number">2</span> == <span class="number">1</span>:</span><br><span class="line">                right -= <span class="number">1</span></span><br><span class="line">        <span class="keyword">return</span> nums</span><br></pre></td></tr></table></figure>
 
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">transpose</span>(<span class="params">self, matrix: <span class="type">List</span>[<span class="type">List</span>[<span class="built_in">int</span>]]</span>) -&gt; <span class="type">List</span>[<span class="type">List</span>[<span class="built_in">int</span>]]:</span></span><br><span class="line">        result = []</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> col <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">len</span>(matrix[<span class="number">0</span>])):</span><br><span class="line">            new_matrix = []</span><br><span class="line"></span><br><span class="line">            <span class="keyword">for</span> row <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">len</span>(matrix)):</span><br><span class="line">                new_matrix.append(matrix[row][col])</span><br><span class="line"></span><br><span class="line">            result.append(new_matrix)</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> result</span><br></pre></td></tr></table></figure>]]></content>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">sortArrayByParity</span>(<span class="params">self, nums: <span class="type">List</span>[<span class="built_in">int</span>]</span>) -&gt; <span class="type">List</span>[<span class="built_in">int</span>]:</span>        even_idx = <span class="number">0</span></span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">len</span>(nums)):</span><br><span class="line">            <span class="keyword">if</span> nums[i] % <span class="number">2</span> == <span class="number">0</span>:</span><br><span class="line">                nums[even_idx], nums[i] = nums[i], nums[even_idx]</span><br><span class="line">                even_idx += <span class="number">1</span></span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> nums</span><br></pre></td></tr></table></figure>]]></content>
       <tags>
+        <tag>list</tag>
         <tag>Leetcode</tag>
         <tag>Python</tag>
-        <tag>Matrix</tag>
+        <tag>Coding</tag>
+        <tag>two pointer</tag>
       </tags>
   </entry>
   <entry>
@@ -2189,6 +2167,28 @@ def date_time(time: str) -&gt; str:
       </tags>
   </entry>
   <entry>
+    <title>[筆記] Leetcode - 867. Transpose Matrix</title>
+    <url>/2023/12/10/%E7%AD%86%E8%A8%98-Leetcode-867.-Transpose-Matrix/</url>
+    <content><![CDATA[<p><a href="https://leetcode.com/problems/transpose-matrix/">https://leetcode.com/problems/transpose-matrix/</a></p>
+<blockquote>
+<p>Given a 2D integer array matrix, return the transpose of matrix.</p>
+<p>The transpose of a matrix is the matrix flipped over its main diagonal, switching the matrix’s row and column indices.</p>
+</blockquote>
+<span id="more"></span>
+
+<p>Example 1:</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Input: matrix &#x3D; [[1,2,3],[4,5,6],[7,8,9]]</span><br><span class="line">Output: [[1,4,7],[2,5,8],[3,6,9]]</span><br></pre></td></tr></table></figure>
+<p>Example 2:</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Input: matrix &#x3D; [[1,2,3],[4,5,6]]</span><br><span class="line">Output: [[1,4],[2,5],[3,6]]</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">transpose</span>(<span class="params">self, matrix: <span class="type">List</span>[<span class="type">List</span>[<span class="built_in">int</span>]]</span>) -&gt; <span class="type">List</span>[<span class="type">List</span>[<span class="built_in">int</span>]]:</span></span><br><span class="line">        result = []</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> col <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">len</span>(matrix[<span class="number">0</span>])):</span><br><span class="line">            new_matrix = []</span><br><span class="line"></span><br><span class="line">            <span class="keyword">for</span> row <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">len</span>(matrix)):</span><br><span class="line">                new_matrix.append(matrix[row][col])</span><br><span class="line"></span><br><span class="line">            result.append(new_matrix)</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> result</span><br></pre></td></tr></table></figure>]]></content>
+      <tags>
+        <tag>Leetcode</tag>
+        <tag>Python</tag>
+        <tag>Matrix</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>[筆記] Relative Dropdown List</title>
     <url>/2021/03/30/%E7%AD%86%E8%A8%98-Relative-Dropdown-List/</url>
     <content><![CDATA[<blockquote>
@@ -2212,28 +2212,6 @@ def date_time(time: str) -&gt; str:
         <tag>javascript</tag>
         <tag>jquery</tag>
         <tag>dropdown</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>[筆記] 網頁版面 - 側邊欄</title>
-    <url>/2020/09/20/%E7%AD%86%E8%A8%98-%E7%B6%B2%E9%A0%81%E7%89%88%E9%9D%A2-%E5%81%B4%E9%82%8A%E6%AC%84/</url>
-    <content><![CDATA[<blockquote>
-<p>實習開發網站，常遇到一些功能需求要上網查詢，整理成筆記以後再用到就不用又從頭開始找，也希望幫助到正在找學這些功能的人</p>
-</blockquote>
-<span id="more"></span>
-
-
-<iframe width="100%" height="500" src="https://codepen.io/ZZYume/embed/WNwaPpJ?height=265&theme-id=dark&default-tab=result" frameborder="0"></iframe>
-
-<p>想看比較清楚的 code，我也有放在 <a href="https://github.com/ZanaZhong/side-nav.github.io">Github</a></p>
-]]></content>
-      <tags>
-        <tag>html</tag>
-        <tag>css</tag>
-        <tag>javascript</tag>
-        <tag>jquery</tag>
-        <tag>Bootstrap</tag>
-        <tag>Bootstrap-table</tag>
       </tags>
   </entry>
   <entry>
@@ -2345,6 +2323,28 @@ def date_time(time: str) -&gt; str:
         <tag>軟體開發</tag>
         <tag>向前兼容</tag>
         <tag>向後兼容</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>[筆記] 網頁版面 - 側邊欄</title>
+    <url>/2020/09/20/%E7%AD%86%E8%A8%98-%E7%B6%B2%E9%A0%81%E7%89%88%E9%9D%A2-%E5%81%B4%E9%82%8A%E6%AC%84/</url>
+    <content><![CDATA[<blockquote>
+<p>實習開發網站，常遇到一些功能需求要上網查詢，整理成筆記以後再用到就不用又從頭開始找，也希望幫助到正在找學這些功能的人</p>
+</blockquote>
+<span id="more"></span>
+
+
+<iframe width="100%" height="500" src="https://codepen.io/ZZYume/embed/WNwaPpJ?height=265&theme-id=dark&default-tab=result" frameborder="0"></iframe>
+
+<p>想看比較清楚的 code，我也有放在 <a href="https://github.com/ZanaZhong/side-nav.github.io">Github</a></p>
+]]></content>
+      <tags>
+        <tag>html</tag>
+        <tag>css</tag>
+        <tag>javascript</tag>
+        <tag>jquery</tag>
+        <tag>Bootstrap</tag>
+        <tag>Bootstrap-table</tag>
       </tags>
   </entry>
 </search>
