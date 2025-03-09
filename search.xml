@@ -240,6 +240,125 @@
       </tags>
   </entry>
   <entry>
+    <title>Go Concurrency：Goroutine、Channel、WaitGroup、Mutex 一次搞懂！</title>
+    <url>/2025/02/25/Go-Concurrency%EF%BC%9AGoroutine%E3%80%81Channel%E3%80%81WaitGroup%E3%80%81Mutex-%E4%B8%80%E6%AC%A1%E6%90%9E%E6%87%82%EF%BC%81/</url>
+    <content><![CDATA[<p>在寫程式時，你是否曾遇過這樣的問題：</p>
+<ul>
+<li>程式跑得很慢，某些函式明明可以同時執行，卻得一個等一個？</li>
+<li>想要讓多個工作並行，但又怕不同的程序互相干擾？</li>
+<li>處理龐大的計算或 I&#x2F;O 任務時，CPU 占用率極低，白白浪費資源？</li>
+</ul>
+<p>這時候，你需要的是 <strong>並發（Concurrency）</strong>！而 Go 語言提供了一種超級簡單且高效的並發工具： <strong>Goroutine</strong>。</p>
+<span id="more"></span>
+
+<p>在 Go 語言中，並發是其核心特性之一，而 Goroutine 則是實現並發的關鍵。你可以把它想像成一個「輕量級的執行緒」，但它比傳統執行緒更高效、佔用更少資源，並且能夠輕鬆地創建成千上萬個 Goroutine。</p>
+<h2 id="Goroutine-是什麼？為什麼它這麼強？"><a href="#Goroutine-是什麼？為什麼它這麼強？" class="headerlink" title="Goroutine 是什麼？為什麼它這麼強？"></a>Goroutine 是什麼？為什麼它這麼強？</h2><p>Goroutine 是 Go 語言的 <strong>輕量級執行緒（Lightweight Thread）</strong>，讓你可以輕鬆執行並發程式，而不需要手動管理繁瑣的系統執行緒。</p>
+<ul>
+<li><strong>輕量級</strong>：相比於傳統的作業系統執行緒（Thread），Goroutine 的記憶體開銷極低。</li>
+<li><strong>執行簡單</strong>：只要在函式前加上 <code>go</code>，就能讓它跑在背景，完全不需要設定任何 Thread！</li>
+<li><strong>獨立運行</strong>：Goroutine 之間互不影響，即使某個 Goroutine 崩潰，也不會導致其他 Goroutine 失敗。</li>
+<li><strong>高效</strong>：Go 運行時（runtime）會自動管理 Goroutine 的調度，避免過度依賴作業系統的執行緒管理。</li>
+</ul>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">    <span class="string">&quot;fmt&quot;</span></span><br><span class="line">    <span class="string">&quot;time&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">hello</span><span class="params">()</span></span> &#123;</span><br><span class="line">    fmt.Println(<span class="string">&quot;Hello, Goroutine!&quot;</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">    <span class="keyword">go</span> hello() <span class="comment">// 啟動 Goroutine</span></span><br><span class="line">    fmt.Println(<span class="string">&quot;Main 函式結束&quot;</span>)</span><br><span class="line">    time.Sleep(time.Second) <span class="comment">// 等待 Goroutine 執行完成</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>輸出</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Main 函式結束</span><br><span class="line">Hello, Goroutine!</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><code>go hello()</code> 會在背景執行，而 <code>main()</code> 函式會繼續往下執行。</li>
+<li>這樣我們的程式就可以同時進行兩個工作，提升效率！</li>
+</ul>
+<p>⚠ 但這裡有個問題—— Goroutine 是異步執行的，main() 可能在 hello() 結束前就已執行完畢，因此 time.Sleep() 讓主執行緒暫停一下，確保 Goroutine 執行。</p>
+<div class="note info"><p><strong>main 函式結束後，所有 Goroutine 也會立即結束</strong>，這就引出了下一個重要工具： <strong>WaitGroup</strong>。</p>
+</div>
+
+<h2 id="WaitGroup：讓主程式等-Goroutine-完成，確保-Goroutine-全部完成"><a href="#WaitGroup：讓主程式等-Goroutine-完成，確保-Goroutine-全部完成" class="headerlink" title="WaitGroup：讓主程式等 Goroutine 完成，確保 Goroutine 全部完成"></a>WaitGroup：讓主程式等 Goroutine 完成，確保 Goroutine 全部完成</h2><p>當我們開啟多個 Goroutine 時，<code>main()</code> 可能還沒等 Goroutine 執行完就結束了，導致 Goroutine 被強制終止。為了解決這個問題，我們可以使用 <strong>sync.WaitGroup</strong>。</p>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">    <span class="string">&quot;fmt&quot;</span></span><br><span class="line">    <span class="string">&quot;sync&quot;</span></span><br><span class="line">    <span class="string">&quot;time&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> wg sync.WaitGroup</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">printMessage</span><span class="params">(message <span class="keyword">string</span>)</span></span> &#123;</span><br><span class="line">    <span class="keyword">defer</span> wg.Done() <span class="comment">// Goroutine 結束時通知 WaitGroup</span></span><br><span class="line">    <span class="keyword">for</span> i := <span class="number">0</span>; i &lt; <span class="number">5</span>; i++ &#123;</span><br><span class="line">        fmt.Println(message, i)</span><br><span class="line">        time.Sleep(time.Millisecond * <span class="number">500</span>)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">    wg.Add(<span class="number">2</span>) <span class="comment">// 設定有 2 個 Goroutine</span></span><br><span class="line">    <span class="keyword">go</span> printMessage(<span class="string">&quot;Hello from Goroutine 1&quot;</span>)</span><br><span class="line">    <span class="keyword">go</span> printMessage(<span class="string">&quot;Hello from Goroutine 2&quot;</span>)</span><br><span class="line"></span><br><span class="line">    wg.Wait() <span class="comment">// 等待所有 Goroutine 結束</span></span><br><span class="line">    fmt.Println(<span class="string">&quot;All Goroutines Finished!&quot;</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li><code>wg.Add(2)</code> 告訴 WaitGroup 需要等 2 個 Goroutine。   &lt;- 增加計數器 </li>
+<li><code>wg.Done()</code> 會在 Goroutine 執行結束時通知 WaitGroup。 &lt;- 減少計數器</li>
+<li><code>wg.Wait()</code> 讓 <code>main()</code> 等待所有 Goroutine 結束後才繼續。 &lt;- 等待計數器歸零</li>
+</ul>
+<p>這樣就能確保主程式不會提前結束！<br>我們再看一個範例：</p>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">    <span class="string">&quot;fmt&quot;</span></span><br><span class="line">    <span class="string">&quot;sync&quot;</span></span><br><span class="line">    <span class="string">&quot;time&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">worker</span><span class="params">(id <span class="keyword">int</span>, wg *sync.WaitGroup)</span></span> &#123;</span><br><span class="line">    <span class="keyword">defer</span> wg.Done() <span class="comment">// 告知 WaitGroup 這個 Goroutine 完成</span></span><br><span class="line">    fmt.Printf(<span class="string">&quot;Worker %d 開始工作\n&quot;</span>, id)</span><br><span class="line">    time.Sleep(time.Second)</span><br><span class="line">    fmt.Printf(<span class="string">&quot;Worker %d 完成工作\n&quot;</span>, id)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">    <span class="keyword">var</span> wg sync.WaitGroup</span><br><span class="line">    <span class="keyword">for</span> i := <span class="number">1</span>; i &lt;= <span class="number">3</span>; i++ &#123;</span><br><span class="line">        wg.Add(<span class="number">1</span>)</span><br><span class="line">        <span class="keyword">go</span> worker(i, &amp;wg)</span><br><span class="line">    &#125;</span><br><span class="line">    wg.Wait() <span class="comment">// 等待所有 Goroutine 結束</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="Channel：Goroutine-之間的溝通管道"><a href="#Channel：Goroutine-之間的溝通管道" class="headerlink" title="Channel：Goroutine 之間的溝通管道"></a>Channel：Goroutine 之間的溝通管道</h2><p>Goroutine 之間如何傳遞資料呢？我們可以使用 <strong>Channel</strong>，它就像是一條輸送帶，負責在 Goroutine 之間傳遞訊息，確保 <strong>Goroutine 之間安全地交換資料</strong>！</p>
+<p>Channel 的基本語法</p>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="string">&quot;fmt&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">    ch := <span class="built_in">make</span>(<span class="keyword">chan</span> <span class="keyword">string</span>) <span class="comment">// 創建 Channel</span></span><br><span class="line">    </span><br><span class="line">    <span class="keyword">go</span> <span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123;</span><br><span class="line">        ch &lt;- <span class="string">&quot;Hello from Goroutine!&quot;</span> <span class="comment">// 發送訊息到 Channel</span></span><br><span class="line">    &#125;()</span><br><span class="line">    </span><br><span class="line">    message := &lt;-ch <span class="comment">// 從 Channel 接收訊息</span></span><br><span class="line">    fmt.Println(message)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>輸出：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Hello from Goroutine!</span><br></pre></td></tr></table></figure>
+<p>另一種寫法（匿名函式）</p>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="string">&quot;fmt&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">sendMessage</span><span class="params">(ch <span class="keyword">chan</span> <span class="keyword">string</span>)</span></span> &#123;</span><br><span class="line">    ch &lt;- <span class="string">&quot;Hello from Goroutine!&quot;</span> <span class="comment">// 發送訊息</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">    ch := <span class="built_in">make</span>(<span class="keyword">chan</span> <span class="keyword">string</span>) <span class="comment">// 建立 Channel</span></span><br><span class="line">    <span class="keyword">go</span> sendMessage(ch)</span><br><span class="line">    message := &lt;-ch <span class="comment">// 從 Channel 接收訊息</span></span><br><span class="line">    fmt.Println(message)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li><code>ch := make(chan string)</code> 建立了一個 <code>string</code> 類型的 Channel。</li>
+<li><code>ch &lt;- &quot;Hello&quot;</code> 讓 Goroutine 發送訊息。</li>
+<li><code>&lt;-ch</code> 讓主程式接收訊息。</li>
+</ul>
+<p>這兩種寫法的主要差異在於：</p>
+<ol>
+<li>第一種寫法：將 <code>sendMessage</code> 定義為一個獨立函式，這樣的方式有助於程式的結構化，使程式碼更具可讀性和可維護性。</li>
+<li>第二種寫法：使用匿名函式（<code>go func() &#123;&#125;</code>）直接啟動 Goroutine，這種方式適合用於簡單的情境，例如臨時的併發操作，而不需要額外定義函式。</li>
+</ol>
+<p>在選擇哪種方式時，通常如果該 Goroutine 需要重複使用，則應該定義成獨立函式；如果只是一次性操作，則可以使用匿名函式。</p>
+<h3 id="Buffered-Channel（有緩衝的-Channel）"><a href="#Buffered-Channel（有緩衝的-Channel）" class="headerlink" title="Buffered Channel（有緩衝的 Channel）"></a>Buffered Channel（有緩衝的 Channel）</h3><p>Buffered channel 允許 goroutine 發送多個訊息而不會馬上被接收：</p>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="string">&quot;fmt&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">    ch := <span class="built_in">make</span>(<span class="keyword">chan</span> <span class="keyword">int</span>, <span class="number">3</span>) <span class="comment">// 緩衝區大小為 3</span></span><br><span class="line"></span><br><span class="line">    ch &lt;- <span class="number">1</span></span><br><span class="line">    ch &lt;- <span class="number">2</span></span><br><span class="line">    ch &lt;- <span class="number">3</span></span><br><span class="line"></span><br><span class="line">    fmt.Println(&lt;-ch)</span><br><span class="line">    fmt.Println(&lt;-ch)</span><br><span class="line">    fmt.Println(&lt;-ch)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>這樣的 Channel 允許存入 3 個數據而不會阻塞 Goroutine。<br>緩衝區滿了後，goroutine 會阻塞直到有空間可用。</p>
+</blockquote>
+<h2 id="Mutex：避免-Goroutine-同時修改資料"><a href="#Mutex：避免-Goroutine-同時修改資料" class="headerlink" title="Mutex：避免 Goroutine 同時修改資料"></a>Mutex：避免 Goroutine 同時修改資料</h2><p>當多個 Goroutine 需要共享同一個變數時，可能會發生 <strong>競爭條件（Race Condition）</strong>，導致不一致的結果。這時候就需要 <strong>Mutex（互斥鎖）</strong> 來確保資料安全。</p>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">    <span class="string">&quot;fmt&quot;</span></span><br><span class="line">    <span class="string">&quot;sync&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> (</span><br><span class="line">    counter <span class="keyword">int</span></span><br><span class="line">    lock sync.Mutex</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">increment</span><span class="params">()</span></span> &#123;</span><br><span class="line">    lock.Lock()   <span class="comment">// 加鎖</span></span><br><span class="line">    counter++</span><br><span class="line">    lock.Unlock() <span class="comment">// 解鎖</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">    <span class="keyword">var</span> wg sync.WaitGroup</span><br><span class="line">    wg.Add(<span class="number">1000</span>)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> i := <span class="number">0</span>; i &lt; <span class="number">1000</span>; i++ &#123;</span><br><span class="line">        <span class="keyword">go</span> <span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123;</span><br><span class="line">            <span class="keyword">defer</span> wg.Done()</span><br><span class="line">            increment()</span><br><span class="line">        &#125;()</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    wg.Wait()</span><br><span class="line">    fmt.Println(<span class="string">&quot;Final Counter:&quot;</span>, counter)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><code>increment()</code> 用於增加計數器，使用 <code>mutex.Lock()</code> 和 <code>mutex.Unlock()</code> 保護 <code>counter</code> 變數。<code>main()</code> 啟動多個 Goroutine，每個 Goroutine 都會調用 <code>increment()</code> 。使用 <code>sync.Mutex </code>可以確保 <code>counter</code> 的值正確。</p>
+<ul>
+<li><code>lock.Lock()</code> 確保只有一個 Goroutine 能修改 <code>counter</code>。</li>
+<li><code>lock.Unlock()</code> 讓其他 Goroutine 繼續執行。</li>
+</ul>
+<p>這樣就能保證並發環境下數據的一致性！</p>
+<h2 id="結論"><a href="#結論" class="headerlink" title="結論"></a>結論</h2><p>Goroutine 讓 Go 的並發變得輕鬆簡單，但為了讓多個 Goroutine 之間能夠順利協作，我們需要：</p>
+<ul>
+<li><strong>WaitGroup</strong> 讓主程式等 Goroutine 執行完。</li>
+<li><strong>Channel</strong> 讓 Goroutine 之間安全地交換數據。</li>
+<li><strong>Mutex</strong> 避免多個 Goroutine 同時修改共享變數。</li>
+</ul>
+]]></content>
+      <categories>
+        <category>Golang</category>
+      </categories>
+      <tags>
+        <tag>Go</tag>
+        <tag>Goroutine</tag>
+        <tag>Concurrency</tag>
+        <tag>Channel</tag>
+        <tag>WaitGroup</tag>
+        <tag>Mutex</tag>
+        <tag>技術教學</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>[分享] Website Layout - Sidebar + Flexed</title>
+    <url>/2021/04/01/%E5%88%86%E4%BA%AB-Website-Layout-Sidebar-Flexed/</url>
+    <content><![CDATA[<blockquote>
+<p>實習開發網站，常遇到一些功能需求要上網查詢，整理成筆記以後再用到就不用又從頭開始找，也希望幫助到正在找學這些功能的人</p>
+</blockquote>
+<span id="more"></span>
+
+<iframe width="100%" height="500" src="https://codepen.io/ZZYume/embed/NWddogz?height=265&theme-id=dark&default-tab=result" frameborder="0"></iframe>
+
+<p>&#x2F;&#x2F; 有空再認真補教學</p>
+]]></content>
+      <categories>
+        <category>html</category>
+      </categories>
+      <tags>
+        <tag>sidebar</tag>
+        <tag>html</tag>
+        <tag>css</tag>
+        <tag>javascript</tag>
+        <tag>jquery</tag>
+        <tag>Bootstrap</tag>
+        <tag>Bootstrap-table</tag>
+        <tag>card</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>SQL 與 NoSQL：關聯式與非關聯式資料庫的差異與應用</title>
     <url>/2025/01/18/SQL-%E8%88%87-NoSQL%EF%BC%9A%E9%97%9C%E8%81%AF%E5%BC%8F%E8%88%87%E9%9D%9E%E9%97%9C%E8%81%AF%E5%BC%8F%E8%B3%87%E6%96%99%E5%BA%AB%E7%9A%84%E5%B7%AE%E7%95%B0%E8%88%87%E6%87%89%E7%94%A8/</url>
     <content><![CDATA[<h3 id="資料的儲存與未來的選擇"><a href="#資料的儲存與未來的選擇" class="headerlink" title="資料的儲存與未來的選擇"></a>資料的儲存與未來的選擇</h3><p>現今的應用程式需要處理大量的資料，而選擇適合的資料庫相當的重要。無論是需要處理<code>結構化資料</code>，還是<code>非結構化</code>或<code>半結構化</code>資料，我們通常面臨著兩種主要資料庫技術的選擇：<strong>關聯式資料庫 (SQL)</strong> 和 <strong>非關聯式資料庫 (NoSQL)</strong> 。</p>
@@ -410,125 +529,6 @@
       </tags>
   </entry>
   <entry>
-    <title>Go Concurrency：Goroutine、Channel、WaitGroup、Mutex 一次搞懂！</title>
-    <url>/2025/02/25/Go-Concurrency%EF%BC%9AGoroutine%E3%80%81Channel%E3%80%81WaitGroup%E3%80%81Mutex-%E4%B8%80%E6%AC%A1%E6%90%9E%E6%87%82%EF%BC%81/</url>
-    <content><![CDATA[<p>在寫程式時，你是否曾遇過這樣的問題：</p>
-<ul>
-<li>程式跑得很慢，某些函式明明可以同時執行，卻得一個等一個？</li>
-<li>想要讓多個工作並行，但又怕不同的程序互相干擾？</li>
-<li>處理龐大的計算或 I&#x2F;O 任務時，CPU 占用率極低，白白浪費資源？</li>
-</ul>
-<p>這時候，你需要的是 <strong>並發（Concurrency）</strong>！而 Go 語言提供了一種超級簡單且高效的並發工具： <strong>Goroutine</strong>。</p>
-<span id="more"></span>
-
-<p>在 Go 語言中，並發是其核心特性之一，而 Goroutine 則是實現並發的關鍵。你可以把它想像成一個「輕量級的執行緒」，但它比傳統執行緒更高效、佔用更少資源，並且能夠輕鬆地創建成千上萬個 Goroutine。</p>
-<h2 id="Goroutine-是什麼？為什麼它這麼強？"><a href="#Goroutine-是什麼？為什麼它這麼強？" class="headerlink" title="Goroutine 是什麼？為什麼它這麼強？"></a>Goroutine 是什麼？為什麼它這麼強？</h2><p>Goroutine 是 Go 語言的 <strong>輕量級執行緒（Lightweight Thread）</strong>，讓你可以輕鬆執行並發程式，而不需要手動管理繁瑣的系統執行緒。</p>
-<ul>
-<li><strong>輕量級</strong>：相比於傳統的作業系統執行緒（Thread），Goroutine 的記憶體開銷極低。</li>
-<li><strong>執行簡單</strong>：只要在函式前加上 <code>go</code>，就能讓它跑在背景，完全不需要設定任何 Thread！</li>
-<li><strong>獨立運行</strong>：Goroutine 之間互不影響，即使某個 Goroutine 崩潰，也不會導致其他 Goroutine 失敗。</li>
-<li><strong>高效</strong>：Go 運行時（runtime）會自動管理 Goroutine 的調度，避免過度依賴作業系統的執行緒管理。</li>
-</ul>
-<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">    <span class="string">&quot;fmt&quot;</span></span><br><span class="line">    <span class="string">&quot;time&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">hello</span><span class="params">()</span></span> &#123;</span><br><span class="line">    fmt.Println(<span class="string">&quot;Hello, Goroutine!&quot;</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">    <span class="keyword">go</span> hello() <span class="comment">// 啟動 Goroutine</span></span><br><span class="line">    fmt.Println(<span class="string">&quot;Main 函式結束&quot;</span>)</span><br><span class="line">    time.Sleep(time.Second) <span class="comment">// 等待 Goroutine 執行完成</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>輸出</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Main 函式結束</span><br><span class="line">Hello, Goroutine!</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li><code>go hello()</code> 會在背景執行，而 <code>main()</code> 函式會繼續往下執行。</li>
-<li>這樣我們的程式就可以同時進行兩個工作，提升效率！</li>
-</ul>
-<p>⚠ 但這裡有個問題—— Goroutine 是異步執行的，main() 可能在 hello() 結束前就已執行完畢，因此 time.Sleep() 讓主執行緒暫停一下，確保 Goroutine 執行。</p>
-<div class="note info"><p><strong>main 函式結束後，所有 Goroutine 也會立即結束</strong>，這就引出了下一個重要工具： <strong>WaitGroup</strong>。</p>
-</div>
-
-<h2 id="WaitGroup：讓主程式等-Goroutine-完成，確保-Goroutine-全部完成"><a href="#WaitGroup：讓主程式等-Goroutine-完成，確保-Goroutine-全部完成" class="headerlink" title="WaitGroup：讓主程式等 Goroutine 完成，確保 Goroutine 全部完成"></a>WaitGroup：讓主程式等 Goroutine 完成，確保 Goroutine 全部完成</h2><p>當我們開啟多個 Goroutine 時，<code>main()</code> 可能還沒等 Goroutine 執行完就結束了，導致 Goroutine 被強制終止。為了解決這個問題，我們可以使用 <strong>sync.WaitGroup</strong>。</p>
-<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">    <span class="string">&quot;fmt&quot;</span></span><br><span class="line">    <span class="string">&quot;sync&quot;</span></span><br><span class="line">    <span class="string">&quot;time&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> wg sync.WaitGroup</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">printMessage</span><span class="params">(message <span class="keyword">string</span>)</span></span> &#123;</span><br><span class="line">    <span class="keyword">defer</span> wg.Done() <span class="comment">// Goroutine 結束時通知 WaitGroup</span></span><br><span class="line">    <span class="keyword">for</span> i := <span class="number">0</span>; i &lt; <span class="number">5</span>; i++ &#123;</span><br><span class="line">        fmt.Println(message, i)</span><br><span class="line">        time.Sleep(time.Millisecond * <span class="number">500</span>)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">    wg.Add(<span class="number">2</span>) <span class="comment">// 設定有 2 個 Goroutine</span></span><br><span class="line">    <span class="keyword">go</span> printMessage(<span class="string">&quot;Hello from Goroutine 1&quot;</span>)</span><br><span class="line">    <span class="keyword">go</span> printMessage(<span class="string">&quot;Hello from Goroutine 2&quot;</span>)</span><br><span class="line"></span><br><span class="line">    wg.Wait() <span class="comment">// 等待所有 Goroutine 結束</span></span><br><span class="line">    fmt.Println(<span class="string">&quot;All Goroutines Finished!&quot;</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<ul>
-<li><code>wg.Add(2)</code> 告訴 WaitGroup 需要等 2 個 Goroutine。   &lt;- 增加計數器 </li>
-<li><code>wg.Done()</code> 會在 Goroutine 執行結束時通知 WaitGroup。 &lt;- 減少計數器</li>
-<li><code>wg.Wait()</code> 讓 <code>main()</code> 等待所有 Goroutine 結束後才繼續。 &lt;- 等待計數器歸零</li>
-</ul>
-<p>這樣就能確保主程式不會提前結束！<br>我們再看一個範例：</p>
-<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">    <span class="string">&quot;fmt&quot;</span></span><br><span class="line">    <span class="string">&quot;sync&quot;</span></span><br><span class="line">    <span class="string">&quot;time&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">worker</span><span class="params">(id <span class="keyword">int</span>, wg *sync.WaitGroup)</span></span> &#123;</span><br><span class="line">    <span class="keyword">defer</span> wg.Done() <span class="comment">// 告知 WaitGroup 這個 Goroutine 完成</span></span><br><span class="line">    fmt.Printf(<span class="string">&quot;Worker %d 開始工作\n&quot;</span>, id)</span><br><span class="line">    time.Sleep(time.Second)</span><br><span class="line">    fmt.Printf(<span class="string">&quot;Worker %d 完成工作\n&quot;</span>, id)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">    <span class="keyword">var</span> wg sync.WaitGroup</span><br><span class="line">    <span class="keyword">for</span> i := <span class="number">1</span>; i &lt;= <span class="number">3</span>; i++ &#123;</span><br><span class="line">        wg.Add(<span class="number">1</span>)</span><br><span class="line">        <span class="keyword">go</span> worker(i, &amp;wg)</span><br><span class="line">    &#125;</span><br><span class="line">    wg.Wait() <span class="comment">// 等待所有 Goroutine 結束</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h2 id="Channel：Goroutine-之間的溝通管道"><a href="#Channel：Goroutine-之間的溝通管道" class="headerlink" title="Channel：Goroutine 之間的溝通管道"></a>Channel：Goroutine 之間的溝通管道</h2><p>Goroutine 之間如何傳遞資料呢？我們可以使用 <strong>Channel</strong>，它就像是一條輸送帶，負責在 Goroutine 之間傳遞訊息，確保 <strong>Goroutine 之間安全地交換資料</strong>！</p>
-<p>Channel 的基本語法</p>
-<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="string">&quot;fmt&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">    ch := <span class="built_in">make</span>(<span class="keyword">chan</span> <span class="keyword">string</span>) <span class="comment">// 創建 Channel</span></span><br><span class="line">    </span><br><span class="line">    <span class="keyword">go</span> <span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123;</span><br><span class="line">        ch &lt;- <span class="string">&quot;Hello from Goroutine!&quot;</span> <span class="comment">// 發送訊息到 Channel</span></span><br><span class="line">    &#125;()</span><br><span class="line">    </span><br><span class="line">    message := &lt;-ch <span class="comment">// 從 Channel 接收訊息</span></span><br><span class="line">    fmt.Println(message)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>輸出：</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Hello from Goroutine!</span><br></pre></td></tr></table></figure>
-<p>另一種寫法（匿名函式）</p>
-<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="string">&quot;fmt&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">sendMessage</span><span class="params">(ch <span class="keyword">chan</span> <span class="keyword">string</span>)</span></span> &#123;</span><br><span class="line">    ch &lt;- <span class="string">&quot;Hello from Goroutine!&quot;</span> <span class="comment">// 發送訊息</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">    ch := <span class="built_in">make</span>(<span class="keyword">chan</span> <span class="keyword">string</span>) <span class="comment">// 建立 Channel</span></span><br><span class="line">    <span class="keyword">go</span> sendMessage(ch)</span><br><span class="line">    message := &lt;-ch <span class="comment">// 從 Channel 接收訊息</span></span><br><span class="line">    fmt.Println(message)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<ul>
-<li><code>ch := make(chan string)</code> 建立了一個 <code>string</code> 類型的 Channel。</li>
-<li><code>ch &lt;- &quot;Hello&quot;</code> 讓 Goroutine 發送訊息。</li>
-<li><code>&lt;-ch</code> 讓主程式接收訊息。</li>
-</ul>
-<p>這兩種寫法的主要差異在於：</p>
-<ol>
-<li>第一種寫法：將 <code>sendMessage</code> 定義為一個獨立函式，這樣的方式有助於程式的結構化，使程式碼更具可讀性和可維護性。</li>
-<li>第二種寫法：使用匿名函式（<code>go func() &#123;&#125;</code>）直接啟動 Goroutine，這種方式適合用於簡單的情境，例如臨時的併發操作，而不需要額外定義函式。</li>
-</ol>
-<p>在選擇哪種方式時，通常如果該 Goroutine 需要重複使用，則應該定義成獨立函式；如果只是一次性操作，則可以使用匿名函式。</p>
-<h3 id="Buffered-Channel（有緩衝的-Channel）"><a href="#Buffered-Channel（有緩衝的-Channel）" class="headerlink" title="Buffered Channel（有緩衝的 Channel）"></a>Buffered Channel（有緩衝的 Channel）</h3><p>Buffered channel 允許 goroutine 發送多個訊息而不會馬上被接收：</p>
-<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="string">&quot;fmt&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">    ch := <span class="built_in">make</span>(<span class="keyword">chan</span> <span class="keyword">int</span>, <span class="number">3</span>) <span class="comment">// 緩衝區大小為 3</span></span><br><span class="line"></span><br><span class="line">    ch &lt;- <span class="number">1</span></span><br><span class="line">    ch &lt;- <span class="number">2</span></span><br><span class="line">    ch &lt;- <span class="number">3</span></span><br><span class="line"></span><br><span class="line">    fmt.Println(&lt;-ch)</span><br><span class="line">    fmt.Println(&lt;-ch)</span><br><span class="line">    fmt.Println(&lt;-ch)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<blockquote>
-<p>這樣的 Channel 允許存入 3 個數據而不會阻塞 Goroutine。<br>緩衝區滿了後，goroutine 會阻塞直到有空間可用。</p>
-</blockquote>
-<h2 id="Mutex：避免-Goroutine-同時修改資料"><a href="#Mutex：避免-Goroutine-同時修改資料" class="headerlink" title="Mutex：避免 Goroutine 同時修改資料"></a>Mutex：避免 Goroutine 同時修改資料</h2><p>當多個 Goroutine 需要共享同一個變數時，可能會發生 <strong>競爭條件（Race Condition）</strong>，導致不一致的結果。這時候就需要 <strong>Mutex（互斥鎖）</strong> 來確保資料安全。</p>
-<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">    <span class="string">&quot;fmt&quot;</span></span><br><span class="line">    <span class="string">&quot;sync&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> (</span><br><span class="line">    counter <span class="keyword">int</span></span><br><span class="line">    lock sync.Mutex</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">increment</span><span class="params">()</span></span> &#123;</span><br><span class="line">    lock.Lock()   <span class="comment">// 加鎖</span></span><br><span class="line">    counter++</span><br><span class="line">    lock.Unlock() <span class="comment">// 解鎖</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">    <span class="keyword">var</span> wg sync.WaitGroup</span><br><span class="line">    wg.Add(<span class="number">1000</span>)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> i := <span class="number">0</span>; i &lt; <span class="number">1000</span>; i++ &#123;</span><br><span class="line">        <span class="keyword">go</span> <span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123;</span><br><span class="line">            <span class="keyword">defer</span> wg.Done()</span><br><span class="line">            increment()</span><br><span class="line">        &#125;()</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    wg.Wait()</span><br><span class="line">    fmt.Println(<span class="string">&quot;Final Counter:&quot;</span>, counter)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p><code>increment()</code> 用於增加計數器，使用 <code>mutex.Lock()</code> 和 <code>mutex.Unlock()</code> 保護 <code>counter</code> 變數。<code>main()</code> 啟動多個 Goroutine，每個 Goroutine 都會調用 <code>increment()</code> 。使用 <code>sync.Mutex </code>可以確保 <code>counter</code> 的值正確。</p>
-<ul>
-<li><code>lock.Lock()</code> 確保只有一個 Goroutine 能修改 <code>counter</code>。</li>
-<li><code>lock.Unlock()</code> 讓其他 Goroutine 繼續執行。</li>
-</ul>
-<p>這樣就能保證並發環境下數據的一致性！</p>
-<h2 id="結論"><a href="#結論" class="headerlink" title="結論"></a>結論</h2><p>Goroutine 讓 Go 的並發變得輕鬆簡單，但為了讓多個 Goroutine 之間能夠順利協作，我們需要：</p>
-<ul>
-<li><strong>WaitGroup</strong> 讓主程式等 Goroutine 執行完。</li>
-<li><strong>Channel</strong> 讓 Goroutine 之間安全地交換數據。</li>
-<li><strong>Mutex</strong> 避免多個 Goroutine 同時修改共享變數。</li>
-</ul>
-]]></content>
-      <categories>
-        <category>Golang</category>
-      </categories>
-      <tags>
-        <tag>Go</tag>
-        <tag>Goroutine</tag>
-        <tag>Concurrency</tag>
-        <tag>Channel</tag>
-        <tag>WaitGroup</tag>
-        <tag>Mutex</tag>
-        <tag>技術教學</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>[分享] Website Layout - Sidebar + Flexed</title>
-    <url>/2021/04/01/%E5%88%86%E4%BA%AB-Website-Layout-Sidebar-Flexed/</url>
-    <content><![CDATA[<blockquote>
-<p>實習開發網站，常遇到一些功能需求要上網查詢，整理成筆記以後再用到就不用又從頭開始找，也希望幫助到正在找學這些功能的人</p>
-</blockquote>
-<span id="more"></span>
-
-<iframe width="100%" height="500" src="https://codepen.io/ZZYume/embed/NWddogz?height=265&theme-id=dark&default-tab=result" frameborder="0"></iframe>
-
-<p>&#x2F;&#x2F; 有空再認真補教學</p>
-]]></content>
-      <categories>
-        <category>html</category>
-      </categories>
-      <tags>
-        <tag>sidebar</tag>
-        <tag>html</tag>
-        <tag>css</tag>
-        <tag>javascript</tag>
-        <tag>jquery</tag>
-        <tag>Bootstrap</tag>
-        <tag>Bootstrap-table</tag>
-        <tag>card</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>單體架構 vs 微服務架構：選擇的關鍵與應用</title>
     <url>/2025/01/15/%E5%96%AE%E9%AB%94%E6%9E%B6%E6%A7%8B-vs-%E5%BE%AE%E6%9C%8D%E5%8B%99%E6%9E%B6%E6%A7%8B%EF%BC%9A%E9%81%B8%E6%93%87%E7%9A%84%E9%97%9C%E9%8D%B5%E8%88%87%E6%87%89%E7%94%A8/</url>
     <content><![CDATA[<h2 id="為什麼要了解單體架構和微服務架構？"><a href="#為什麼要了解單體架構和微服務架構？" class="headerlink" title="為什麼要了解單體架構和微服務架構？"></a>為什麼要了解單體架構和微服務架構？</h2><p>隨著技術的快速發展，軟體架構設計已經成為每個工程師必須掌握的核心知識之一。<br>無論你是正在開發新產品的初創團隊，還是維護大型系統的資深工程師，選擇適合的架構直接影響系統的穩定性、性能和團隊效率。</p>
@@ -650,6 +650,85 @@
       </tags>
   </entry>
   <entry>
+    <title>[學習] Check.io - Nearest Value</title>
+    <url>/2021/01/14/%E5%AD%B8%E7%BF%92-Check-io-Nearest-Value/</url>
+    <content><![CDATA[<blockquote>
+<p><a href="https://py.checkio.org/en/mission/nearest-value/">check.io</a> 上的題目：求出與指定數字最接近之值<br>此系列文章主要是自己在解題時覺得有趣的題目，記錄下來讓自己以後好複習，有興趣的人可以參考看看</p>
+</blockquote>
+<span id="more"></span>
+
+<p><img src="https://i.imgur.com/JQbrSnX.png"></p>
+<h3 id="lamdba-的用法"><a href="#lamdba-的用法" class="headerlink" title="lamdba 的用法"></a>lamdba 的用法</h3><div class="note default"><p>語法： lambda parameters: expression</p>
+</div>
+
+<ul>
+<li>parameters (參數) 可以是多個參數，參數間要由 “ , ” 作間隔</li>
+<li>expression (運算式)</li>
+</ul>
+<p>example_1 input:</p>
+<figure class="highlight python"><figcaption><span>example_1</span></figcaption><table><tr><td class="code"><pre><span class="line">a = <span class="keyword">lambda</span> x: x**<span class="number">2</span></span><br><span class="line"><span class="built_in">print</span>(a(<span class="number">10</span>))</span><br></pre></td></tr></table></figure>
+
+<p>output:</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">100</span><br></pre></td></tr></table></figure>
+
+<p>example_2 input:</p>
+<figure class="highlight python"><figcaption><span>example_2</span></figcaption><table><tr><td class="code"><pre><span class="line">a = <span class="keyword">lambda</span> x, y: x * y</span><br><span class="line"><span class="built_in">print</span>(a(<span class="number">10</span>, <span class="number">11</span>))</span><br></pre></td></tr></table></figure>
+
+<p>output:</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">110</span><br></pre></td></tr></table></figure>
+<p>以 example_1 為例 lambda 也等於</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">example</span>(<span class="params">x</span>):</span></span><br><span class="line">   <span class="keyword">return</span> x**<span class="number">2</span></span><br><span class="line"><span class="built_in">print</span>(example(<span class="number">10</span>))</span><br></pre></td></tr></table></figure>
+
+<p>以 example_2 為例 example_2 也可以寫成</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">print((lambda x, y: x * y)(10, 11))</span><br></pre></td></tr></table></figure>
+
+<h3 id="min-x2F-max-的用法"><a href="#min-x2F-max-的用法" class="headerlink" title="min&#x2F;max 的用法"></a>min&#x2F;max 的用法</h3><div class="note default"><p>語法： max(parameters, key&#x3D;expression)</p>
+</div>
+<ul>
+<li>expression (運算式) 返回要執行比較的值 (滿抽象的QQ</li>
+</ul>
+<p>example_1 input:</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">list &#x3D; [(1, &#39;a&#39;), (6, &#39;d&#39;), (4, &#39;e&#39;), (-2, &#39;y&#39;)]</span><br><span class="line">max(list)</span><br></pre></td></tr></table></figure>
+<p>output:</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">(6, &#39;d&#39;)</span><br></pre></td></tr></table></figure>
+
+<p>example_2 input:</p>
+<blockquote>
+<p>tuple 型態，比較的話會先看第一個位置的值，一樣的話看第二個位置的值</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">list &#x3D; [(1, &#39;a&#39;), (6, &#39;d&#39;), (6, &#39;e&#39;), (-2, &#39;y&#39;)]</span><br><span class="line">max(list)</span><br></pre></td></tr></table></figure>
+<p>output:</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">(6, &#39;e&#39;)</span><br></pre></td></tr></table></figure>
+
+<p>example_3 input:</p>
+<blockquote>
+<p>tuple 型態，指定要比較的為每個 tuple 裡 index&#x3D;1 的值</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">list &#x3D; [(1, &#39;a&#39;), (6, &#39;d&#39;), (4, &#39;e&#39;), (-2, &#39;y&#39;)]</span><br><span class="line">max(list, key&#x3D;lambda l: l[1])</span><br></pre></td></tr></table></figure>
+<p>output:</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">(-2, &#39;y&#39;)</span><br></pre></td></tr></table></figure>
+
+<h3 id="解答："><a href="#解答：" class="headerlink" title="解答："></a>解答：</h3><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">nearest_value</span>(<span class="params">values: <span class="built_in">set</span>, one: <span class="built_in">int</span></span>) -&gt; <span class="built_in">int</span>:</span></span><br><span class="line">    <span class="comment"># your code here</span></span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">min</span>(values, key=<span class="keyword">lambda</span> x: (<span class="built_in">abs</span>(one - x), x))</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;Example:&quot;</span>)</span><br><span class="line">    <span class="built_in">print</span>(nearest_value(&#123;<span class="number">4</span>, <span class="number">7</span>, <span class="number">10</span>, <span class="number">11</span>, <span class="number">12</span>, <span class="number">17</span>&#125;, <span class="number">9</span>))</span><br><span class="line"></span><br><span class="line">    <span class="comment"># These &quot;asserts&quot; are used for self-checking and not for an auto-testing</span></span><br><span class="line">    <span class="keyword">assert</span> nearest_value(&#123;<span class="number">4</span>, <span class="number">7</span>, <span class="number">10</span>, <span class="number">11</span>, <span class="number">12</span>, <span class="number">17</span>&#125;, <span class="number">9</span>) == <span class="number">10</span></span><br><span class="line">    <span class="keyword">assert</span> nearest_value(&#123;<span class="number">4</span>, <span class="number">7</span>, <span class="number">10</span>, <span class="number">11</span>, <span class="number">12</span>, <span class="number">17</span>&#125;, <span class="number">8</span>) == <span class="number">7</span></span><br><span class="line">    <span class="keyword">assert</span> nearest_value(&#123;<span class="number">4</span>, <span class="number">8</span>, <span class="number">10</span>, <span class="number">11</span>, <span class="number">12</span>, <span class="number">17</span>&#125;, <span class="number">9</span>) == <span class="number">8</span></span><br><span class="line">    <span class="keyword">assert</span> nearest_value(&#123;<span class="number">4</span>, <span class="number">9</span>, <span class="number">10</span>, <span class="number">11</span>, <span class="number">12</span>, <span class="number">17</span>&#125;, <span class="number">9</span>) == <span class="number">9</span></span><br><span class="line">    <span class="keyword">assert</span> nearest_value(&#123;<span class="number">4</span>, <span class="number">7</span>, <span class="number">10</span>, <span class="number">11</span>, <span class="number">12</span>, <span class="number">17</span>&#125;, <span class="number">0</span>) == <span class="number">4</span></span><br><span class="line">    <span class="keyword">assert</span> nearest_value(&#123;<span class="number">4</span>, <span class="number">7</span>, <span class="number">10</span>, <span class="number">11</span>, <span class="number">12</span>, <span class="number">17</span>&#125;, <span class="number">100</span>) == <span class="number">17</span></span><br><span class="line">    <span class="keyword">assert</span> nearest_value(&#123;<span class="number">5</span>, <span class="number">10</span>, <span class="number">8</span>, <span class="number">12</span>, <span class="number">89</span>, <span class="number">100</span>&#125;, <span class="number">7</span>) == <span class="number">8</span></span><br><span class="line">    <span class="keyword">assert</span> nearest_value(&#123;-<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>&#125;, <span class="number">0</span>) == -<span class="number">1</span></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;Coding complete? Click &#x27;Check&#x27; to earn cool rewards!&quot;</span>)</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+<h4 id="參考網站"><a href="#參考網站" class="headerlink" title="參考網站"></a>參考網站</h4><ul>
+<li><a href="https://www.geeksforgeeks.org/python-find-closest-number-to-k-in-given-list/">https://www.geeksforgeeks.org/python-find-closest-number-to-k-in-given-list/</a></li>
+<li><a href="https://stackoverflow.com/questions/18296755/python-max-function-using-key-and-lambda-expression">https://stackoverflow.com/questions/18296755/python-max-function-using-key-and-lambda-expression</a></li>
+</ul>
+]]></content>
+      <categories>
+        <category>Check.io</category>
+        <category>python</category>
+      </categories>
+      <tags>
+        <tag>Check.io</tag>
+        <tag>python</tag>
+        <tag>lambda</tag>
+        <tag>min/max</tag>
+        <tag>list</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>[學習] Check.io - Bigger Price</title>
     <url>/2021/03/17/%E5%AD%B8%E7%BF%92-Check-io-Bigger-Price/</url>
     <content><![CDATA[<blockquote>
@@ -694,8 +773,8 @@
         <tag>Check.io</tag>
         <tag>python</tag>
         <tag>lambda</tag>
-        <tag>sort</tag>
         <tag>list</tag>
+        <tag>sort</tag>
         <tag>dictionary</tag>
       </tags>
   </entry>
@@ -756,6 +835,47 @@
         <tag>python</tag>
         <tag>list</tag>
         <tag>count</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>[學習] Pyton  try - except</title>
+    <url>/2021/01/31/%E5%AD%B8%E7%BF%92-Pyton-try-except/</url>
+    <content><![CDATA[<blockquote>
+<p>在開發程式的過程中，難免有會遇到錯誤，例如：使用者輸入不正確的資料、網路連線問題或語法上的問題等，如果沒有做好例外處理的機制，程式碼可能因此而中斷，還會讓使用者看到錯誤訊息，對產品使用的觀感不佳，體驗也會大打折扣。因此，在開發的過程中要考慮到錯誤發生時，程式碼要如何做適當的反應。</p>
+</blockquote>
+<span id="more"></span>
+
+<p>Python 在例外處理的機制為：</p>
+<div class="note default"><p>try 執行<br>except 例外<br>else 都沒出錯就執行這區塊<br>finally 任何狀況下都會執行的區塊</p>
+</div>
+
+<p>而錯誤類型可以至<a href="https://docs.python.org/3.6/library/exceptions.html">該網址</a>查看，常見ValueError(ex: int(hi))、ZeroDivisionError(ex: x &#x3D; 2&#x2F;0)、</p>
+<p>先來個完整的架構的範例：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">func</span>(<span class="params">x, y</span>):</span></span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        result = x / y</span><br><span class="line">    <span class="keyword">except</span> ZeroDivisionError:</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;不能除以零！&quot;</span>)</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;結果是：&quot;</span>, result)</span><br><span class="line">    <span class="keyword">finally</span>:</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;Hi，我一定會執行&quot;</span>)</span><br><span class="line">func(<span class="number">4</span>, <span class="number">2</span>)</span><br><span class="line"></span><br><span class="line">func(<span class="number">2</span>, <span class="number">0</span>)</span><br></pre></td></tr></table></figure>
+
+<p>output：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">結果是： 2.0</span><br><span class="line">Hi，我一定會執行</span><br><span class="line">--------------</span><br><span class="line">不能除以零！</span><br><span class="line">Hi，我一定會執行</span><br></pre></td></tr></table></figure>
+
+<p>一般來說可以這樣寫：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">try:</span><br><span class="line">    正常時要執行的程式</span><br><span class="line">except &lt;error type&gt;:</span><br><span class="line">    錯誤時要執行程式</span><br></pre></td></tr></table></figure>
+
+<p>不確定的錯誤類型的話 error type 可以不寫</p>
+<p>example：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">func</span>(<span class="params">x, y</span>):</span></span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        result = x / y</span><br><span class="line">    <span class="keyword">except</span>:</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;something wrong&quot;</span>)</span><br><span class="line"></span><br><span class="line">func(<span class="number">4</span>, <span class="number">0</span>)</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">something wrong</span><br></pre></td></tr></table></figure>
+
+<p>sys.exc_info()[0] 可以用來取出 except 的錯誤訊息</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> sys</span><br><span class="line"></span><br><span class="line">i = <span class="string">&#x27;o&#x27;</span></span><br><span class="line"><span class="keyword">try</span>:</span><br><span class="line">    result = i / <span class="number">0</span></span><br><span class="line">    <span class="built_in">print</span>(result)</span><br><span class="line"><span class="keyword">except</span>:</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;Unexpected error:&quot;</span>, sys.exc_info()[<span class="number">0</span>])</span><br></pre></td></tr></table></figure>
+
+<p>output：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Unexpected error: &lt;class &#39;TypeError&#39;&gt;</span><br></pre></td></tr></table></figure>]]></content>
+      <categories>
+        <category>python</category>
+      </categories>
+      <tags>
+        <tag>python</tag>
+        <tag>try-except</tag>
       </tags>
   </entry>
   <entry>
@@ -1030,126 +1150,6 @@
       </tags>
   </entry>
   <entry>
-    <title>[學習] Pyton  try - except</title>
-    <url>/2021/01/31/%E5%AD%B8%E7%BF%92-Pyton-try-except/</url>
-    <content><![CDATA[<blockquote>
-<p>在開發程式的過程中，難免有會遇到錯誤，例如：使用者輸入不正確的資料、網路連線問題或語法上的問題等，如果沒有做好例外處理的機制，程式碼可能因此而中斷，還會讓使用者看到錯誤訊息，對產品使用的觀感不佳，體驗也會大打折扣。因此，在開發的過程中要考慮到錯誤發生時，程式碼要如何做適當的反應。</p>
-</blockquote>
-<span id="more"></span>
-
-<p>Python 在例外處理的機制為：</p>
-<div class="note default"><p>try 執行<br>except 例外<br>else 都沒出錯就執行這區塊<br>finally 任何狀況下都會執行的區塊</p>
-</div>
-
-<p>而錯誤類型可以至<a href="https://docs.python.org/3.6/library/exceptions.html">該網址</a>查看，常見ValueError(ex: int(hi))、ZeroDivisionError(ex: x &#x3D; 2&#x2F;0)、</p>
-<p>先來個完整的架構的範例：</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">func</span>(<span class="params">x, y</span>):</span></span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        result = x / y</span><br><span class="line">    <span class="keyword">except</span> ZeroDivisionError:</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;不能除以零！&quot;</span>)</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;結果是：&quot;</span>, result)</span><br><span class="line">    <span class="keyword">finally</span>:</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;Hi，我一定會執行&quot;</span>)</span><br><span class="line">func(<span class="number">4</span>, <span class="number">2</span>)</span><br><span class="line"></span><br><span class="line">func(<span class="number">2</span>, <span class="number">0</span>)</span><br></pre></td></tr></table></figure>
-
-<p>output：</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">結果是： 2.0</span><br><span class="line">Hi，我一定會執行</span><br><span class="line">--------------</span><br><span class="line">不能除以零！</span><br><span class="line">Hi，我一定會執行</span><br></pre></td></tr></table></figure>
-
-<p>一般來說可以這樣寫：</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">try:</span><br><span class="line">    正常時要執行的程式</span><br><span class="line">except &lt;error type&gt;:</span><br><span class="line">    錯誤時要執行程式</span><br></pre></td></tr></table></figure>
-
-<p>不確定的錯誤類型的話 error type 可以不寫</p>
-<p>example：</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">func</span>(<span class="params">x, y</span>):</span></span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        result = x / y</span><br><span class="line">    <span class="keyword">except</span>:</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;something wrong&quot;</span>)</span><br><span class="line"></span><br><span class="line">func(<span class="number">4</span>, <span class="number">0</span>)</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">something wrong</span><br></pre></td></tr></table></figure>
-
-<p>sys.exc_info()[0] 可以用來取出 except 的錯誤訊息</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> sys</span><br><span class="line"></span><br><span class="line">i = <span class="string">&#x27;o&#x27;</span></span><br><span class="line"><span class="keyword">try</span>:</span><br><span class="line">    result = i / <span class="number">0</span></span><br><span class="line">    <span class="built_in">print</span>(result)</span><br><span class="line"><span class="keyword">except</span>:</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;Unexpected error:&quot;</span>, sys.exc_info()[<span class="number">0</span>])</span><br></pre></td></tr></table></figure>
-
-<p>output：</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Unexpected error: &lt;class &#39;TypeError&#39;&gt;</span><br></pre></td></tr></table></figure>]]></content>
-      <categories>
-        <category>python</category>
-      </categories>
-      <tags>
-        <tag>python</tag>
-        <tag>try-except</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>[學習] Check.io - Nearest Value</title>
-    <url>/2021/01/14/%E5%AD%B8%E7%BF%92-Check-io-Nearest-Value/</url>
-    <content><![CDATA[<blockquote>
-<p><a href="https://py.checkio.org/en/mission/nearest-value/">check.io</a> 上的題目：求出與指定數字最接近之值<br>此系列文章主要是自己在解題時覺得有趣的題目，記錄下來讓自己以後好複習，有興趣的人可以參考看看</p>
-</blockquote>
-<span id="more"></span>
-
-<p><img src="https://i.imgur.com/JQbrSnX.png"></p>
-<h3 id="lamdba-的用法"><a href="#lamdba-的用法" class="headerlink" title="lamdba 的用法"></a>lamdba 的用法</h3><div class="note default"><p>語法： lambda parameters: expression</p>
-</div>
-
-<ul>
-<li>parameters (參數) 可以是多個參數，參數間要由 “ , ” 作間隔</li>
-<li>expression (運算式)</li>
-</ul>
-<p>example_1 input:</p>
-<figure class="highlight python"><figcaption><span>example_1</span></figcaption><table><tr><td class="code"><pre><span class="line">a = <span class="keyword">lambda</span> x: x**<span class="number">2</span></span><br><span class="line"><span class="built_in">print</span>(a(<span class="number">10</span>))</span><br></pre></td></tr></table></figure>
-
-<p>output:</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">100</span><br></pre></td></tr></table></figure>
-
-<p>example_2 input:</p>
-<figure class="highlight python"><figcaption><span>example_2</span></figcaption><table><tr><td class="code"><pre><span class="line">a = <span class="keyword">lambda</span> x, y: x * y</span><br><span class="line"><span class="built_in">print</span>(a(<span class="number">10</span>, <span class="number">11</span>))</span><br></pre></td></tr></table></figure>
-
-<p>output:</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">110</span><br></pre></td></tr></table></figure>
-<p>以 example_1 為例 lambda 也等於</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">example</span>(<span class="params">x</span>):</span></span><br><span class="line">   <span class="keyword">return</span> x**<span class="number">2</span></span><br><span class="line"><span class="built_in">print</span>(example(<span class="number">10</span>))</span><br></pre></td></tr></table></figure>
-
-<p>以 example_2 為例 example_2 也可以寫成</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">print((lambda x, y: x * y)(10, 11))</span><br></pre></td></tr></table></figure>
-
-<h3 id="min-x2F-max-的用法"><a href="#min-x2F-max-的用法" class="headerlink" title="min&#x2F;max 的用法"></a>min&#x2F;max 的用法</h3><div class="note default"><p>語法： max(parameters, key&#x3D;expression)</p>
-</div>
-<ul>
-<li>expression (運算式) 返回要執行比較的值 (滿抽象的QQ</li>
-</ul>
-<p>example_1 input:</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">list &#x3D; [(1, &#39;a&#39;), (6, &#39;d&#39;), (4, &#39;e&#39;), (-2, &#39;y&#39;)]</span><br><span class="line">max(list)</span><br></pre></td></tr></table></figure>
-<p>output:</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">(6, &#39;d&#39;)</span><br></pre></td></tr></table></figure>
-
-<p>example_2 input:</p>
-<blockquote>
-<p>tuple 型態，比較的話會先看第一個位置的值，一樣的話看第二個位置的值</p>
-</blockquote>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">list &#x3D; [(1, &#39;a&#39;), (6, &#39;d&#39;), (6, &#39;e&#39;), (-2, &#39;y&#39;)]</span><br><span class="line">max(list)</span><br></pre></td></tr></table></figure>
-<p>output:</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">(6, &#39;e&#39;)</span><br></pre></td></tr></table></figure>
-
-<p>example_3 input:</p>
-<blockquote>
-<p>tuple 型態，指定要比較的為每個 tuple 裡 index&#x3D;1 的值</p>
-</blockquote>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">list &#x3D; [(1, &#39;a&#39;), (6, &#39;d&#39;), (4, &#39;e&#39;), (-2, &#39;y&#39;)]</span><br><span class="line">max(list, key&#x3D;lambda l: l[1])</span><br></pre></td></tr></table></figure>
-<p>output:</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">(-2, &#39;y&#39;)</span><br></pre></td></tr></table></figure>
-
-<h3 id="解答："><a href="#解答：" class="headerlink" title="解答："></a>解答：</h3><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">nearest_value</span>(<span class="params">values: <span class="built_in">set</span>, one: <span class="built_in">int</span></span>) -&gt; <span class="built_in">int</span>:</span></span><br><span class="line">    <span class="comment"># your code here</span></span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">min</span>(values, key=<span class="keyword">lambda</span> x: (<span class="built_in">abs</span>(one - x), x))</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;Example:&quot;</span>)</span><br><span class="line">    <span class="built_in">print</span>(nearest_value(&#123;<span class="number">4</span>, <span class="number">7</span>, <span class="number">10</span>, <span class="number">11</span>, <span class="number">12</span>, <span class="number">17</span>&#125;, <span class="number">9</span>))</span><br><span class="line"></span><br><span class="line">    <span class="comment"># These &quot;asserts&quot; are used for self-checking and not for an auto-testing</span></span><br><span class="line">    <span class="keyword">assert</span> nearest_value(&#123;<span class="number">4</span>, <span class="number">7</span>, <span class="number">10</span>, <span class="number">11</span>, <span class="number">12</span>, <span class="number">17</span>&#125;, <span class="number">9</span>) == <span class="number">10</span></span><br><span class="line">    <span class="keyword">assert</span> nearest_value(&#123;<span class="number">4</span>, <span class="number">7</span>, <span class="number">10</span>, <span class="number">11</span>, <span class="number">12</span>, <span class="number">17</span>&#125;, <span class="number">8</span>) == <span class="number">7</span></span><br><span class="line">    <span class="keyword">assert</span> nearest_value(&#123;<span class="number">4</span>, <span class="number">8</span>, <span class="number">10</span>, <span class="number">11</span>, <span class="number">12</span>, <span class="number">17</span>&#125;, <span class="number">9</span>) == <span class="number">8</span></span><br><span class="line">    <span class="keyword">assert</span> nearest_value(&#123;<span class="number">4</span>, <span class="number">9</span>, <span class="number">10</span>, <span class="number">11</span>, <span class="number">12</span>, <span class="number">17</span>&#125;, <span class="number">9</span>) == <span class="number">9</span></span><br><span class="line">    <span class="keyword">assert</span> nearest_value(&#123;<span class="number">4</span>, <span class="number">7</span>, <span class="number">10</span>, <span class="number">11</span>, <span class="number">12</span>, <span class="number">17</span>&#125;, <span class="number">0</span>) == <span class="number">4</span></span><br><span class="line">    <span class="keyword">assert</span> nearest_value(&#123;<span class="number">4</span>, <span class="number">7</span>, <span class="number">10</span>, <span class="number">11</span>, <span class="number">12</span>, <span class="number">17</span>&#125;, <span class="number">100</span>) == <span class="number">17</span></span><br><span class="line">    <span class="keyword">assert</span> nearest_value(&#123;<span class="number">5</span>, <span class="number">10</span>, <span class="number">8</span>, <span class="number">12</span>, <span class="number">89</span>, <span class="number">100</span>&#125;, <span class="number">7</span>) == <span class="number">8</span></span><br><span class="line">    <span class="keyword">assert</span> nearest_value(&#123;-<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>&#125;, <span class="number">0</span>) == -<span class="number">1</span></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;Coding complete? Click &#x27;Check&#x27; to earn cool rewards!&quot;</span>)</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-
-<h4 id="參考網站"><a href="#參考網站" class="headerlink" title="參考網站"></a>參考網站</h4><ul>
-<li><a href="https://www.geeksforgeeks.org/python-find-closest-number-to-k-in-given-list/">https://www.geeksforgeeks.org/python-find-closest-number-to-k-in-given-list/</a></li>
-<li><a href="https://stackoverflow.com/questions/18296755/python-max-function-using-key-and-lambda-expression">https://stackoverflow.com/questions/18296755/python-max-function-using-key-and-lambda-expression</a></li>
-</ul>
-]]></content>
-      <categories>
-        <category>Check.io</category>
-        <category>python</category>
-      </categories>
-      <tags>
-        <tag>Check.io</tag>
-        <tag>python</tag>
-        <tag>lambda</tag>
-        <tag>list</tag>
-        <tag>min/max</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>深入淺出理解 Docker 的底層運作與架</title>
     <url>/2025/01/16/%E6%B7%B1%E5%85%A5%E6%B7%BA%E5%87%BA%E7%90%86%E8%A7%A3-Docker-%E7%9A%84%E5%BA%95%E5%B1%A4%E9%81%8B%E4%BD%9C%E8%88%87%E6%9E%B6/</url>
     <content><![CDATA[<h2 id="Docker-是什麼？"><a href="#Docker-是什麼？" class="headerlink" title="Docker 是什麼？"></a>Docker 是什麼？</h2><p>Docker 是現代開發與運維中不可或缺的工具、是一種容器化技術，用來打包、部署和運行應用程式。它讓你能在任何環境中快速部署應用，實現「一次構建，隨處運行」的目標。</p>
@@ -1415,69 +1415,6 @@
       </tags>
   </entry>
   <entry>
-    <title>[筆記] Leetcode - 1822. Sign of the Product of an Array</title>
-    <url>/2023/05/02/%E7%AD%86-Leetcode-1822-Sign-of-the-Product-of-an-Array/</url>
-    <content><![CDATA[<p><a href="https://leetcode.com/problems/sign-of-the-product-of-an-array/">https://leetcode.com/problems/sign-of-the-product-of-an-array/</a></p>
-<blockquote>
-<p>There is a function signFunc(x) that returns:<br>1 if x is positive.<br>-1 if x is negative.<br>0 if x is equal to 0.<br>You are given an integer array nums. Let product be the product of all values in the array nums.<br>Return signFunc(product).</p>
-</blockquote>
-<p><img src="https://i.imgur.com/v6fBWOf.png"></p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">arraySign</span>(<span class="params">self, nums: <span class="type">List</span>[<span class="built_in">int</span>]</span>) -&gt; <span class="built_in">int</span>:</span></span><br><span class="line">        sign = <span class="number">1</span></span><br><span class="line">        <span class="keyword">for</span> num <span class="keyword">in</span> nums:</span><br><span class="line">            <span class="keyword">if</span> num == <span class="number">0</span>:</span><br><span class="line">                <span class="keyword">return</span> <span class="number">0</span></span><br><span class="line">            <span class="keyword">if</span> num &lt; <span class="number">0</span>:</span><br><span class="line">                sign = -sign</span><br><span class="line">        <span class="keyword">return</span> sign</span><br></pre></td></tr></table></figure>]]></content>
-      <tags>
-        <tag>Leetcode</tag>
-        <tag>Python</tag>
-        <tag>Coding</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>[筆記] Leetcode - 1903. Largest Odd Number in String</title>
-    <url>/2023/12/09/%E7%AD%86%E8%A8%98-1903.-Largest-Odd%20Number-in-String/</url>
-    <content><![CDATA[<blockquote>
-<p>You are given a string num, representing a large integer. Return the largest-valued odd integer (as a string) that is a non-empty substring of num, or an empty string “” if no odd integer exists.</p>
-</blockquote>
-<p>A substring is a contiguous sequence of characters within a string.</p>
-<p>Example 1:</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Input: num &#x3D; &quot;52&quot;</span><br><span class="line">Output: &quot;5&quot;</span><br><span class="line">Explanation: The only non-empty substrings are &quot;5&quot;, &quot;2&quot;, and &quot;52&quot;. &quot;5&quot; is the only odd number.</span><br></pre></td></tr></table></figure>
-<p>Example 2:</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Input: num &#x3D; &quot;4206&quot;</span><br><span class="line">Output: &quot;&quot;</span><br><span class="line">Explanation: There are no odd numbers in &quot;4206&quot;.</span><br></pre></td></tr></table></figure>
-<p>Example 3:</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Input: num &#x3D; &quot;35427&quot;</span><br><span class="line">Output: &quot;35427&quot;</span><br><span class="line">Explanation: &quot;35427&quot; is already an odd number.</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">largestOddNumber</span>(<span class="params">self, num: <span class="built_in">str</span></span>) -&gt; <span class="built_in">str</span>:</span></span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">len</span>(num) - <span class="number">1</span>, -<span class="number">1</span>, -<span class="number">1</span>):</span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span> <span class="built_in">int</span>(num[i]) % <span class="number">2</span>:</span><br><span class="line">                <span class="keyword">return</span> num[:i + <span class="number">1</span>]</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> <span class="string">&#x27;&#x27;</span></span><br></pre></td></tr></table></figure>
-
-]]></content>
-      <tags>
-        <tag>list</tag>
-        <tag>Leetcode</tag>
-        <tag>Python</tag>
-        <tag>reverse</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>[筆記] Leetcode - 1913. Maximum Product Difference Between Two Pairs</title>
-    <url>/2023/12/18/%E7%AD%86%E8%A8%98-1913.-Maximum-Product%20Difference-Between-Two-Pairs/</url>
-    <content><![CDATA[<p><a href="https://leetcode.com/problems/maximum-product-difference-between-two-pairs/">https://leetcode.com/problems/maximum-product-difference-between-two-pairs/</a></p>
-<blockquote>
-<p>The product difference between two pairs (a, b) and (c, d) is defined as (a * b) - (c * d).</p>
-<p>For example, the product difference between (5, 6) and (2, 7) is (5 * 6) - (2 * 7) &#x3D; 16.<br>Given an integer array nums, choose four distinct indices w, x, y, and z such that the product difference between pairs (nums[w], nums[x]) and (nums[y], nums[z]) is maximized.</p>
-<p>Return the maximum such product difference.</p>
-</blockquote>
-<span id="more"></span>
-
-<p>Example 1:</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Input: nums &#x3D; [5,6,2,7,4]</span><br><span class="line">Output: 34</span><br><span class="line">Explanation: We can choose indices 1 and 3 for the first pair (6, 7) and indices 2 and 4 for the second pair (2, 4).</span><br><span class="line">The product difference is (6 * 7) - (2 * 4) &#x3D; 34.</span><br></pre></td></tr></table></figure>
-<p>Example 2:</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Input: nums &#x3D; [4,2,5,9,7,4,8]</span><br><span class="line">Output: 64</span><br><span class="line">Explanation: We can choose indices 3 and 6 for the first pair (9, 8) and indices 1 and 5 for the second pair (2, 4).</span><br><span class="line">The product difference is (9 * 8) - (2 * 4) &#x3D; 64.</span><br></pre></td></tr></table></figure>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">maxProductDifference</span>(<span class="params">self, nums: <span class="type">List</span>[<span class="built_in">int</span>]</span>) -&gt; <span class="built_in">int</span>:</span></span><br><span class="line">        min_num1, min_num2 = math.inf, math.inf</span><br><span class="line">        max_num1, max_num2 = -math.inf, -math.inf</span><br><span class="line">    </span><br><span class="line">        <span class="keyword">for</span> number <span class="keyword">in</span> nums: </span><br><span class="line">            <span class="keyword">if</span> number &gt; max_num1:</span><br><span class="line">                max_num1, max_num2 = number, max_num1</span><br><span class="line">            <span class="keyword">elif</span> number &gt; max_num2:</span><br><span class="line">                max_num2 = number</span><br><span class="line">    </span><br><span class="line">            <span class="keyword">if</span> number &lt; min_num1:</span><br><span class="line">                min_num1, min_num2 = number, min_num1</span><br><span class="line">            <span class="keyword">elif</span> number &lt; min_num2:</span><br><span class="line">                min_num2 = number</span><br><span class="line">    </span><br><span class="line">        <span class="keyword">return</span> max_num1 * max_num2 - min_num1 * min_num2</span><br></pre></td></tr></table></figure>
-
-]]></content>
-      <tags>
-        <tag>Leetcode</tag>
-        <tag>Python</tag>
-        <tag>Math</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>用 Go 寫 Web API？Gin Framework 帶你快速上手！</title>
     <url>/2025/03/06/%E7%94%A8-Go-%E5%AF%AB-Web-API%EF%BC%9FGin-Framework-%E5%B8%B6%E4%BD%A0%E5%BF%AB%E9%80%9F%E4%B8%8A%E6%89%8B%EF%BC%81/</url>
     <content><![CDATA[<p>大家好，我是一個在剛開始學習 Golang 的工程師，今天想和大家聊聊 <strong>Gin Framework</strong> ——一個簡單又強大的 Go 語言 Web Framework。如果你聽過 Golang，一定知道它以高效能和簡潔聞名，而 Gin 就像你常用的悠遊卡，小巧方便，卻能輕鬆應付各種場景。接下來，讓我們從零開始認識 Gin。</p>
@@ -1543,6 +1480,69 @@
         <tag>Golang</tag>
         <tag>Gin Framework</tag>
         <tag>Web API</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>[筆記] Leetcode - 1822. Sign of the Product of an Array</title>
+    <url>/2023/05/02/%E7%AD%86-Leetcode-1822-Sign-of-the-Product-of-an-Array/</url>
+    <content><![CDATA[<p><a href="https://leetcode.com/problems/sign-of-the-product-of-an-array/">https://leetcode.com/problems/sign-of-the-product-of-an-array/</a></p>
+<blockquote>
+<p>There is a function signFunc(x) that returns:<br>1 if x is positive.<br>-1 if x is negative.<br>0 if x is equal to 0.<br>You are given an integer array nums. Let product be the product of all values in the array nums.<br>Return signFunc(product).</p>
+</blockquote>
+<p><img src="https://i.imgur.com/v6fBWOf.png"></p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">arraySign</span>(<span class="params">self, nums: <span class="type">List</span>[<span class="built_in">int</span>]</span>) -&gt; <span class="built_in">int</span>:</span></span><br><span class="line">        sign = <span class="number">1</span></span><br><span class="line">        <span class="keyword">for</span> num <span class="keyword">in</span> nums:</span><br><span class="line">            <span class="keyword">if</span> num == <span class="number">0</span>:</span><br><span class="line">                <span class="keyword">return</span> <span class="number">0</span></span><br><span class="line">            <span class="keyword">if</span> num &lt; <span class="number">0</span>:</span><br><span class="line">                sign = -sign</span><br><span class="line">        <span class="keyword">return</span> sign</span><br></pre></td></tr></table></figure>]]></content>
+      <tags>
+        <tag>Leetcode</tag>
+        <tag>Python</tag>
+        <tag>Coding</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>[筆記] Leetcode - 1903. Largest Odd Number in String</title>
+    <url>/2023/12/09/%E7%AD%86%E8%A8%98-1903.-Largest-Odd%20Number-in-String/</url>
+    <content><![CDATA[<blockquote>
+<p>You are given a string num, representing a large integer. Return the largest-valued odd integer (as a string) that is a non-empty substring of num, or an empty string “” if no odd integer exists.</p>
+</blockquote>
+<p>A substring is a contiguous sequence of characters within a string.</p>
+<p>Example 1:</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Input: num &#x3D; &quot;52&quot;</span><br><span class="line">Output: &quot;5&quot;</span><br><span class="line">Explanation: The only non-empty substrings are &quot;5&quot;, &quot;2&quot;, and &quot;52&quot;. &quot;5&quot; is the only odd number.</span><br></pre></td></tr></table></figure>
+<p>Example 2:</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Input: num &#x3D; &quot;4206&quot;</span><br><span class="line">Output: &quot;&quot;</span><br><span class="line">Explanation: There are no odd numbers in &quot;4206&quot;.</span><br></pre></td></tr></table></figure>
+<p>Example 3:</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Input: num &#x3D; &quot;35427&quot;</span><br><span class="line">Output: &quot;35427&quot;</span><br><span class="line">Explanation: &quot;35427&quot; is already an odd number.</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">largestOddNumber</span>(<span class="params">self, num: <span class="built_in">str</span></span>) -&gt; <span class="built_in">str</span>:</span></span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">len</span>(num) - <span class="number">1</span>, -<span class="number">1</span>, -<span class="number">1</span>):</span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span> <span class="built_in">int</span>(num[i]) % <span class="number">2</span>:</span><br><span class="line">                <span class="keyword">return</span> num[:i + <span class="number">1</span>]</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> <span class="string">&#x27;&#x27;</span></span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <tags>
+        <tag>list</tag>
+        <tag>Leetcode</tag>
+        <tag>Python</tag>
+        <tag>reverse</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>[筆記] Leetcode - 1913. Maximum Product Difference Between Two Pairs</title>
+    <url>/2023/12/18/%E7%AD%86%E8%A8%98-1913.-Maximum-Product%20Difference-Between-Two-Pairs/</url>
+    <content><![CDATA[<p><a href="https://leetcode.com/problems/maximum-product-difference-between-two-pairs/">https://leetcode.com/problems/maximum-product-difference-between-two-pairs/</a></p>
+<blockquote>
+<p>The product difference between two pairs (a, b) and (c, d) is defined as (a * b) - (c * d).</p>
+<p>For example, the product difference between (5, 6) and (2, 7) is (5 * 6) - (2 * 7) &#x3D; 16.<br>Given an integer array nums, choose four distinct indices w, x, y, and z such that the product difference between pairs (nums[w], nums[x]) and (nums[y], nums[z]) is maximized.</p>
+<p>Return the maximum such product difference.</p>
+</blockquote>
+<span id="more"></span>
+
+<p>Example 1:</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Input: nums &#x3D; [5,6,2,7,4]</span><br><span class="line">Output: 34</span><br><span class="line">Explanation: We can choose indices 1 and 3 for the first pair (6, 7) and indices 2 and 4 for the second pair (2, 4).</span><br><span class="line">The product difference is (6 * 7) - (2 * 4) &#x3D; 34.</span><br></pre></td></tr></table></figure>
+<p>Example 2:</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Input: nums &#x3D; [4,2,5,9,7,4,8]</span><br><span class="line">Output: 64</span><br><span class="line">Explanation: We can choose indices 3 and 6 for the first pair (9, 8) and indices 1 and 5 for the second pair (2, 4).</span><br><span class="line">The product difference is (9 * 8) - (2 * 4) &#x3D; 64.</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">maxProductDifference</span>(<span class="params">self, nums: <span class="type">List</span>[<span class="built_in">int</span>]</span>) -&gt; <span class="built_in">int</span>:</span></span><br><span class="line">        min_num1, min_num2 = math.inf, math.inf</span><br><span class="line">        max_num1, max_num2 = -math.inf, -math.inf</span><br><span class="line">    </span><br><span class="line">        <span class="keyword">for</span> number <span class="keyword">in</span> nums: </span><br><span class="line">            <span class="keyword">if</span> number &gt; max_num1:</span><br><span class="line">                max_num1, max_num2 = number, max_num1</span><br><span class="line">            <span class="keyword">elif</span> number &gt; max_num2:</span><br><span class="line">                max_num2 = number</span><br><span class="line">    </span><br><span class="line">            <span class="keyword">if</span> number &lt; min_num1:</span><br><span class="line">                min_num1, min_num2 = number, min_num1</span><br><span class="line">            <span class="keyword">elif</span> number &lt; min_num2:</span><br><span class="line">                min_num2 = number</span><br><span class="line">    </span><br><span class="line">        <span class="keyword">return</span> max_num1 * max_num2 - min_num1 * min_num2</span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <tags>
+        <tag>Leetcode</tag>
+        <tag>Python</tag>
+        <tag>Math</tag>
       </tags>
   </entry>
   <entry>
@@ -1644,51 +1644,6 @@ def date_time(time: str) -&gt; str:
       </tags>
   </entry>
   <entry>
-    <title>[筆記] HackerRank - Sales by Match</title>
-    <url>/2021/04/02/%E7%AD%86%E8%A8%98-HackerRank-Sales-by-Match/</url>
-    <content><![CDATA[<blockquote>
-<p>HackerRank 上的題目：找出成對的襪子並算出總共有幾雙<br>此系列文章主要是自己在解題時覺得有趣的題目，記錄下來讓自己以後好複習，有興趣的人可以參考看看</p>
-</blockquote>
-<span id="more"></span>
-
-<h2 id="先來看看題目"><a href="#先來看看題目" class="headerlink" title="先來看看題目"></a>先來看看題目</h2><p><a href="https://www.hackerrank.com/challenges/sock-merchant/problem?h_l=interview&playlist_slugs%5B%5D=interview-preparation-kit&playlist_slugs%5B%5D=warmup"><img src="https://i.imgur.com/McOlaEW.png"></a></p>
-<h3 id="解題步驟："><a href="#解題步驟：" class="headerlink" title="解題步驟："></a>解題步驟：</h3><ol>
-<li>想想怎麼找出成對的襪子並記錄</li>
-<li>計算出所有成對的襪子有幾雙</li>
-</ol>
-<h2 id="Python"><a href="#Python" class="headerlink" title="Python"></a>Python</h2><p>如果第一個想到用 dictionary 來實踐儲存不同顏色襪子有幾隻的話，<a href="https://zanazhong.github.io/2021/03/22/%E5%AD%B8%E7%BF%92-Python-List/">此篇文章</a> 有提到相關用法，這裡就不贅述。</p>
-<p>最好要將 dictionay 裡所有的 value 值找出成對的並算出共有幾對的話可以使用 sum。</p>
-<h3 id="sum-的用法"><a href="#sum-的用法" class="headerlink" title="sum 的用法"></a>sum 的用法</h3><div class="note default"><p>語法： sum(iterable, start)</p>
-</div>
-
-<p>input:</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">list &#x3D; [2, 4, 1, 3, 6]</span><br><span class="line">print(sum(list))</span><br><span class="line">&#x2F;&#x2F; 起始點從 100 開始 (目前沒使用過)</span><br><span class="line">print(sum(list, 100))</span><br></pre></td></tr></table></figure>
-<p>output:</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">16</span><br><span class="line">116</span><br></pre></td></tr></table></figure>
-
-<h3 id="解題"><a href="#解題" class="headerlink" title="解題"></a>解題</h3><h4 id="方法一-dict-sum"><a href="#方法一-dict-sum" class="headerlink" title="方法一 dict + sum"></a>方法一 dict + sum</h4><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">sockMerchant</span>(<span class="params">n, ar</span>):</span></span><br><span class="line">    pair_count = &#123;i : ar.count(i) <span class="keyword">for</span> i <span class="keyword">in</span> ar&#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">sum</span>(i//<span class="number">2</span> <span class="keyword">for</span> i <span class="keyword">in</span> pair_count.values())</span><br></pre></td></tr></table></figure>
-<h4 id="方法二-set-sum"><a href="#方法二-set-sum" class="headerlink" title="方法二 set + sum"></a>方法二 set + sum</h4><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">sockMerchant</span>(<span class="params">n, ar</span>):</span></span><br><span class="line">    pair_count = <span class="built_in">set</span>(ar)</span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">sum</span>(ar.count(i) // <span class="number">2</span> <span class="keyword">for</span> i <span class="keyword">in</span> pair_count)</span><br></pre></td></tr></table></figure>
-
-<h2 id="Java"><a href="#Java" class="headerlink" title="Java"></a>Java</h2><h4 id="方法一-for-loop"><a href="#方法一-for-loop" class="headerlink" title="方法一 for loop"></a>方法一 for loop</h4><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">int</span> <span class="title">sockMerchant</span><span class="params">(<span class="keyword">int</span> n, <span class="keyword">int</span>[] ar)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span> sum = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; n; i++) &#123;</span><br><span class="line">        <span class="keyword">int</span> count = <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">if</span> (ar[i] != -<span class="number">1</span>) &#123;</span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> j = i + <span class="number">1</span>; j &lt; n; j++ ) &#123;</span><br><span class="line">                <span class="keyword">if</span> (ar[i] == ar[j]) &#123;</span><br><span class="line">                    count++;</span><br><span class="line">                    ar[j] = -<span class="number">1</span>;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            System.out.print(count);</span><br><span class="line">            sum += Math.floor(count / <span class="number">2</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> sum;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h4 id="方法二-HashSet"><a href="#方法二-HashSet" class="headerlink" title="方法二 HashSet"></a>方法二 HashSet</h4><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> java.util.HashSet;</span><br><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">int</span> <span class="title">sockMerchant</span><span class="params">(<span class="keyword">int</span> n, <span class="keyword">int</span>[] ar)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span> count = <span class="number">0</span>;</span><br><span class="line">    HashSet&lt;Integer&gt; sock_set = <span class="keyword">new</span> HashSet&lt;Integer&gt;();</span><br><span class="line">    <span class="keyword">for</span> (Integer i: ar) &#123;</span><br><span class="line">        <span class="keyword">if</span> (sock_set.contains(i)) &#123;</span><br><span class="line">            sock_set.remove(i);</span><br><span class="line">            count++;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            sock_set.add(i);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> count;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-<p>ref: <a href="https://www.programiz.com/python-programming/methods/built-in/sum">https://www.programiz.com/python-programming/methods/built-in/sum</a></p>
-]]></content>
-      <categories>
-        <category>hackerrank</category>
-        <category>python</category>
-      </categories>
-      <tags>
-        <tag>python</tag>
-        <tag>dictionary</tag>
-        <tag>hackerrank</tag>
-        <tag>sum</tag>
-        <tag>java</tag>
-        <tag>hashset</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>[筆記] GitHub pages + Hexo 搭建 Blog (Mac)</title>
     <url>/2020/09/11/%E7%AD%86%E8%A8%98-GitHub-pages-Hexo-%E6%90%AD%E5%BB%BA-Blog-Mac/</url>
     <content><![CDATA[<blockquote>
@@ -1762,6 +1717,51 @@ def date_time(time: str) -&gt; str:
         <tag>python</tag>
         <tag>chr</tag>
         <tag>ord</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>[筆記] HackerRank - Sales by Match</title>
+    <url>/2021/04/02/%E7%AD%86%E8%A8%98-HackerRank-Sales-by-Match/</url>
+    <content><![CDATA[<blockquote>
+<p>HackerRank 上的題目：找出成對的襪子並算出總共有幾雙<br>此系列文章主要是自己在解題時覺得有趣的題目，記錄下來讓自己以後好複習，有興趣的人可以參考看看</p>
+</blockquote>
+<span id="more"></span>
+
+<h2 id="先來看看題目"><a href="#先來看看題目" class="headerlink" title="先來看看題目"></a>先來看看題目</h2><p><a href="https://www.hackerrank.com/challenges/sock-merchant/problem?h_l=interview&playlist_slugs%5B%5D=interview-preparation-kit&playlist_slugs%5B%5D=warmup"><img src="https://i.imgur.com/McOlaEW.png"></a></p>
+<h3 id="解題步驟："><a href="#解題步驟：" class="headerlink" title="解題步驟："></a>解題步驟：</h3><ol>
+<li>想想怎麼找出成對的襪子並記錄</li>
+<li>計算出所有成對的襪子有幾雙</li>
+</ol>
+<h2 id="Python"><a href="#Python" class="headerlink" title="Python"></a>Python</h2><p>如果第一個想到用 dictionary 來實踐儲存不同顏色襪子有幾隻的話，<a href="https://zanazhong.github.io/2021/03/22/%E5%AD%B8%E7%BF%92-Python-List/">此篇文章</a> 有提到相關用法，這裡就不贅述。</p>
+<p>最好要將 dictionay 裡所有的 value 值找出成對的並算出共有幾對的話可以使用 sum。</p>
+<h3 id="sum-的用法"><a href="#sum-的用法" class="headerlink" title="sum 的用法"></a>sum 的用法</h3><div class="note default"><p>語法： sum(iterable, start)</p>
+</div>
+
+<p>input:</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">list &#x3D; [2, 4, 1, 3, 6]</span><br><span class="line">print(sum(list))</span><br><span class="line">&#x2F;&#x2F; 起始點從 100 開始 (目前沒使用過)</span><br><span class="line">print(sum(list, 100))</span><br></pre></td></tr></table></figure>
+<p>output:</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">16</span><br><span class="line">116</span><br></pre></td></tr></table></figure>
+
+<h3 id="解題"><a href="#解題" class="headerlink" title="解題"></a>解題</h3><h4 id="方法一-dict-sum"><a href="#方法一-dict-sum" class="headerlink" title="方法一 dict + sum"></a>方法一 dict + sum</h4><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">sockMerchant</span>(<span class="params">n, ar</span>):</span></span><br><span class="line">    pair_count = &#123;i : ar.count(i) <span class="keyword">for</span> i <span class="keyword">in</span> ar&#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">sum</span>(i//<span class="number">2</span> <span class="keyword">for</span> i <span class="keyword">in</span> pair_count.values())</span><br></pre></td></tr></table></figure>
+<h4 id="方法二-set-sum"><a href="#方法二-set-sum" class="headerlink" title="方法二 set + sum"></a>方法二 set + sum</h4><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">sockMerchant</span>(<span class="params">n, ar</span>):</span></span><br><span class="line">    pair_count = <span class="built_in">set</span>(ar)</span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">sum</span>(ar.count(i) // <span class="number">2</span> <span class="keyword">for</span> i <span class="keyword">in</span> pair_count)</span><br></pre></td></tr></table></figure>
+
+<h2 id="Java"><a href="#Java" class="headerlink" title="Java"></a>Java</h2><h4 id="方法一-for-loop"><a href="#方法一-for-loop" class="headerlink" title="方法一 for loop"></a>方法一 for loop</h4><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">int</span> <span class="title">sockMerchant</span><span class="params">(<span class="keyword">int</span> n, <span class="keyword">int</span>[] ar)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span> sum = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; n; i++) &#123;</span><br><span class="line">        <span class="keyword">int</span> count = <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">if</span> (ar[i] != -<span class="number">1</span>) &#123;</span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> j = i + <span class="number">1</span>; j &lt; n; j++ ) &#123;</span><br><span class="line">                <span class="keyword">if</span> (ar[i] == ar[j]) &#123;</span><br><span class="line">                    count++;</span><br><span class="line">                    ar[j] = -<span class="number">1</span>;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            System.out.print(count);</span><br><span class="line">            sum += Math.floor(count / <span class="number">2</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> sum;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="方法二-HashSet"><a href="#方法二-HashSet" class="headerlink" title="方法二 HashSet"></a>方法二 HashSet</h4><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> java.util.HashSet;</span><br><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">int</span> <span class="title">sockMerchant</span><span class="params">(<span class="keyword">int</span> n, <span class="keyword">int</span>[] ar)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span> count = <span class="number">0</span>;</span><br><span class="line">    HashSet&lt;Integer&gt; sock_set = <span class="keyword">new</span> HashSet&lt;Integer&gt;();</span><br><span class="line">    <span class="keyword">for</span> (Integer i: ar) &#123;</span><br><span class="line">        <span class="keyword">if</span> (sock_set.contains(i)) &#123;</span><br><span class="line">            sock_set.remove(i);</span><br><span class="line">            count++;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            sock_set.add(i);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> count;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+<p>ref: <a href="https://www.programiz.com/python-programming/methods/built-in/sum">https://www.programiz.com/python-programming/methods/built-in/sum</a></p>
+]]></content>
+      <categories>
+        <category>hackerrank</category>
+        <category>python</category>
+      </categories>
+      <tags>
+        <tag>python</tag>
+        <tag>dictionary</tag>
+        <tag>hackerrank</tag>
+        <tag>sum</tag>
+        <tag>java</tag>
+        <tag>hashset</tag>
       </tags>
   </entry>
   <entry>
@@ -1846,6 +1846,45 @@ def date_time(time: str) -&gt; str:
       </tags>
   </entry>
   <entry>
+    <title>[筆記] Hexo - nexT 基礎配置 (三)</title>
+    <url>/2020/09/14/%E7%AD%86%E8%A8%98-Hexo-nexT-%E5%9F%BA%E7%A4%8E%E9%85%8D%E7%BD%AE-%E4%B8%89/</url>
+    <content><![CDATA[<blockquote>
+<p>自己在建置的時候查了很多資料，整理完希望幫助到有需要的人<br>此篇文章主要教學 Disqus 建置</p>
+</blockquote>
+<span id="more"></span>
+
+
+<h3 id="新增留言功能"><a href="#新增留言功能" class="headerlink" title="新增留言功能"></a>新增留言功能</h3><ol>
+<li><p>至 <a href="https://disqus.com/">Disqus</a> 註冊帳號<br>  <img src="https://i.imgur.com/fJmBmr6.png" alt="圖片"></p>
+</li>
+<li><p>選擇 I want to install Disqus on my site<br>  <img src="https://i.imgur.com/muQV1ZW.jpg" alt="圖片"></p>
+</li>
+<li><p>.<br>  <img src="https://i.imgur.com/FqbITcy.png" alt="圖片"></p>
+</li>
+<li><p>到 <a href="https://disqus.com/api/applications/">Disqus API Application</a> 註冊 application<br>  <img src="https://i.imgur.com/uVVwI0b.png" alt="圖片"></p>
+<ul>
+<li>點選 Register new application</li>
+<li>完成後就會给你一個 API Key<br> <img src="https://i.imgur.com/HFKEZ37.png" alt="圖片"></li>
+</ul>
+</li>
+<li><p>設定 Hexo<br>themes&#x2F;next&#x2F;_config.yml</p>
+<figure class="highlight yml"><table><tr><td class="code"><pre><span class="line"><span class="comment"># Disqus</span></span><br><span class="line"><span class="attr">disqus:</span></span><br><span class="line">  <span class="attr">enable:</span> <span class="literal">true</span></span><br><span class="line">  <span class="attr">shortname:</span></span><br><span class="line">  <span class="attr">count:</span> <span class="literal">true</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># DisqusJS</span></span><br><span class="line"><span class="comment"># Alternative Disqus - Render comment component using Disqus API.</span></span><br><span class="line"><span class="comment"># Demo: https://suka.js.org/DisqusJS/</span></span><br><span class="line"><span class="comment"># For more information: https://github.com/SukkaW/DisqusJS</span></span><br><span class="line"><span class="attr">disqusjs:</span></span><br><span class="line">  <span class="attr">enable:</span> <span class="literal">true</span></span><br><span class="line">  <span class="comment"># API Endpoint of Disqus API (https://disqus.com/api/).</span></span><br><span class="line">  <span class="comment"># Leave api empty if you are able to connect to Disqus API. Otherwise you need a reverse proxy for it.</span></span><br><span class="line">  <span class="comment"># For example:</span></span><br><span class="line">  <span class="comment"># api: https://disqus.skk.moe/disqus/</span></span><br><span class="line">  <span class="attr">api:</span></span><br><span class="line">  <span class="attr">apikey:</span> <span class="comment"># Register new application from https://disqus.com/api/applications/</span></span><br><span class="line">  <span class="attr">shortname:</span> <span class="comment"># See: https://disqus.com/admin/settings/general/</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>完成<br>  <img src="https://i.imgur.com/iSG3tLo.png" alt="圖片"></p>
+</li>
+</ol>
+]]></content>
+      <categories>
+        <category>Hexo</category>
+      </categories>
+      <tags>
+        <tag>GitHub</tag>
+        <tag>Hexo</tag>
+        <tag>GitHub pages</tag>
+        <tag>Blog</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>[筆記] Hexo - nexT 基礎配置 (二)</title>
     <url>/2020/09/11/%E7%AD%86%E8%A8%98-Hexo-nexT-%E5%9F%BA%E7%A4%8E%E9%85%8D%E7%BD%AE-%E4%BA%8C/</url>
     <content><![CDATA[<blockquote>
@@ -1892,64 +1931,6 @@ def date_time(time: str) -&gt; str:
 <figure class="highlight yml"><table><tr><td class="code"><pre><span class="line"><span class="attr">border_radius:</span></span><br><span class="line">  <span class="attr">copy_button:</span></span><br><span class="line">    <span class="attr">enable:</span> <span class="literal">true</span></span><br><span class="line">    <span class="comment"># Available values: default | flat | mac</span></span><br><span class="line">    <span class="attr">style:</span> <span class="string">flat</span></span><br></pre></td></tr></table></figure></li>
 </ul>
 ]]></content>
-      <tags>
-        <tag>GitHub</tag>
-        <tag>Hexo</tag>
-        <tag>GitHub pages</tag>
-        <tag>Blog</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>[筆記] Leetcode - 136. Single Number</title>
-    <url>/2023/09/28/%E7%AD%86%E8%A8%98-Leetcode-%20136.-Single%20Number/</url>
-    <content><![CDATA[<p><a href="https://leetcode.com/problems/single-number/">https://leetcode.com/problems/single-number/</a></p>
-<blockquote>
-<p>Given a non-empty array of integers nums, every element appears twice except for one. Find that single one.<br>You must implement a solution with a linear runtime complexity and use only constant extra space.</p>
-</blockquote>
-<p><img src="https://hackmd.io/_uploads/BJfpj0Mx6.png"></p>
-<span id="more"></span>
-
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">singleNumber</span>(<span class="params">self, nums: <span class="type">List</span>[<span class="built_in">int</span>]</span>) -&gt; <span class="built_in">int</span>:</span></span><br><span class="line">        <span class="built_in">list</span> = []</span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> nums:</span><br><span class="line">            <span class="keyword">if</span> i <span class="keyword">in</span> <span class="built_in">list</span>:</span><br><span class="line">                <span class="built_in">list</span>.remove(i)</span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                <span class="built_in">list</span>.append(i)</span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">list</span>.pop()</span><br></pre></td></tr></table></figure>
-]]></content>
-      <tags>
-        <tag>list</tag>
-        <tag>Leetcode</tag>
-        <tag>Python</tag>
-        <tag>Coding</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>[筆記] Hexo - nexT 基礎配置 (三)</title>
-    <url>/2020/09/14/%E7%AD%86%E8%A8%98-Hexo-nexT-%E5%9F%BA%E7%A4%8E%E9%85%8D%E7%BD%AE-%E4%B8%89/</url>
-    <content><![CDATA[<blockquote>
-<p>自己在建置的時候查了很多資料，整理完希望幫助到有需要的人<br>此篇文章主要教學 Disqus 建置</p>
-</blockquote>
-<span id="more"></span>
-
-
-<h3 id="新增留言功能"><a href="#新增留言功能" class="headerlink" title="新增留言功能"></a>新增留言功能</h3><ol>
-<li><p>至 <a href="https://disqus.com/">Disqus</a> 註冊帳號<br>  <img src="https://i.imgur.com/fJmBmr6.png" alt="圖片"></p>
-</li>
-<li><p>選擇 I want to install Disqus on my site<br>  <img src="https://i.imgur.com/muQV1ZW.jpg" alt="圖片"></p>
-</li>
-<li><p>.<br>  <img src="https://i.imgur.com/FqbITcy.png" alt="圖片"></p>
-</li>
-<li><p>到 <a href="https://disqus.com/api/applications/">Disqus API Application</a> 註冊 application<br>  <img src="https://i.imgur.com/uVVwI0b.png" alt="圖片"></p>
-<ul>
-<li>點選 Register new application</li>
-<li>完成後就會给你一個 API Key<br> <img src="https://i.imgur.com/HFKEZ37.png" alt="圖片"></li>
-</ul>
-</li>
-<li><p>設定 Hexo<br>themes&#x2F;next&#x2F;_config.yml</p>
-<figure class="highlight yml"><table><tr><td class="code"><pre><span class="line"><span class="comment"># Disqus</span></span><br><span class="line"><span class="attr">disqus:</span></span><br><span class="line">  <span class="attr">enable:</span> <span class="literal">true</span></span><br><span class="line">  <span class="attr">shortname:</span></span><br><span class="line">  <span class="attr">count:</span> <span class="literal">true</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># DisqusJS</span></span><br><span class="line"><span class="comment"># Alternative Disqus - Render comment component using Disqus API.</span></span><br><span class="line"><span class="comment"># Demo: https://suka.js.org/DisqusJS/</span></span><br><span class="line"><span class="comment"># For more information: https://github.com/SukkaW/DisqusJS</span></span><br><span class="line"><span class="attr">disqusjs:</span></span><br><span class="line">  <span class="attr">enable:</span> <span class="literal">true</span></span><br><span class="line">  <span class="comment"># API Endpoint of Disqus API (https://disqus.com/api/).</span></span><br><span class="line">  <span class="comment"># Leave api empty if you are able to connect to Disqus API. Otherwise you need a reverse proxy for it.</span></span><br><span class="line">  <span class="comment"># For example:</span></span><br><span class="line">  <span class="comment"># api: https://disqus.skk.moe/disqus/</span></span><br><span class="line">  <span class="attr">api:</span></span><br><span class="line">  <span class="attr">apikey:</span> <span class="comment"># Register new application from https://disqus.com/api/applications/</span></span><br><span class="line">  <span class="attr">shortname:</span> <span class="comment"># See: https://disqus.com/admin/settings/general/</span></span><br></pre></td></tr></table></figure>
-</li>
-<li><p>完成<br>  <img src="https://i.imgur.com/iSG3tLo.png" alt="圖片"></p>
-</li>
-</ol>
-]]></content>
-      <categories>
-        <category>Hexo</category>
-      </categories>
       <tags>
         <tag>GitHub</tag>
         <tag>Hexo</tag>
@@ -2035,6 +2016,25 @@ def date_time(time: str) -&gt; str:
       </tags>
   </entry>
   <entry>
+    <title>[筆記] Leetcode - 136. Single Number</title>
+    <url>/2023/09/28/%E7%AD%86%E8%A8%98-Leetcode-%20136.-Single%20Number/</url>
+    <content><![CDATA[<p><a href="https://leetcode.com/problems/single-number/">https://leetcode.com/problems/single-number/</a></p>
+<blockquote>
+<p>Given a non-empty array of integers nums, every element appears twice except for one. Find that single one.<br>You must implement a solution with a linear runtime complexity and use only constant extra space.</p>
+</blockquote>
+<p><img src="https://hackmd.io/_uploads/BJfpj0Mx6.png"></p>
+<span id="more"></span>
+
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">singleNumber</span>(<span class="params">self, nums: <span class="type">List</span>[<span class="built_in">int</span>]</span>) -&gt; <span class="built_in">int</span>:</span></span><br><span class="line">        <span class="built_in">list</span> = []</span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> nums:</span><br><span class="line">            <span class="keyword">if</span> i <span class="keyword">in</span> <span class="built_in">list</span>:</span><br><span class="line">                <span class="built_in">list</span>.remove(i)</span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                <span class="built_in">list</span>.append(i)</span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">list</span>.pop()</span><br></pre></td></tr></table></figure>
+]]></content>
+      <tags>
+        <tag>list</tag>
+        <tag>Leetcode</tag>
+        <tag>Python</tag>
+        <tag>Coding</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>[筆記] Leetcode - 1716. Calculate Money in Leetcode Bank</title>
     <url>/2023/12/07/%E7%AD%86%E8%A8%98-Leetcode-%201716.-Calculate%20Money-in%20Leetcode-Bank/</url>
     <content><![CDATA[<p><a href="https://leetcode.com/problems/calculate-money-in-leetcode-bank">https://leetcode.com/problems/calculate-money-in-leetcode-bank</a></p>
@@ -2102,29 +2102,6 @@ def date_time(time: str) -&gt; str:
       </tags>
   </entry>
   <entry>
-    <title>[筆記] Leetcode - 1491. Average Salary Excluding the Minimum and Maximum Salary</title>
-    <url>/2023/05/01/%E7%AD%86%E8%A8%98-Leetcode-1491-Average-Salary-Excluding-the-Minimum-and-Maximum-Salary/</url>
-    <content><![CDATA[<p><a href="https://leetcode.com/problems/average-salary-excluding-the-minimum-and-maximum-salary/">https://leetcode.com/problems/average-salary-excluding-the-minimum-and-maximum-salary/</a></p>
-<blockquote>
-<p>You are given an array of unique integers salary where salary[i] is the salary of the ith employee.<br>Return the average salary of employees excluding the minimum and maximum salary. Answers within 10-5 of the actual answer will be accepted.</p>
-</blockquote>
-<p><img src="https://i.imgur.com/uoZrJtI.png"></p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">average</span>(<span class="params">self, salary: <span class="type">List</span>[<span class="built_in">int</span>]</span>) -&gt; <span class="built_in">float</span>:</span> </span><br><span class="line">        salary.sort()</span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">sum</span>(salary[<span class="number">1</span>:-<span class="number">1</span>]) / (<span class="built_in">len</span>(salary) - <span class="number">2</span>)</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">average</span>(<span class="params">self, salary: <span class="type">List</span>[<span class="built_in">int</span>]</span>) -&gt; <span class="built_in">float</span>:</span></span><br><span class="line">        salary.remove(<span class="built_in">min</span>(salary))</span><br><span class="line">        salary.remove(<span class="built_in">max</span>(salary))</span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">sum</span>(salary) / <span class="built_in">len</span>(salary)</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">average</span>(<span class="params">self, salary: <span class="type">List</span>[<span class="built_in">int</span>]</span>) -&gt; <span class="built_in">float</span>:</span></span><br><span class="line">        <span class="keyword">return</span> (<span class="built_in">sum</span>(salary) - <span class="built_in">min</span>(salary) - <span class="built_in">max</span>(salary)) / (<span class="built_in">len</span>(salary) - <span class="number">2</span>)</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">average</span>(<span class="params">self, salary: <span class="type">List</span>[<span class="built_in">int</span>]</span>) -&gt; <span class="built_in">float</span>:</span></span><br><span class="line">        salary.sort()</span><br><span class="line">        salary.pop(<span class="number">0</span>)</span><br><span class="line">        salary.pop()</span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">sum</span>(salary) / <span class="built_in">len</span>(salary)</span><br></pre></td></tr></table></figure>
-]]></content>
-      <tags>
-        <tag>sort</tag>
-        <tag>Leetcode</tag>
-        <tag>Python</tag>
-        <tag>Coding</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>[筆記] Leetcode - 905. Sort Array By Parity</title>
     <url>/2023/09/29/%E7%AD%86%E8%A8%98-Leetcode-%20905.-Sort-Array-By-Parity/</url>
     <content><![CDATA[<p><a href="https://leetcode.com/problems/contains-duplicate/">https://leetcode.com/problems/contains-duplicate/</a></p>
@@ -2146,21 +2123,23 @@ def date_time(time: str) -&gt; str:
       </tags>
   </entry>
   <entry>
-    <title>[筆記] Leetcode - 2215. Find the Difference of Two Arrays</title>
-    <url>/2023/05/03/%E7%AD%86%E8%A8%98-Leetcode-1822-Sign-of-the-Product-of-an-Array/</url>
-    <content><![CDATA[<span id="more"></span>
-
+    <title>[筆記] Leetcode - 1491. Average Salary Excluding the Minimum and Maximum Salary</title>
+    <url>/2023/05/01/%E7%AD%86%E8%A8%98-Leetcode-1491-Average-Salary-Excluding-the-Minimum-and-Maximum-Salary/</url>
+    <content><![CDATA[<p><a href="https://leetcode.com/problems/average-salary-excluding-the-minimum-and-maximum-salary/">https://leetcode.com/problems/average-salary-excluding-the-minimum-and-maximum-salary/</a></p>
 <blockquote>
-<p>Given two 0-indexed integer arrays nums1 and nums2, return a list answer of size 2 where:</p>
-<ul>
-<li>answer[0] is a list of all distinct integers in nums1 which are not present in nums2.</li>
-<li>answer[1] is a list of all distinct integers in nums2 which are not present in nums1.</li>
-</ul>
-<p>Note that the integers in the lists may be returned in any order.</p>
+<p>You are given an array of unique integers salary where salary[i] is the salary of the ith employee.<br>Return the average salary of employees excluding the minimum and maximum salary. Answers within 10-5 of the actual answer will be accepted.</p>
 </blockquote>
-<p><img src="https://i.imgur.com/mN6RB67.png"></p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">findDifference</span>(<span class="params">self, nums1: <span class="type">List</span>[<span class="built_in">int</span>], nums2: <span class="type">List</span>[<span class="built_in">int</span>]</span>) -&gt; <span class="type">List</span>[<span class="type">List</span>[<span class="built_in">int</span>]]:</span></span><br><span class="line">        set1 = <span class="built_in">set</span>(nums1)</span><br><span class="line">        set2 = <span class="built_in">set</span>(nums2)</span><br><span class="line">        <span class="keyword">return</span> [ <span class="built_in">list</span>(set1 - set2), <span class="built_in">list</span>(set2 - set1)]</span><br></pre></td></tr></table></figure>]]></content>
+<p><img src="https://i.imgur.com/uoZrJtI.png"></p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">average</span>(<span class="params">self, salary: <span class="type">List</span>[<span class="built_in">int</span>]</span>) -&gt; <span class="built_in">float</span>:</span> </span><br><span class="line">        salary.sort()</span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">sum</span>(salary[<span class="number">1</span>:-<span class="number">1</span>]) / (<span class="built_in">len</span>(salary) - <span class="number">2</span>)</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">average</span>(<span class="params">self, salary: <span class="type">List</span>[<span class="built_in">int</span>]</span>) -&gt; <span class="built_in">float</span>:</span></span><br><span class="line">        salary.remove(<span class="built_in">min</span>(salary))</span><br><span class="line">        salary.remove(<span class="built_in">max</span>(salary))</span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">sum</span>(salary) / <span class="built_in">len</span>(salary)</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">average</span>(<span class="params">self, salary: <span class="type">List</span>[<span class="built_in">int</span>]</span>) -&gt; <span class="built_in">float</span>:</span></span><br><span class="line">        <span class="keyword">return</span> (<span class="built_in">sum</span>(salary) - <span class="built_in">min</span>(salary) - <span class="built_in">max</span>(salary)) / (<span class="built_in">len</span>(salary) - <span class="number">2</span>)</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">average</span>(<span class="params">self, salary: <span class="type">List</span>[<span class="built_in">int</span>]</span>) -&gt; <span class="built_in">float</span>:</span></span><br><span class="line">        salary.sort()</span><br><span class="line">        salary.pop(<span class="number">0</span>)</span><br><span class="line">        salary.pop()</span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">sum</span>(salary) / <span class="built_in">len</span>(salary)</span><br></pre></td></tr></table></figure>
+]]></content>
       <tags>
+        <tag>sort</tag>
         <tag>Leetcode</tag>
         <tag>Python</tag>
         <tag>Coding</tag>
@@ -2186,6 +2165,27 @@ def date_time(time: str) -&gt; str:
         <tag>Leetcode</tag>
         <tag>Python</tag>
         <tag>Matrix</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>[筆記] Leetcode - 2215. Find the Difference of Two Arrays</title>
+    <url>/2023/05/03/%E7%AD%86%E8%A8%98-Leetcode-1822-Sign-of-the-Product-of-an-Array/</url>
+    <content><![CDATA[<span id="more"></span>
+
+<blockquote>
+<p>Given two 0-indexed integer arrays nums1 and nums2, return a list answer of size 2 where:</p>
+<ul>
+<li>answer[0] is a list of all distinct integers in nums1 which are not present in nums2.</li>
+<li>answer[1] is a list of all distinct integers in nums2 which are not present in nums1.</li>
+</ul>
+<p>Note that the integers in the lists may be returned in any order.</p>
+</blockquote>
+<p><img src="https://i.imgur.com/mN6RB67.png"></p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">findDifference</span>(<span class="params">self, nums1: <span class="type">List</span>[<span class="built_in">int</span>], nums2: <span class="type">List</span>[<span class="built_in">int</span>]</span>) -&gt; <span class="type">List</span>[<span class="type">List</span>[<span class="built_in">int</span>]]:</span></span><br><span class="line">        set1 = <span class="built_in">set</span>(nums1)</span><br><span class="line">        set2 = <span class="built_in">set</span>(nums2)</span><br><span class="line">        <span class="keyword">return</span> [ <span class="built_in">list</span>(set1 - set2), <span class="built_in">list</span>(set2 - set1)]</span><br></pre></td></tr></table></figure>]]></content>
+      <tags>
+        <tag>Leetcode</tag>
+        <tag>Python</tag>
+        <tag>Coding</tag>
       </tags>
   </entry>
   <entry>

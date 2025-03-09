@@ -2,7 +2,7 @@
 User-agent: *
 Allow: /
 Allow: /Archives/
-Allow: /Aategories/
+Allow: /Categories/
 Allow: /Tags/
 Allow: /About/ 
 
@@ -11,3 +11,4 @@ Allow: /About/
 # Disallow: /fancybox/
 
 Sitemap: https://zanazhong.github.io/sitemap.xml
+Sitemap: https://zanazhong.github.io/baidusitemap.xml
