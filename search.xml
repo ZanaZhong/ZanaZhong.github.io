@@ -101,99 +101,6 @@
       </tags>
   </entry>
   <entry>
-    <title>Go Concurrency：Goroutine、Channel、WaitGroup、Mutex 一次搞懂！</title>
-    <url>/2025/02/25/Go-Concurrency%EF%BC%9AGoroutine%E3%80%81Channel%E3%80%81WaitGroup%E3%80%81Mutex-%E4%B8%80%E6%AC%A1%E6%90%9E%E6%87%82%EF%BC%81/</url>
-    <content><![CDATA[<p>在寫程式時，你是否曾遇過這樣的問題：</p>
-<ul>
-<li>程式跑得很慢，某些函式明明可以同時執行，卻得一個等一個？</li>
-<li>想要讓多個工作並行，但又怕不同的程序互相干擾？</li>
-<li>處理龐大的計算或 I&#x2F;O 任務時，CPU 占用率極低，白白浪費資源？</li>
-</ul>
-<p>這時候，你需要的是 <strong>並發（Concurrency）</strong>！而 Go 語言提供了一種超級簡單且高效的並發工具： <strong>Goroutine</strong>。</p>
-<span id="more"></span>
-
-<p>在 Go 語言中，並發是其核心特性之一，而 Goroutine 則是實現並發的關鍵。你可以把它想像成一個「輕量級的執行緒」，但它比傳統執行緒更高效、佔用更少資源，並且能夠輕鬆地創建成千上萬個 Goroutine。</p>
-<h2 id="Goroutine-是什麼？為什麼它這麼強？"><a href="#Goroutine-是什麼？為什麼它這麼強？" class="headerlink" title="Goroutine 是什麼？為什麼它這麼強？"></a>Goroutine 是什麼？為什麼它這麼強？</h2><p>Goroutine 是 Go 語言的 <strong>輕量級執行緒（Lightweight Thread）</strong>，讓你可以輕鬆執行並發程式，而不需要手動管理繁瑣的系統執行緒。</p>
-<ul>
-<li><strong>輕量級</strong>：相比於傳統的作業系統執行緒（Thread），Goroutine 的記憶體開銷極低。</li>
-<li><strong>執行簡單</strong>：只要在函式前加上 <code>go</code>，就能讓它跑在背景，完全不需要設定任何 Thread！</li>
-<li><strong>獨立運行</strong>：Goroutine 之間互不影響，即使某個 Goroutine 崩潰，也不會導致其他 Goroutine 失敗。</li>
-<li><strong>高效</strong>：Go 運行時（runtime）會自動管理 Goroutine 的調度，避免過度依賴作業系統的執行緒管理。</li>
-</ul>
-<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">    <span class="string">&quot;fmt&quot;</span></span><br><span class="line">    <span class="string">&quot;time&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">hello</span><span class="params">()</span></span> &#123;</span><br><span class="line">    fmt.Println(<span class="string">&quot;Hello, Goroutine!&quot;</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">    <span class="keyword">go</span> hello() <span class="comment">// 啟動 Goroutine</span></span><br><span class="line">    fmt.Println(<span class="string">&quot;Main 函式結束&quot;</span>)</span><br><span class="line">    time.Sleep(time.Second) <span class="comment">// 等待 Goroutine 執行完成</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>輸出</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Main 函式結束</span><br><span class="line">Hello, Goroutine!</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li><code>go hello()</code> 會在背景執行，而 <code>main()</code> 函式會繼續往下執行。</li>
-<li>這樣我們的程式就可以同時進行兩個工作，提升效率！</li>
-</ul>
-<p>⚠ 但這裡有個問題—— Goroutine 是異步執行的，main() 可能在 hello() 結束前就已執行完畢，因此 time.Sleep() 讓主執行緒暫停一下，確保 Goroutine 執行。</p>
-<div class="note info"><p><strong>main 函式結束後，所有 Goroutine 也會立即結束</strong>，這就引出了下一個重要工具： <strong>WaitGroup</strong>。</p>
-</div>
-
-<h2 id="WaitGroup：讓主程式等-Goroutine-完成，確保-Goroutine-全部完成"><a href="#WaitGroup：讓主程式等-Goroutine-完成，確保-Goroutine-全部完成" class="headerlink" title="WaitGroup：讓主程式等 Goroutine 完成，確保 Goroutine 全部完成"></a>WaitGroup：讓主程式等 Goroutine 完成，確保 Goroutine 全部完成</h2><p>當我們開啟多個 Goroutine 時，<code>main()</code> 可能還沒等 Goroutine 執行完就結束了，導致 Goroutine 被強制終止。為了解決這個問題，我們可以使用 <strong>sync.WaitGroup</strong>。</p>
-<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">    <span class="string">&quot;fmt&quot;</span></span><br><span class="line">    <span class="string">&quot;sync&quot;</span></span><br><span class="line">    <span class="string">&quot;time&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> wg sync.WaitGroup</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">printMessage</span><span class="params">(message <span class="keyword">string</span>)</span></span> &#123;</span><br><span class="line">    <span class="keyword">defer</span> wg.Done() <span class="comment">// Goroutine 結束時通知 WaitGroup</span></span><br><span class="line">    <span class="keyword">for</span> i := <span class="number">0</span>; i &lt; <span class="number">5</span>; i++ &#123;</span><br><span class="line">        fmt.Println(message, i)</span><br><span class="line">        time.Sleep(time.Millisecond * <span class="number">500</span>)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">    wg.Add(<span class="number">2</span>) <span class="comment">// 設定有 2 個 Goroutine</span></span><br><span class="line">    <span class="keyword">go</span> printMessage(<span class="string">&quot;Hello from Goroutine 1&quot;</span>)</span><br><span class="line">    <span class="keyword">go</span> printMessage(<span class="string">&quot;Hello from Goroutine 2&quot;</span>)</span><br><span class="line"></span><br><span class="line">    wg.Wait() <span class="comment">// 等待所有 Goroutine 結束</span></span><br><span class="line">    fmt.Println(<span class="string">&quot;All Goroutines Finished!&quot;</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<ul>
-<li><code>wg.Add(2)</code> 告訴 WaitGroup 需要等 2 個 Goroutine。   &lt;- 增加計數器 </li>
-<li><code>wg.Done()</code> 會在 Goroutine 執行結束時通知 WaitGroup。 &lt;- 減少計數器</li>
-<li><code>wg.Wait()</code> 讓 <code>main()</code> 等待所有 Goroutine 結束後才繼續。 &lt;- 等待計數器歸零</li>
-</ul>
-<p>這樣就能確保主程式不會提前結束！<br>我們再看一個範例：</p>
-<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">    <span class="string">&quot;fmt&quot;</span></span><br><span class="line">    <span class="string">&quot;sync&quot;</span></span><br><span class="line">    <span class="string">&quot;time&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">worker</span><span class="params">(id <span class="keyword">int</span>, wg *sync.WaitGroup)</span></span> &#123;</span><br><span class="line">    <span class="keyword">defer</span> wg.Done() <span class="comment">// 告知 WaitGroup 這個 Goroutine 完成</span></span><br><span class="line">    fmt.Printf(<span class="string">&quot;Worker %d 開始工作\n&quot;</span>, id)</span><br><span class="line">    time.Sleep(time.Second)</span><br><span class="line">    fmt.Printf(<span class="string">&quot;Worker %d 完成工作\n&quot;</span>, id)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">    <span class="keyword">var</span> wg sync.WaitGroup</span><br><span class="line">    <span class="keyword">for</span> i := <span class="number">1</span>; i &lt;= <span class="number">3</span>; i++ &#123;</span><br><span class="line">        wg.Add(<span class="number">1</span>)</span><br><span class="line">        <span class="keyword">go</span> worker(i, &amp;wg)</span><br><span class="line">    &#125;</span><br><span class="line">    wg.Wait() <span class="comment">// 等待所有 Goroutine 結束</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h2 id="Channel：Goroutine-之間的溝通管道"><a href="#Channel：Goroutine-之間的溝通管道" class="headerlink" title="Channel：Goroutine 之間的溝通管道"></a>Channel：Goroutine 之間的溝通管道</h2><p>Goroutine 之間如何傳遞資料呢？我們可以使用 <strong>Channel</strong>，它就像是一條輸送帶，負責在 Goroutine 之間傳遞訊息，確保 <strong>Goroutine 之間安全地交換資料</strong>！</p>
-<p>Channel 的基本語法</p>
-<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="string">&quot;fmt&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">    ch := <span class="built_in">make</span>(<span class="keyword">chan</span> <span class="keyword">string</span>) <span class="comment">// 創建 Channel</span></span><br><span class="line">    </span><br><span class="line">    <span class="keyword">go</span> <span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123;</span><br><span class="line">        ch &lt;- <span class="string">&quot;Hello from Goroutine!&quot;</span> <span class="comment">// 發送訊息到 Channel</span></span><br><span class="line">    &#125;()</span><br><span class="line">    </span><br><span class="line">    message := &lt;-ch <span class="comment">// 從 Channel 接收訊息</span></span><br><span class="line">    fmt.Println(message)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>輸出：</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Hello from Goroutine!</span><br></pre></td></tr></table></figure>
-<p>另一種寫法（匿名函式）</p>
-<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="string">&quot;fmt&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">sendMessage</span><span class="params">(ch <span class="keyword">chan</span> <span class="keyword">string</span>)</span></span> &#123;</span><br><span class="line">    ch &lt;- <span class="string">&quot;Hello from Goroutine!&quot;</span> <span class="comment">// 發送訊息</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">    ch := <span class="built_in">make</span>(<span class="keyword">chan</span> <span class="keyword">string</span>) <span class="comment">// 建立 Channel</span></span><br><span class="line">    <span class="keyword">go</span> sendMessage(ch)</span><br><span class="line">    message := &lt;-ch <span class="comment">// 從 Channel 接收訊息</span></span><br><span class="line">    fmt.Println(message)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<ul>
-<li><code>ch := make(chan string)</code> 建立了一個 <code>string</code> 類型的 Channel。</li>
-<li><code>ch &lt;- &quot;Hello&quot;</code> 讓 Goroutine 發送訊息。</li>
-<li><code>&lt;-ch</code> 讓主程式接收訊息。</li>
-</ul>
-<p>這兩種寫法的主要差異在於：</p>
-<ol>
-<li>第一種寫法：將 <code>sendMessage</code> 定義為一個獨立函式，這樣的方式有助於程式的結構化，使程式碼更具可讀性和可維護性。</li>
-<li>第二種寫法：使用匿名函式（<code>go func() &#123;&#125;</code>）直接啟動 Goroutine，這種方式適合用於簡單的情境，例如臨時的併發操作，而不需要額外定義函式。</li>
-</ol>
-<p>在選擇哪種方式時，通常如果該 Goroutine 需要重複使用，則應該定義成獨立函式；如果只是一次性操作，則可以使用匿名函式。</p>
-<h3 id="Buffered-Channel（有緩衝的-Channel）"><a href="#Buffered-Channel（有緩衝的-Channel）" class="headerlink" title="Buffered Channel（有緩衝的 Channel）"></a>Buffered Channel（有緩衝的 Channel）</h3><p>Buffered channel 允許 goroutine 發送多個訊息而不會馬上被接收：</p>
-<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="string">&quot;fmt&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">    ch := <span class="built_in">make</span>(<span class="keyword">chan</span> <span class="keyword">int</span>, <span class="number">3</span>) <span class="comment">// 緩衝區大小為 3</span></span><br><span class="line"></span><br><span class="line">    ch &lt;- <span class="number">1</span></span><br><span class="line">    ch &lt;- <span class="number">2</span></span><br><span class="line">    ch &lt;- <span class="number">3</span></span><br><span class="line"></span><br><span class="line">    fmt.Println(&lt;-ch)</span><br><span class="line">    fmt.Println(&lt;-ch)</span><br><span class="line">    fmt.Println(&lt;-ch)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<blockquote>
-<p>這樣的 Channel 允許存入 3 個數據而不會阻塞 Goroutine。<br>緩衝區滿了後，goroutine 會阻塞直到有空間可用。</p>
-</blockquote>
-<h2 id="Mutex：避免-Goroutine-同時修改資料"><a href="#Mutex：避免-Goroutine-同時修改資料" class="headerlink" title="Mutex：避免 Goroutine 同時修改資料"></a>Mutex：避免 Goroutine 同時修改資料</h2><p>當多個 Goroutine 需要共享同一個變數時，可能會發生 <strong>競爭條件（Race Condition）</strong>，導致不一致的結果。這時候就需要 <strong>Mutex（互斥鎖）</strong> 來確保資料安全。</p>
-<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">    <span class="string">&quot;fmt&quot;</span></span><br><span class="line">    <span class="string">&quot;sync&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> (</span><br><span class="line">    counter <span class="keyword">int</span></span><br><span class="line">    lock sync.Mutex</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">increment</span><span class="params">()</span></span> &#123;</span><br><span class="line">    lock.Lock()   <span class="comment">// 加鎖</span></span><br><span class="line">    counter++</span><br><span class="line">    lock.Unlock() <span class="comment">// 解鎖</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">    <span class="keyword">var</span> wg sync.WaitGroup</span><br><span class="line">    wg.Add(<span class="number">1000</span>)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> i := <span class="number">0</span>; i &lt; <span class="number">1000</span>; i++ &#123;</span><br><span class="line">        <span class="keyword">go</span> <span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123;</span><br><span class="line">            <span class="keyword">defer</span> wg.Done()</span><br><span class="line">            increment()</span><br><span class="line">        &#125;()</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    wg.Wait()</span><br><span class="line">    fmt.Println(<span class="string">&quot;Final Counter:&quot;</span>, counter)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p><code>increment()</code> 用於增加計數器，使用 <code>mutex.Lock()</code> 和 <code>mutex.Unlock()</code> 保護 <code>counter</code> 變數。<code>main()</code> 啟動多個 Goroutine，每個 Goroutine 都會調用 <code>increment()</code> 。使用 <code>sync.Mutex </code>可以確保 <code>counter</code> 的值正確。</p>
-<ul>
-<li><code>lock.Lock()</code> 確保只有一個 Goroutine 能修改 <code>counter</code>。</li>
-<li><code>lock.Unlock()</code> 讓其他 Goroutine 繼續執行。</li>
-</ul>
-<p>這樣就能保證並發環境下數據的一致性！</p>
-<h2 id="結論"><a href="#結論" class="headerlink" title="結論"></a>結論</h2><p>Goroutine 讓 Go 的並發變得輕鬆簡單，但為了讓多個 Goroutine 之間能夠順利協作，我們需要：</p>
-<ul>
-<li><strong>WaitGroup</strong> 讓主程式等 Goroutine 執行完。</li>
-<li><strong>Channel</strong> 讓 Goroutine 之間安全地交換數據。</li>
-<li><strong>Mutex</strong> 避免多個 Goroutine 同時修改共享變數。</li>
-</ul>
-]]></content>
-      <categories>
-        <category>Golang</category>
-      </categories>
-      <tags>
-        <tag>Go</tag>
-        <tag>Goroutine</tag>
-        <tag>Concurrency</tag>
-        <tag>Channel</tag>
-        <tag>WaitGroup</tag>
-        <tag>Mutex</tag>
-        <tag>技術教學</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>SQL 與 NoSQL：關聯式與非關聯式資料庫的差異與應用</title>
     <url>/2025/01/18/SQL-%E8%88%87-NoSQL%EF%BC%9A%E9%97%9C%E8%81%AF%E5%BC%8F%E8%88%87%E9%9D%9E%E9%97%9C%E8%81%AF%E5%BC%8F%E8%B3%87%E6%96%99%E5%BA%AB%E7%9A%84%E5%B7%AE%E7%95%B0%E8%88%87%E6%87%89%E7%94%A8/</url>
     <content><![CDATA[<h3 id="資料的儲存與未來的選擇"><a href="#資料的儲存與未來的選擇" class="headerlink" title="資料的儲存與未來的選擇"></a>資料的儲存與未來的選擇</h3><p>現今的應用程式需要處理大量的資料，而選擇適合的資料庫相當的重要。無論是需要處理<code>結構化資料</code>，還是<code>非結構化</code>或<code>半結構化</code>資料，我們通常面臨著兩種主要資料庫技術的選擇：<strong>關聯式資料庫 (SQL)</strong> 和 <strong>非關聯式資料庫 (NoSQL)</strong> 。</p>
@@ -503,6 +410,175 @@
       </tags>
   </entry>
   <entry>
+    <title>[分享] Website Layout - Sidebar + Flexed</title>
+    <url>/2021/04/01/%E5%88%86%E4%BA%AB-Website-Layout-Sidebar-Flexed/</url>
+    <content><![CDATA[<blockquote>
+<p>實習開發網站，常遇到一些功能需求要上網查詢，整理成筆記以後再用到就不用又從頭開始找，也希望幫助到正在找學這些功能的人</p>
+</blockquote>
+<span id="more"></span>
+
+<iframe width="100%" height="500" src="https://codepen.io/ZZYume/embed/NWddogz?height=265&theme-id=dark&default-tab=result" frameborder="0"></iframe>
+
+<p>&#x2F;&#x2F; 有空再認真補教學</p>
+]]></content>
+      <categories>
+        <category>html</category>
+      </categories>
+      <tags>
+        <tag>sidebar</tag>
+        <tag>html</tag>
+        <tag>css</tag>
+        <tag>javascript</tag>
+        <tag>jquery</tag>
+        <tag>Bootstrap</tag>
+        <tag>Bootstrap-table</tag>
+        <tag>card</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>[學習] Check.io - Bigger Price</title>
+    <url>/2021/03/17/%E5%AD%B8%E7%BF%92-Check-io-Bigger-Price/</url>
+    <content><![CDATA[<blockquote>
+<p>check.io 上的題目：求出 list 裡 topN 貴的物品儲存方式是dicionary，每個物品各有兩個 key 分別為 name &amp; price<br>此系列文章主要是自己在解題時覺得有趣的題目，記錄下來讓自己以後好複習，有興趣的人可以參考看看</p>
+</blockquote>
+<span id="more"></span>
+
+<p>先來看看題目</p>
+<p><img src="https://i.imgur.com/ss2IjD4.png"></p>
+<p>看完題目可能會覺得小複雜，一般題目出有關 dictionary 的題目大多都只要找出一個最大或最小的 key 值，很直覺就會想到要用max&#x2F;min的函式來解決(詳細用法在<a href="https://zanazhong.github.io/2021/01/14/%E5%AD%B8%E7%BF%92-Check-io-Nearest-Value/#more">此篇文章</a>有提到)，這裡還要找不只一個，但認真想想其實也沒很難，用sort就可以一行輕鬆解決了。</p>
+<h3 id="sorted-的用法"><a href="#sorted-的用法" class="headerlink" title="sorted 的用法"></a>sorted 的用法</h3><div class="note default"><p>語法：sorted(list, key&#x3D;parameters, reverse&#x3D;True&#x2F;False)</p>
+</div>
+
+<h4 id="基本"><a href="#基本" class="headerlink" title="基本"></a>基本</h4><figure class="highlight python"><table><tr><td class="code"><pre><span class="line">x = [<span class="number">3</span>, <span class="number">2</span>, <span class="number">6</span>, <span class="number">1</span>, <span class="number">9</span>]</span><br><span class="line">y = <span class="built_in">sorted</span>(x)</span><br><span class="line"><span class="built_in">print</span>(y)</span><br></pre></td></tr></table></figure>
+<p>output:</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[1, 2, 3, 6, 9]</span><br></pre></td></tr></table></figure>
+
+<p>反向排序(大到小)</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">y = <span class="built_in">sorted</span>(x, reverse=<span class="literal">True</span>)</span><br></pre></td></tr></table></figure>
+<p>output:</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[9, 6, 3, 2, 1]</span><br></pre></td></tr></table></figure>
+
+<h4 id="進階"><a href="#進階" class="headerlink" title="進階"></a>進階</h4><p>example 1:</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">x = [(<span class="string">&quot;Amy&quot;</span>, <span class="number">150</span>, <span class="number">60</span>),</span><br><span class="line">     (<span class="string">&quot;Emily&quot;</span>, <span class="number">154</span>, <span class="number">55</span>),</span><br><span class="line">     (<span class="string">&quot;Wen&quot;</span>, <span class="number">145</span>, <span class="number">70</span>)]</span><br><span class="line"><span class="built_in">print</span>(<span class="built_in">sorted</span>(x, key=<span class="keyword">lambda</span> a: a[<span class="number">1</span>]))</span><br></pre></td></tr></table></figure>
+<p>output:</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[(&#39;Wen&#39;, 145, 70), (&#39;Amy&#39;, 150, 60), (&#39;Emily&#39;, 154, 55)]</span><br></pre></td></tr></table></figure>
+
+<p>example 2:</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">x = [&#123;<span class="string">&quot;fruit&quot;</span>: <span class="string">&quot;apple&quot;</span>, <span class="string">&quot;price&quot;</span>: <span class="number">20</span>&#125;,</span><br><span class="line">     &#123;<span class="string">&quot;fruit&quot;</span>: <span class="string">&quot;banana&quot;</span>, <span class="string">&quot;price&quot;</span>: <span class="number">18</span>&#125;,</span><br><span class="line">     &#123;<span class="string">&quot;fruit&quot;</span>: <span class="string">&quot;peach&quot;</span>, <span class="string">&quot;price&quot;</span>: <span class="number">25</span>&#125;] </span><br><span class="line"><span class="built_in">print</span>(<span class="built_in">sorted</span>(x, key=<span class="keyword">lambda</span> x: x[<span class="string">&quot;price&quot;</span>]))</span><br></pre></td></tr></table></figure>
+<p>output:</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[&#123;&#39;fruit&#39;: &#39;banana&#39;, &#39;price&#39;: 18&#125;, &#123;&#39;fruit&#39;: &#39;apple&#39;, &#39;price&#39;: 20&#125;, &#123;&#39;fruit&#39;: &#39;peach&#39;, &#39;price&#39;: 25&#125;]</span><br></pre></td></tr></table></figure>
+
+<h3 id="解答："><a href="#解答：" class="headerlink" title="解答："></a>解答：</h3><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">bigger_price</span>(<span class="params">limit: <span class="built_in">int</span>, data: <span class="built_in">list</span></span>) -&gt; <span class="built_in">list</span>:</span></span><br><span class="line">    <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">        TOP most expensive goods</span></span><br><span class="line"><span class="string">    &quot;&quot;&quot;</span></span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">sorted</span>(data, key=<span class="keyword">lambda</span> d: d[<span class="string">&#x27;price&#x27;</span>], reverse=<span class="literal">True</span>)[:limit]</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    <span class="keyword">from</span> pprint <span class="keyword">import</span> pprint</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&#x27;Example:&#x27;</span>)</span><br><span class="line">    pprint(bigger_price(<span class="number">2</span>, [</span><br><span class="line">        &#123;<span class="string">&quot;name&quot;</span>: <span class="string">&quot;bread&quot;</span>, <span class="string">&quot;price&quot;</span>: <span class="number">100</span>&#125;,</span><br><span class="line">        &#123;<span class="string">&quot;name&quot;</span>: <span class="string">&quot;wine&quot;</span>, <span class="string">&quot;price&quot;</span>: <span class="number">138</span>&#125;,</span><br><span class="line">        &#123;<span class="string">&quot;name&quot;</span>: <span class="string">&quot;meat&quot;</span>, <span class="string">&quot;price&quot;</span>: <span class="number">15</span>&#125;,</span><br><span class="line">        &#123;<span class="string">&quot;name&quot;</span>: <span class="string">&quot;water&quot;</span>, <span class="string">&quot;price&quot;</span>: <span class="number">1</span>&#125;</span><br><span class="line">    ]))</span><br><span class="line"></span><br><span class="line">    <span class="comment"># These &quot;asserts&quot; using for self-checking and not for auto-testing</span></span><br><span class="line">    <span class="keyword">assert</span> bigger_price(<span class="number">2</span>, [</span><br><span class="line">        &#123;<span class="string">&quot;name&quot;</span>: <span class="string">&quot;bread&quot;</span>, <span class="string">&quot;price&quot;</span>: <span class="number">100</span>&#125;,</span><br><span class="line">        &#123;<span class="string">&quot;name&quot;</span>: <span class="string">&quot;wine&quot;</span>, <span class="string">&quot;price&quot;</span>: <span class="number">138</span>&#125;,</span><br><span class="line">        &#123;<span class="string">&quot;name&quot;</span>: <span class="string">&quot;meat&quot;</span>, <span class="string">&quot;price&quot;</span>: <span class="number">15</span>&#125;,</span><br><span class="line">        &#123;<span class="string">&quot;name&quot;</span>: <span class="string">&quot;water&quot;</span>, <span class="string">&quot;price&quot;</span>: <span class="number">1</span>&#125;</span><br><span class="line">    ]) == [</span><br><span class="line">        &#123;<span class="string">&quot;name&quot;</span>: <span class="string">&quot;wine&quot;</span>, <span class="string">&quot;price&quot;</span>: <span class="number">138</span>&#125;,</span><br><span class="line">        &#123;<span class="string">&quot;name&quot;</span>: <span class="string">&quot;bread&quot;</span>, <span class="string">&quot;price&quot;</span>: <span class="number">100</span>&#125;</span><br><span class="line">    ], <span class="string">&quot;First&quot;</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">assert</span> bigger_price(<span class="number">1</span>, [</span><br><span class="line">        &#123;<span class="string">&quot;name&quot;</span>: <span class="string">&quot;pen&quot;</span>, <span class="string">&quot;price&quot;</span>: <span class="number">5</span>&#125;,</span><br><span class="line">        &#123;<span class="string">&quot;name&quot;</span>: <span class="string">&quot;whiteboard&quot;</span>, <span class="string">&quot;price&quot;</span>: <span class="number">170</span>&#125;</span><br><span class="line">    ]) == [&#123;<span class="string">&quot;name&quot;</span>: <span class="string">&quot;whiteboard&quot;</span>, <span class="string">&quot;price&quot;</span>: <span class="number">170</span>&#125;], <span class="string">&quot;Second&quot;</span></span><br><span class="line"></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&#x27;Done! Looks like it is fine. Go and check it&#x27;</span>)</span><br></pre></td></tr></table></figure>
+
+
+]]></content>
+      <categories>
+        <category>Check.io</category>
+        <category>python</category>
+      </categories>
+      <tags>
+        <tag>Check.io</tag>
+        <tag>python</tag>
+        <tag>lambda</tag>
+        <tag>sort</tag>
+        <tag>list</tag>
+        <tag>dictionary</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Go Concurrency：Goroutine、Channel、WaitGroup、Mutex 一次搞懂！</title>
+    <url>/2025/02/25/Go-Concurrency%EF%BC%9AGoroutine%E3%80%81Channel%E3%80%81WaitGroup%E3%80%81Mutex-%E4%B8%80%E6%AC%A1%E6%90%9E%E6%87%82%EF%BC%81/</url>
+    <content><![CDATA[<p>在寫程式時，你是否曾遇過這樣的問題：</p>
+<ul>
+<li>程式跑得很慢，某些函式明明可以同時執行，卻得一個等一個？</li>
+<li>想要讓多個工作並行，但又怕不同的程序互相干擾？</li>
+<li>處理龐大的計算或 I&#x2F;O 任務時，CPU 占用率極低，白白浪費資源？</li>
+</ul>
+<p>這時候，你需要的是 <strong>並發（Concurrency）</strong>！而 Go 語言提供了一種超級簡單且高效的並發工具： <strong>Goroutine</strong>。</p>
+<span id="more"></span>
+
+<p>在 Go 語言中，並發是其核心特性之一，而 Goroutine 則是實現並發的關鍵。你可以把它想像成一個「輕量級的執行緒」，但它比傳統執行緒更高效、佔用更少資源，並且能夠輕鬆地創建成千上萬個 Goroutine。</p>
+<h2 id="Goroutine-是什麼？為什麼它這麼強？"><a href="#Goroutine-是什麼？為什麼它這麼強？" class="headerlink" title="Goroutine 是什麼？為什麼它這麼強？"></a>Goroutine 是什麼？為什麼它這麼強？</h2><p>Goroutine 是 Go 語言的 <strong>輕量級執行緒（Lightweight Thread）</strong>，讓你可以輕鬆執行並發程式，而不需要手動管理繁瑣的系統執行緒。</p>
+<ul>
+<li><strong>輕量級</strong>：相比於傳統的作業系統執行緒（Thread），Goroutine 的記憶體開銷極低。</li>
+<li><strong>執行簡單</strong>：只要在函式前加上 <code>go</code>，就能讓它跑在背景，完全不需要設定任何 Thread！</li>
+<li><strong>獨立運行</strong>：Goroutine 之間互不影響，即使某個 Goroutine 崩潰，也不會導致其他 Goroutine 失敗。</li>
+<li><strong>高效</strong>：Go 運行時（runtime）會自動管理 Goroutine 的調度，避免過度依賴作業系統的執行緒管理。</li>
+</ul>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">    <span class="string">&quot;fmt&quot;</span></span><br><span class="line">    <span class="string">&quot;time&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">hello</span><span class="params">()</span></span> &#123;</span><br><span class="line">    fmt.Println(<span class="string">&quot;Hello, Goroutine!&quot;</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">    <span class="keyword">go</span> hello() <span class="comment">// 啟動 Goroutine</span></span><br><span class="line">    fmt.Println(<span class="string">&quot;Main 函式結束&quot;</span>)</span><br><span class="line">    time.Sleep(time.Second) <span class="comment">// 等待 Goroutine 執行完成</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>輸出</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Main 函式結束</span><br><span class="line">Hello, Goroutine!</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><code>go hello()</code> 會在背景執行，而 <code>main()</code> 函式會繼續往下執行。</li>
+<li>這樣我們的程式就可以同時進行兩個工作，提升效率！</li>
+</ul>
+<p>⚠ 但這裡有個問題—— Goroutine 是異步執行的，main() 可能在 hello() 結束前就已執行完畢，因此 time.Sleep() 讓主執行緒暫停一下，確保 Goroutine 執行。</p>
+<div class="note info"><p><strong>main 函式結束後，所有 Goroutine 也會立即結束</strong>，這就引出了下一個重要工具： <strong>WaitGroup</strong>。</p>
+</div>
+
+<h2 id="WaitGroup：讓主程式等-Goroutine-完成，確保-Goroutine-全部完成"><a href="#WaitGroup：讓主程式等-Goroutine-完成，確保-Goroutine-全部完成" class="headerlink" title="WaitGroup：讓主程式等 Goroutine 完成，確保 Goroutine 全部完成"></a>WaitGroup：讓主程式等 Goroutine 完成，確保 Goroutine 全部完成</h2><p>當我們開啟多個 Goroutine 時，<code>main()</code> 可能還沒等 Goroutine 執行完就結束了，導致 Goroutine 被強制終止。為了解決這個問題，我們可以使用 <strong>sync.WaitGroup</strong>。</p>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">    <span class="string">&quot;fmt&quot;</span></span><br><span class="line">    <span class="string">&quot;sync&quot;</span></span><br><span class="line">    <span class="string">&quot;time&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> wg sync.WaitGroup</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">printMessage</span><span class="params">(message <span class="keyword">string</span>)</span></span> &#123;</span><br><span class="line">    <span class="keyword">defer</span> wg.Done() <span class="comment">// Goroutine 結束時通知 WaitGroup</span></span><br><span class="line">    <span class="keyword">for</span> i := <span class="number">0</span>; i &lt; <span class="number">5</span>; i++ &#123;</span><br><span class="line">        fmt.Println(message, i)</span><br><span class="line">        time.Sleep(time.Millisecond * <span class="number">500</span>)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">    wg.Add(<span class="number">2</span>) <span class="comment">// 設定有 2 個 Goroutine</span></span><br><span class="line">    <span class="keyword">go</span> printMessage(<span class="string">&quot;Hello from Goroutine 1&quot;</span>)</span><br><span class="line">    <span class="keyword">go</span> printMessage(<span class="string">&quot;Hello from Goroutine 2&quot;</span>)</span><br><span class="line"></span><br><span class="line">    wg.Wait() <span class="comment">// 等待所有 Goroutine 結束</span></span><br><span class="line">    fmt.Println(<span class="string">&quot;All Goroutines Finished!&quot;</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li><code>wg.Add(2)</code> 告訴 WaitGroup 需要等 2 個 Goroutine。   &lt;- 增加計數器 </li>
+<li><code>wg.Done()</code> 會在 Goroutine 執行結束時通知 WaitGroup。 &lt;- 減少計數器</li>
+<li><code>wg.Wait()</code> 讓 <code>main()</code> 等待所有 Goroutine 結束後才繼續。 &lt;- 等待計數器歸零</li>
+</ul>
+<p>這樣就能確保主程式不會提前結束！<br>我們再看一個範例：</p>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">    <span class="string">&quot;fmt&quot;</span></span><br><span class="line">    <span class="string">&quot;sync&quot;</span></span><br><span class="line">    <span class="string">&quot;time&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">worker</span><span class="params">(id <span class="keyword">int</span>, wg *sync.WaitGroup)</span></span> &#123;</span><br><span class="line">    <span class="keyword">defer</span> wg.Done() <span class="comment">// 告知 WaitGroup 這個 Goroutine 完成</span></span><br><span class="line">    fmt.Printf(<span class="string">&quot;Worker %d 開始工作\n&quot;</span>, id)</span><br><span class="line">    time.Sleep(time.Second)</span><br><span class="line">    fmt.Printf(<span class="string">&quot;Worker %d 完成工作\n&quot;</span>, id)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">    <span class="keyword">var</span> wg sync.WaitGroup</span><br><span class="line">    <span class="keyword">for</span> i := <span class="number">1</span>; i &lt;= <span class="number">3</span>; i++ &#123;</span><br><span class="line">        wg.Add(<span class="number">1</span>)</span><br><span class="line">        <span class="keyword">go</span> worker(i, &amp;wg)</span><br><span class="line">    &#125;</span><br><span class="line">    wg.Wait() <span class="comment">// 等待所有 Goroutine 結束</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="Channel：Goroutine-之間的溝通管道"><a href="#Channel：Goroutine-之間的溝通管道" class="headerlink" title="Channel：Goroutine 之間的溝通管道"></a>Channel：Goroutine 之間的溝通管道</h2><p>Goroutine 之間如何傳遞資料呢？我們可以使用 <strong>Channel</strong>，它就像是一條輸送帶，負責在 Goroutine 之間傳遞訊息，確保 <strong>Goroutine 之間安全地交換資料</strong>！</p>
+<p>Channel 的基本語法</p>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="string">&quot;fmt&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">    ch := <span class="built_in">make</span>(<span class="keyword">chan</span> <span class="keyword">string</span>) <span class="comment">// 創建 Channel</span></span><br><span class="line">    </span><br><span class="line">    <span class="keyword">go</span> <span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123;</span><br><span class="line">        ch &lt;- <span class="string">&quot;Hello from Goroutine!&quot;</span> <span class="comment">// 發送訊息到 Channel</span></span><br><span class="line">    &#125;()</span><br><span class="line">    </span><br><span class="line">    message := &lt;-ch <span class="comment">// 從 Channel 接收訊息</span></span><br><span class="line">    fmt.Println(message)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>輸出：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Hello from Goroutine!</span><br></pre></td></tr></table></figure>
+<p>另一種寫法（匿名函式）</p>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="string">&quot;fmt&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">sendMessage</span><span class="params">(ch <span class="keyword">chan</span> <span class="keyword">string</span>)</span></span> &#123;</span><br><span class="line">    ch &lt;- <span class="string">&quot;Hello from Goroutine!&quot;</span> <span class="comment">// 發送訊息</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">    ch := <span class="built_in">make</span>(<span class="keyword">chan</span> <span class="keyword">string</span>) <span class="comment">// 建立 Channel</span></span><br><span class="line">    <span class="keyword">go</span> sendMessage(ch)</span><br><span class="line">    message := &lt;-ch <span class="comment">// 從 Channel 接收訊息</span></span><br><span class="line">    fmt.Println(message)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li><code>ch := make(chan string)</code> 建立了一個 <code>string</code> 類型的 Channel。</li>
+<li><code>ch &lt;- &quot;Hello&quot;</code> 讓 Goroutine 發送訊息。</li>
+<li><code>&lt;-ch</code> 讓主程式接收訊息。</li>
+</ul>
+<p>這兩種寫法的主要差異在於：</p>
+<ol>
+<li>第一種寫法：將 <code>sendMessage</code> 定義為一個獨立函式，這樣的方式有助於程式的結構化，使程式碼更具可讀性和可維護性。</li>
+<li>第二種寫法：使用匿名函式（<code>go func() &#123;&#125;</code>）直接啟動 Goroutine，這種方式適合用於簡單的情境，例如臨時的併發操作，而不需要額外定義函式。</li>
+</ol>
+<p>在選擇哪種方式時，通常如果該 Goroutine 需要重複使用，則應該定義成獨立函式；如果只是一次性操作，則可以使用匿名函式。</p>
+<h3 id="Buffered-Channel（有緩衝的-Channel）"><a href="#Buffered-Channel（有緩衝的-Channel）" class="headerlink" title="Buffered Channel（有緩衝的 Channel）"></a>Buffered Channel（有緩衝的 Channel）</h3><p>Buffered channel 允許 goroutine 發送多個訊息而不會馬上被接收：</p>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="string">&quot;fmt&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">    ch := <span class="built_in">make</span>(<span class="keyword">chan</span> <span class="keyword">int</span>, <span class="number">3</span>) <span class="comment">// 緩衝區大小為 3</span></span><br><span class="line"></span><br><span class="line">    ch &lt;- <span class="number">1</span></span><br><span class="line">    ch &lt;- <span class="number">2</span></span><br><span class="line">    ch &lt;- <span class="number">3</span></span><br><span class="line"></span><br><span class="line">    fmt.Println(&lt;-ch)</span><br><span class="line">    fmt.Println(&lt;-ch)</span><br><span class="line">    fmt.Println(&lt;-ch)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>這樣的 Channel 允許存入 3 個數據而不會阻塞 Goroutine。<br>緩衝區滿了後，goroutine 會阻塞直到有空間可用。</p>
+</blockquote>
+<h2 id="Mutex：避免-Goroutine-同時修改資料"><a href="#Mutex：避免-Goroutine-同時修改資料" class="headerlink" title="Mutex：避免 Goroutine 同時修改資料"></a>Mutex：避免 Goroutine 同時修改資料</h2><p>當多個 Goroutine 需要共享同一個變數時，可能會發生 <strong>競爭條件（Race Condition）</strong>，導致不一致的結果。這時候就需要 <strong>Mutex（互斥鎖）</strong> 來確保資料安全。</p>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">    <span class="string">&quot;fmt&quot;</span></span><br><span class="line">    <span class="string">&quot;sync&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> (</span><br><span class="line">    counter <span class="keyword">int</span></span><br><span class="line">    lock sync.Mutex</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">increment</span><span class="params">()</span></span> &#123;</span><br><span class="line">    lock.Lock()   <span class="comment">// 加鎖</span></span><br><span class="line">    counter++</span><br><span class="line">    lock.Unlock() <span class="comment">// 解鎖</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">    <span class="keyword">var</span> wg sync.WaitGroup</span><br><span class="line">    wg.Add(<span class="number">1000</span>)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> i := <span class="number">0</span>; i &lt; <span class="number">1000</span>; i++ &#123;</span><br><span class="line">        <span class="keyword">go</span> <span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123;</span><br><span class="line">            <span class="keyword">defer</span> wg.Done()</span><br><span class="line">            increment()</span><br><span class="line">        &#125;()</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    wg.Wait()</span><br><span class="line">    fmt.Println(<span class="string">&quot;Final Counter:&quot;</span>, counter)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><code>increment()</code> 用於增加計數器，使用 <code>mutex.Lock()</code> 和 <code>mutex.Unlock()</code> 保護 <code>counter</code> 變數。<code>main()</code> 啟動多個 Goroutine，每個 Goroutine 都會調用 <code>increment()</code> 。使用 <code>sync.Mutex </code>可以確保 <code>counter</code> 的值正確。</p>
+<ul>
+<li><code>lock.Lock()</code> 確保只有一個 Goroutine 能修改 <code>counter</code>。</li>
+<li><code>lock.Unlock()</code> 讓其他 Goroutine 繼續執行。</li>
+</ul>
+<p>這樣就能保證並發環境下數據的一致性！</p>
+<h2 id="結論"><a href="#結論" class="headerlink" title="結論"></a>結論</h2><p>Goroutine 讓 Go 的並發變得輕鬆簡單，但為了讓多個 Goroutine 之間能夠順利協作，我們需要：</p>
+<ul>
+<li><strong>WaitGroup</strong> 讓主程式等 Goroutine 執行完。</li>
+<li><strong>Channel</strong> 讓 Goroutine 之間安全地交換數據。</li>
+<li><strong>Mutex</strong> 避免多個 Goroutine 同時修改共享變數。</li>
+</ul>
+]]></content>
+      <categories>
+        <category>Golang</category>
+      </categories>
+      <tags>
+        <tag>Go</tag>
+        <tag>Goroutine</tag>
+        <tag>Concurrency</tag>
+        <tag>Channel</tag>
+        <tag>WaitGroup</tag>
+        <tag>Mutex</tag>
+        <tag>技術教學</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>單體架構 vs 微服務架構：選擇的關鍵與應用</title>
     <url>/2025/01/15/%E5%96%AE%E9%AB%94%E6%9E%B6%E6%A7%8B-vs-%E5%BE%AE%E6%9C%8D%E5%8B%99%E6%9E%B6%E6%A7%8B%EF%BC%9A%E9%81%B8%E6%93%87%E7%9A%84%E9%97%9C%E9%8D%B5%E8%88%87%E6%87%89%E7%94%A8/</url>
     <content><![CDATA[<h2 id="為什麼要了解單體架構和微服務架構？"><a href="#為什麼要了解單體架構和微服務架構？" class="headerlink" title="為什麼要了解單體架構和微服務架構？"></a>為什麼要了解單體架構和微服務架構？</h2><p>隨著技術的快速發展，軟體架構設計已經成為每個工程師必須掌握的核心知識之一。<br>無論你是正在開發新產品的初創團隊，還是維護大型系統的資深工程師，選擇適合的架構直接影響系統的穩定性、性能和團隊效率。</p>
@@ -621,82 +697,6 @@
         <tag>Microservices</tag>
         <tag>單體架構</tag>
         <tag>系統架構</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>[分享] Website Layout - Sidebar + Flexed</title>
-    <url>/2021/04/01/%E5%88%86%E4%BA%AB-Website-Layout-Sidebar-Flexed/</url>
-    <content><![CDATA[<blockquote>
-<p>實習開發網站，常遇到一些功能需求要上網查詢，整理成筆記以後再用到就不用又從頭開始找，也希望幫助到正在找學這些功能的人</p>
-</blockquote>
-<span id="more"></span>
-
-<iframe width="100%" height="500" src="https://codepen.io/ZZYume/embed/NWddogz?height=265&theme-id=dark&default-tab=result" frameborder="0"></iframe>
-
-<p>&#x2F;&#x2F; 有空再認真補教學</p>
-]]></content>
-      <categories>
-        <category>html</category>
-      </categories>
-      <tags>
-        <tag>sidebar</tag>
-        <tag>html</tag>
-        <tag>css</tag>
-        <tag>javascript</tag>
-        <tag>jquery</tag>
-        <tag>Bootstrap</tag>
-        <tag>Bootstrap-table</tag>
-        <tag>card</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>[學習] Check.io - Bigger Price</title>
-    <url>/2021/03/17/%E5%AD%B8%E7%BF%92-Check-io-Bigger-Price/</url>
-    <content><![CDATA[<blockquote>
-<p>check.io 上的題目：求出 list 裡 topN 貴的物品儲存方式是dicionary，每個物品各有兩個 key 分別為 name &amp; price<br>此系列文章主要是自己在解題時覺得有趣的題目，記錄下來讓自己以後好複習，有興趣的人可以參考看看</p>
-</blockquote>
-<span id="more"></span>
-
-<p>先來看看題目</p>
-<p><img src="https://i.imgur.com/ss2IjD4.png"></p>
-<p>看完題目可能會覺得小複雜，一般題目出有關 dictionary 的題目大多都只要找出一個最大或最小的 key 值，很直覺就會想到要用max&#x2F;min的函式來解決(詳細用法在<a href="https://zanazhong.github.io/2021/01/14/%E5%AD%B8%E7%BF%92-Check-io-Nearest-Value/#more">此篇文章</a>有提到)，這裡還要找不只一個，但認真想想其實也沒很難，用sort就可以一行輕鬆解決了。</p>
-<h3 id="sorted-的用法"><a href="#sorted-的用法" class="headerlink" title="sorted 的用法"></a>sorted 的用法</h3><div class="note default"><p>語法：sorted(list, key&#x3D;parameters, reverse&#x3D;True&#x2F;False)</p>
-</div>
-
-<h4 id="基本"><a href="#基本" class="headerlink" title="基本"></a>基本</h4><figure class="highlight python"><table><tr><td class="code"><pre><span class="line">x = [<span class="number">3</span>, <span class="number">2</span>, <span class="number">6</span>, <span class="number">1</span>, <span class="number">9</span>]</span><br><span class="line">y = <span class="built_in">sorted</span>(x)</span><br><span class="line"><span class="built_in">print</span>(y)</span><br></pre></td></tr></table></figure>
-<p>output:</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[1, 2, 3, 6, 9]</span><br></pre></td></tr></table></figure>
-
-<p>反向排序(大到小)</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">y = <span class="built_in">sorted</span>(x, reverse=<span class="literal">True</span>)</span><br></pre></td></tr></table></figure>
-<p>output:</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[9, 6, 3, 2, 1]</span><br></pre></td></tr></table></figure>
-
-<h4 id="進階"><a href="#進階" class="headerlink" title="進階"></a>進階</h4><p>example 1:</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">x = [(<span class="string">&quot;Amy&quot;</span>, <span class="number">150</span>, <span class="number">60</span>),</span><br><span class="line">     (<span class="string">&quot;Emily&quot;</span>, <span class="number">154</span>, <span class="number">55</span>),</span><br><span class="line">     (<span class="string">&quot;Wen&quot;</span>, <span class="number">145</span>, <span class="number">70</span>)]</span><br><span class="line"><span class="built_in">print</span>(<span class="built_in">sorted</span>(x, key=<span class="keyword">lambda</span> a: a[<span class="number">1</span>]))</span><br></pre></td></tr></table></figure>
-<p>output:</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[(&#39;Wen&#39;, 145, 70), (&#39;Amy&#39;, 150, 60), (&#39;Emily&#39;, 154, 55)]</span><br></pre></td></tr></table></figure>
-
-<p>example 2:</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">x = [&#123;<span class="string">&quot;fruit&quot;</span>: <span class="string">&quot;apple&quot;</span>, <span class="string">&quot;price&quot;</span>: <span class="number">20</span>&#125;,</span><br><span class="line">     &#123;<span class="string">&quot;fruit&quot;</span>: <span class="string">&quot;banana&quot;</span>, <span class="string">&quot;price&quot;</span>: <span class="number">18</span>&#125;,</span><br><span class="line">     &#123;<span class="string">&quot;fruit&quot;</span>: <span class="string">&quot;peach&quot;</span>, <span class="string">&quot;price&quot;</span>: <span class="number">25</span>&#125;] </span><br><span class="line"><span class="built_in">print</span>(<span class="built_in">sorted</span>(x, key=<span class="keyword">lambda</span> x: x[<span class="string">&quot;price&quot;</span>]))</span><br></pre></td></tr></table></figure>
-<p>output:</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[&#123;&#39;fruit&#39;: &#39;banana&#39;, &#39;price&#39;: 18&#125;, &#123;&#39;fruit&#39;: &#39;apple&#39;, &#39;price&#39;: 20&#125;, &#123;&#39;fruit&#39;: &#39;peach&#39;, &#39;price&#39;: 25&#125;]</span><br></pre></td></tr></table></figure>
-
-<h3 id="解答："><a href="#解答：" class="headerlink" title="解答："></a>解答：</h3><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">bigger_price</span>(<span class="params">limit: <span class="built_in">int</span>, data: <span class="built_in">list</span></span>) -&gt; <span class="built_in">list</span>:</span></span><br><span class="line">    <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">        TOP most expensive goods</span></span><br><span class="line"><span class="string">    &quot;&quot;&quot;</span></span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">sorted</span>(data, key=<span class="keyword">lambda</span> d: d[<span class="string">&#x27;price&#x27;</span>], reverse=<span class="literal">True</span>)[:limit]</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    <span class="keyword">from</span> pprint <span class="keyword">import</span> pprint</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&#x27;Example:&#x27;</span>)</span><br><span class="line">    pprint(bigger_price(<span class="number">2</span>, [</span><br><span class="line">        &#123;<span class="string">&quot;name&quot;</span>: <span class="string">&quot;bread&quot;</span>, <span class="string">&quot;price&quot;</span>: <span class="number">100</span>&#125;,</span><br><span class="line">        &#123;<span class="string">&quot;name&quot;</span>: <span class="string">&quot;wine&quot;</span>, <span class="string">&quot;price&quot;</span>: <span class="number">138</span>&#125;,</span><br><span class="line">        &#123;<span class="string">&quot;name&quot;</span>: <span class="string">&quot;meat&quot;</span>, <span class="string">&quot;price&quot;</span>: <span class="number">15</span>&#125;,</span><br><span class="line">        &#123;<span class="string">&quot;name&quot;</span>: <span class="string">&quot;water&quot;</span>, <span class="string">&quot;price&quot;</span>: <span class="number">1</span>&#125;</span><br><span class="line">    ]))</span><br><span class="line"></span><br><span class="line">    <span class="comment"># These &quot;asserts&quot; using for self-checking and not for auto-testing</span></span><br><span class="line">    <span class="keyword">assert</span> bigger_price(<span class="number">2</span>, [</span><br><span class="line">        &#123;<span class="string">&quot;name&quot;</span>: <span class="string">&quot;bread&quot;</span>, <span class="string">&quot;price&quot;</span>: <span class="number">100</span>&#125;,</span><br><span class="line">        &#123;<span class="string">&quot;name&quot;</span>: <span class="string">&quot;wine&quot;</span>, <span class="string">&quot;price&quot;</span>: <span class="number">138</span>&#125;,</span><br><span class="line">        &#123;<span class="string">&quot;name&quot;</span>: <span class="string">&quot;meat&quot;</span>, <span class="string">&quot;price&quot;</span>: <span class="number">15</span>&#125;,</span><br><span class="line">        &#123;<span class="string">&quot;name&quot;</span>: <span class="string">&quot;water&quot;</span>, <span class="string">&quot;price&quot;</span>: <span class="number">1</span>&#125;</span><br><span class="line">    ]) == [</span><br><span class="line">        &#123;<span class="string">&quot;name&quot;</span>: <span class="string">&quot;wine&quot;</span>, <span class="string">&quot;price&quot;</span>: <span class="number">138</span>&#125;,</span><br><span class="line">        &#123;<span class="string">&quot;name&quot;</span>: <span class="string">&quot;bread&quot;</span>, <span class="string">&quot;price&quot;</span>: <span class="number">100</span>&#125;</span><br><span class="line">    ], <span class="string">&quot;First&quot;</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">assert</span> bigger_price(<span class="number">1</span>, [</span><br><span class="line">        &#123;<span class="string">&quot;name&quot;</span>: <span class="string">&quot;pen&quot;</span>, <span class="string">&quot;price&quot;</span>: <span class="number">5</span>&#125;,</span><br><span class="line">        &#123;<span class="string">&quot;name&quot;</span>: <span class="string">&quot;whiteboard&quot;</span>, <span class="string">&quot;price&quot;</span>: <span class="number">170</span>&#125;</span><br><span class="line">    ]) == [&#123;<span class="string">&quot;name&quot;</span>: <span class="string">&quot;whiteboard&quot;</span>, <span class="string">&quot;price&quot;</span>: <span class="number">170</span>&#125;], <span class="string">&quot;Second&quot;</span></span><br><span class="line"></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&#x27;Done! Looks like it is fine. Go and check it&#x27;</span>)</span><br></pre></td></tr></table></figure>
-
-
-]]></content>
-      <categories>
-        <category>Check.io</category>
-        <category>python</category>
-      </categories>
-      <tags>
-        <tag>Check.io</tag>
-        <tag>python</tag>
-        <tag>lambda</tag>
-        <tag>sort</tag>
-        <tag>list</tag>
-        <tag>dictionary</tag>
       </tags>
   </entry>
   <entry>
@@ -838,6 +838,47 @@
       </tags>
   </entry>
   <entry>
+    <title>[學習] Pyton  try - except</title>
+    <url>/2021/01/31/%E5%AD%B8%E7%BF%92-Pyton-try-except/</url>
+    <content><![CDATA[<blockquote>
+<p>在開發程式的過程中，難免有會遇到錯誤，例如：使用者輸入不正確的資料、網路連線問題或語法上的問題等，如果沒有做好例外處理的機制，程式碼可能因此而中斷，還會讓使用者看到錯誤訊息，對產品使用的觀感不佳，體驗也會大打折扣。因此，在開發的過程中要考慮到錯誤發生時，程式碼要如何做適當的反應。</p>
+</blockquote>
+<span id="more"></span>
+
+<p>Python 在例外處理的機制為：</p>
+<div class="note default"><p>try 執行<br>except 例外<br>else 都沒出錯就執行這區塊<br>finally 任何狀況下都會執行的區塊</p>
+</div>
+
+<p>而錯誤類型可以至<a href="https://docs.python.org/3.6/library/exceptions.html">該網址</a>查看，常見ValueError(ex: int(hi))、ZeroDivisionError(ex: x &#x3D; 2&#x2F;0)、</p>
+<p>先來個完整的架構的範例：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">func</span>(<span class="params">x, y</span>):</span></span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        result = x / y</span><br><span class="line">    <span class="keyword">except</span> ZeroDivisionError:</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;不能除以零！&quot;</span>)</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;結果是：&quot;</span>, result)</span><br><span class="line">    <span class="keyword">finally</span>:</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;Hi，我一定會執行&quot;</span>)</span><br><span class="line">func(<span class="number">4</span>, <span class="number">2</span>)</span><br><span class="line"></span><br><span class="line">func(<span class="number">2</span>, <span class="number">0</span>)</span><br></pre></td></tr></table></figure>
+
+<p>output：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">結果是： 2.0</span><br><span class="line">Hi，我一定會執行</span><br><span class="line">--------------</span><br><span class="line">不能除以零！</span><br><span class="line">Hi，我一定會執行</span><br></pre></td></tr></table></figure>
+
+<p>一般來說可以這樣寫：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">try:</span><br><span class="line">    正常時要執行的程式</span><br><span class="line">except &lt;error type&gt;:</span><br><span class="line">    錯誤時要執行程式</span><br></pre></td></tr></table></figure>
+
+<p>不確定的錯誤類型的話 error type 可以不寫</p>
+<p>example：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">func</span>(<span class="params">x, y</span>):</span></span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        result = x / y</span><br><span class="line">    <span class="keyword">except</span>:</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;something wrong&quot;</span>)</span><br><span class="line"></span><br><span class="line">func(<span class="number">4</span>, <span class="number">0</span>)</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">something wrong</span><br></pre></td></tr></table></figure>
+
+<p>sys.exc_info()[0] 可以用來取出 except 的錯誤訊息</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> sys</span><br><span class="line"></span><br><span class="line">i = <span class="string">&#x27;o&#x27;</span></span><br><span class="line"><span class="keyword">try</span>:</span><br><span class="line">    result = i / <span class="number">0</span></span><br><span class="line">    <span class="built_in">print</span>(result)</span><br><span class="line"><span class="keyword">except</span>:</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;Unexpected error:&quot;</span>, sys.exc_info()[<span class="number">0</span>])</span><br></pre></td></tr></table></figure>
+
+<p>output：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Unexpected error: &lt;class &#39;TypeError&#39;&gt;</span><br></pre></td></tr></table></figure>]]></content>
+      <categories>
+        <category>python</category>
+      </categories>
+      <tags>
+        <tag>python</tag>
+        <tag>try-except</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>[學習] Pyton - String</title>
     <url>/2021/01/20/%E5%AD%B8%E7%BF%92-Pyton-String/</url>
     <content><![CDATA[<blockquote>
@@ -877,47 +918,6 @@
       <tags>
         <tag>python</tag>
         <tag>string</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>[學習] Pyton  try - except</title>
-    <url>/2021/01/31/%E5%AD%B8%E7%BF%92-Pyton-try-except/</url>
-    <content><![CDATA[<blockquote>
-<p>在開發程式的過程中，難免有會遇到錯誤，例如：使用者輸入不正確的資料、網路連線問題或語法上的問題等，如果沒有做好例外處理的機制，程式碼可能因此而中斷，還會讓使用者看到錯誤訊息，對產品使用的觀感不佳，體驗也會大打折扣。因此，在開發的過程中要考慮到錯誤發生時，程式碼要如何做適當的反應。</p>
-</blockquote>
-<span id="more"></span>
-
-<p>Python 在例外處理的機制為：</p>
-<div class="note default"><p>try 執行<br>except 例外<br>else 都沒出錯就執行這區塊<br>finally 任何狀況下都會執行的區塊</p>
-</div>
-
-<p>而錯誤類型可以至<a href="https://docs.python.org/3.6/library/exceptions.html">該網址</a>查看，常見ValueError(ex: int(hi))、ZeroDivisionError(ex: x &#x3D; 2&#x2F;0)、</p>
-<p>先來個完整的架構的範例：</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">func</span>(<span class="params">x, y</span>):</span></span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        result = x / y</span><br><span class="line">    <span class="keyword">except</span> ZeroDivisionError:</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;不能除以零！&quot;</span>)</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;結果是：&quot;</span>, result)</span><br><span class="line">    <span class="keyword">finally</span>:</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;Hi，我一定會執行&quot;</span>)</span><br><span class="line">func(<span class="number">4</span>, <span class="number">2</span>)</span><br><span class="line"></span><br><span class="line">func(<span class="number">2</span>, <span class="number">0</span>)</span><br></pre></td></tr></table></figure>
-
-<p>output：</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">結果是： 2.0</span><br><span class="line">Hi，我一定會執行</span><br><span class="line">--------------</span><br><span class="line">不能除以零！</span><br><span class="line">Hi，我一定會執行</span><br></pre></td></tr></table></figure>
-
-<p>一般來說可以這樣寫：</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">try:</span><br><span class="line">    正常時要執行的程式</span><br><span class="line">except &lt;error type&gt;:</span><br><span class="line">    錯誤時要執行程式</span><br></pre></td></tr></table></figure>
-
-<p>不確定的錯誤類型的話 error type 可以不寫</p>
-<p>example：</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">func</span>(<span class="params">x, y</span>):</span></span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        result = x / y</span><br><span class="line">    <span class="keyword">except</span>:</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;something wrong&quot;</span>)</span><br><span class="line"></span><br><span class="line">func(<span class="number">4</span>, <span class="number">0</span>)</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">something wrong</span><br></pre></td></tr></table></figure>
-
-<p>sys.exc_info()[0] 可以用來取出 except 的錯誤訊息</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> sys</span><br><span class="line"></span><br><span class="line">i = <span class="string">&#x27;o&#x27;</span></span><br><span class="line"><span class="keyword">try</span>:</span><br><span class="line">    result = i / <span class="number">0</span></span><br><span class="line">    <span class="built_in">print</span>(result)</span><br><span class="line"><span class="keyword">except</span>:</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;Unexpected error:&quot;</span>, sys.exc_info()[<span class="number">0</span>])</span><br></pre></td></tr></table></figure>
-
-<p>output：</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Unexpected error: &lt;class &#39;TypeError&#39;&gt;</span><br></pre></td></tr></table></figure>]]></content>
-      <categories>
-        <category>python</category>
-      </categories>
-      <tags>
-        <tag>python</tag>
-        <tag>try-except</tag>
       </tags>
   </entry>
   <entry>
@@ -1150,6 +1150,108 @@
       </tags>
   </entry>
   <entry>
+    <title>常用 Docker 指令全攻略</title>
+    <url>/2025/03/11/%E5%B8%B8%E7%94%A8-Docker-%E6%8C%87%E4%BB%A4%E5%85%A8%E6%94%BB%E7%95%A5/</url>
+    <content><![CDATA[<p>歡迎來到 Docker 的指令世界！在<a href="https://zanazhong.github.io/2025/01/16/%E6%B7%B1%E5%85%A5%E6%B7%BA%E5%87%BA%E7%90%86%E8%A7%A3-Docker-%E7%9A%84%E5%BA%95%E5%B1%A4%E9%81%8B%E4%BD%9C%E8%88%87%E6%9E%B6%E6%A7%8B/">上篇文章</a>中，我們聊過 Docker 的核心架構，將它比喻成一台「神奇咖啡機」，從顧客（Docker Client）用遙控器操作，到咖啡機的大腦（Docker Daemon）接到訂單，再到咖啡機沖泡（Containerd 和 OCI Runtime），最後端出一杯完美的咖啡（Container）。這次，我們要動手操作這台咖啡機，學會如何用指令點單、沖咖啡，甚至調配自己的配方。一樣會沿用上一篇的比喻，若是還沒閱讀過的讀者，可以先至<a href="https://zanazhong.github.io/2025/01/16/%E6%B7%B1%E5%85%A5%E6%B7%BA%E5%87%BA%E7%90%86%E8%A7%A3-Docker-%E7%9A%84%E5%BA%95%E5%B1%A4%E9%81%8B%E4%BD%9C%E8%88%87%E6%9E%B6%E6%A7%8B/">上篇文章</a>閱讀，了解 Docker 的基本概念。</p>
+<span id="more"></span>
+
+<h2 id="基本指令：檢查-Docker-狀態"><a href="#基本指令：檢查-Docker-狀態" class="headerlink" title="基本指令：檢查 Docker 狀態"></a>基本指令：檢查 Docker 狀態</h2><h3 id="查看-Docker-版本"><a href="#查看-Docker-版本" class="headerlink" title="查看 Docker 版本"></a>查看 Docker 版本</h3><blockquote>
+<p>確認 Docker 是否正常安裝。</p>
+</blockquote>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">docker --version</span><br></pre></td></tr></table></figure>
+<p>output:</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Docker version 20.10.21, build baeda1f</span><br></pre></td></tr></table></figure>
+
+<h2 id="準備原料：下載與管理-Image"><a href="#準備原料：下載與管理-Image" class="headerlink" title="準備原料：下載與管理 Image"></a>準備原料：下載與管理 Image</h2><h3 id="下載一個-Image"><a href="#下載一個-Image" class="headerlink" title="下載一個 Image"></a>下載一個 Image</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">docker pull nginx</span><br></pre></td></tr></table></figure>
+<p>從 Docker Hub（原料供應商）下載一個映像檔，這裡用的是 Nginx（一個輕量網頁伺服器）。</p>
+<p>就像跟供應商說：「給我一包優質咖啡豆！」有了之後，才能開始沖咖啡。</p>
+<h3 id="查看本地-Image-清單"><a href="#查看本地-Image-清單" class="headerlink" title="查看本地 Image 清單"></a>查看本地 Image 清單</h3><blockquote>
+<p>列出你電腦裡的所有 Image。</p>
+</blockquote>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">docker images</span><br></pre></td></tr></table></figure>
+<p>output:</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">REPOSITORY   TAG       IMAGE ID       CREATED        SIZE</span><br><span class="line">nginx        latest    4cdc5dd7e69d   2 weeks ago    142MB</span><br></pre></td></tr></table></figure>
+<p>像是檢查咖啡店的原料櫃，看看有哪些咖啡豆可用。</p>
+<h2 id="沖咖啡：啟動與管理-Container"><a href="#沖咖啡：啟動與管理-Container" class="headerlink" title="沖咖啡：啟動與管理 Container"></a>沖咖啡：啟動與管理 Container</h2><h3 id="啟動一個-Container"><a href="#啟動一個-Container" class="headerlink" title="啟動一個 Container"></a>啟動一個 Container</h3><blockquote>
+<p>用 Image 啟動一個容器。</p>
+</blockquote>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">docker run -d -p 8080:80 nginx</span><br></pre></td></tr></table></figure>
+<ul>
+<li><code>-d</code>：背景運行（讓咖啡機自己運作，不用你盯著）。</li>
+<li><code>-p 8080:80</code>：把容器的 80 端口映射到本機的 8080 端口。</li>
+<li><code>nginx</code>：使用剛剛下載的 Nginx Image。</li>
+</ul>
+<p>就像按下咖啡機的「開始鍵」，告訴它：「用 Nginx 配方沖一杯咖啡，送到 8080 桌！」</p>
+<p>現在打開瀏覽器，輸入 <code>http://localhost:8080</code>，你會看到 Nginx 的歡迎頁面，像端上桌的咖啡一樣完美，簡單吧？</p>
+<h3 id="查看運行中的-Container"><a href="#查看運行中的-Container" class="headerlink" title="查看運行中的 Container"></a>查看運行中的 Container</h3><blockquote>
+<p>顯示目前正在運行的容器。</p>
+</blockquote>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">docker ps</span><br></pre></td></tr></table></figure>
+<p>output:</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">CONTAINER ID   IMAGE     COMMAND                  PORTS                  NAMES</span><br><span class="line">a1b2c3d4e5f6   nginx     &quot;&#x2F;docker-entrypoint.…&quot;   0.0.0.0:8080-&gt;80&#x2F;tcp   happy_coffee</span><br></pre></td></tr></table></figure>
+<p>（<code>a1b2c3d4e5f6</code> 是 Container ID，後面會用到）<br>像是看看咖啡店裡有哪些咖啡機正在沖咖啡。</p>
+<h3 id="查看所有-Container（包括已停止的）"><a href="#查看所有-Container（包括已停止的）" class="headerlink" title="查看所有 Container（包括已停止的）"></a>查看所有 Container（包括已停止的）</h3><blockquote>
+<p>列出所有容器，不論是否正在運行。</p>
+</blockquote>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">docker ps -a</span><br></pre></td></tr></table></figure>
+<p>像是檢查咖啡店的訂單紀錄，看看今天沖過哪些咖啡。</p>
+<h2 id="清理咖啡機：停止與移除"><a href="#清理咖啡機：停止與移除" class="headerlink" title="清理咖啡機：停止與移除"></a>清理咖啡機：停止與移除</h2><h3 id="停止一個-Container"><a href="#停止一個-Container" class="headerlink" title="停止一個 Container"></a>停止一個 Container</h3><blockquote>
+<p>停止指定的容器（可以用 <code>docker ps</code> 找到的 Container ID）。</p>
+</blockquote>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">docker stop a1b2c3d4e5f6</span><br></pre></td></tr></table></figure>
+
+<p>就像按下咖啡機的「暫停鍵」，讓它休息一下。</p>
+<h3 id="移除一個-Container"><a href="#移除一個-Container" class="headerlink" title="移除一個 Container"></a>移除一個 Container</h3><blockquote>
+<p>刪除已停止的容器。</p>
+</blockquote>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">docker rm a1b2c3d4e5f6</span><br></pre></td></tr></table></figure>
+<p>像是把用完的咖啡機清理乾淨，準備下一杯。</p>
+<h3 id="移除一個-Image"><a href="#移除一個-Image" class="headerlink" title="移除一個 Image"></a>移除一個 Image</h3><blockquote>
+<p>刪除本地的 Image（前提是沒有容器在使用它）。</p>
+</blockquote>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">docker rmi nginx</span><br></pre></td></tr></table></figure>
+
+<p>就像把用不到的咖啡豆丟掉，節省櫃子空間。</p>
+<h2 id="自己沖咖啡：打造專屬-Image"><a href="#自己沖咖啡：打造專屬-Image" class="headerlink" title="自己沖咖啡：打造專屬 Image"></a>自己沖咖啡：打造專屬 Image</h2><h3 id="建立自己的-Image"><a href="#建立自己的-Image" class="headerlink" title="建立自己的 Image"></a>建立自己的 Image</h3><blockquote>
+<p>用 <code>Dockerfile</code> 打包出一個自訂 Image，命名為 <code>my-coffee</code>。</p>
+</blockquote>
+<p>假設你寫了一個簡單的 Node.js 應用程式：</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="comment">// app.js</span></span><br><span class="line"><span class="keyword">const</span> express = <span class="built_in">require</span>(<span class="string">&#x27;express&#x27;</span>);</span><br><span class="line"><span class="keyword">const</span> app = express();</span><br><span class="line">app.get(<span class="string">&#x27;/&#x27;</span>, <span class="function">(<span class="params">req, res</span>) =&gt;</span> res.send(<span class="string">&#x27;Hello, Docker Coffee!&#x27;</span>));</span><br><span class="line">app.listen(<span class="number">3000</span>, <span class="function">() =&gt;</span> <span class="built_in">console</span>.log(<span class="string">&#x27;Coffee brewing on port 3000&#x27;</span>));</span><br></pre></td></tr></table></figure>
+<p>接著創建一個 <code>Dockerfile</code>（咖啡配方）：</p>
+<figure class="highlight dockerfile"><table><tr><td class="code"><pre><span class="line"><span class="keyword">FROM</span> node:<span class="number">18</span></span><br><span class="line"><span class="keyword">WORKDIR</span><span class="bash"> /app</span></span><br><span class="line"><span class="keyword">COPY</span><span class="bash"> . .</span></span><br><span class="line"><span class="keyword">RUN</span><span class="bash"> npm install</span></span><br><span class="line"><span class="keyword">CMD</span><span class="bash"> [<span class="string">&quot;node&quot;</span>, <span class="string">&quot;app.js&quot;</span>]</span></span><br></pre></td></tr></table></figure>
+<p>然後執行：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">docker build -t my-coffee .</span><br></pre></td></tr></table></figure>
+<p>就像自己調配咖啡配方，告訴咖啡機怎麼沖出一杯獨特的咖啡。</p>
+<h3 id="用自訂-Image-啟動-Container"><a href="#用自訂-Image-啟動-Container" class="headerlink" title="用自訂 Image 啟動 Container"></a>用自訂 Image 啟動 Container</h3><blockquote>
+<p>啟動你剛剛打造的 Image。</p>
+</blockquote>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">docker run -d -p 3000:3000 my-coffee</span><br></pre></td></tr></table></figure>
+
+<p>瀏覽 <code>http://localhost:3000</code>，你會看到「Hello, Docker Coffee!」這就是你自己沖出的專屬咖啡！</p>
+<h2 id="實用小技巧"><a href="#實用小技巧" class="headerlink" title="實用小技巧"></a>實用小技巧</h2><h3 id="查看-Container-日誌"><a href="#查看-Container-日誌" class="headerlink" title="查看 Container 日誌"></a>查看 Container 日誌</h3><blockquote>
+<p>檢查容器的運行狀況。</p>
+</blockquote>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">docker logs a1b2c3d4e5f6</span><br></pre></td></tr></table></figure>
+
+<p>像是查看咖啡機的沖泡記錄，看看哪一步出了問題。</p>
+<h3 id="進入-Container-內部"><a href="#進入-Container-內部" class="headerlink" title="進入 Container 內部"></a>進入 Container 內部</h3><blockquote>
+<p>進入容器內部操作（<code>-it</code> 表示互動模式）。</p>
+</blockquote>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">docker <span class="built_in">exec</span> -it a1b2c3d4e5f6 bash</span><br></pre></td></tr></table></figure>
+<ul>
+<li>-it：進入容器的交互模式。</li>
+<li>a1b2c3d4e5f6：使用 a1b2c3d4e5f6 映像檔。</li>
+<li>bash：在容器啟動後要執行的命令，這裡進入容器的 bash 終端機。</li>
+</ul>
+<p>就像打開咖啡機的蓋子，親手調整設定。</p>
+<h2 id="結論"><a href="#結論" class="headerlink" title="結論"></a>結論</h2><p>這些常用指令就像基本操作：檢查設備（<code>docker --version</code>）、準備原料（<code>docker pull</code>）、沖咖啡（<code>docker run</code>）、清理（<code>docker stop/rm</code>），甚至自己調配配方（<code>docker build</code>）。學會這些，你已經能應付大多數 Docker 場景了！</p>
+]]></content>
+      <tags>
+        <tag>Docker</tag>
+        <tag>Command</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>深入解析：列式資料（Column-Oriented）與鍵值資料（Key-Value）</title>
     <url>/2025/01/20/%E6%B7%B1%E5%85%A5%E8%A7%A3%E6%9E%90%EF%BC%9A%E5%88%97%E5%BC%8F%E8%B3%87%E6%96%99%EF%BC%88Column-Oriented%EF%BC%89%E8%88%87%E9%8D%B5%E5%80%BC%E8%B3%87%E6%96%99%EF%BC%88Key-Value%EF%BC%89/</url>
     <content><![CDATA[<p>在現代應用程式開發中，選擇合適的資料庫類型對於系統效能與可擴展性非常重要。許多人常將列式資料 (Column-Oriented) 與鍵值資料 (Key-Value) 混淆，本文將介紹這兩種存儲方式的概念、優缺點與適用場景，幫助讀者更好地理解並選擇合適的解決方案。</p>
@@ -1258,239 +1360,6 @@
       </tags>
   </entry>
   <entry>
-    <title>常用 Docker 指令全攻略</title>
-    <url>/2025/03/11/%E5%B8%B8%E7%94%A8-Docker-%E6%8C%87%E4%BB%A4%E5%85%A8%E6%94%BB%E7%95%A5/</url>
-    <content><![CDATA[<p>歡迎來到 Docker 的指令世界！在<a href="https://zanazhong.github.io/2025/01/16/%E6%B7%B1%E5%85%A5%E6%B7%BA%E5%87%BA%E7%90%86%E8%A7%A3-Docker-%E7%9A%84%E5%BA%95%E5%B1%A4%E9%81%8B%E4%BD%9C%E8%88%87%E6%9E%B6%E6%A7%8B/">上篇文章</a>中，我們聊過 Docker 的核心架構，將它比喻成一台「神奇咖啡機」，從顧客（Docker Client）用遙控器操作，到咖啡機的大腦（Docker Daemon）接到訂單，再到咖啡機沖泡（Containerd 和 OCI Runtime），最後端出一杯完美的咖啡（Container）。這次，我們要動手操作這台咖啡機，學會如何用指令點單、沖咖啡，甚至調配自己的配方。一樣會沿用上一篇的比喻，若是還沒閱讀過的讀者，可以先至<a href="https://zanazhong.github.io/2025/01/16/%E6%B7%B1%E5%85%A5%E6%B7%BA%E5%87%BA%E7%90%86%E8%A7%A3-Docker-%E7%9A%84%E5%BA%95%E5%B1%A4%E9%81%8B%E4%BD%9C%E8%88%87%E6%9E%B6%E6%A7%8B/">上篇文章</a>閱讀，了解 Docker 的基本概念。</p>
-<span id="more"></span>
-
-<h2 id="基本指令：檢查-Docker-狀態"><a href="#基本指令：檢查-Docker-狀態" class="headerlink" title="基本指令：檢查 Docker 狀態"></a>基本指令：檢查 Docker 狀態</h2><h3 id="查看-Docker-版本"><a href="#查看-Docker-版本" class="headerlink" title="查看 Docker 版本"></a>查看 Docker 版本</h3><blockquote>
-<p>確認 Docker 是否正常安裝。</p>
-</blockquote>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">docker --version</span><br></pre></td></tr></table></figure>
-<p>output:</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Docker version 20.10.21, build baeda1f</span><br></pre></td></tr></table></figure>
-
-<h2 id="準備原料：下載與管理-Image"><a href="#準備原料：下載與管理-Image" class="headerlink" title="準備原料：下載與管理 Image"></a>準備原料：下載與管理 Image</h2><h3 id="下載一個-Image"><a href="#下載一個-Image" class="headerlink" title="下載一個 Image"></a>下載一個 Image</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">docker pull nginx</span><br></pre></td></tr></table></figure>
-<p>從 Docker Hub（原料供應商）下載一個映像檔，這裡用的是 Nginx（一個輕量網頁伺服器）。</p>
-<p>就像跟供應商說：「給我一包優質咖啡豆！」有了之後，才能開始沖咖啡。</p>
-<h3 id="查看本地-Image-清單"><a href="#查看本地-Image-清單" class="headerlink" title="查看本地 Image 清單"></a>查看本地 Image 清單</h3><blockquote>
-<p>列出你電腦裡的所有 Image。</p>
-</blockquote>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">docker images</span><br></pre></td></tr></table></figure>
-<p>output:</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">REPOSITORY   TAG       IMAGE ID       CREATED        SIZE</span><br><span class="line">nginx        latest    4cdc5dd7e69d   2 weeks ago    142MB</span><br></pre></td></tr></table></figure>
-<p>像是檢查咖啡店的原料櫃，看看有哪些咖啡豆可用。</p>
-<h2 id="沖咖啡：啟動與管理-Container"><a href="#沖咖啡：啟動與管理-Container" class="headerlink" title="沖咖啡：啟動與管理 Container"></a>沖咖啡：啟動與管理 Container</h2><h3 id="啟動一個-Container"><a href="#啟動一個-Container" class="headerlink" title="啟動一個 Container"></a>啟動一個 Container</h3><blockquote>
-<p>用 Image 啟動一個容器。</p>
-</blockquote>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">docker run -d -p 8080:80 nginx</span><br></pre></td></tr></table></figure>
-<ul>
-<li><code>-d</code>：背景運行（讓咖啡機自己運作，不用你盯著）。</li>
-<li><code>-p 8080:80</code>：把容器的 80 端口映射到本機的 8080 端口。</li>
-<li><code>nginx</code>：使用剛剛下載的 Nginx Image。</li>
-</ul>
-<p>就像按下咖啡機的「開始鍵」，告訴它：「用 Nginx 配方沖一杯咖啡，送到 8080 桌！」</p>
-<p>現在打開瀏覽器，輸入 <code>http://localhost:8080</code>，你會看到 Nginx 的歡迎頁面，像端上桌的咖啡一樣完美，簡單吧？</p>
-<h3 id="查看運行中的-Container"><a href="#查看運行中的-Container" class="headerlink" title="查看運行中的 Container"></a>查看運行中的 Container</h3><blockquote>
-<p>顯示目前正在運行的容器。</p>
-</blockquote>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">docker ps</span><br></pre></td></tr></table></figure>
-<p>output:</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">CONTAINER ID   IMAGE     COMMAND                  PORTS                  NAMES</span><br><span class="line">a1b2c3d4e5f6   nginx     &quot;&#x2F;docker-entrypoint.…&quot;   0.0.0.0:8080-&gt;80&#x2F;tcp   happy_coffee</span><br></pre></td></tr></table></figure>
-<p>（<code>a1b2c3d4e5f6</code> 是 Container ID，後面會用到）<br>像是看看咖啡店裡有哪些咖啡機正在沖咖啡。</p>
-<h3 id="查看所有-Container（包括已停止的）"><a href="#查看所有-Container（包括已停止的）" class="headerlink" title="查看所有 Container（包括已停止的）"></a>查看所有 Container（包括已停止的）</h3><blockquote>
-<p>列出所有容器，不論是否正在運行。</p>
-</blockquote>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">docker ps -a</span><br></pre></td></tr></table></figure>
-<p>像是檢查咖啡店的訂單紀錄，看看今天沖過哪些咖啡。</p>
-<h2 id="清理咖啡機：停止與移除"><a href="#清理咖啡機：停止與移除" class="headerlink" title="清理咖啡機：停止與移除"></a>清理咖啡機：停止與移除</h2><h3 id="停止一個-Container"><a href="#停止一個-Container" class="headerlink" title="停止一個 Container"></a>停止一個 Container</h3><blockquote>
-<p>停止指定的容器（可以用 <code>docker ps</code> 找到的 Container ID）。</p>
-</blockquote>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">docker stop a1b2c3d4e5f6</span><br></pre></td></tr></table></figure>
-
-<p>就像按下咖啡機的「暫停鍵」，讓它休息一下。</p>
-<h3 id="移除一個-Container"><a href="#移除一個-Container" class="headerlink" title="移除一個 Container"></a>移除一個 Container</h3><blockquote>
-<p>刪除已停止的容器。</p>
-</blockquote>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">docker rm a1b2c3d4e5f6</span><br></pre></td></tr></table></figure>
-<p>像是把用完的咖啡機清理乾淨，準備下一杯。</p>
-<h3 id="移除一個-Image"><a href="#移除一個-Image" class="headerlink" title="移除一個 Image"></a>移除一個 Image</h3><blockquote>
-<p>刪除本地的 Image（前提是沒有容器在使用它）。</p>
-</blockquote>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">docker rmi nginx</span><br></pre></td></tr></table></figure>
-
-<p>就像把用不到的咖啡豆丟掉，節省櫃子空間。</p>
-<h2 id="自己沖咖啡：打造專屬-Image"><a href="#自己沖咖啡：打造專屬-Image" class="headerlink" title="自己沖咖啡：打造專屬 Image"></a>自己沖咖啡：打造專屬 Image</h2><h3 id="建立自己的-Image"><a href="#建立自己的-Image" class="headerlink" title="建立自己的 Image"></a>建立自己的 Image</h3><blockquote>
-<p>用 <code>Dockerfile</code> 打包出一個自訂 Image，命名為 <code>my-coffee</code>。</p>
-</blockquote>
-<p>假設你寫了一個簡單的 Node.js 應用程式：</p>
-<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="comment">// app.js</span></span><br><span class="line"><span class="keyword">const</span> express = <span class="built_in">require</span>(<span class="string">&#x27;express&#x27;</span>);</span><br><span class="line"><span class="keyword">const</span> app = express();</span><br><span class="line">app.get(<span class="string">&#x27;/&#x27;</span>, <span class="function">(<span class="params">req, res</span>) =&gt;</span> res.send(<span class="string">&#x27;Hello, Docker Coffee!&#x27;</span>));</span><br><span class="line">app.listen(<span class="number">3000</span>, <span class="function">() =&gt;</span> <span class="built_in">console</span>.log(<span class="string">&#x27;Coffee brewing on port 3000&#x27;</span>));</span><br></pre></td></tr></table></figure>
-<p>接著創建一個 <code>Dockerfile</code>（咖啡配方）：</p>
-<figure class="highlight dockerfile"><table><tr><td class="code"><pre><span class="line"><span class="keyword">FROM</span> node:<span class="number">18</span></span><br><span class="line"><span class="keyword">WORKDIR</span><span class="bash"> /app</span></span><br><span class="line"><span class="keyword">COPY</span><span class="bash"> . .</span></span><br><span class="line"><span class="keyword">RUN</span><span class="bash"> npm install</span></span><br><span class="line"><span class="keyword">CMD</span><span class="bash"> [<span class="string">&quot;node&quot;</span>, <span class="string">&quot;app.js&quot;</span>]</span></span><br></pre></td></tr></table></figure>
-<p>然後執行：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">docker build -t my-coffee .</span><br></pre></td></tr></table></figure>
-<p>就像自己調配咖啡配方，告訴咖啡機怎麼沖出一杯獨特的咖啡。</p>
-<h3 id="用自訂-Image-啟動-Container"><a href="#用自訂-Image-啟動-Container" class="headerlink" title="用自訂 Image 啟動 Container"></a>用自訂 Image 啟動 Container</h3><blockquote>
-<p>啟動你剛剛打造的 Image。</p>
-</blockquote>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">docker run -d -p 3000:3000 my-coffee</span><br></pre></td></tr></table></figure>
-
-<p>瀏覽 <code>http://localhost:3000</code>，你會看到「Hello, Docker Coffee!」這就是你自己沖出的專屬咖啡！</p>
-<h2 id="實用小技巧"><a href="#實用小技巧" class="headerlink" title="實用小技巧"></a>實用小技巧</h2><h3 id="查看-Container-日誌"><a href="#查看-Container-日誌" class="headerlink" title="查看 Container 日誌"></a>查看 Container 日誌</h3><blockquote>
-<p>檢查容器的運行狀況。</p>
-</blockquote>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">docker logs a1b2c3d4e5f6</span><br></pre></td></tr></table></figure>
-
-<p>像是查看咖啡機的沖泡記錄，看看哪一步出了問題。</p>
-<h3 id="進入-Container-內部"><a href="#進入-Container-內部" class="headerlink" title="進入 Container 內部"></a>進入 Container 內部</h3><blockquote>
-<p>進入容器內部操作（<code>-it</code> 表示互動模式）。</p>
-</blockquote>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">docker <span class="built_in">exec</span> -it a1b2c3d4e5f6 bash</span><br></pre></td></tr></table></figure>
-<ul>
-<li>-it：進入容器的交互模式。</li>
-<li>a1b2c3d4e5f6：使用 a1b2c3d4e5f6 映像檔。</li>
-<li>bash：在容器啟動後要執行的命令，這裡進入容器的 bash 終端機。</li>
-</ul>
-<p>就像打開咖啡機的蓋子，親手調整設定。</p>
-<h2 id="結論"><a href="#結論" class="headerlink" title="結論"></a>結論</h2><p>這些常用指令就像基本操作：檢查設備（<code>docker --version</code>）、準備原料（<code>docker pull</code>）、沖咖啡（<code>docker run</code>）、清理（<code>docker stop/rm</code>），甚至自己調配配方（<code>docker build</code>）。學會這些，你已經能應付大多數 Docker 場景了！</p>
-]]></content>
-      <tags>
-        <tag>Docker</tag>
-        <tag>Command</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>[筆記] Leetcode - 1822. Sign of the Product of an Array</title>
-    <url>/2023/05/02/%E7%AD%86-Leetcode-1822-Sign-of-the-Product-of-an-Array/</url>
-    <content><![CDATA[<p><a href="https://leetcode.com/problems/sign-of-the-product-of-an-array/">https://leetcode.com/problems/sign-of-the-product-of-an-array/</a></p>
-<blockquote>
-<p>There is a function signFunc(x) that returns:<br>1 if x is positive.<br>-1 if x is negative.<br>0 if x is equal to 0.<br>You are given an integer array nums. Let product be the product of all values in the array nums.<br>Return signFunc(product).</p>
-</blockquote>
-<p><img src="https://i.imgur.com/v6fBWOf.png"></p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">arraySign</span>(<span class="params">self, nums: <span class="type">List</span>[<span class="built_in">int</span>]</span>) -&gt; <span class="built_in">int</span>:</span></span><br><span class="line">        sign = <span class="number">1</span></span><br><span class="line">        <span class="keyword">for</span> num <span class="keyword">in</span> nums:</span><br><span class="line">            <span class="keyword">if</span> num == <span class="number">0</span>:</span><br><span class="line">                <span class="keyword">return</span> <span class="number">0</span></span><br><span class="line">            <span class="keyword">if</span> num &lt; <span class="number">0</span>:</span><br><span class="line">                sign = -sign</span><br><span class="line">        <span class="keyword">return</span> sign</span><br></pre></td></tr></table></figure>]]></content>
-      <tags>
-        <tag>Leetcode</tag>
-        <tag>Python</tag>
-        <tag>Coding</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>[筆記] Leetcode - 1913. Maximum Product Difference Between Two Pairs</title>
-    <url>/2023/12/18/%E7%AD%86%E8%A8%98-1913.-Maximum-Product%20Difference-Between-Two-Pairs/</url>
-    <content><![CDATA[<p><a href="https://leetcode.com/problems/maximum-product-difference-between-two-pairs/">https://leetcode.com/problems/maximum-product-difference-between-two-pairs/</a></p>
-<blockquote>
-<p>The product difference between two pairs (a, b) and (c, d) is defined as (a * b) - (c * d).</p>
-<p>For example, the product difference between (5, 6) and (2, 7) is (5 * 6) - (2 * 7) &#x3D; 16.<br>Given an integer array nums, choose four distinct indices w, x, y, and z such that the product difference between pairs (nums[w], nums[x]) and (nums[y], nums[z]) is maximized.</p>
-<p>Return the maximum such product difference.</p>
-</blockquote>
-<span id="more"></span>
-
-<p>Example 1:</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Input: nums &#x3D; [5,6,2,7,4]</span><br><span class="line">Output: 34</span><br><span class="line">Explanation: We can choose indices 1 and 3 for the first pair (6, 7) and indices 2 and 4 for the second pair (2, 4).</span><br><span class="line">The product difference is (6 * 7) - (2 * 4) &#x3D; 34.</span><br></pre></td></tr></table></figure>
-<p>Example 2:</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Input: nums &#x3D; [4,2,5,9,7,4,8]</span><br><span class="line">Output: 64</span><br><span class="line">Explanation: We can choose indices 3 and 6 for the first pair (9, 8) and indices 1 and 5 for the second pair (2, 4).</span><br><span class="line">The product difference is (9 * 8) - (2 * 4) &#x3D; 64.</span><br></pre></td></tr></table></figure>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">maxProductDifference</span>(<span class="params">self, nums: <span class="type">List</span>[<span class="built_in">int</span>]</span>) -&gt; <span class="built_in">int</span>:</span></span><br><span class="line">        min_num1, min_num2 = math.inf, math.inf</span><br><span class="line">        max_num1, max_num2 = -math.inf, -math.inf</span><br><span class="line">    </span><br><span class="line">        <span class="keyword">for</span> number <span class="keyword">in</span> nums: </span><br><span class="line">            <span class="keyword">if</span> number &gt; max_num1:</span><br><span class="line">                max_num1, max_num2 = number, max_num1</span><br><span class="line">            <span class="keyword">elif</span> number &gt; max_num2:</span><br><span class="line">                max_num2 = number</span><br><span class="line">    </span><br><span class="line">            <span class="keyword">if</span> number &lt; min_num1:</span><br><span class="line">                min_num1, min_num2 = number, min_num1</span><br><span class="line">            <span class="keyword">elif</span> number &lt; min_num2:</span><br><span class="line">                min_num2 = number</span><br><span class="line">    </span><br><span class="line">        <span class="keyword">return</span> max_num1 * max_num2 - min_num1 * min_num2</span><br></pre></td></tr></table></figure>
-
-]]></content>
-      <tags>
-        <tag>Leetcode</tag>
-        <tag>Python</tag>
-        <tag>Math</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>[筆記] Leetcode - 1903. Largest Odd Number in String</title>
-    <url>/2023/12/09/%E7%AD%86%E8%A8%98-1903.-Largest-Odd%20Number-in-String/</url>
-    <content><![CDATA[<blockquote>
-<p>You are given a string num, representing a large integer. Return the largest-valued odd integer (as a string) that is a non-empty substring of num, or an empty string “” if no odd integer exists.</p>
-</blockquote>
-<p>A substring is a contiguous sequence of characters within a string.</p>
-<p>Example 1:</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Input: num &#x3D; &quot;52&quot;</span><br><span class="line">Output: &quot;5&quot;</span><br><span class="line">Explanation: The only non-empty substrings are &quot;5&quot;, &quot;2&quot;, and &quot;52&quot;. &quot;5&quot; is the only odd number.</span><br></pre></td></tr></table></figure>
-<p>Example 2:</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Input: num &#x3D; &quot;4206&quot;</span><br><span class="line">Output: &quot;&quot;</span><br><span class="line">Explanation: There are no odd numbers in &quot;4206&quot;.</span><br></pre></td></tr></table></figure>
-<p>Example 3:</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Input: num &#x3D; &quot;35427&quot;</span><br><span class="line">Output: &quot;35427&quot;</span><br><span class="line">Explanation: &quot;35427&quot; is already an odd number.</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">largestOddNumber</span>(<span class="params">self, num: <span class="built_in">str</span></span>) -&gt; <span class="built_in">str</span>:</span></span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">len</span>(num) - <span class="number">1</span>, -<span class="number">1</span>, -<span class="number">1</span>):</span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span> <span class="built_in">int</span>(num[i]) % <span class="number">2</span>:</span><br><span class="line">                <span class="keyword">return</span> num[:i + <span class="number">1</span>]</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> <span class="string">&#x27;&#x27;</span></span><br></pre></td></tr></table></figure>
-
-]]></content>
-      <tags>
-        <tag>list</tag>
-        <tag>Leetcode</tag>
-        <tag>Python</tag>
-        <tag>reverse</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>用 Go 寫 Web API？Gin Framework 帶你快速上手！</title>
-    <url>/2025/03/06/%E7%94%A8-Go-%E5%AF%AB-Web-API%EF%BC%9FGin-Framework-%E5%B8%B6%E4%BD%A0%E5%BF%AB%E9%80%9F%E4%B8%8A%E6%89%8B%EF%BC%81/</url>
-    <content><![CDATA[<p>大家好，我是一個在剛開始學習 Golang 的工程師，今天想和大家聊聊 <strong>Gin Framework</strong> ——一個簡單又強大的 Go 語言 Web Framework。如果你聽過 Golang，一定知道它以高效能和簡潔聞名，而 Gin 就像你常用的悠遊卡，小巧方便，卻能輕鬆應付各種場景。接下來，讓我們從零開始認識 Gin。</p>
-<span id="more"></span>
-
-<h2 id="什麼是-Gin-Framework？"><a href="#什麼是-Gin-Framework？" class="headerlink" title="什麼是 Gin Framework？"></a>什麼是 Gin Framework？</h2><p>想像你在開一家咖啡店，顧客進門點單，你得快速把咖啡端上桌。Gin 就像是你店裡的咖啡機：它不負責種咖啡豆（那是資料庫的事），也不負責裝潢店面（那是前端的事），但它能幫你快速接收訂單（HTTP 請求）、處理需求（路由與邏輯），然後端出成品（回應）。簡單來說，Gin 是一個輕量級的 Web Framework，專注於處理 HTTP request 和 Routing，特別適合用來打造 API 或簡單的網站。</p>
-<p>相比其他框架，如 Flask 或 Express，Gin 的優勢在於速度快和語法簡潔。Flask 簡單易上手但效能需額外優化，Express 靈活且生態豐富卻受單執行緒限制。而 Gin 就像一台『迷你跑車』，輕巧高效，讓你在 Web 開發中跑得又快又穩。</p>
-<h2 id="安裝與第一個「Hello-World-」"><a href="#安裝與第一個「Hello-World-」" class="headerlink" title="安裝與第一個「Hello, World!」"></a>安裝與第一個「Hello, World!」</h2><p>在開始之前，假設你已經安裝了 Go（可以用 <code>go version</code> 檢查）。接著，我們需要把 Gin 安裝到你的工具箱裡。</p>
-<h3 id="Step-1-安裝-Gin"><a href="#Step-1-安裝-Gin" class="headerlink" title="Step 1: 安裝 Gin"></a>Step 1: 安裝 Gin</h3><p>打開終端機，輸入以下指令，就像去超市買食材一樣：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">go get -u github.com/gin-gonic/gin</span><br></pre></td></tr></table></figure>
-
-<p>這會下載 Gin 的最新版本並加入你的 Go 專案。</p>
-<h3 id="Step-2-寫一個簡單的-Web-服務"><a href="#Step-2-寫一個簡單的-Web-服務" class="headerlink" title="Step 2: 寫一個簡單的 Web 服務"></a>Step 2: 寫一個簡單的 Web 服務</h3><p>新建一個檔案叫做 <code>main.go</code>，就像準備開始煮咖啡一樣，我們先把基本架構搭起來：</p>
-<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="string">&quot;github.com/gin-gonic/gin&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">    <span class="comment">// 建立一個新的 Gin 引擎，就像開啟一台咖啡機</span></span><br><span class="line">    r := gin.Default()</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 定義一個路由：當有人訪問 &quot;/&quot; 時，回應 &quot;Hello, World!&quot;</span></span><br><span class="line">    r.GET(<span class="string">&quot;/&quot;</span>, <span class="function"><span class="keyword">func</span><span class="params">(c *gin.Context)</span></span> &#123;</span><br><span class="line">        c.String(<span class="number">200</span>, <span class="string">&quot;Hello, World!&quot;</span>)</span><br><span class="line">    &#125;)</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 啟動服務，預設跑在 8080 埠</span></span><br><span class="line">    r.Run() </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h3 id="Step-3-啟動服務"><a href="#Step-3-啟動服務" class="headerlink" title="Step 3: 啟動服務"></a>Step 3: 啟動服務</h3><p>在終端機輸入：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">go run main.go</span><br></pre></td></tr></table></figure>
-
-<p>打開瀏覽器，輸入 <code>http://localhost:8080</code>，你會看到「Hello, World!」跳出來。這就像你第一次試著泡咖啡——簡單幾步，卻已經能端出一杯讓人滿足的飲品。</p>
-<h2 id="Gin-的核心概念"><a href="#Gin-的核心概念" class="headerlink" title="Gin 的核心概念"></a>Gin 的核心概念</h2><p>Gin 的運作有三個關鍵：</p>
-<ol>
-<li>**引擎 (Engine)**：<code>gin.Default()</code> 是你的料理機開關，負責啟動服務和分配訂單。</li>
-<li>**路由 (Routing)**：根據顧客的點單（URL），決定端出什麼咖啡（回應）。</li>
-<li>**上下文 (Context)**：<code>gin.Context</code> 就像訂單小票，記下顧客需求並告訴你怎麼回應。</li>
-</ol>
-<h2 id="Gin-路由解析：如何處理請求"><a href="#Gin-路由解析：如何處理請求" class="headerlink" title="Gin 路由解析：如何處理請求"></a>Gin 路由解析：如何處理請求</h2><p>在 Gin 裡，路由（Routing）就像是咖啡店的點單流程。比如：</p>
-<ul>
-<li>顧客說「我要拿鐵」 → 你把訂單送到 <code>/latte</code> 這條路線。</li>
-<li>顧客說「我要查帳單」 → 你把訂單送到 <code>/bill</code> 這條路線。</li>
-</ul>
-<p>我們來加幾個路由看看：</p>
-<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="string">&quot;github.com/gin-gonic/gin&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">    r := gin.Default()</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 根路由：歡迎顧客</span></span><br><span class="line">    r.GET <span class="string">&quot;/&quot;</span>, <span class="function"><span class="keyword">func</span><span class="params">(c *gin.Context)</span></span> &#123;</span><br><span class="line">        c.String(<span class="number">200</span>, <span class="string">&quot;歡迎來到我的咖啡店！&quot;</span>)</span><br><span class="line">    &#125;)</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 拿鐵訂單</span></span><br><span class="line">    r.GET(<span class="string">&quot;/latte&quot;</span>, <span class="function"><span class="keyword">func</span><span class="params">(c *gin.Context)</span></span> &#123;</span><br><span class="line">        c.String(<span class="number">200</span>, <span class="string">&quot;這是一杯熱拿鐵，享用吧！&quot;</span>)</span><br><span class="line">    &#125;)</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 查詢帳單</span></span><br><span class="line">    r.GET(<span class="string">&quot;/bill&quot;</span>, <span class="function"><span class="keyword">func</span><span class="params">(c *gin.Context)</span></span> &#123;</span><br><span class="line">        c.String(<span class="number">200</span>, <span class="string">&quot;今天的帳單是 50 元。&quot;</span>)</span><br><span class="line">    &#125;)</span><br><span class="line"></span><br><span class="line">    r.Run()</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>現在訪問 <code>http://localhost:8080/latte</code>，你會看到拿鐵的回應；訪問 <code>http://localhost:8080/bill</code>，則會看到帳單。這就是路由的基本概念：根據顧客的需求（URL），提供不同的服務（回應）。</p>
-<h2 id="處理顧客的特殊需求：參數與-JSON"><a href="#處理顧客的特殊需求：參數與-JSON" class="headerlink" title="處理顧客的特殊需求：參數與 JSON"></a>處理顧客的特殊需求：參數與 JSON</h2><p>假設有個顧客說：「我要一杯拿鐵，但大小要中杯，糖要少一點。」這時候，單純的 <code>/latte</code> 不夠用了，我們需要從 URL 或請求中提取參數。</p>
-<h3 id="用-URL-參數"><a href="#用-URL-參數" class="headerlink" title="用 URL 參數"></a>用 URL 參數</h3><p>改進程式碼，讓顧客可以指定杯子大小：</p>
-<figure class="highlight go"><table><tr><td class="code"><pre><span class="line">r.GET(<span class="string">&quot;/latte/:size&quot;</span>, <span class="function"><span class="keyword">func</span><span class="params">(c *gin.Context)</span></span> &#123;</span><br><span class="line">    size := c.Param(<span class="string">&quot;size&quot;</span>) <span class="comment">// 從 URL 中提取 &quot;size&quot; 參數</span></span><br><span class="line">    c.String(<span class="number">200</span>, <span class="string">&quot;這是一杯 %s 拿鐵，享用吧！&quot;</span>, size)</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
-
-<p>訪問 <code>http://localhost:8080/latte/medium</code>，你會看到「這是一杯 medium 拿鐵，享用吧！」。</p>
-<h3 id="用-JSON-處理更複雜的訂單"><a href="#用-JSON-處理更複雜的訂單" class="headerlink" title="用 JSON 處理更複雜的訂單"></a>用 JSON 處理更複雜的訂單</h3><p>如果顧客的需求更詳細（例如糖量、溫度），可以用 POST 請求傳 JSON：</p>
-<figure class="highlight go"><table><tr><td class="code"><pre><span class="line">r.POST(<span class="string">&quot;/order&quot;</span>, <span class="function"><span class="keyword">func</span><span class="params">(c *gin.Context)</span></span> &#123;</span><br><span class="line">    <span class="keyword">type</span> CoffeeOrder <span class="keyword">struct</span> &#123;</span><br><span class="line">        Type   <span class="keyword">string</span> <span class="string">`json:&quot;type&quot;`</span></span><br><span class="line">        Size   <span class="keyword">string</span> <span class="string">`json:&quot;size&quot;`</span></span><br><span class="line">        Sugar  <span class="keyword">int</span>    <span class="string">`json:&quot;sugar&quot;`</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">var</span> order CoffeeOrder</span><br><span class="line">    <span class="keyword">if</span> err := c.BindJSON(&amp;order); err != <span class="literal">nil</span> &#123;</span><br><span class="line">        c.String(<span class="number">400</span>, <span class="string">&quot;訂單格式錯誤！&quot;</span>)</span><br><span class="line">        <span class="keyword">return</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    c.JSON(<span class="number">200</span>, gin.H&#123;</span><br><span class="line">        <span class="string">&quot;message&quot;</span>: <span class="string">&quot;訂單收到！&quot;</span>,</span><br><span class="line">        <span class="string">&quot;order&quot;</span>:   order,</span><br><span class="line">    &#125;)</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
-
-<p>用工具（例如 Postman）發送以下 POST 請求到 <code>http://localhost:8080/order</code>：</p>
-<figure class="highlight json"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    <span class="attr">&quot;type&quot;</span>: <span class="string">&quot;latte&quot;</span>,</span><br><span class="line">    <span class="attr">&quot;size&quot;</span>: <span class="string">&quot;large&quot;</span>,</span><br><span class="line">    <span class="attr">&quot;sugar&quot;</span>: <span class="number">2</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>你會得到回應：</p>
-<figure class="highlight json"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    <span class="attr">&quot;message&quot;</span>: <span class="string">&quot;訂單收到！&quot;</span>,</span><br><span class="line">    <span class="attr">&quot;order&quot;</span>: &#123;</span><br><span class="line">        <span class="attr">&quot;type&quot;</span>: <span class="string">&quot;latte&quot;</span>,</span><br><span class="line">        <span class="attr">&quot;size&quot;</span>: <span class="string">&quot;large&quot;</span>,</span><br><span class="line">        <span class="attr">&quot;sugar&quot;</span>: <span class="number">2</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>這就像顧客填好訂單表，你確認後回覆一樣，簡單又清楚。</p>
-<h2 id="讓我們總結一下：Gin-的魅力"><a href="#讓我們總結一下：Gin-的魅力" class="headerlink" title="讓我們總結一下：Gin 的魅力"></a>讓我們總結一下：Gin 的魅力</h2><p>Gin 的設計哲學就像咖啡店的經營之道：<strong>簡單、快速、靈活</strong>。它不強迫你用複雜的設定，而是提供直觀的工具，讓你專注在業務邏輯上。透過今天的例子，我們學會了：</p>
-<ol>
-<li>如何安裝和啟動 Gin。</li>
-<li>用路由處理不同的請求。</li>
-<li>接收參數和 JSON，提升服務的彈性。</li>
-</ol>
-<p>下次如果你想打造一個輕量級 API（例如給手機 App 用的後端）、Web 應用程式，甚至是微服務架構，不妨試試 Gin，它能助你一臂之力。</p>
-]]></content>
-      <categories>
-        <category>Golang</category>
-        <category>Web API</category>
-      </categories>
-      <tags>
-        <tag>Golang</tag>
-        <tag>Gin Framework</tag>
-        <tag>Web API</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>深入淺出理解 Docker 的底層運作與架構</title>
     <url>/2025/01/16/%E6%B7%B1%E5%85%A5%E6%B7%BA%E5%87%BA%E7%90%86%E8%A7%A3-Docker-%E7%9A%84%E5%BA%95%E5%B1%A4%E9%81%8B%E4%BD%9C%E8%88%87%E6%9E%B6%E6%A7%8B/</url>
     <content><![CDATA[<p>今天我們要一起來聊聊 Docker，Docker 是現代開發與運維中不可或缺的工具，用來打包、部署和運行應用程序。它讓你能在任何環境中快速部署應用，實現「一次構建，隨處運行」的目標，是一個讓開發者與運維工程師都愛不釋手的工具。想像 Docker 就像是「貨櫃」，它能把你的應用程式打包起來，無論搬到哪台電腦上都能保證一致運行。準備好了嗎？讓我們開始吧！</p>
@@ -1518,16 +1387,16 @@
 </li>
 </ul>
 <h2 id="底層技術"><a href="#底層技術" class="headerlink" title="底層技術"></a>底層技術</h2><blockquote>
-<p>Docker 的強大主要依賴於 Linux 的核心功能</p>
+<p>Docker 的強大主要建立在 Linux 提供的核心功能之上</p>
 </blockquote>
 <ul>
 <li><p><strong>Namespace</strong></p>
 <ul>
 <li>用於實現 Container 的 <strong>process 隔離</strong>。</li>
-<li>每個 Container 都有自己的命名空間，確保不同容器間的資源互不影響。</li>
+<li>每個 Container 都有自己的命名空間，確保不同容器之間的資源互不影響。</li>
 <li>常見的 Namespace：<ul>
-<li>PID (Process ID)：每個容器看到的是自己的進程列表。</li>
-<li>NET (網路)：每個容器擁有自己的網路接口和 IP。</li>
+<li>PID (Process ID)：每個容器看到的是自己的 Process 列表。</li>
+<li>NET (網路)：每個容器配備獨立的網路接口和 IP。</li>
 <li>MNT (掛載)：每個容器有自己的檔案系統視圖。</li>
 </ul>
 </li>
@@ -1535,13 +1404,13 @@
 </li>
 <li><p><strong>Cgroups</strong></p>
 <ul>
-<li>用於實現資源管理和限制，EX: CPU、記憶體和網路。</li>
-<li>防止單一容器佔用過多資源，影響整體系統性能。</li>
+<li>用於資源的分配與限制，EX: CPU、記憶體和網路資源的管理。</li>
+<li>能避免單一容器過度佔用資源，確保整體系統性能穩定。</li>
 </ul>
 </li>
 <li><p><strong>UnionFS</strong></p>
 <ul>
-<li>支援分層的檔案系統，++減少重複存儲的數據量++。</li>
+<li>支援分層的檔案系統，可有效 ++減少重複數據的存儲量++。</li>
 <li>Docker 的 Image 由多層構成，每層只存儲新增或修改的部分，未改變的部分會繼續共享。</li>
 </ul>
 </li>
@@ -1634,89 +1503,134 @@
       </tags>
   </entry>
   <entry>
-    <title>[筆記] Check.io - Date and Time Converter</title>
-    <url>/2021/04/25/%E7%AD%86%E8%A8%98-Check-io-Date-and-Time-Converter/</url>
-    <content><![CDATA[<blockquote>
-<p><a href="https://py.checkio.org/en/mission/date-and-time-converter/">check.io</a> 上的題目：將字串轉成規定的格式<br>此系列文章主要是自己在解題時覺得有趣的題目，記錄下來讓自己以後方便複習，有興趣的人可以參考看看</p>
-</blockquote>
+    <title>用 Go 寫 Web API？Gin Framework 帶你快速上手！</title>
+    <url>/2025/03/06/%E7%94%A8-Go-%E5%AF%AB-Web-API%EF%BC%9FGin-Framework-%E5%B8%B6%E4%BD%A0%E5%BF%AB%E9%80%9F%E4%B8%8A%E6%89%8B%EF%BC%81/</url>
+    <content><![CDATA[<p>大家好，我是一個在剛開始學習 Golang 的工程師，今天想和大家聊聊 <strong>Gin Framework</strong> ——一個簡單又強大的 Go 語言 Web Framework。如果你聽過 Golang，一定知道它以高效能和簡潔聞名，而 Gin 就像你常用的悠遊卡，小巧方便，卻能輕鬆應付各種場景。接下來，讓我們從零開始認識 Gin。</p>
 <span id="more"></span>
 
-<h2 id="先來看看題目"><a href="#先來看看題目" class="headerlink" title="先來看看題目"></a>先來看看題目</h2><p><img src="https://i.imgur.com/1IHEoPk.png"></p>
-<h2 id="解題步驟"><a href="#解題步驟" class="headerlink" title="解題步驟"></a>解題步驟</h2><h2 id=""><a href="#" class="headerlink" title="- "></a>- </h2><p>strptime<br>strftime<br>format</p>
-<p><a href="https://www.geeksforgeeks.org/python-strftime-function/"><img src="https://i.imgur.com/cKcNfZx.png" alt="參考來源"></a></p>
-<h2 id="解題"><a href="#解題" class="headerlink" title="解題"></a>解題</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> datetime</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">date_time</span>(<span class="params">time: <span class="built_in">str</span></span>) -&gt; <span class="built_in">str</span>:</span></span><br><span class="line">    <span class="comment">#convert string to datetime</span></span><br><span class="line">    date_time = datetime.datetime.strptime(time, <span class="string">&quot;%d.%m.%Y %H:%M&quot;</span>)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> date_time.strftime(<span class="string">f&quot;<span class="subst">&#123;date_time.day&#125;</span> %B %Y year <span class="subst">&#123;date_time.hour&#125;</span> hour<span class="subst">&#123;<span class="string">&#x27;s&#x27;</span> <span class="keyword">if</span> date_time.hour != <span class="number">1</span> <span class="keyword">else</span> <span class="string">&#x27;&#x27;</span>&#125;</span> <span class="subst">&#123;date_time.minute&#125;</span> minute<span class="subst">&#123;<span class="string">&#x27;s&#x27;</span> <span class="keyword">if</span> date_time.minute != <span class="number">1</span> <span class="keyword">else</span> <span class="string">&#x27;&#x27;</span>&#125;</span>&quot;</span>)</span><br></pre></td></tr></table></figure>
+<h2 id="什麼是-Gin-Framework？"><a href="#什麼是-Gin-Framework？" class="headerlink" title="什麼是 Gin Framework？"></a>什麼是 Gin Framework？</h2><p>想像你在開一家咖啡店，顧客進門點單，你得快速把咖啡端上桌。Gin 就像是你店裡的咖啡機：它不負責種咖啡豆（那是資料庫的事），也不負責裝潢店面（那是前端的事），但它能幫你快速接收訂單（HTTP 請求）、處理需求（路由與邏輯），然後端出成品（回應）。簡單來說，Gin 是一個輕量級的 Web Framework，專注於處理 HTTP request 和 Routing，特別適合用來打造 API 或簡單的網站。</p>
+<p>相比其他框架，如 Flask 或 Express，Gin 的優勢在於速度快和語法簡潔。Flask 簡單易上手但效能需額外優化，Express 靈活且生態豐富卻受單執行緒限制。而 Gin 就像一台『迷你跑車』，輕巧高效，讓你在 Web 開發中跑得又快又穩。</p>
+<h2 id="安裝與第一個「Hello-World-」"><a href="#安裝與第一個「Hello-World-」" class="headerlink" title="安裝與第一個「Hello, World!」"></a>安裝與第一個「Hello, World!」</h2><p>在開始之前，假設你已經安裝了 Go（可以用 <code>go version</code> 檢查）。接著，我們需要把 Gin 安裝到你的工具箱裡。</p>
+<h3 id="Step-1-安裝-Gin"><a href="#Step-1-安裝-Gin" class="headerlink" title="Step 1: 安裝 Gin"></a>Step 1: 安裝 Gin</h3><p>打開終端機，輸入以下指令，就像去超市買食材一樣：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">go get -u github.com/gin-gonic/gin</span><br></pre></td></tr></table></figure>
 
-<p>分享一個查到的不錯的方法</p>
-<pre><code class="python">import datetime
+<p>這會下載 Gin 的最新版本並加入你的 Go 專案。</p>
+<h3 id="Step-2-寫一個簡單的-Web-服務"><a href="#Step-2-寫一個簡單的-Web-服務" class="headerlink" title="Step 2: 寫一個簡單的 Web 服務"></a>Step 2: 寫一個簡單的 Web 服務</h3><p>新建一個檔案叫做 <code>main.go</code>，就像準備開始煮咖啡一樣，我們先把基本架構搭起來：</p>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="string">&quot;github.com/gin-gonic/gin&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">    <span class="comment">// 建立一個新的 Gin 引擎，就像開啟一台咖啡機</span></span><br><span class="line">    r := gin.Default()</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 定義一個路由：當有人訪問 &quot;/&quot; 時，回應 &quot;Hello, World!&quot;</span></span><br><span class="line">    r.GET(<span class="string">&quot;/&quot;</span>, <span class="function"><span class="keyword">func</span><span class="params">(c *gin.Context)</span></span> &#123;</span><br><span class="line">        c.String(<span class="number">200</span>, <span class="string">&quot;Hello, World!&quot;</span>)</span><br><span class="line">    &#125;)</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 啟動服務，預設跑在 8080 埠</span></span><br><span class="line">    r.Run() </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-def date_time(time: str) -&gt; str:
-    #convert string to datetime
-    date_time = datetime.datetime.strptime(time, &quot;%d.%m.%Y %H:%M&quot;)
+<h3 id="Step-3-啟動服務"><a href="#Step-3-啟動服務" class="headerlink" title="Step 3: 啟動服務"></a>Step 3: 啟動服務</h3><p>在終端機輸入：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">go run main.go</span><br></pre></td></tr></table></figure>
 
-    return date_time.strftime(f&quot;&#123;date_time.day&#125; %B %Y year &#123;date_time.hour&#125; &#123;[&#39;hours&#39;, &#39;hour&#39;][date_time.hour == 1]&#125; &#123;date_time.minute&#125; &#123;[&#39;minutes&#39;, &#39;minute&#39;][date_time.minute == 1]&#125;&quot;)
-</code></pre>
-]]></content>
-      <categories>
-        <category>Check.io</category>
-        <category>python</category>
-      </categories>
-      <tags>
-        <tag>Check.io</tag>
-        <tag>python</tag>
-        <tag>datetime</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>[筆記] Check.io - Pawn Brotherhood</title>
-    <url>/2021/04/25/%E7%AD%86%E8%A8%98-Check-io-Pawn-Brotherhood/</url>
-    <content><![CDATA[<blockquote>
-<p><a href="https://py.checkio.org/en/mission/pawn-brotherhood/">check.io</a> 上的題目：判斷西洋棋中的兵有幾個是安全的<br>此系列文章主要是自己在解題時覺得有趣的題目，記錄下來讓自己以後好複習，有興趣的人可以參考看看</p>
-</blockquote>
-<h2 id="先來看看題目"><a href="#先來看看題目" class="headerlink" title="先來看看題目"></a>先來看看題目</h2><p><img src="https://i.imgur.com/oTOaA4z.jpg"><br>總結來說：兵的行徑方向走斜對角的(左前、右前)，若是兵的右下或左下有其他兵的話，他就是安全的</p>
-<h2 id="解題步驟"><a href="#解題步驟" class="headerlink" title="解題步驟"></a>解題步驟</h2><h2 id="解題"><a href="#解題" class="headerlink" title="解題"></a>解題</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">safe_pawns</span>(<span class="params">pawns: <span class="built_in">set</span></span>) -&gt; <span class="built_in">int</span>:</span></span><br><span class="line">    safe = <span class="number">0</span></span><br><span class="line">    <span class="keyword">for</span> p <span class="keyword">in</span> pawns:</span><br><span class="line">        <span class="keyword">if</span> <span class="built_in">chr</span>(<span class="built_in">ord</span>(p[<span class="number">0</span>]) + <span class="number">1</span>) + <span class="built_in">str</span>(<span class="built_in">int</span>(p[<span class="number">1</span>]) - <span class="number">1</span>) <span class="keyword">in</span> pawns <span class="keyword">or</span> <span class="built_in">chr</span>(<span class="built_in">ord</span>(p[<span class="number">0</span>]) - <span class="number">1</span>) + <span class="built_in">str</span>(<span class="built_in">int</span>(p[<span class="number">1</span>]) - <span class="number">1</span>) <span class="keyword">in</span> pawns:</span><br><span class="line">            safe += <span class="number">1</span></span><br><span class="line">    <span class="keyword">return</span> safe</span><br></pre></td></tr></table></figure>]]></content>
-      <categories>
-        <category>Check.io</category>
-        <category>python</category>
-      </categories>
-      <tags>
-        <tag>Check.io</tag>
-        <tag>python</tag>
-        <tag>chr</tag>
-        <tag>ord</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>[筆記] Check.io - Acceptable Password II</title>
-    <url>/2021/05/01/%E7%AD%86%E8%A8%98-Check-io-Acceptable-Password-II/</url>
-    <content><![CDATA[<blockquote>
-<p><a href="https://py.checkio.org/en/mission/acceptable-password-ii/">check.io</a> 上的題目：合格的密碼須含數字<br>此系列文章主要是自己在解題時覺得有趣的題目，記錄下來讓自己以後方便複習，有興趣的人可以參考看看</p>
-</blockquote>
-<span id="more"></span>
-
-<h2 id="先來看看題目"><a href="#先來看看題目" class="headerlink" title="先來看看題目"></a>先來看看題目</h2><p><img src="https://i.imgur.com/PvH7bh2.png"></p>
-<h2 id="解題步驟"><a href="#解題步驟" class="headerlink" title="解題步驟"></a>解題步驟</h2><ul>
-<li>密碼須大於６位數</li>
-<li>至少需包含一個數字</li>
+<p>打開瀏覽器，輸入 <code>http://localhost:8080</code>，你會看到「Hello, World!」跳出來。這就像你第一次試著泡咖啡——簡單幾步，卻已經能端出一杯讓人滿足的飲品。</p>
+<h2 id="Gin-的核心概念"><a href="#Gin-的核心概念" class="headerlink" title="Gin 的核心概念"></a>Gin 的核心概念</h2><p>Gin 的運作有三個關鍵：</p>
+<ol>
+<li>**引擎 (Engine)**：<code>gin.Default()</code> 是你的料理機開關，負責啟動服務和分配訂單。</li>
+<li>**路由 (Routing)**：根據顧客的點單（URL），決定端出什麼咖啡（回應）。</li>
+<li>**上下文 (Context)**：<code>gin.Context</code> 就像訂單小票，記下顧客需求並告訴你怎麼回應。</li>
+</ol>
+<h2 id="Gin-路由解析：如何處理請求"><a href="#Gin-路由解析：如何處理請求" class="headerlink" title="Gin 路由解析：如何處理請求"></a>Gin 路由解析：如何處理請求</h2><p>在 Gin 裡，路由（Routing）就像是咖啡店的點單流程。比如：</p>
+<ul>
+<li>顧客說「我要拿鐵」 → 你把訂單送到 <code>/latte</code> 這條路線。</li>
+<li>顧客說「我要查帳單」 → 你把訂單送到 <code>/bill</code> 這條路線。</li>
 </ul>
-<h3 id="map-用法"><a href="#map-用法" class="headerlink" title="map 用法"></a>map 用法</h3><div class="note default"><p>語法： map(function: iterable) </p>
-</div>
+<p>我們來加幾個路由看看：</p>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="string">&quot;github.com/gin-gonic/gin&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">    r := gin.Default()</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 根路由：歡迎顧客</span></span><br><span class="line">    r.GET <span class="string">&quot;/&quot;</span>, <span class="function"><span class="keyword">func</span><span class="params">(c *gin.Context)</span></span> &#123;</span><br><span class="line">        c.String(<span class="number">200</span>, <span class="string">&quot;歡迎來到我的咖啡店！&quot;</span>)</span><br><span class="line">    &#125;)</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 拿鐵訂單</span></span><br><span class="line">    r.GET(<span class="string">&quot;/latte&quot;</span>, <span class="function"><span class="keyword">func</span><span class="params">(c *gin.Context)</span></span> &#123;</span><br><span class="line">        c.String(<span class="number">200</span>, <span class="string">&quot;這是一杯熱拿鐵，享用吧！&quot;</span>)</span><br><span class="line">    &#125;)</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 查詢帳單</span></span><br><span class="line">    r.GET(<span class="string">&quot;/bill&quot;</span>, <span class="function"><span class="keyword">func</span><span class="params">(c *gin.Context)</span></span> &#123;</span><br><span class="line">        c.String(<span class="number">200</span>, <span class="string">&quot;今天的帳單是 50 元。&quot;</span>)</span><br><span class="line">    &#125;)</span><br><span class="line"></span><br><span class="line">    r.Run()</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">square</span>(<span class="params">x</span>):</span></span><br><span class="line">  <span class="keyword">return</span> x * x</span><br><span class="line">    </span><br><span class="line"><span class="built_in">map</span>(square, [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>])  <span class="comment">#Output [2, 4, 6, 8]</span></span><br></pre></td></tr></table></figure>
+<p>現在訪問 <code>http://localhost:8080/latte</code>，你會看到拿鐵的回應；訪問 <code>http://localhost:8080/bill</code>，則會看到帳單。這就是路由的基本概念：根據顧客的需求（URL），提供不同的服務（回應）。</p>
+<h2 id="處理顧客的特殊需求：參數與-JSON"><a href="#處理顧客的特殊需求：參數與-JSON" class="headerlink" title="處理顧客的特殊需求：參數與 JSON"></a>處理顧客的特殊需求：參數與 JSON</h2><p>假設有個顧客說：「我要一杯拿鐵，但大小要中杯，糖要少一點。」這時候，單純的 <code>/latte</code> 不夠用了，我們需要從 URL 或請求中提取參數。</p>
+<h3 id="用-URL-參數"><a href="#用-URL-參數" class="headerlink" title="用 URL 參數"></a>用 URL 參數</h3><p>改進程式碼，讓顧客可以指定杯子大小：</p>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line">r.GET(<span class="string">&quot;/latte/:size&quot;</span>, <span class="function"><span class="keyword">func</span><span class="params">(c *gin.Context)</span></span> &#123;</span><br><span class="line">    size := c.Param(<span class="string">&quot;size&quot;</span>) <span class="comment">// 從 URL 中提取 &quot;size&quot; 參數</span></span><br><span class="line">    c.String(<span class="number">200</span>, <span class="string">&quot;這是一杯 %s 拿鐵，享用吧！&quot;</span>, size)</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
 
-<h3 id="any-用法"><a href="#any-用法" class="headerlink" title="any 用法"></a>any 用法</h3><h3 id="解答："><a href="#解答：" class="headerlink" title="解答："></a>解答：</h3><pre><code class="python">def is_acceptable_password(password: str) -&gt; bool:
-    # your code here
-    return True if len(password) &gt; 6 and any(map(str.isdigit, password)) else False
-</code></pre>
+<p>訪問 <code>http://localhost:8080/latte/medium</code>，你會看到「這是一杯 medium 拿鐵，享用吧！」。</p>
+<h3 id="用-JSON-處理更複雜的訂單"><a href="#用-JSON-處理更複雜的訂單" class="headerlink" title="用 JSON 處理更複雜的訂單"></a>用 JSON 處理更複雜的訂單</h3><p>如果顧客的需求更詳細（例如糖量、溫度），可以用 POST 請求傳 JSON：</p>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line">r.POST(<span class="string">&quot;/order&quot;</span>, <span class="function"><span class="keyword">func</span><span class="params">(c *gin.Context)</span></span> &#123;</span><br><span class="line">    <span class="keyword">type</span> CoffeeOrder <span class="keyword">struct</span> &#123;</span><br><span class="line">        Type   <span class="keyword">string</span> <span class="string">`json:&quot;type&quot;`</span></span><br><span class="line">        Size   <span class="keyword">string</span> <span class="string">`json:&quot;size&quot;`</span></span><br><span class="line">        Sugar  <span class="keyword">int</span>    <span class="string">`json:&quot;sugar&quot;`</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">var</span> order CoffeeOrder</span><br><span class="line">    <span class="keyword">if</span> err := c.BindJSON(&amp;order); err != <span class="literal">nil</span> &#123;</span><br><span class="line">        c.String(<span class="number">400</span>, <span class="string">&quot;訂單格式錯誤！&quot;</span>)</span><br><span class="line">        <span class="keyword">return</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    c.JSON(<span class="number">200</span>, gin.H&#123;</span><br><span class="line">        <span class="string">&quot;message&quot;</span>: <span class="string">&quot;訂單收到！&quot;</span>,</span><br><span class="line">        <span class="string">&quot;order&quot;</span>:   order,</span><br><span class="line">    &#125;)</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+<p>用工具（例如 Postman）發送以下 POST 請求到 <code>http://localhost:8080/order</code>：</p>
+<figure class="highlight json"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    <span class="attr">&quot;type&quot;</span>: <span class="string">&quot;latte&quot;</span>,</span><br><span class="line">    <span class="attr">&quot;size&quot;</span>: <span class="string">&quot;large&quot;</span>,</span><br><span class="line">    <span class="attr">&quot;sugar&quot;</span>: <span class="number">2</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>你會得到回應：</p>
+<figure class="highlight json"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    <span class="attr">&quot;message&quot;</span>: <span class="string">&quot;訂單收到！&quot;</span>,</span><br><span class="line">    <span class="attr">&quot;order&quot;</span>: &#123;</span><br><span class="line">        <span class="attr">&quot;type&quot;</span>: <span class="string">&quot;latte&quot;</span>,</span><br><span class="line">        <span class="attr">&quot;size&quot;</span>: <span class="string">&quot;large&quot;</span>,</span><br><span class="line">        <span class="attr">&quot;sugar&quot;</span>: <span class="number">2</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>這就像顧客填好訂單表，你確認後回覆一樣，簡單又清楚。</p>
+<h2 id="讓我們總結一下：Gin-的魅力"><a href="#讓我們總結一下：Gin-的魅力" class="headerlink" title="讓我們總結一下：Gin 的魅力"></a>讓我們總結一下：Gin 的魅力</h2><p>Gin 的設計哲學就像咖啡店的經營之道：<strong>簡單、快速、靈活</strong>。它不強迫你用複雜的設定，而是提供直觀的工具，讓你專注在業務邏輯上。透過今天的例子，我們學會了：</p>
+<ol>
+<li>如何安裝和啟動 Gin。</li>
+<li>用路由處理不同的請求。</li>
+<li>接收參數和 JSON，提升服務的彈性。</li>
+</ol>
+<p>下次如果你想打造一個輕量級 API（例如給手機 App 用的後端）、Web 應用程式，甚至是微服務架構，不妨試試 Gin，它能助你一臂之力。</p>
 ]]></content>
       <categories>
-        <category>Check.io</category>
-        <category>python</category>
+        <category>Golang</category>
+        <category>Web API</category>
       </categories>
       <tags>
-        <tag>Check.io</tag>
-        <tag>python</tag>
-        <tag>map</tag>
-        <tag>any</tag>
+        <tag>Golang</tag>
+        <tag>Gin Framework</tag>
+        <tag>Web API</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>[筆記] Leetcode - 1913. Maximum Product Difference Between Two Pairs</title>
+    <url>/2023/12/18/%E7%AD%86%E8%A8%98-1913.-Maximum-Product%20Difference-Between-Two-Pairs/</url>
+    <content><![CDATA[<p><a href="https://leetcode.com/problems/maximum-product-difference-between-two-pairs/">https://leetcode.com/problems/maximum-product-difference-between-two-pairs/</a></p>
+<blockquote>
+<p>The product difference between two pairs (a, b) and (c, d) is defined as (a * b) - (c * d).</p>
+<p>For example, the product difference between (5, 6) and (2, 7) is (5 * 6) - (2 * 7) &#x3D; 16.<br>Given an integer array nums, choose four distinct indices w, x, y, and z such that the product difference between pairs (nums[w], nums[x]) and (nums[y], nums[z]) is maximized.</p>
+<p>Return the maximum such product difference.</p>
+</blockquote>
+<span id="more"></span>
+
+<p>Example 1:</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Input: nums &#x3D; [5,6,2,7,4]</span><br><span class="line">Output: 34</span><br><span class="line">Explanation: We can choose indices 1 and 3 for the first pair (6, 7) and indices 2 and 4 for the second pair (2, 4).</span><br><span class="line">The product difference is (6 * 7) - (2 * 4) &#x3D; 34.</span><br></pre></td></tr></table></figure>
+<p>Example 2:</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Input: nums &#x3D; [4,2,5,9,7,4,8]</span><br><span class="line">Output: 64</span><br><span class="line">Explanation: We can choose indices 3 and 6 for the first pair (9, 8) and indices 1 and 5 for the second pair (2, 4).</span><br><span class="line">The product difference is (9 * 8) - (2 * 4) &#x3D; 64.</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">maxProductDifference</span>(<span class="params">self, nums: <span class="type">List</span>[<span class="built_in">int</span>]</span>) -&gt; <span class="built_in">int</span>:</span></span><br><span class="line">        min_num1, min_num2 = math.inf, math.inf</span><br><span class="line">        max_num1, max_num2 = -math.inf, -math.inf</span><br><span class="line">    </span><br><span class="line">        <span class="keyword">for</span> number <span class="keyword">in</span> nums: </span><br><span class="line">            <span class="keyword">if</span> number &gt; max_num1:</span><br><span class="line">                max_num1, max_num2 = number, max_num1</span><br><span class="line">            <span class="keyword">elif</span> number &gt; max_num2:</span><br><span class="line">                max_num2 = number</span><br><span class="line">    </span><br><span class="line">            <span class="keyword">if</span> number &lt; min_num1:</span><br><span class="line">                min_num1, min_num2 = number, min_num1</span><br><span class="line">            <span class="keyword">elif</span> number &lt; min_num2:</span><br><span class="line">                min_num2 = number</span><br><span class="line">    </span><br><span class="line">        <span class="keyword">return</span> max_num1 * max_num2 - min_num1 * min_num2</span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <tags>
+        <tag>Leetcode</tag>
+        <tag>Python</tag>
+        <tag>Math</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>[筆記] Leetcode - 1903. Largest Odd Number in String</title>
+    <url>/2023/12/09/%E7%AD%86%E8%A8%98-1903.-Largest-Odd%20Number-in-String/</url>
+    <content><![CDATA[<blockquote>
+<p>You are given a string num, representing a large integer. Return the largest-valued odd integer (as a string) that is a non-empty substring of num, or an empty string “” if no odd integer exists.</p>
+</blockquote>
+<p>A substring is a contiguous sequence of characters within a string.</p>
+<p>Example 1:</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Input: num &#x3D; &quot;52&quot;</span><br><span class="line">Output: &quot;5&quot;</span><br><span class="line">Explanation: The only non-empty substrings are &quot;5&quot;, &quot;2&quot;, and &quot;52&quot;. &quot;5&quot; is the only odd number.</span><br></pre></td></tr></table></figure>
+<p>Example 2:</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Input: num &#x3D; &quot;4206&quot;</span><br><span class="line">Output: &quot;&quot;</span><br><span class="line">Explanation: There are no odd numbers in &quot;4206&quot;.</span><br></pre></td></tr></table></figure>
+<p>Example 3:</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Input: num &#x3D; &quot;35427&quot;</span><br><span class="line">Output: &quot;35427&quot;</span><br><span class="line">Explanation: &quot;35427&quot; is already an odd number.</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">largestOddNumber</span>(<span class="params">self, num: <span class="built_in">str</span></span>) -&gt; <span class="built_in">str</span>:</span></span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">len</span>(num) - <span class="number">1</span>, -<span class="number">1</span>, -<span class="number">1</span>):</span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span> <span class="built_in">int</span>(num[i]) % <span class="number">2</span>:</span><br><span class="line">                <span class="keyword">return</span> num[:i + <span class="number">1</span>]</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> <span class="string">&#x27;&#x27;</span></span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <tags>
+        <tag>list</tag>
+        <tag>Leetcode</tag>
+        <tag>Python</tag>
+        <tag>reverse</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>[筆記] Leetcode - 1822. Sign of the Product of an Array</title>
+    <url>/2023/05/02/%E7%AD%86-Leetcode-1822-Sign-of-the-Product-of-an-Array/</url>
+    <content><![CDATA[<p><a href="https://leetcode.com/problems/sign-of-the-product-of-an-array/">https://leetcode.com/problems/sign-of-the-product-of-an-array/</a></p>
+<blockquote>
+<p>There is a function signFunc(x) that returns:<br>1 if x is positive.<br>-1 if x is negative.<br>0 if x is equal to 0.<br>You are given an integer array nums. Let product be the product of all values in the array nums.<br>Return signFunc(product).</p>
+</blockquote>
+<p><img src="https://i.imgur.com/v6fBWOf.png"></p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">arraySign</span>(<span class="params">self, nums: <span class="type">List</span>[<span class="built_in">int</span>]</span>) -&gt; <span class="built_in">int</span>:</span></span><br><span class="line">        sign = <span class="number">1</span></span><br><span class="line">        <span class="keyword">for</span> num <span class="keyword">in</span> nums:</span><br><span class="line">            <span class="keyword">if</span> num == <span class="number">0</span>:</span><br><span class="line">                <span class="keyword">return</span> <span class="number">0</span></span><br><span class="line">            <span class="keyword">if</span> num &lt; <span class="number">0</span>:</span><br><span class="line">                sign = -sign</span><br><span class="line">        <span class="keyword">return</span> sign</span><br></pre></td></tr></table></figure>]]></content>
+      <tags>
+        <tag>Leetcode</tag>
+        <tag>Python</tag>
+        <tag>Coding</tag>
       </tags>
   </entry>
   <entry>
@@ -1808,6 +1722,40 @@ def date_time(time: str) -&gt; str:
       </tags>
   </entry>
   <entry>
+    <title>[筆記] Check.io - Acceptable Password II</title>
+    <url>/2021/05/01/%E7%AD%86%E8%A8%98-Check-io-Acceptable-Password-II/</url>
+    <content><![CDATA[<blockquote>
+<p><a href="https://py.checkio.org/en/mission/acceptable-password-ii/">check.io</a> 上的題目：合格的密碼須含數字<br>此系列文章主要是自己在解題時覺得有趣的題目，記錄下來讓自己以後方便複習，有興趣的人可以參考看看</p>
+</blockquote>
+<span id="more"></span>
+
+<h2 id="先來看看題目"><a href="#先來看看題目" class="headerlink" title="先來看看題目"></a>先來看看題目</h2><p><img src="https://i.imgur.com/PvH7bh2.png"></p>
+<h2 id="解題步驟"><a href="#解題步驟" class="headerlink" title="解題步驟"></a>解題步驟</h2><ul>
+<li>密碼須大於６位數</li>
+<li>至少需包含一個數字</li>
+</ul>
+<h3 id="map-用法"><a href="#map-用法" class="headerlink" title="map 用法"></a>map 用法</h3><div class="note default"><p>語法： map(function: iterable) </p>
+</div>
+
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">square</span>(<span class="params">x</span>):</span></span><br><span class="line">  <span class="keyword">return</span> x * x</span><br><span class="line">    </span><br><span class="line"><span class="built_in">map</span>(square, [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>])  <span class="comment">#Output [2, 4, 6, 8]</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="any-用法"><a href="#any-用法" class="headerlink" title="any 用法"></a>any 用法</h3><h3 id="解答："><a href="#解答：" class="headerlink" title="解答："></a>解答：</h3><pre><code class="python">def is_acceptable_password(password: str) -&gt; bool:
+    # your code here
+    return True if len(password) &gt; 6 and any(map(str.isdigit, password)) else False
+</code></pre>
+]]></content>
+      <categories>
+        <category>Check.io</category>
+        <category>python</category>
+      </categories>
+      <tags>
+        <tag>Check.io</tag>
+        <tag>python</tag>
+        <tag>map</tag>
+        <tag>any</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>[筆記] HackerRank - Sales by Match</title>
     <url>/2021/04/02/%E7%AD%86%E8%A8%98-HackerRank-Sales-by-Match/</url>
     <content><![CDATA[<blockquote>
@@ -1850,6 +1798,58 @@ def date_time(time: str) -&gt; str:
         <tag>sum</tag>
         <tag>java</tag>
         <tag>hashset</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>[筆記] Check.io - Date and Time Converter</title>
+    <url>/2021/04/25/%E7%AD%86%E8%A8%98-Check-io-Date-and-Time-Converter/</url>
+    <content><![CDATA[<blockquote>
+<p><a href="https://py.checkio.org/en/mission/date-and-time-converter/">check.io</a> 上的題目：將字串轉成規定的格式<br>此系列文章主要是自己在解題時覺得有趣的題目，記錄下來讓自己以後方便複習，有興趣的人可以參考看看</p>
+</blockquote>
+<span id="more"></span>
+
+<h2 id="先來看看題目"><a href="#先來看看題目" class="headerlink" title="先來看看題目"></a>先來看看題目</h2><p><img src="https://i.imgur.com/1IHEoPk.png"></p>
+<h2 id="解題步驟"><a href="#解題步驟" class="headerlink" title="解題步驟"></a>解題步驟</h2><h2 id=""><a href="#" class="headerlink" title="- "></a>- </h2><p>strptime<br>strftime<br>format</p>
+<p><a href="https://www.geeksforgeeks.org/python-strftime-function/"><img src="https://i.imgur.com/cKcNfZx.png" alt="參考來源"></a></p>
+<h2 id="解題"><a href="#解題" class="headerlink" title="解題"></a>解題</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> datetime</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">date_time</span>(<span class="params">time: <span class="built_in">str</span></span>) -&gt; <span class="built_in">str</span>:</span></span><br><span class="line">    <span class="comment">#convert string to datetime</span></span><br><span class="line">    date_time = datetime.datetime.strptime(time, <span class="string">&quot;%d.%m.%Y %H:%M&quot;</span>)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> date_time.strftime(<span class="string">f&quot;<span class="subst">&#123;date_time.day&#125;</span> %B %Y year <span class="subst">&#123;date_time.hour&#125;</span> hour<span class="subst">&#123;<span class="string">&#x27;s&#x27;</span> <span class="keyword">if</span> date_time.hour != <span class="number">1</span> <span class="keyword">else</span> <span class="string">&#x27;&#x27;</span>&#125;</span> <span class="subst">&#123;date_time.minute&#125;</span> minute<span class="subst">&#123;<span class="string">&#x27;s&#x27;</span> <span class="keyword">if</span> date_time.minute != <span class="number">1</span> <span class="keyword">else</span> <span class="string">&#x27;&#x27;</span>&#125;</span>&quot;</span>)</span><br></pre></td></tr></table></figure>
+
+<p>分享一個查到的不錯的方法</p>
+<pre><code class="python">import datetime
+
+def date_time(time: str) -&gt; str:
+    #convert string to datetime
+    date_time = datetime.datetime.strptime(time, &quot;%d.%m.%Y %H:%M&quot;)
+
+    return date_time.strftime(f&quot;&#123;date_time.day&#125; %B %Y year &#123;date_time.hour&#125; &#123;[&#39;hours&#39;, &#39;hour&#39;][date_time.hour == 1]&#125; &#123;date_time.minute&#125; &#123;[&#39;minutes&#39;, &#39;minute&#39;][date_time.minute == 1]&#125;&quot;)
+</code></pre>
+]]></content>
+      <categories>
+        <category>Check.io</category>
+        <category>python</category>
+      </categories>
+      <tags>
+        <tag>Check.io</tag>
+        <tag>python</tag>
+        <tag>datetime</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>[筆記] Check.io - Pawn Brotherhood</title>
+    <url>/2021/04/25/%E7%AD%86%E8%A8%98-Check-io-Pawn-Brotherhood/</url>
+    <content><![CDATA[<blockquote>
+<p><a href="https://py.checkio.org/en/mission/pawn-brotherhood/">check.io</a> 上的題目：判斷西洋棋中的兵有幾個是安全的<br>此系列文章主要是自己在解題時覺得有趣的題目，記錄下來讓自己以後好複習，有興趣的人可以參考看看</p>
+</blockquote>
+<h2 id="先來看看題目"><a href="#先來看看題目" class="headerlink" title="先來看看題目"></a>先來看看題目</h2><p><img src="https://i.imgur.com/oTOaA4z.jpg"><br>總結來說：兵的行徑方向走斜對角的(左前、右前)，若是兵的右下或左下有其他兵的話，他就是安全的</p>
+<h2 id="解題步驟"><a href="#解題步驟" class="headerlink" title="解題步驟"></a>解題步驟</h2><h2 id="解題"><a href="#解題" class="headerlink" title="解題"></a>解題</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">safe_pawns</span>(<span class="params">pawns: <span class="built_in">set</span></span>) -&gt; <span class="built_in">int</span>:</span></span><br><span class="line">    safe = <span class="number">0</span></span><br><span class="line">    <span class="keyword">for</span> p <span class="keyword">in</span> pawns:</span><br><span class="line">        <span class="keyword">if</span> <span class="built_in">chr</span>(<span class="built_in">ord</span>(p[<span class="number">0</span>]) + <span class="number">1</span>) + <span class="built_in">str</span>(<span class="built_in">int</span>(p[<span class="number">1</span>]) - <span class="number">1</span>) <span class="keyword">in</span> pawns <span class="keyword">or</span> <span class="built_in">chr</span>(<span class="built_in">ord</span>(p[<span class="number">0</span>]) - <span class="number">1</span>) + <span class="built_in">str</span>(<span class="built_in">int</span>(p[<span class="number">1</span>]) - <span class="number">1</span>) <span class="keyword">in</span> pawns:</span><br><span class="line">            safe += <span class="number">1</span></span><br><span class="line">    <span class="keyword">return</span> safe</span><br></pre></td></tr></table></figure>]]></content>
+      <categories>
+        <category>Check.io</category>
+        <category>python</category>
+      </categories>
+      <tags>
+        <tag>Check.io</tag>
+        <tag>python</tag>
+        <tag>chr</tag>
+        <tag>ord</tag>
       </tags>
   </entry>
   <entry>
@@ -1931,83 +1931,6 @@ def date_time(time: str) -&gt; str:
         <tag>GitHub pages</tag>
         <tag>Blog</tag>
         <tag>Mac</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>[筆記] Hexo - 換電腦重新部署環境</title>
-    <url>/2023/04/17/%E7%AD%86%E8%A8%98-Hexo-%E6%8F%9B%E9%9B%BB%E8%85%A6%E9%87%8D%E6%96%B0%E9%83%A8%E7%BD%B2%E7%92%B0%E5%A2%83/</url>
-    <content><![CDATA[<blockquote>
-<p>換電腦後發現即使有用 time machine 做備份還是要重新部署<br>因為 push 至 github 的是已經編譯過後的檔案，所以沒有留原始檔的話，看起來應該沒救了(?)</p>
-</blockquote>
-<span id="more"></span>
-<h3 id="step-1-電腦環境設定"><a href="#step-1-電腦環境設定" class="headerlink" title="step 1: 電腦環境設定"></a>step 1: 電腦環境設定</h3><figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line">git --version</span><br><span class="line">node -v</span><br><span class="line">hexo -v</span><br></pre></td></tr></table></figure>
-<center>
-   <img src="https://i.imgur.com/wNuNXtT.png" width="40%">
-</center>
-
-<h3 id="step-2-重新建置-Hexo-環境"><a href="#step-2-重新建置-Hexo-環境" class="headerlink" title="step 2: 重新建置 Hexo 環境"></a>step 2: 重新建置 Hexo 環境</h3><figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line">#建立一個 blog 的資料夾 (blog_name 請自行命名~)</span><br><span class="line">hexo init blog_name  </span><br></pre></td></tr></table></figure>
-<p>若是有其他的要安裝請參考 <a href="https://zanazhong.github.io/2020/09/11/%E7%AD%86%E8%A8%98-GitHub-pages-Hexo-%E6%90%AD%E5%BB%BA-Blog-Mac/#more">Hexo 環境安裝</a></p>
-<figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line"><span class="built_in">cd</span> blog_name</span><br></pre></td></tr></table></figure>
-<h4 id="將備份的檔案複製至新的-Hexo-環境"><a href="#將備份的檔案複製至新的-Hexo-環境" class="headerlink" title="將備份的檔案複製至新的 Hexo 環境"></a>將備份的檔案複製至新的 Hexo 環境</h4><center>
-   <img src="https://i.imgur.com/lWLZd0F.png)" width="40%">
-</center>
-
-<p>將除了 node_modules 跟 public 之外的檔案複製過去</p>
-<blockquote>
-<p>node_modules 是放一些 library 的地方，執行 npm install 時就會下載相關的 library；而 public 是放原始檔編譯後的檔案，之後部署時會再建回來</p>
-</blockquote>
-<h4 id="複製完執行以下指令"><a href="#複製完執行以下指令" class="headerlink" title="複製完執行以下指令"></a>複製完執行以下指令</h4><figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line">npm install</span><br><span class="line">npm install hexo-deployer-git --save</span><br><span class="line">npm install hexo-generator-feed --save</span><br><span class="line">npm install hexo-generator-sitemap --save</span><br></pre></td></tr></table></figure>
-<p>可能會出現一些 Error or Warning，照著他的指示修正即可</p>
-<h3 id="step-3-在本地端-preview-一下"><a href="#step-3-在本地端-preview-一下" class="headerlink" title="step 3: 在本地端 preview 一下"></a>step 3: 在本地端 preview 一下</h3><p>上線前還是小心謹慎一點好，先在本地檢視一下有沒有如期正常顯示，畢竟裡面已經有嘔心瀝血作品</p>
-<figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line">#透過本機的 http://localhost:<span class="number">4000</span> 查看</span><br><span class="line">hexo s --debug</span><br></pre></td></tr></table></figure>
-
-<h3 id="step-4-重新部署-gogo"><a href="#step-4-重新部署-gogo" class="headerlink" title="step 4: 重新部署 gogo"></a>step 4: 重新部署 gogo</h3><figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line">hexo d -g</span><br></pre></td></tr></table></figure>
-
-
-<h3 id="番外-部署問題"><a href="#番外-部署問題" class="headerlink" title="番外: 部署問題"></a>番外: 部署問題</h3><blockquote>
-<p>事情有時候總是沒這麼簡單的喇!!</p>
-</blockquote>
-<p>看起來一般來說他給的這個網站裡面都能找到解法 ⬇️<br>Something’s wrong. Maybe you can find the solution here: %s <a href="https://hexo.io/docs/troubleshooting.html">https://hexo.io/docs/troubleshooting.html</a></p>
-<p>分享一下我遇到的是 github Authentication Failed (身份驗證失敗)<br>解法：</p>
-<figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line"># 進去網站資料夾</span><br><span class="line"><span class="built_in">cd</span> blog_name</span><br><span class="line"></span><br><span class="line"># 修改 _config.yml</span><br><span class="line">vim _config.yml</span><br></pre></td></tr></table></figure>
-<p>將 https 方式改成用 ssh 方式</p>
-<figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line"><span class="function">deploy:</span></span><br><span class="line"><span class="function">    <span class="title">type</span>: <span class="title">git</span></span></span><br><span class="line"><span class="function">    <span class="title">repo</span>: <span class="title">https</span>://<span class="title">github.com</span>/<span class="title">yourname</span>/<span class="title">yourname.github.io.git</span> -&gt; <span class="title">git</span>@<span class="title">github.com:yourname</span>/<span class="title">yourname.github.io.git</span></span></span><br><span class="line"><span class="function">    <span class="title">branch</span>: <span class="title">master</span></span></span><br></pre></td></tr></table></figure>
-
-<ol>
-<li><p>Generating a new SSH key and adding it to the ssh-agent <a href="https://docs.github.com/en/authentication/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent">:link:</a></p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">ls -al ~&#x2F;.ssh</span><br></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">ssh-keygen -t ed25519 -C &quot;your_email@example.com&quot;</span><br></pre></td></tr></table></figure>
-<p>產生金鑰的過程中，會問 3 個問題，如果沒有特殊需求可以全部使用預設值(press Enter)就好</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># 金鑰儲存的位置與檔名，預設檔名是前面所提到 id_ed25519，可以更改檔名，ex: githud_key</span><br><span class="line">Enter file in which to save the key (&#x2F;home&#x2F;username&#x2F;.ssh&#x2F;id_ed25519): [Press enter]</span><br><span class="line"></span><br><span class="line"># 詢問是否指定金鑰保護密碼，若有設定密碼的話，之後使用每次使用時，這把金鑰時就要輸入密碼，請務必牢記。之後想修改金鑰密碼的話，可以透過 ssh-keygen 來設定。</span><br><span class="line">Enter passphrase (empty for no passphrase):</span><br><span class="line">Enter same passphrase again:</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Generating public&#x2F;private ed25519 key pair.</span><br><span class="line">Enter file in which to save the key (&#x2F;Users&#x2F;username&#x2F;.ssh&#x2F;id_ed25519):</span><br><span class="line">Enter passphrase (empty for no passphrase):</span><br><span class="line">Enter same passphrase again:</span><br><span class="line">Your identification has been saved in &#x2F;Users&#x2F;username&#x2F;.ssh&#x2F;id_ed25519</span><br><span class="line">Your public key has been saved in &#x2F;Users&#x2F;username&#x2F;.ssh&#x2F;id_ed25519.pub</span><br><span class="line">The key fingerprint is:</span><br><span class="line">SHA256:*************************** your_email@example.com</span><br><span class="line">The key&#39;s randomart image is:</span><br><span class="line">+--[ED25519 256]--+</span><br><span class="line">|                 |</span><br><span class="line">|                 |</span><br><span class="line">|                 |</span><br><span class="line">|                 |</span><br><span class="line">|                 |</span><br><span class="line">|                 |</span><br><span class="line">|                 |</span><br><span class="line">|                 |</span><br><span class="line">|                 |</span><br><span class="line">+----[SHA256]-----+</span><br></pre></td></tr></table></figure>
-<p><img src="https://i.imgur.com/lDCil5I.png"></p>
-<p>設定金鑰代理</p>
-<figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line">eval &quot;$(ssh-agent -s)&quot;</span><br><span class="line"># output: Agent pid <span class="number">98350</span></span><br></pre></td></tr></table></figure>
-
-<figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line">touch ~/.ssh/config</span><br><span class="line">open ~/.ssh/config</span><br></pre></td></tr></table></figure>
-<p>modify ~&#x2F;.ssh&#x2F;config</p>
-<figure class="highlight vim"><table><tr><td class="code"><pre><span class="line">Host *</span><br><span class="line">   AddKeysToAgent yes</span><br><span class="line">   UseKeychain yes</span><br><span class="line">   IdentityFile ~/.ssh/id_ed25519 #！如果有改名的話這邊記得改</span><br></pre></td></tr></table></figure>
-<figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line"># Add your SSH private key to the ssh-agen</span><br><span class="line">ssh-add -K ~/.ssh/id_ed25519</span><br><span class="line"># <span class="built_in">copy</span> it</span><br><span class="line">pbcopy &lt; ~/.ssh/id_ed25519.pub #！如果有改名的話這邊記得改</span><br></pre></td></tr></table></figure>
-
-
-</li>
-<li><p>Adding a new SSH key to your GitHub account<a href="https://docs.github.com/en/authentication/connecting-to-github-with-ssh/adding-a-new-ssh-key-to-your-github-account">:link:</a><br>![](<a href="https://i.imgur.com/fT8xpej.png">https://i.imgur.com/fT8xpej.png</a> &#x3D;200x)<br><img src="https://i.imgur.com/esiwR1T.png"></p>
-<p><img src="https://i.imgur.com/8yv980c.png"></p>
-<p>連線測試</p>
-<figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line">ssh -T git@github.com</span><br><span class="line"># output: Hi XXX! You’ve successfully authenticated, but GitHub does <span class="keyword">not</span> provide shell access.</span><br></pre></td></tr></table></figure></li>
-<li><p>deploy on GitHub</p>
-<figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line">hexo clean &amp;&amp; hexo g &amp;&amp; hexo d</span><br></pre></td></tr></table></figure></li>
-</ol>
-]]></content>
-      <categories>
-        <category>Hexo</category>
-      </categories>
-      <tags>
-        <tag>GitHub</tag>
-        <tag>Hexo</tag>
-        <tag>GitHub pages</tag>
-        <tag>Blog</tag>
       </tags>
   </entry>
   <entry>
@@ -2104,6 +2027,83 @@ def date_time(time: str) -&gt; str:
       </tags>
   </entry>
   <entry>
+    <title>[筆記] Hexo - 換電腦重新部署環境</title>
+    <url>/2023/04/17/%E7%AD%86%E8%A8%98-Hexo-%E6%8F%9B%E9%9B%BB%E8%85%A6%E9%87%8D%E6%96%B0%E9%83%A8%E7%BD%B2%E7%92%B0%E5%A2%83/</url>
+    <content><![CDATA[<blockquote>
+<p>換電腦後發現即使有用 time machine 做備份還是要重新部署<br>因為 push 至 github 的是已經編譯過後的檔案，所以沒有留原始檔的話，看起來應該沒救了(?)</p>
+</blockquote>
+<span id="more"></span>
+<h3 id="step-1-電腦環境設定"><a href="#step-1-電腦環境設定" class="headerlink" title="step 1: 電腦環境設定"></a>step 1: 電腦環境設定</h3><figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line">git --version</span><br><span class="line">node -v</span><br><span class="line">hexo -v</span><br></pre></td></tr></table></figure>
+<center>
+   <img src="https://i.imgur.com/wNuNXtT.png" width="40%">
+</center>
+
+<h3 id="step-2-重新建置-Hexo-環境"><a href="#step-2-重新建置-Hexo-環境" class="headerlink" title="step 2: 重新建置 Hexo 環境"></a>step 2: 重新建置 Hexo 環境</h3><figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line">#建立一個 blog 的資料夾 (blog_name 請自行命名~)</span><br><span class="line">hexo init blog_name  </span><br></pre></td></tr></table></figure>
+<p>若是有其他的要安裝請參考 <a href="https://zanazhong.github.io/2020/09/11/%E7%AD%86%E8%A8%98-GitHub-pages-Hexo-%E6%90%AD%E5%BB%BA-Blog-Mac/#more">Hexo 環境安裝</a></p>
+<figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line"><span class="built_in">cd</span> blog_name</span><br></pre></td></tr></table></figure>
+<h4 id="將備份的檔案複製至新的-Hexo-環境"><a href="#將備份的檔案複製至新的-Hexo-環境" class="headerlink" title="將備份的檔案複製至新的 Hexo 環境"></a>將備份的檔案複製至新的 Hexo 環境</h4><center>
+   <img src="https://i.imgur.com/lWLZd0F.png)" width="40%">
+</center>
+
+<p>將除了 node_modules 跟 public 之外的檔案複製過去</p>
+<blockquote>
+<p>node_modules 是放一些 library 的地方，執行 npm install 時就會下載相關的 library；而 public 是放原始檔編譯後的檔案，之後部署時會再建回來</p>
+</blockquote>
+<h4 id="複製完執行以下指令"><a href="#複製完執行以下指令" class="headerlink" title="複製完執行以下指令"></a>複製完執行以下指令</h4><figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line">npm install</span><br><span class="line">npm install hexo-deployer-git --save</span><br><span class="line">npm install hexo-generator-feed --save</span><br><span class="line">npm install hexo-generator-sitemap --save</span><br></pre></td></tr></table></figure>
+<p>可能會出現一些 Error or Warning，照著他的指示修正即可</p>
+<h3 id="step-3-在本地端-preview-一下"><a href="#step-3-在本地端-preview-一下" class="headerlink" title="step 3: 在本地端 preview 一下"></a>step 3: 在本地端 preview 一下</h3><p>上線前還是小心謹慎一點好，先在本地檢視一下有沒有如期正常顯示，畢竟裡面已經有嘔心瀝血作品</p>
+<figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line">#透過本機的 http://localhost:<span class="number">4000</span> 查看</span><br><span class="line">hexo s --debug</span><br></pre></td></tr></table></figure>
+
+<h3 id="step-4-重新部署-gogo"><a href="#step-4-重新部署-gogo" class="headerlink" title="step 4: 重新部署 gogo"></a>step 4: 重新部署 gogo</h3><figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line">hexo d -g</span><br></pre></td></tr></table></figure>
+
+
+<h3 id="番外-部署問題"><a href="#番外-部署問題" class="headerlink" title="番外: 部署問題"></a>番外: 部署問題</h3><blockquote>
+<p>事情有時候總是沒這麼簡單的喇!!</p>
+</blockquote>
+<p>看起來一般來說他給的這個網站裡面都能找到解法 ⬇️<br>Something’s wrong. Maybe you can find the solution here: %s <a href="https://hexo.io/docs/troubleshooting.html">https://hexo.io/docs/troubleshooting.html</a></p>
+<p>分享一下我遇到的是 github Authentication Failed (身份驗證失敗)<br>解法：</p>
+<figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line"># 進去網站資料夾</span><br><span class="line"><span class="built_in">cd</span> blog_name</span><br><span class="line"></span><br><span class="line"># 修改 _config.yml</span><br><span class="line">vim _config.yml</span><br></pre></td></tr></table></figure>
+<p>將 https 方式改成用 ssh 方式</p>
+<figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line"><span class="function">deploy:</span></span><br><span class="line"><span class="function">    <span class="title">type</span>: <span class="title">git</span></span></span><br><span class="line"><span class="function">    <span class="title">repo</span>: <span class="title">https</span>://<span class="title">github.com</span>/<span class="title">yourname</span>/<span class="title">yourname.github.io.git</span> -&gt; <span class="title">git</span>@<span class="title">github.com:yourname</span>/<span class="title">yourname.github.io.git</span></span></span><br><span class="line"><span class="function">    <span class="title">branch</span>: <span class="title">master</span></span></span><br></pre></td></tr></table></figure>
+
+<ol>
+<li><p>Generating a new SSH key and adding it to the ssh-agent <a href="https://docs.github.com/en/authentication/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent">:link:</a></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">ls -al ~&#x2F;.ssh</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">ssh-keygen -t ed25519 -C &quot;your_email@example.com&quot;</span><br></pre></td></tr></table></figure>
+<p>產生金鑰的過程中，會問 3 個問題，如果沒有特殊需求可以全部使用預設值(press Enter)就好</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># 金鑰儲存的位置與檔名，預設檔名是前面所提到 id_ed25519，可以更改檔名，ex: githud_key</span><br><span class="line">Enter file in which to save the key (&#x2F;home&#x2F;username&#x2F;.ssh&#x2F;id_ed25519): [Press enter]</span><br><span class="line"></span><br><span class="line"># 詢問是否指定金鑰保護密碼，若有設定密碼的話，之後使用每次使用時，這把金鑰時就要輸入密碼，請務必牢記。之後想修改金鑰密碼的話，可以透過 ssh-keygen 來設定。</span><br><span class="line">Enter passphrase (empty for no passphrase):</span><br><span class="line">Enter same passphrase again:</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Generating public&#x2F;private ed25519 key pair.</span><br><span class="line">Enter file in which to save the key (&#x2F;Users&#x2F;username&#x2F;.ssh&#x2F;id_ed25519):</span><br><span class="line">Enter passphrase (empty for no passphrase):</span><br><span class="line">Enter same passphrase again:</span><br><span class="line">Your identification has been saved in &#x2F;Users&#x2F;username&#x2F;.ssh&#x2F;id_ed25519</span><br><span class="line">Your public key has been saved in &#x2F;Users&#x2F;username&#x2F;.ssh&#x2F;id_ed25519.pub</span><br><span class="line">The key fingerprint is:</span><br><span class="line">SHA256:*************************** your_email@example.com</span><br><span class="line">The key&#39;s randomart image is:</span><br><span class="line">+--[ED25519 256]--+</span><br><span class="line">|                 |</span><br><span class="line">|                 |</span><br><span class="line">|                 |</span><br><span class="line">|                 |</span><br><span class="line">|                 |</span><br><span class="line">|                 |</span><br><span class="line">|                 |</span><br><span class="line">|                 |</span><br><span class="line">|                 |</span><br><span class="line">+----[SHA256]-----+</span><br></pre></td></tr></table></figure>
+<p><img src="https://i.imgur.com/lDCil5I.png"></p>
+<p>設定金鑰代理</p>
+<figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line">eval &quot;$(ssh-agent -s)&quot;</span><br><span class="line"># output: Agent pid <span class="number">98350</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line">touch ~/.ssh/config</span><br><span class="line">open ~/.ssh/config</span><br></pre></td></tr></table></figure>
+<p>modify ~&#x2F;.ssh&#x2F;config</p>
+<figure class="highlight vim"><table><tr><td class="code"><pre><span class="line">Host *</span><br><span class="line">   AddKeysToAgent yes</span><br><span class="line">   UseKeychain yes</span><br><span class="line">   IdentityFile ~/.ssh/id_ed25519 #！如果有改名的話這邊記得改</span><br></pre></td></tr></table></figure>
+<figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line"># Add your SSH private key to the ssh-agen</span><br><span class="line">ssh-add -K ~/.ssh/id_ed25519</span><br><span class="line"># <span class="built_in">copy</span> it</span><br><span class="line">pbcopy &lt; ~/.ssh/id_ed25519.pub #！如果有改名的話這邊記得改</span><br></pre></td></tr></table></figure>
+
+
+</li>
+<li><p>Adding a new SSH key to your GitHub account<a href="https://docs.github.com/en/authentication/connecting-to-github-with-ssh/adding-a-new-ssh-key-to-your-github-account">:link:</a><br>![](<a href="https://i.imgur.com/fT8xpej.png">https://i.imgur.com/fT8xpej.png</a> &#x3D;200x)<br><img src="https://i.imgur.com/esiwR1T.png"></p>
+<p><img src="https://i.imgur.com/8yv980c.png"></p>
+<p>連線測試</p>
+<figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line">ssh -T git@github.com</span><br><span class="line"># output: Hi XXX! You’ve successfully authenticated, but GitHub does <span class="keyword">not</span> provide shell access.</span><br></pre></td></tr></table></figure></li>
+<li><p>deploy on GitHub</p>
+<figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line">hexo clean &amp;&amp; hexo g &amp;&amp; hexo d</span><br></pre></td></tr></table></figure></li>
+</ol>
+]]></content>
+      <categories>
+        <category>Hexo</category>
+      </categories>
+      <tags>
+        <tag>GitHub</tag>
+        <tag>Hexo</tag>
+        <tag>GitHub pages</tag>
+        <tag>Blog</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>[筆記] Leetcode - 136. Single Number</title>
     <url>/2023/09/28/%E7%AD%86%E8%A8%98-Leetcode-%20136.-Single%20Number/</url>
     <content><![CDATA[<p><a href="https://leetcode.com/problems/single-number/">https://leetcode.com/problems/single-number/</a></p>
@@ -2120,6 +2120,29 @@ def date_time(time: str) -&gt; str:
         <tag>Leetcode</tag>
         <tag>Python</tag>
         <tag>Coding</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>[筆記] Leetcode - 217. Contains Duplicate</title>
+    <url>/2023/09/28/%E7%AD%86%E8%A8%98-Leetcode-%20217.-Contains-Duplicate/</url>
+    <content><![CDATA[<p><a href="https://leetcode.com/problems/contains-duplicate/">https://leetcode.com/problems/contains-duplicate/</a></p>
+<blockquote>
+<p>Given an integer array nums, return true if any value appears at least twice in the array, and return false if every element is distinct.</p>
+</blockquote>
+<p><img src="https://hackmd.io/_uploads/H1SgWl7ga.png"></p>
+<span id="more"></span>
+
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">containsDuplicate</span>(<span class="params">self, nums: <span class="type">List</span>[<span class="built_in">int</span>]</span>) -&gt; <span class="built_in">bool</span>:</span></span><br><span class="line">        ans = &#123;&#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> num <span class="keyword">in</span> nums:</span><br><span class="line">            <span class="keyword">if</span> num <span class="keyword">in</span> ans:</span><br><span class="line">                <span class="keyword">return</span> <span class="literal">True</span></span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                ans[num] = <span class="number">1</span></span><br><span class="line">            </span><br><span class="line">        <span class="keyword">return</span> <span class="literal">False</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">containsDuplicate</span>(<span class="params">self, nums: <span class="type">List</span>[<span class="built_in">int</span>]</span>) -&gt; <span class="built_in">bool</span>:</span></span><br><span class="line">        ans = &#123;&#125;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">for</span> num <span class="keyword">in</span> nums:</span><br><span class="line">            <span class="keyword">if</span> ans.get(num):</span><br><span class="line">                <span class="keyword">return</span> <span class="literal">True</span></span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                ans[num] = <span class="number">1</span></span><br><span class="line">        </span><br><span class="line">        <span class="keyword">return</span> <span class="literal">False</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">containsDuplicate</span>(<span class="params">self, nums: <span class="type">List</span>[<span class="built_in">int</span>]</span>) -&gt; <span class="built_in">bool</span>:</span></span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">len</span>(nums) != <span class="built_in">len</span>(<span class="built_in">list</span>(<span class="built_in">set</span>(nums)))</span><br></pre></td></tr></table></figure>
+]]></content>
+      <tags>
+        <tag>list</tag>
+        <tag>Leetcode</tag>
+        <tag>Python</tag>
+        <tag>Coding</tag>
+        <tag>set</tag>
       </tags>
   </entry>
   <entry>
@@ -2147,26 +2170,23 @@ def date_time(time: str) -&gt; str:
       </tags>
   </entry>
   <entry>
-    <title>[筆記] Leetcode - 217. Contains Duplicate</title>
-    <url>/2023/09/28/%E7%AD%86%E8%A8%98-Leetcode-%20217.-Contains-Duplicate/</url>
-    <content><![CDATA[<p><a href="https://leetcode.com/problems/contains-duplicate/">https://leetcode.com/problems/contains-duplicate/</a></p>
-<blockquote>
-<p>Given an integer array nums, return true if any value appears at least twice in the array, and return false if every element is distinct.</p>
-</blockquote>
-<p><img src="https://hackmd.io/_uploads/H1SgWl7ga.png"></p>
+    <title>[筆記] Leetcode - 56. Merge Intervals</title>
+    <url>/2023/09/05/%E7%AD%86%E8%A8%98-Leetcode-%2056.-Merge%20Intervals/</url>
+    <content><![CDATA[<p><a href="https://leetcode.com/problems/merge-intervals/">https://leetcode.com/problems/merge-intervals/</a></p>
+<p><img src="https://i.imgur.com/FaQwh8J.png"><br>It means each list in intervals is a range, just to merge the overlapping one, others stay the same.</p>
 <span id="more"></span>
 
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">containsDuplicate</span>(<span class="params">self, nums: <span class="type">List</span>[<span class="built_in">int</span>]</span>) -&gt; <span class="built_in">bool</span>:</span></span><br><span class="line">        ans = &#123;&#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> num <span class="keyword">in</span> nums:</span><br><span class="line">            <span class="keyword">if</span> num <span class="keyword">in</span> ans:</span><br><span class="line">                <span class="keyword">return</span> <span class="literal">True</span></span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                ans[num] = <span class="number">1</span></span><br><span class="line">            </span><br><span class="line">        <span class="keyword">return</span> <span class="literal">False</span></span><br></pre></td></tr></table></figure>
 
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">containsDuplicate</span>(<span class="params">self, nums: <span class="type">List</span>[<span class="built_in">int</span>]</span>) -&gt; <span class="built_in">bool</span>:</span></span><br><span class="line">        ans = &#123;&#125;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">for</span> num <span class="keyword">in</span> nums:</span><br><span class="line">            <span class="keyword">if</span> ans.get(num):</span><br><span class="line">                <span class="keyword">return</span> <span class="literal">True</span></span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                ans[num] = <span class="number">1</span></span><br><span class="line">        </span><br><span class="line">        <span class="keyword">return</span> <span class="literal">False</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">containsDuplicate</span>(<span class="params">self, nums: <span class="type">List</span>[<span class="built_in">int</span>]</span>) -&gt; <span class="built_in">bool</span>:</span></span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">len</span>(nums) != <span class="built_in">len</span>(<span class="built_in">list</span>(<span class="built_in">set</span>(nums)))</span><br></pre></td></tr></table></figure>
-]]></content>
+<p>解題:</p>
+<ol>
+<li>sort</li>
+</ol>
+<p>sort by the start of each range<br>save the first one in result<br>if any the start of each range smaller then the last item in result, it should be merged, otherwise append in result</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>(<span class="params"><span class="built_in">object</span></span>):</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">merge</span>(<span class="params">self, intervals</span>):</span></span><br><span class="line">        <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">        :type intervals: List[List[int]]</span></span><br><span class="line"><span class="string">        :rtype: List[List[int]]</span></span><br><span class="line"><span class="string">        &quot;&quot;&quot;</span></span><br><span class="line">        <span class="comment"># internals.sort(key = lambda x = x[0])</span></span><br><span class="line">        sort_intervals = <span class="built_in">sorted</span>(intervals, key = <span class="keyword">lambda</span> x: x[<span class="number">0</span>])</span><br><span class="line"></span><br><span class="line">        res = [sort_intervals[<span class="number">0</span>]]</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> start, end <span class="keyword">in</span> sort_intervals[<span class="number">1</span>:]:</span><br><span class="line">            <span class="keyword">if</span> res[-<span class="number">1</span>][<span class="number">1</span>] &gt;= start:</span><br><span class="line">                res[-<span class="number">1</span>][<span class="number">1</span>] = <span class="built_in">max</span>(res[-<span class="number">1</span>][<span class="number">1</span>], end)</span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                res.append([start, end])</span><br><span class="line">        <span class="keyword">return</span> res</span><br></pre></td></tr></table></figure>]]></content>
       <tags>
-        <tag>list</tag>
         <tag>Leetcode</tag>
         <tag>Python</tag>
         <tag>Coding</tag>
-        <tag>set</tag>
       </tags>
   </entry>
   <entry>
@@ -2191,23 +2211,25 @@ def date_time(time: str) -&gt; str:
       </tags>
   </entry>
   <entry>
-    <title>[筆記] Leetcode - 56. Merge Intervals</title>
-    <url>/2023/09/05/%E7%AD%86%E8%A8%98-Leetcode-%2056.-Merge%20Intervals/</url>
-    <content><![CDATA[<p><a href="https://leetcode.com/problems/merge-intervals/">https://leetcode.com/problems/merge-intervals/</a></p>
-<p><img src="https://i.imgur.com/FaQwh8J.png"><br>It means each list in intervals is a range, just to merge the overlapping one, others stay the same.</p>
+    <title>[筆記] 網頁版面 - 側邊欄</title>
+    <url>/2020/09/20/%E7%AD%86%E8%A8%98-%E7%B6%B2%E9%A0%81%E7%89%88%E9%9D%A2-%E5%81%B4%E9%82%8A%E6%AC%84/</url>
+    <content><![CDATA[<blockquote>
+<p>實習開發網站，常遇到一些功能需求要上網查詢，整理成筆記以後再用到就不用又從頭開始找，也希望幫助到正在找學這些功能的人</p>
+</blockquote>
 <span id="more"></span>
 
 
-<p>解題:</p>
-<ol>
-<li>sort</li>
-</ol>
-<p>sort by the start of each range<br>save the first one in result<br>if any the start of each range smaller then the last item in result, it should be merged, otherwise append in result</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>(<span class="params"><span class="built_in">object</span></span>):</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">merge</span>(<span class="params">self, intervals</span>):</span></span><br><span class="line">        <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">        :type intervals: List[List[int]]</span></span><br><span class="line"><span class="string">        :rtype: List[List[int]]</span></span><br><span class="line"><span class="string">        &quot;&quot;&quot;</span></span><br><span class="line">        <span class="comment"># internals.sort(key = lambda x = x[0])</span></span><br><span class="line">        sort_intervals = <span class="built_in">sorted</span>(intervals, key = <span class="keyword">lambda</span> x: x[<span class="number">0</span>])</span><br><span class="line"></span><br><span class="line">        res = [sort_intervals[<span class="number">0</span>]]</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> start, end <span class="keyword">in</span> sort_intervals[<span class="number">1</span>:]:</span><br><span class="line">            <span class="keyword">if</span> res[-<span class="number">1</span>][<span class="number">1</span>] &gt;= start:</span><br><span class="line">                res[-<span class="number">1</span>][<span class="number">1</span>] = <span class="built_in">max</span>(res[-<span class="number">1</span>][<span class="number">1</span>], end)</span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                res.append([start, end])</span><br><span class="line">        <span class="keyword">return</span> res</span><br></pre></td></tr></table></figure>]]></content>
+<iframe width="100%" height="500" src="https://codepen.io/ZZYume/embed/WNwaPpJ?height=265&theme-id=dark&default-tab=result" frameborder="0"></iframe>
+
+<p>想看比較清楚的 code，我也有放在 <a href="https://github.com/ZanaZhong/side-nav.github.io">Github</a></p>
+]]></content>
       <tags>
-        <tag>Leetcode</tag>
-        <tag>Python</tag>
-        <tag>Coding</tag>
+        <tag>html</tag>
+        <tag>css</tag>
+        <tag>javascript</tag>
+        <tag>jquery</tag>
+        <tag>Bootstrap</tag>
+        <tag>Bootstrap-table</tag>
       </tags>
   </entry>
   <entry>
@@ -2260,28 +2282,6 @@ def date_time(time: str) -&gt; str:
       </tags>
   </entry>
   <entry>
-    <title>[筆記] 網頁版面 - 側邊欄</title>
-    <url>/2020/09/20/%E7%AD%86%E8%A8%98-%E7%B6%B2%E9%A0%81%E7%89%88%E9%9D%A2-%E5%81%B4%E9%82%8A%E6%AC%84/</url>
-    <content><![CDATA[<blockquote>
-<p>實習開發網站，常遇到一些功能需求要上網查詢，整理成筆記以後再用到就不用又從頭開始找，也希望幫助到正在找學這些功能的人</p>
-</blockquote>
-<span id="more"></span>
-
-
-<iframe width="100%" height="500" src="https://codepen.io/ZZYume/embed/WNwaPpJ?height=265&theme-id=dark&default-tab=result" frameborder="0"></iframe>
-
-<p>想看比較清楚的 code，我也有放在 <a href="https://github.com/ZanaZhong/side-nav.github.io">Github</a></p>
-]]></content>
-      <tags>
-        <tag>html</tag>
-        <tag>css</tag>
-        <tag>javascript</tag>
-        <tag>jquery</tag>
-        <tag>Bootstrap</tag>
-        <tag>Bootstrap-table</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>[筆記] Leetcode - 867. Transpose Matrix</title>
     <url>/2023/12/10/%E7%AD%86%E8%A8%98-Leetcode-867.-Transpose-Matrix/</url>
     <content><![CDATA[<p><a href="https://leetcode.com/problems/transpose-matrix/">https://leetcode.com/problems/transpose-matrix/</a></p>
@@ -2301,27 +2301,6 @@ def date_time(time: str) -&gt; str:
         <tag>Leetcode</tag>
         <tag>Python</tag>
         <tag>Matrix</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>[筆記] Leetcode - 2215. Find the Difference of Two Arrays</title>
-    <url>/2023/05/03/%E7%AD%86%E8%A8%98-Leetcode-1822-Sign-of-the-Product-of-an-Array/</url>
-    <content><![CDATA[<span id="more"></span>
-
-<blockquote>
-<p>Given two 0-indexed integer arrays nums1 and nums2, return a list answer of size 2 where:</p>
-<ul>
-<li>answer[0] is a list of all distinct integers in nums1 which are not present in nums2.</li>
-<li>answer[1] is a list of all distinct integers in nums2 which are not present in nums1.</li>
-</ul>
-<p>Note that the integers in the lists may be returned in any order.</p>
-</blockquote>
-<p><img src="https://i.imgur.com/mN6RB67.png"></p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">findDifference</span>(<span class="params">self, nums1: <span class="type">List</span>[<span class="built_in">int</span>], nums2: <span class="type">List</span>[<span class="built_in">int</span>]</span>) -&gt; <span class="type">List</span>[<span class="type">List</span>[<span class="built_in">int</span>]]:</span></span><br><span class="line">        set1 = <span class="built_in">set</span>(nums1)</span><br><span class="line">        set2 = <span class="built_in">set</span>(nums2)</span><br><span class="line">        <span class="keyword">return</span> [ <span class="built_in">list</span>(set1 - set2), <span class="built_in">list</span>(set2 - set1)]</span><br></pre></td></tr></table></figure>]]></content>
-      <tags>
-        <tag>Leetcode</tag>
-        <tag>Python</tag>
-        <tag>Coding</tag>
       </tags>
   </entry>
   <entry>
@@ -2433,6 +2412,27 @@ def date_time(time: str) -&gt; str:
         <tag>軟體開發</tag>
         <tag>向前兼容</tag>
         <tag>向後兼容</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>[筆記] Leetcode - 2215. Find the Difference of Two Arrays</title>
+    <url>/2023/05/03/%E7%AD%86%E8%A8%98-Leetcode-1822-Sign-of-the-Product-of-an-Array/</url>
+    <content><![CDATA[<span id="more"></span>
+
+<blockquote>
+<p>Given two 0-indexed integer arrays nums1 and nums2, return a list answer of size 2 where:</p>
+<ul>
+<li>answer[0] is a list of all distinct integers in nums1 which are not present in nums2.</li>
+<li>answer[1] is a list of all distinct integers in nums2 which are not present in nums1.</li>
+</ul>
+<p>Note that the integers in the lists may be returned in any order.</p>
+</blockquote>
+<p><img src="https://i.imgur.com/mN6RB67.png"></p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">findDifference</span>(<span class="params">self, nums1: <span class="type">List</span>[<span class="built_in">int</span>], nums2: <span class="type">List</span>[<span class="built_in">int</span>]</span>) -&gt; <span class="type">List</span>[<span class="type">List</span>[<span class="built_in">int</span>]]:</span></span><br><span class="line">        set1 = <span class="built_in">set</span>(nums1)</span><br><span class="line">        set2 = <span class="built_in">set</span>(nums2)</span><br><span class="line">        <span class="keyword">return</span> [ <span class="built_in">list</span>(set1 - set2), <span class="built_in">list</span>(set2 - set1)]</span><br></pre></td></tr></table></figure>]]></content>
+      <tags>
+        <tag>Leetcode</tag>
+        <tag>Python</tag>
+        <tag>Coding</tag>
       </tags>
   </entry>
 </search>

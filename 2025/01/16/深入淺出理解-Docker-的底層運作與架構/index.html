@@ -47,7 +47,7 @@
 <meta property="og:image" content="https://hackmd.io/_uploads/H1Hyw48Dkg.jpg">
 <meta property="og:image" content="https://hackmd.io/_uploads/BJtzWkFPkx.png">
 <meta property="article:published_time" content="2025-01-16T07:07:49.000Z">
-<meta property="article:modified_time" content="2025-03-11T15:03:24.388Z">
+<meta property="article:modified_time" content="2025-03-11T15:14:08.249Z">
 <meta property="article:author" content="Zana">
 <meta property="article:tag" content="Docker">
 <meta property="article:tag" content="容器化技術">
@@ -365,7 +365,7 @@
           <i class="far fa-calendar-check"></i>
         </span>
         <span class="post-meta-item-text">Edited on</span>
-        <time title="Modified: 2025-03-11 23:03:24" itemprop="dateModified" datetime="2025-03-11T23:03:24+08:00">2025-03-11</time>
+        <time title="Modified: 2025-03-11 23:14:08" itemprop="dateModified" datetime="2025-03-11T23:14:08+08:00">2025-03-11</time>
       </span>
 
   
@@ -381,7 +381,7 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">Symbols count in article: </span>
-      <span>2.6k</span>
+      <span>2.7k</span>
     </span>
     <span class="post-meta-item" title="Reading time">
       <span class="post-meta-item-icon">
@@ -424,16 +424,16 @@
 </li>
 </ul>
 <h2 id="底層技術"><a href="#底層技術" class="headerlink" title="底層技術"></a>底層技術</h2><blockquote>
-<p>Docker 的強大主要依賴於 Linux 的核心功能</p>
+<p>Docker 的強大主要建立在 Linux 提供的核心功能之上</p>
 </blockquote>
 <ul>
 <li><p><strong>Namespace</strong></p>
 <ul>
 <li>用於實現 Container 的 <strong>process 隔離</strong>。</li>
-<li>每個 Container 都有自己的命名空間，確保不同容器間的資源互不影響。</li>
+<li>每個 Container 都有自己的命名空間，確保不同容器之間的資源互不影響。</li>
 <li>常見的 Namespace：<ul>
-<li>PID (Process ID)：每個容器看到的是自己的進程列表。</li>
-<li>NET (網路)：每個容器擁有自己的網路接口和 IP。</li>
+<li>PID (Process ID)：每個容器看到的是自己的 Process 列表。</li>
+<li>NET (網路)：每個容器配備獨立的網路接口和 IP。</li>
 <li>MNT (掛載)：每個容器有自己的檔案系統視圖。</li>
 </ul>
 </li>
@@ -441,13 +441,13 @@
 </li>
 <li><p><strong>Cgroups</strong></p>
 <ul>
-<li>用於實現資源管理和限制，EX: CPU、記憶體和網路。</li>
-<li>防止單一容器佔用過多資源，影響整體系統性能。</li>
+<li>用於資源的分配與限制，EX: CPU、記憶體和網路資源的管理。</li>
+<li>能避免單一容器過度佔用資源，確保整體系統性能穩定。</li>
 </ul>
 </li>
 <li><p><strong>UnionFS</strong></p>
 <ul>
-<li>支援分層的檔案系統，++減少重複存儲的數據量++。</li>
+<li>支援分層的檔案系統，可有效 ++減少重複數據的存儲量++。</li>
 <li>Docker 的 Image 由多層構成，每層只存儲新增或修改的部分，未改變的部分會繼續共享。</li>
 </ul>
 </li>
