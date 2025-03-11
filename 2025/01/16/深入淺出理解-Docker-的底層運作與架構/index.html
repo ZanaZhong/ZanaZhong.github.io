@@ -47,7 +47,7 @@
 <meta property="og:image" content="https://hackmd.io/_uploads/H1Hyw48Dkg.jpg">
 <meta property="og:image" content="https://hackmd.io/_uploads/BJtzWkFPkx.png">
 <meta property="article:published_time" content="2025-01-16T07:07:49.000Z">
-<meta property="article:modified_time" content="2025-03-11T14:46:40.867Z">
+<meta property="article:modified_time" content="2025-03-11T14:53:17.700Z">
 <meta property="article:author" content="Zana">
 <meta property="article:tag" content="Docker">
 <meta property="article:tag" content="容器化技術">
@@ -365,7 +365,7 @@
           <i class="far fa-calendar-check"></i>
         </span>
         <span class="post-meta-item-text">Edited on</span>
-        <time title="Modified: 2025-03-11 22:46:40" itemprop="dateModified" datetime="2025-03-11T22:46:40+08:00">2025-03-11</time>
+        <time title="Modified: 2025-03-11 22:53:17" itemprop="dateModified" datetime="2025-03-11T22:53:17+08:00">2025-03-11</time>
       </span>
 
   
@@ -381,14 +381,14 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">Symbols count in article: </span>
-      <span>2.9k</span>
+      <span>2.6k</span>
     </span>
     <span class="post-meta-item" title="Reading time">
       <span class="post-meta-item-icon">
         <i class="far fa-clock"></i>
       </span>
       <span class="post-meta-item-text">Reading time &asymp;</span>
-      <span>3 mins.</span>
+      <span>2 mins.</span>
     </span>
 </div>
 
@@ -401,9 +401,7 @@
     <div class="post-body" itemprop="articleBody">
         <p>今天我們要一起來聊聊 Docker，Docker 是現代開發與運維中不可或缺的工具，用來打包、部署和運行應用程序。它讓你能在任何環境中快速部署應用，實現「一次構建，隨處運行」的目標，是一個讓開發者與運維工程師都愛不釋手的工具。想像 Docker 就像是「貨櫃」，它能把你的應用程式打包起來，無論搬到哪台電腦上都能保證一致運行。準備好了嗎？讓我們開始吧！</p>
 <span id="more"></span>
-<h2 id="Docker-是什麼？"><a href="#Docker-是什麼？" class="headerlink" title="Docker 是什麼？"></a>Docker 是什麼？</h2><p>Docker 是一個容器化技術 (Containerlize)。什麼是容器化呢？想像你開了一家披薩店，每天要把披薩送到不同客戶手上。如果每次送貨都要在客戶家現場烤披薩，不同地方的烤箱、食材可能都不一樣，結果披薩的味道參差不齊。但如果有了 Docker，你可以把披薩的食材、食譜，甚至連一台「標準化的烤箱」都準備好，全部打包在一起。無論送到哪裡，只要啟動這個烤箱，就能烤出味道一模一樣的披薩。</p>
-<p>在程式世界裡，這個「披薩」就是你的應用程式，「烤箱」就是 Docker 容器。它把程式碼、依賴庫、設定檔通通裝進這個標準化的環境，讓程式能在任何地方（你的電腦、雲端伺服器）穩定運行。</p>
-<p>想像你有一台「神奇咖啡機」，每天要為不同客戶沖泡咖啡。如果每次都要在客戶家現場準備咖啡豆、糖、水，還要調整不同的咖啡機，結果做出來的咖啡味道可能忽濃忽淡。但如果有了 Docker，你可以把咖啡豆、糖、水，甚至連沖泡的設定和一台標準化的「神奇咖啡機」都打包好。無論這台咖啡機被帶到哪裡，只要按下開始鍵，就能保證沖出來的咖啡味道一模一樣。</p>
+<h2 id="Docker-是什麼？"><a href="#Docker-是什麼？" class="headerlink" title="Docker 是什麼？"></a>Docker 是什麼？</h2><p>Docker 是一個容器化技術 (Containerlize)。什麼是容器化呢？想像你有一台「神奇咖啡機」，每天要為不同客戶沖泡咖啡。如果每次都要在客戶家現場準備咖啡豆、糖、水，還要調整不同的咖啡機，結果做出來的咖啡味道可能忽濃忽淡。但如果有了 Docker，你可以把咖啡豆、糖、水，甚至連沖泡的設定和一台標準化的「神奇咖啡機」都打包好。無論這台咖啡機被帶到哪裡，只要按下開始鍵，就能保證沖出來的咖啡味道一模一樣。</p>
 <p>在程式世界裡，這杯「咖啡」就是你的應用程式，「神奇咖啡機」就是 Docker 容器。它把程式碼、依賴庫、設定檔通通裝進這個標準化的環境，讓程式能在任何地方（你的電腦、雲端伺服器）穩定運行。</p>
 <h2 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h2><p>要理解 Docker 的運作，我們需要先了解幾個核心概念：</p>
 <ul>
