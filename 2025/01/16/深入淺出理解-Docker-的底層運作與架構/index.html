@@ -37,17 +37,17 @@
     var CONFIG = {"hostname":"zanazhong.github.io","root":"/","scheme":"Gemini","version":"8.0.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":true,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}};
   </script>
 
-  <meta name="description" content="今天我們要一起來聊聊 Docker，Docker 是現代開發與運維中不可或缺的工具，用來打包、部署和運行應用程序。它讓你能在任何環境中快速部署應用，實現「一次構建，隨處運行」的目標，是一個讓開發者與運維工程師都愛不釋手的工具。想像 Docker 就像是「貨櫃」，它能把你的應用程式打包起來，無論搬到哪台電腦上都能保證一致運行。準備好了嗎？讓我們開始吧！">
+  <meta name="description" content="今天我們要一起來聊聊 Docker，Docker 是現代開發與運維中不可或缺的工具，用來打包、部署和運行應用程式。它讓你能在任何環境中快速部署應用，實現「一次構建，隨處運行」的目標，是一個讓開發者與運維工程師都愛不釋手的工具。想像 Docker 就像是「貨櫃」，它能把你的應用程式打包起來，無論搬到哪台電腦上都能保證一致運行。準備好了嗎？讓我們開始吧！">
 <meta property="og:type" content="article">
 <meta property="og:title" content="深入淺出理解 Docker 的底層運作與架構">
 <meta property="og:url" content="https://zanazhong.github.io/2025/01/16/%E6%B7%B1%E5%85%A5%E6%B7%BA%E5%87%BA%E7%90%86%E8%A7%A3-Docker-%E7%9A%84%E5%BA%95%E5%B1%A4%E9%81%8B%E4%BD%9C%E8%88%87%E6%9E%B6%E6%A7%8B/index.html">
 <meta property="og:site_name" content="Hey I am Zana">
-<meta property="og:description" content="今天我們要一起來聊聊 Docker，Docker 是現代開發與運維中不可或缺的工具，用來打包、部署和運行應用程序。它讓你能在任何環境中快速部署應用，實現「一次構建，隨處運行」的目標，是一個讓開發者與運維工程師都愛不釋手的工具。想像 Docker 就像是「貨櫃」，它能把你的應用程式打包起來，無論搬到哪台電腦上都能保證一致運行。準備好了嗎？讓我們開始吧！">
+<meta property="og:description" content="今天我們要一起來聊聊 Docker，Docker 是現代開發與運維中不可或缺的工具，用來打包、部署和運行應用程式。它讓你能在任何環境中快速部署應用，實現「一次構建，隨處運行」的目標，是一個讓開發者與運維工程師都愛不釋手的工具。想像 Docker 就像是「貨櫃」，它能把你的應用程式打包起來，無論搬到哪台電腦上都能保證一致運行。準備好了嗎？讓我們開始吧！">
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="https://hackmd.io/_uploads/H1Hyw48Dkg.jpg">
 <meta property="og:image" content="https://hackmd.io/_uploads/BJtzWkFPkx.png">
 <meta property="article:published_time" content="2025-01-16T07:07:49.000Z">
-<meta property="article:modified_time" content="2025-03-11T15:14:08.249Z">
+<meta property="article:modified_time" content="2025-03-11T15:21:14.500Z">
 <meta property="article:author" content="Zana">
 <meta property="article:tag" content="Docker">
 <meta property="article:tag" content="容器化技術">
@@ -365,7 +365,7 @@
           <i class="far fa-calendar-check"></i>
         </span>
         <span class="post-meta-item-text">Edited on</span>
-        <time title="Modified: 2025-03-11 23:14:08" itemprop="dateModified" datetime="2025-03-11T23:14:08+08:00">2025-03-11</time>
+        <time title="Modified: 2025-03-11 23:21:14" itemprop="dateModified" datetime="2025-03-11T23:21:14+08:00">2025-03-11</time>
       </span>
 
   
@@ -399,7 +399,7 @@
     
     
     <div class="post-body" itemprop="articleBody">
-        <p>今天我們要一起來聊聊 Docker，Docker 是現代開發與運維中不可或缺的工具，用來打包、部署和運行應用程序。它讓你能在任何環境中快速部署應用，實現「一次構建，隨處運行」的目標，是一個讓開發者與運維工程師都愛不釋手的工具。想像 Docker 就像是「貨櫃」，它能把你的應用程式打包起來，無論搬到哪台電腦上都能保證一致運行。準備好了嗎？讓我們開始吧！</p>
+        <p>今天我們要一起來聊聊 Docker，Docker 是現代開發與運維中不可或缺的工具，用來打包、部署和運行應用程式。它讓你能在任何環境中快速部署應用，實現「一次構建，隨處運行」的目標，是一個讓開發者與運維工程師都愛不釋手的工具。想像 Docker 就像是「貨櫃」，它能把你的應用程式打包起來，無論搬到哪台電腦上都能保證一致運行。準備好了嗎？讓我們開始吧！</p>
 <span id="more"></span>
 <h2 id="Docker-是什麼？"><a href="#Docker-是什麼？" class="headerlink" title="Docker 是什麼？"></a>Docker 是什麼？</h2><p>Docker 是一個容器化技術 (Containerlize)。什麼是容器化呢？想像你有一台「神奇咖啡機」，每天要為不同客戶沖泡咖啡。如果每次都要在客戶家現場準備咖啡豆、糖、水，還要調整不同的咖啡機，結果做出來的咖啡味道可能忽濃忽淡。但如果有了 Docker，你可以把咖啡豆、糖、水，甚至連沖泡的設定和一台標準化的「神奇咖啡機」都打包好。無論這台咖啡機被帶到哪裡，只要按下開始鍵，就能保證沖出來的咖啡味道一模一樣。</p>
 <p>在程式世界裡，這杯「咖啡」就是你的應用程式，「神奇咖啡機」就是 Docker 容器。它把程式碼、依賴庫、設定檔通通裝進這個標準化的環境，讓程式能在任何地方（你的電腦、雲端伺服器）穩定運行。</p>
@@ -407,7 +407,7 @@
 <ul>
 <li><p><strong>Image</strong>：</p>
 <ul>
-<li>應用的靜態模板，包含應用程序及其運行所需的依賴（EX:程式碼、程式庫）。</li>
+<li>應用程式的靜態模板，其中包含應用程式及其運行所需的依賴（EX:程式碼、程式庫）。</li>
 <li>類似於 VM 中的「快照」(Snapeshot)。</li>
 </ul>
 </li>
@@ -480,29 +480,29 @@
 <li><p><strong>查找 Image</strong>：</p>
 <ul>
 <li>Docker Client 發送請求到 Docker Daemon。</li>
-<li>Daemon 會先在本地檢查是否存在 <code>hello-world</code> Image，沒有則從 Docker Hub 拉取。</li>
+<li>Daemon 會先檢查本地是否已有 <code>hello-world</code> Image，若不存在，則從 Docker Hub 拉取。</li>
 </ul>
 </li>
 <li><p><strong>啟動容器</strong>：</p>
 <ul>
-<li>使用下載的 Image 創建容器。</li>
+<li>使用拉取下來的 Image 創建容器。</li>
 <li>分配資源（EX: CPU、Memory）並設置 Namespace。</li>
 </ul>
 </li>
-<li><p><strong>運行應用程序</strong>：</p>
+<li><p><strong>運行應用程式</strong>：</p>
 <ul>
-<li>啟動容器中的應用程序。</li>
-<li>使用者可以通過容器內的網路端口與應用程序交互。</li>
+<li>啟動容器內的應用程式。</li>
+<li>使用者可以通過容器內的網路端口與應用程式進行互動。</li>
 </ul>
 </li>
 </ol>
 <p><img src="https://hackmd.io/_uploads/BJtzWkFPkx.png" alt="Docker"></p>
 <h2 id="應用場景"><a href="#應用場景" class="headerlink" title="應用場景"></a>應用場景</h2><ul>
-<li><p><strong>開發環境一致性</strong>：<br> 開發人員可以在本地運行與生產環境完全一致的環境，避免「在我這能跑」的問題。</p>
+<li><p><strong>開發環境一致性</strong>：<br>開發者能夠在本地建立與生產環境完全一致的運行環境，從而有效解決「在我這裡可以跑」這類常見問題，大幅提升開發流程的穩定性和可靠性。</p>
 </li>
-<li><p><strong>CI&#x2F;CD 流程</strong>：<br> 快速打包、測試和部署應用程序，大幅縮短交付周期。</p>
+<li><p><strong>CI&#x2F;CD 流程</strong>：<br> 支援快速完成應用程式的打包、測試與部署，顯著縮減從開發到上線的整體交付周期，讓產品更新和改進更加高效。</p>
 </li>
-<li><p><strong>微服務架構</strong>：<br> 每個微服務打包成獨立的容器，實現高效管理和擴展。</p>
+<li><p><strong>微服務架構</strong>：<br> 將每個微服務打包成獨立容器後，能夠更輕鬆地實現高效管理與彈性擴展，有助於系統在應對複雜需求時保持靈活性與穩定性。</p>
 </li>
 </ul>
 <h2 id="優缺點"><a href="#優缺點" class="headerlink" title="優缺點"></a>優缺點</h2><table>
