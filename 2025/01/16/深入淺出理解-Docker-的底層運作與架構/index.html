@@ -47,7 +47,7 @@
 <meta property="og:image" content="https://hackmd.io/_uploads/H1Hyw48Dkg.jpg">
 <meta property="og:image" content="https://hackmd.io/_uploads/BJtzWkFPkx.png">
 <meta property="article:published_time" content="2025-01-16T07:07:49.000Z">
-<meta property="article:modified_time" content="2025-03-11T14:53:17.700Z">
+<meta property="article:modified_time" content="2025-03-11T15:03:24.388Z">
 <meta property="article:author" content="Zana">
 <meta property="article:tag" content="Docker">
 <meta property="article:tag" content="容器化技術">
@@ -365,7 +365,7 @@
           <i class="far fa-calendar-check"></i>
         </span>
         <span class="post-meta-item-text">Edited on</span>
-        <time title="Modified: 2025-03-11 22:53:17" itemprop="dateModified" datetime="2025-03-11T22:53:17+08:00">2025-03-11</time>
+        <time title="Modified: 2025-03-11 23:03:24" itemprop="dateModified" datetime="2025-03-11T23:03:24+08:00">2025-03-11</time>
       </span>
 
   
@@ -463,7 +463,7 @@
 <ul>
 <li><p><strong>Docker Client</strong><br>用戶與 Docker 互動的介面，負責接收指令（<code>docker run</code>） 後，傳給 Docker Daemon。<br>就像你手上有一個「咖啡機遙控器」，按下「沖泡」按鈕（<code>docker run</code>），告訴咖啡機要做什麼。</p>
 </li>
-<li><p><strong>Docker Daemon</strong><br>Docker 接收指令、管理一切的中心，負責所有 Container 的操作（啟動、停止、刪除等），並管理 Image、網絡、儲存等資源。它持續運行，並++監聽來自 Docker Client 的請求++。<br>就像咖啡機的「智慧大腦」。接收你的指令 (<code>docker run</code>)，然後指揮咖啡機磨豆、加水、沖泡、分配原料。</p>
+<li><p><strong>Docker Daemon</strong><br>Docker 接收指令、管理一切的中心，負責處理所有 Container 的操作（如啟動、停止、刪除等），同時管理 Image、網路和儲存等資源。它會持續運行，並監聽來自 Docker Client 的請求。<br>就像咖啡機的「智能大腦」。接收你的指令 (<code>docker run</code>)，然後指揮咖啡機磨豆、加水、沖泡、分配原料。</p>
 </li>
 <li><p><strong>Containerd</strong><br>Container 的核心執行環境，管理 Container 的生命周期（創建、啟動、停止等）。它是 Docker Daemon 的一部分，但獨立出來，讓架構更模組化。<br>就像咖啡機裡的「沖泡模組」。大腦 （Daemon） 告訴它做事，它負責把咖啡豆變成咖啡（管理 Container 的生命周期），確保每杯咖啡都能順利沖泡。</p>
 </li>
