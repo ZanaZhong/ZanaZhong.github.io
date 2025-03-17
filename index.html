@@ -163,7 +163,7 @@
   </li>
         <li class="menu-item menu-item-tags">
 
-    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">89</span></a>
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">90</span></a>
 
   </li>
         <li class="menu-item menu-item-categories">
@@ -173,7 +173,7 @@
   </li>
         <li class="menu-item menu-item-archives">
 
-    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">41</span></a>
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">42</span></a>
 
   </li>
         <li class="menu-item menu-item-sitemap">
@@ -252,7 +252,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">41</span>
+          <span class="site-state-item-count">42</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -265,7 +265,7 @@
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">89</span>
+        <span class="site-state-item-count">90</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
@@ -317,6 +317,92 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://zanazhong.github.io/2025/03/17/Docker-Volume-%E6%95%99%E5%AD%B8%EF%BC%9A%E8%BC%95%E9%AC%86%E7%AE%A1%E7%90%86%E5%AE%B9%E5%99%A8%E6%95%B8%E6%93%9A%E7%9A%84%E7%A7%98%E5%AF%86%E6%AD%A6%E5%99%A8/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/headshot.jpg">
+      <meta itemprop="name" content="Zana">
+      <meta itemprop="description" content="ɪᴛ ɪs ɪᴍᴘᴏʀᴛᴀɴᴛ ᴛᴏ sᴇᴇ ʜᴏᴡ ғᴀʀ ʏᴏᴜ'ᴠᴇ ᴄᴏᴍᴇ🐾">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hey I am Zana">
+    </span>
+
+    
+    
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2025/03/17/Docker-Volume-%E6%95%99%E5%AD%B8%EF%BC%9A%E8%BC%95%E9%AC%86%E7%AE%A1%E7%90%86%E5%AE%B9%E5%99%A8%E6%95%B8%E6%93%9A%E7%9A%84%E7%A7%98%E5%AF%86%E6%AD%A6%E5%99%A8/" class="post-title-link" itemprop="url">Docker Volume 教學：輕鬆管理容器數據的秘密武器</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+      
+
+      <time title="Created: 2025-03-17 22:01:22 / Modified: 22:02:58" itemprop="dateCreated datePublished" datetime="2025-03-17T22:01:22+08:00">2025-03-17</time>
+    </span>
+
+  
+    <span class="post-meta-item" title="Symbols count in article">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">Symbols count in article: </span>
+      <span>3.2k</span>
+    </span>
+    <span class="post-meta-item" title="Reading time">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">Reading time &asymp;</span>
+      <span>3 mins.</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p>嗨！今天我們要來聊聊 Docker 中的一個超實用功能——<strong>Docker Volume</strong>。如果你已經開始使用 Docker，一定聽過容器是「短暫的」這件事。就像便利商店買的一次性咖啡杯，用完就丟，裡面的咖啡（數據）也跟著不見了。但如果我們希望咖啡能保存下來，甚至在不同的杯子間共享呢？這就是 Docker Volume 要解決的問題！它就像一個神奇的「保溫瓶」，讓你的數據在容器間安全又方便地流動。</p>
+<p>這篇文章會帶你從頭認識 Docker Volume，包括它的架構、常用指令，以及實際應用操作。</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2025/03/17/Docker-Volume-%E6%95%99%E5%AD%B8%EF%BC%9A%E8%BC%95%E9%AC%86%E7%AE%A1%E7%90%86%E5%AE%B9%E5%99%A8%E6%95%B8%E6%93%9A%E7%9A%84%E7%A7%98%E5%AF%86%E6%AD%A6%E5%99%A8/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
     <link itemprop="mainEntityOfPage" href="https://zanazhong.github.io/2025/03/12/Dockerfile-%E6%92%B0%E5%AF%AB%E6%95%99%E5%AD%B8/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -352,7 +438,7 @@
           <i class="far fa-calendar-check"></i>
         </span>
         <span class="post-meta-item-text">Edited on</span>
-        <time title="Modified: 2025-03-17 21:57:32" itemprop="dateModified" datetime="2025-03-17T21:57:32+08:00">2025-03-17</time>
+        <time title="Modified: 2025-03-17 22:00:06" itemprop="dateModified" datetime="2025-03-17T22:00:06+08:00">2025-03-17</time>
       </span>
 
   
@@ -1133,97 +1219,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://zanazhong.github.io/2025/01/16/%E6%B7%B1%E5%85%A5%E6%B7%BA%E5%87%BA%E7%90%86%E8%A7%A3-Docker-%E7%9A%84%E5%BA%95%E5%B1%A4%E9%81%8B%E4%BD%9C%E8%88%87%E6%9E%B6%E6%A7%8B/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/headshot.jpg">
-      <meta itemprop="name" content="Zana">
-      <meta itemprop="description" content="ɪᴛ ɪs ɪᴍᴘᴏʀᴛᴀɴᴛ ᴛᴏ sᴇᴇ ʜᴏᴡ ғᴀʀ ʏᴏᴜ'ᴠᴇ ᴄᴏᴍᴇ🐾">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hey I am Zana">
-    </span>
-
-    
-    
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2025/01/16/%E6%B7%B1%E5%85%A5%E6%B7%BA%E5%87%BA%E7%90%86%E8%A7%A3-Docker-%E7%9A%84%E5%BA%95%E5%B1%A4%E9%81%8B%E4%BD%9C%E8%88%87%E6%9E%B6%E6%A7%8B/" class="post-title-link" itemprop="url">深入淺出理解 Docker 的底層運作與架構</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">Posted on</span>
-
-      <time title="Created: 2025-01-16 15:07:49" itemprop="dateCreated datePublished" datetime="2025-01-16T15:07:49+08:00">2025-01-16</time>
-    </span>
-      <span class="post-meta-item">
-        <span class="post-meta-item-icon">
-          <i class="far fa-calendar-check"></i>
-        </span>
-        <span class="post-meta-item-text">Edited on</span>
-        <time title="Modified: 2025-03-11 23:21:14" itemprop="dateModified" datetime="2025-03-11T23:21:14+08:00">2025-03-11</time>
-      </span>
-
-  
-    <span class="post-meta-item" title="Symbols count in article">
-      <span class="post-meta-item-icon">
-        <i class="far fa-file-word"></i>
-      </span>
-      <span class="post-meta-item-text">Symbols count in article: </span>
-      <span>2.7k</span>
-    </span>
-    <span class="post-meta-item" title="Reading time">
-      <span class="post-meta-item-icon">
-        <i class="far fa-clock"></i>
-      </span>
-      <span class="post-meta-item-text">Reading time &asymp;</span>
-      <span>2 mins.</span>
-    </span>
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p>今天我們要一起來聊聊 Docker，Docker 是現代開發與運維中不可或缺的工具，用來打包、部署和運行應用程式。它讓你能在任何環境中快速部署應用，實現「一次構建，隨處運行」的目標，是一個讓開發者與運維工程師都愛不釋手的工具。想像 Docker 就像是「貨櫃」，它能把你的應用程式打包起來，無論搬到哪台電腦上都能保證一致運行。準備好了嗎？讓我們開始吧！</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2025/01/16/%E6%B7%B1%E5%85%A5%E6%B7%BA%E5%87%BA%E7%90%86%E8%A7%A3-Docker-%E7%9A%84%E5%BA%95%E5%B1%A4%E9%81%8B%E4%BD%9C%E8%88%87%E6%9E%B6%E6%A7%8B/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1279,13 +1274,13 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-line"></i>
     </span>
-    <span title="Symbols count total">60k</span>
+    <span title="Symbols count total">63k</span>
   </span>
   <span class="post-meta-item">
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="Reading time total">55 mins.</span>
+    <span title="Reading time total">58 mins.</span>
   </span>
 </div>
 <div class="busuanzi-count">

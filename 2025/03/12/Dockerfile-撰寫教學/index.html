@@ -45,7 +45,7 @@
 <meta property="og:description" content="歡迎來到 Docker 的進階玩法——撰寫 Dockerfile！在前兩篇文章中，我們聊過 Docker 的核心架構（咖啡機的運作原理）和常用指令（如何點單與沖咖啡）。這次，我們要更進一步，自己動手調配「咖啡配方」，也就是撰寫 Dockerfile，讓你能打造專屬的 Docker Image。一樣會沿用「咖啡機」的比喻，若還沒閱讀過前文的讀者，可以先至上篇閱讀 或 前篇閱讀 看看。準備好了嗎？讓我">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2025-03-12T14:36:13.000Z">
-<meta property="article:modified_time" content="2025-03-17T13:57:32.678Z">
+<meta property="article:modified_time" content="2025-03-17T14:00:06.020Z">
 <meta property="article:author" content="Zana">
 <meta property="article:tag" content="Docker">
 <meta property="article:tag" content="Dockerfile">
@@ -167,7 +167,7 @@
   </li>
         <li class="menu-item menu-item-tags">
 
-    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">89</span></a>
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">90</span></a>
 
   </li>
         <li class="menu-item menu-item-categories">
@@ -177,7 +177,7 @@
   </li>
         <li class="menu-item menu-item-archives">
 
-    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">41</span></a>
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">42</span></a>
 
   </li>
         <li class="menu-item menu-item-sitemap">
@@ -257,7 +257,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">41</span>
+          <span class="site-state-item-count">42</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -270,7 +270,7 @@
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">89</span>
+        <span class="site-state-item-count">90</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
@@ -357,7 +357,7 @@
           <i class="far fa-calendar-check"></i>
         </span>
         <span class="post-meta-item-text">Edited on</span>
-        <time title="Modified: 2025-03-17 21:57:32" itemprop="dateModified" datetime="2025-03-17T21:57:32+08:00">2025-03-17</time>
+        <time title="Modified: 2025-03-17 22:00:06" itemprop="dateModified" datetime="2025-03-17T22:00:06+08:00">2025-03-17</time>
       </span>
 
   
@@ -435,7 +435,7 @@
 
 <figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">COPY</span><span class="bash"> . .</span></span><br></pre></td></tr></table></figure>
 
-<p>把你的咖啡豆（<code>app.js</code>）、糖（<code>package.json</code>）搬到檯面上。</p>
+<p>把你的咖啡豆（<code>app.js</code>）、糖（<code>package.json</code>）搬到檯面上，準備開始調配。</p>
 <div class="note warning"><h4 id="注意"><a href="#注意" class="headerlink" title="注意"></a>注意</h4><ul>
 <li>如果 <code>&lt;dest&gt;</code> 不存在，會自動創建。</li>
 <li>建議搭配 <code>.dockerignore</code>（類似 <code>.gitignore</code>），排除不必要的檔案（例如 <code>node_modules</code>），避免浪費空間。</li>
@@ -591,6 +591,9 @@
                 </a>
             </div>
             <div class="post-nav-item">
+                <a href="/2025/03/17/Docker-Volume-%E6%95%99%E5%AD%B8%EF%BC%9A%E8%BC%95%E9%AC%86%E7%AE%A1%E7%90%86%E5%AE%B9%E5%99%A8%E6%95%B8%E6%93%9A%E7%9A%84%E7%A7%98%E5%AF%86%E6%AD%A6%E5%99%A8/" rel="next" title="Docker Volume 教學：輕鬆管理容器數據的秘密武器">
+                  Docker Volume 教學：輕鬆管理容器數據的秘密武器 <i class="fa fa-chevron-right"></i>
+                </a>
             </div>
           </div>
     </footer>
@@ -655,13 +658,13 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-line"></i>
     </span>
-    <span title="Symbols count total">60k</span>
+    <span title="Symbols count total">63k</span>
   </span>
   <span class="post-meta-item">
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="Reading time total">55 mins.</span>
+    <span title="Reading time total">58 mins.</span>
   </span>
 </div>
 <div class="busuanzi-count">
