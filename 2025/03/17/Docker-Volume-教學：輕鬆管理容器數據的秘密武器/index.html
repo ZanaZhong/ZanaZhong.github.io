@@ -37,20 +37,20 @@
     var CONFIG = {"hostname":"zanazhong.github.io","root":"/","scheme":"Gemini","version":"8.0.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":true,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}};
   </script>
 
-  <meta name="description" content="嗨！今天我們要來聊聊 Docker 中的一個超實用功能——Docker Volume。如果你已經開始使用 Docker，一定聽過容器是「短暫的」這件事。就像便利商店買的一次性咖啡杯，用完就丟，裡面的咖啡（數據）也跟著不見了。但如果我們希望咖啡能保存下來，甚至在不同的杯子間共享呢？這就是 Docker Volume 要解決的問題！它就像一個神奇的「保溫瓶」，讓你的數據在容器間安全又方便地流動。 這篇">
+  <meta name="description" content="嗨！今天我們要來聊聊 Docker 中的一個超實用功能——Docker Volume。如果你已經開始使用 Docker，一定聽過容器是「短暫的」這件事。就像便利商店買的一次性咖啡杯，用完就丟，裡面的咖啡（數據）也跟著不見了。但如果我們希望咖啡能保存下來，甚至在不同的杯子間共享呢？這就是 Docker Volume 要解決的問題！它就像一個神奇的「保溫瓶」，讓你的數據在容器間安全又方便地流動。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Docker Volume 教學：輕鬆管理容器數據的秘密武器">
 <meta property="og:url" content="https://zanazhong.github.io/2025/03/17/Docker-Volume-%E6%95%99%E5%AD%B8%EF%BC%9A%E8%BC%95%E9%AC%86%E7%AE%A1%E7%90%86%E5%AE%B9%E5%99%A8%E6%95%B8%E6%93%9A%E7%9A%84%E7%A7%98%E5%AF%86%E6%AD%A6%E5%99%A8/index.html">
 <meta property="og:site_name" content="Hey I am Zana">
-<meta property="og:description" content="嗨！今天我們要來聊聊 Docker 中的一個超實用功能——Docker Volume。如果你已經開始使用 Docker，一定聽過容器是「短暫的」這件事。就像便利商店買的一次性咖啡杯，用完就丟，裡面的咖啡（數據）也跟著不見了。但如果我們希望咖啡能保存下來，甚至在不同的杯子間共享呢？這就是 Docker Volume 要解決的問題！它就像一個神奇的「保溫瓶」，讓你的數據在容器間安全又方便地流動。 這篇">
+<meta property="og:description" content="嗨！今天我們要來聊聊 Docker 中的一個超實用功能——Docker Volume。如果你已經開始使用 Docker，一定聽過容器是「短暫的」這件事。就像便利商店買的一次性咖啡杯，用完就丟，裡面的咖啡（數據）也跟著不見了。但如果我們希望咖啡能保存下來，甚至在不同的杯子間共享呢？這就是 Docker Volume 要解決的問題！它就像一個神奇的「保溫瓶」，讓你的數據在容器間安全又方便地流動。">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2025-03-17T14:01:22.000Z">
-<meta property="article:modified_time" content="2025-03-17T14:02:58.663Z">
+<meta property="article:modified_time" content="2025-03-17T15:03:21.387Z">
 <meta property="article:author" content="Zana">
 <meta property="article:tag" content="Docker">
 <meta property="article:tag" content="Dockerfile">
-<meta property="article:tag" content="容器化技術">
 <meta property="article:tag" content="volume">
+<meta property="article:tag" content="容器化技術">
 <meta name="twitter:card" content="summary">
 
 
@@ -352,7 +352,7 @@
       <span class="post-meta-item-text">Posted on</span>
       
 
-      <time title="Created: 2025-03-17 22:01:22 / Modified: 22:02:58" itemprop="dateCreated datePublished" datetime="2025-03-17T22:01:22+08:00">2025-03-17</time>
+      <time title="Created: 2025-03-17 22:01:22 / Modified: 23:03:21" itemprop="dateCreated datePublished" datetime="2025-03-17T22:01:22+08:00">2025-03-17</time>
     </span>
 
   
@@ -387,7 +387,6 @@
     
     <div class="post-body" itemprop="articleBody">
         <p>嗨！今天我們要來聊聊 Docker 中的一個超實用功能——<strong>Docker Volume</strong>。如果你已經開始使用 Docker，一定聽過容器是「短暫的」這件事。就像便利商店買的一次性咖啡杯，用完就丟，裡面的咖啡（數據）也跟著不見了。但如果我們希望咖啡能保存下來，甚至在不同的杯子間共享呢？這就是 Docker Volume 要解決的問題！它就像一個神奇的「保溫瓶」，讓你的數據在容器間安全又方便地流動。</p>
-<p>這篇文章會帶你從頭認識 Docker Volume，包括它的架構、常用指令，以及實際應用操作。</p>
 <span id="more"></span>
 
 <h2 id="什麼是-Docker-Volume？"><a href="#什麼是-Docker-Volume？" class="headerlink" title="什麼是 Docker Volume？"></a>什麼是 Docker Volume？</h2><p>簡單來說，Docker Volume 是 Docker 用來<strong>持久化數據</strong>的一種機制。容器本身就像一台臨時的電腦，關機後什麼都不剩。但有時候我們需要存東西，比如網站的資料庫數據、用戶上傳的照片，這時候就需要 Volume 這個「外接硬碟」來幫忙。</p>
@@ -404,8 +403,8 @@
 <blockquote>
 <p>通常也叫 “Docker-managed Volume” 或 “Named Volume”<br>像是一個「雲端儲物櫃」，你告訴管理員「幫我存東西」，但具體放哪個櫃子你不用管，交給管理員保管。</p>
 </blockquote>
+<p>由 Docker 自動創建和管理，存放在主機的 <code>/var/lib/docker/volumes</code> 目錄下。</p>
 <ul>
-<li>由 Docker 自動創建和管理，存放在主機的 <code>/var/lib/docker/volumes</code> 目錄下。</li>
 <li>場景：資料庫（如 MySQL）、簡單部署。</li>
 <li>優點：簡單，不用自己指定路徑，Docker 幫你搞定。</li>
 <li>缺點：位置固定，不太靈活。</li>
@@ -416,8 +415,8 @@
 <blockquote>
 <p>像是「你家書桌抽屜」，你知道東西放哪，想拿就拿，想改就改。</p>
 </blockquote>
+<p>可以直接指定主機上的某個路徑（比如 <code>/home/user/data</code>）掛載到容器裡。</p>
 <ul>
-<li>可以直接指定主機上的某個路徑（比如 <code>/home/user/data</code>）掛載到容器裡。</li>
 <li>場景：開發（hotfix）、已有數據。</li>
 <li>優點：完全掌控數據位置，適合開發或已有數據的情況。</li>
 <li>缺點：需要手動管理主機路徑。</li>
@@ -428,8 +427,8 @@
 <blockquote>
 <p>像一個「紙便條貼」，你隨手寫下臨時筆記，用完就丟。</p>
 </blockquote>
+<p>數據只存在記憶體（RAM）中，不寫入硬碟，容器停止後即消失。</p>
 <ul>
-<li>數據只存在記憶體（RAM）中，不寫入硬碟，容器停止後即消失。</li>
 <li>場景：敏感數據、高效臨時（如日誌）。</li>
 <li>優點：速度快、安全，適合臨時數據。</li>
 <li>缺點：不持久，關機就沒了。</li>
@@ -472,9 +471,7 @@
 <li>會告訴你這個 Volume 的「身家背景」，比如存放在主機的哪個路徑：<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">[</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="attr">&quot;Name&quot;</span>: <span class="string">&quot;my-data&quot;</span>,</span><br><span class="line">        <span class="attr">&quot;Driver&quot;</span>: <span class="string">&quot;local&quot;</span>,</span><br><span class="line">        <span class="attr">&quot;Mountpoint&quot;</span>: <span class="string">&quot;/var/lib/docker/volumes/my-data/_data&quot;</span></span><br><span class="line">    &#125;</span><br><span class="line">]</span><br></pre></td></tr></table></figure></li>
 </ul>
 <h3 id="6-清理無用的-Volume"><a href="#6-清理無用的-Volume" class="headerlink" title="6. 清理無用的 Volume"></a>6. 清理無用的 Volume</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker volume prune</span><br></pre></td></tr></table></figure>
-<ul>
-<li>把沒人用的便當盒丟掉，小心別誤刪重要的！</li>
-</ul>
+<p>把沒人用的便當盒丟掉，小心別誤刪重要的！</p>
 <h2 id="應用操作：一個簡單的案例"><a href="#應用操作：一個簡單的案例" class="headerlink" title="應用操作：一個簡單的案例"></a>應用操作：一個簡單的案例</h2><p>假設你想用 Docker 跑一個 <strong>MySQL 資料庫</strong>，並確保數據不會因為容器停止而丟失。我們來實作：</p>
 <h3 id="步驟-1：創建-Volume"><a href="#步驟-1：創建-Volume" class="headerlink" title="步驟 1：創建 Volume"></a>步驟 1：創建 Volume</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker volume create mysql-data</span><br></pre></td></tr></table></figure>
 
@@ -487,10 +484,7 @@
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">docker stop my-mysql</span><br><span class="line">docker rm my-mysql</span><br></pre></td></tr></table></figure>
 
 <h3 id="步驟-4：重新啟動新容器"><a href="#步驟-4：重新啟動新容器" class="headerlink" title="步驟 4：重新啟動新容器"></a>步驟 4：重新啟動新容器</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run -d --name my-mysql -v mysql-data:/var/lib/mysql -e MYSQL_ROOT_PASSWORD=123456 mysql</span><br></pre></td></tr></table></figure>
-<ul>
-<li>你會發現資料庫數據依然存在，因為它被安全地存在 <code>mysql-data</code> 裡！</li>
-</ul>
-<p>這就像你把咖啡裝進保溫瓶，換個杯子倒出來還是熱的。</p>
+<p>你會發現資料庫數據依然存在，因為它被安全地存在 <code>mysql-data</code> 裡！<br>這就像你把咖啡裝進保溫瓶，換個杯子倒出來還是熱的。</p>
 
     </div>
 
@@ -502,8 +496,8 @@
           <div class="post-tags">
               <a href="/tags/Docker/" rel="tag"># Docker</a>
               <a href="/tags/Dockerfile/" rel="tag"># Dockerfile</a>
-              <a href="/tags/%E5%AE%B9%E5%99%A8%E5%8C%96%E6%8A%80%E8%A1%93/" rel="tag"># 容器化技術</a>
               <a href="/tags/volume/" rel="tag"># volume</a>
+              <a href="/tags/%E5%AE%B9%E5%99%A8%E5%8C%96%E6%8A%80%E8%A1%93/" rel="tag"># 容器化技術</a>
           </div>
 
         
@@ -579,7 +573,7 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-line"></i>
     </span>
-    <span title="Symbols count total">63k</span>
+    <span title="Symbols count total">64k</span>
   </span>
   <span class="post-meta-item">
     <span class="post-meta-item-icon">
